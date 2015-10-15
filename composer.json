@@ -1,0 +1,14 @@
+{
+    "name": "itmundi/schematic",
+    "description": "Sync Craft setups",
+    "authors": [
+        {
+            "name": "Itmundi",
+            "email": "info@itmundi.nl"
+        }
+    ],
+    "type": "craft-plugin",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
