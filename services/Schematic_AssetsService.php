@@ -59,7 +59,6 @@ class Schematic_AssetsService extends BaseApplicationComponent
             'type'         => $assetSourceDefinition['type'],
             'name'         => $assetSourceDefinition['name'],
             'sortOrder'    => $assetSourceDefinition['sortOrder'],
-            'settings'     => $assetSourceDefinition['settings'],
         ));
 
         return $assetSource;
