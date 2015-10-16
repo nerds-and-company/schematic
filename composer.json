@@ -24,10 +24,6 @@
     "license": "MIT",
     "type": "craft-plugin",
     "require": {
-        "php": "^5.3",
-        "ext-gd": "*",
-        "ext-mbstring": "*",
-        "ext-mcrypt": "*",
         "composer/installers": "~1.0"
     }
 }
