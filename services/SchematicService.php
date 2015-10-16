@@ -120,7 +120,7 @@ class SchematicService extends BaseApplicationComponent
 
         $export = array(
             'assets' => craft()->schematic_assets->export(),
-            'fields' => craft()->aschematic_fields->export($fieldGroups),
+            'fields' => craft()->schematic_fields->export($fieldGroups),
             'plugins' => craft()->schematic_plugins->export(),
             'sections' => craft()->schematic_sections->export($sections),
             'globals' => craft()->schematic_globals->export($globals),
