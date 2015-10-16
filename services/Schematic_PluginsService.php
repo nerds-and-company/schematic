@@ -16,73 +16,129 @@ namespace Craft;
 class Schematic_PluginsService extends BaseApplicationComponent
 {
     /**
-     * Import plugins.
-     *
+     * @var Schematic_ResultModel
+     */
+    protected $resultModel;
+
+
+    /**
+     * Constructor to setup result model
+     */
+    public function __construct()
+    {
+        $this->resultModel = new Schematic_ResultModel();
+    }
+
+    /**
+     * @return PluginsService
+     */
+    protected function getPluginService()
+    {
+        return craft()->plugins;
+    }
+
+    /**
+     * Installs plugin by handle
+     * @param string $handle
+     */
+    protected function installPluginByHandle($handle)
+    {
+        try {
+            $this->getPluginService()->installPlugin($handle);
+        } catch (\Exception $e) {
+            $this->resultModel->addError(
+                'errors',
+                "An error occurred while installing plugin $handle, continuing anyway" . PHP_EOL
+            );
+        }
+    }
+
+    /**
+     * Uninstalls plugin by handle
+     * @param $handle
+     */
+    protected function uninstallPluginByHandle($handle)
+    {
+        $this->getPluginService()->uninstallPlugin($handle);
+    }
+
+    /**
+     * Returns plugin by handle
+     * @param string $handle
+     * @return BasePlugin|null
+     */
+    protected function getPlugin($handle)
+    {
+        $plugin = $this->getPluginService()->getPlugin($handle, false);
+        if (!$plugin) {
+            $this->resultModel->addError(
+                'errors',
+                "Plugin $handle could not be found, make sure it's files are located in the plugins folder" . PHP_EOL
+            );
+        }
+
+        return $plugin;
+    }
+
+    /**
+     * Toggles plugin based on enabled flag
+     * @param string $handle
+     * @param bool $isEnabled
+     */
+    protected function togglePluginByHandle($handle, $isEnabled)
+    {
+        if ($isEnabled) {
+            $this->getPluginService()->enablePlugin($handle);
+        } else {
+            $this->getPluginService()->disablePlugin($handle);
+        }
+    }
+
+    /**
      * @param array $pluginDefinitions
-     *
      * @return Schematic_ResultModel
      */
     public function import(array $pluginDefinitions)
     {
-        $result = new Schematic_ResultModel();
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            $plugin = craft()->plugins->getPlugin($handle, false);
+            if($plugin = $this->getPlugin($handle)) {
+                if ($pluginDefinition['isInstalled']) {
+                    $this->installPluginByHandle($handle);
 
-            if (!$plugin) {
-                return $result->error("Plugin $handle could not be found, make sure it's files are located in the plugins folder");
-            }
-
-            if ($pluginDefinition['isInstalled']) {
-                try {
-                    craft()->plugins->installPlugin($handle);
-                } catch (\Exception $e) {
-                    echo "An error occurred while installing plugin $handle, continuing anyway".PHP_EOL;
-                }
-
-                if ($pluginDefinition['isEnabled']) {
-                    craft()->plugins->enablePlugin($handle);
+                    $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
                 } else {
-                    craft()->plugins->disablePlugin($handle);
+                    $this->uninstallPluginByHandle($handle);
                 }
-            } else {
-                craft()->plugins->uninstallPlugin($handle);
             }
         }
 
-        return $result;
+        return $this->resultModel;
     }
 
     /**
-     * Export plugins.
-     *
      * @return array
      */
     public function export()
     {
-        $plugins = craft()->plugins->getPlugins(false);
+        $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = array();
 
         foreach ($plugins as $handle => $plugin) {
             $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
         }
 
-        ksort($pluginDefinitions);
-
         return $pluginDefinitions;
     }
 
     /**
-     * Get plugin definition.
-     *
      * @param BasePlugin $plugin
-     *
      * @return array
      */
     private function getPluginDefinition(BasePlugin $plugin)
     {
         return array(
             'isInstalled' => $plugin->isInstalled,
-            'isEnabled' => $plugin->isEnabled,
+            'isEnabled' => $plugin->isEnabled
         );
     }
 }
