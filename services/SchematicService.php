@@ -2,9 +2,22 @@
 
 namespace Craft;
 
+/**
+ * Schematic Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
+ */
 class SchematicService extends BaseApplicationComponent
 {
     /**
+     * Import from JSON.
+     *
      * @param string $json
      * @param bool   $force if set to true items not included in import will be deleted
      *
@@ -17,26 +30,39 @@ class SchematicService extends BaseApplicationComponent
         return $this->importFromExportedDataModel($exportedDataModel, $force);
     }
 
+    /**
+     * Import tabs from JSON.
+     *
+     * @param string $json
+     * @param string $applyTo
+     *
+     * @return Schematic_ResultModel
+     */
     public function importTabsFromJson($json, $applyTo)
     {
         $exportedDataModel = Schematic_ExportedDataModel::fromJson($json);
-        $applyToModel = json_decode($applyTo, false);
+        $applyToModel = JsonHelper::decode($applyTo, false);
 
         return $this->importTabsFromExportedDataModel($exportedDataModel, $applyToModel);
     }
 
+    /**
+     * Load from JSON.
+     *
+     * @param string $json
+     *
+     * @return string
+     */
     public function loadFromJson($json)
     {
         $data = Schematic_ExportedDataModel::fromJson($json);
-
-        foreach ($data->fields as $group) {
-            $group['notes'] = 'HEY';
-        }
 
         return $data;
     }
 
     /**
+     * Import from array.
+     *
      * @param array $array
      * @param bool  $force if set to true items not included in import will be deleted
      *
@@ -50,6 +76,8 @@ class SchematicService extends BaseApplicationComponent
     }
 
     /**
+     * Import tabs from exported data model.
+     *
      * @param $model
      *
      * @return Schematic_ResultModel
@@ -60,14 +88,14 @@ class SchematicService extends BaseApplicationComponent
 
         if ($model !== null) {
             $contentTabsImportResult = craft()->schematic_contentTabs->import($model->contenttabs, $applyTo);
-
-            //$result->consume($contentTabsImportResult);
         }
 
         return $result;
     }
 
     /**
+     * Import from exported data model.
+     *
      * @param Schematic_ExportedDataModel $model
      * @param bool                        $force if set to true items not in the import will be deleted
      *
@@ -110,6 +138,8 @@ class SchematicService extends BaseApplicationComponent
     }
 
     /**
+     * Export.
+     *
      * @return array
      */
     public function export()
