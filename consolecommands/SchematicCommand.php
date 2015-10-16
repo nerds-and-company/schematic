@@ -2,6 +2,17 @@
 
 namespace Craft;
 
+/**
+ * Schematic Command.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
+ */
 class SchematicCommand extends BaseCommand
 {
     /**

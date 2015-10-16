@@ -3,15 +3,21 @@
 namespace Craft;
 
 /**
- * Class Schematic_SectionsService.
+ * Schematic Result Model.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
  */
 class Schematic_SectionsService extends BaseApplicationComponent
 {
-    //==============================================================================================================
-    //=================================================  EXPORT  ===================================================
-    //==============================================================================================================
-
     /**
+     * Export sections.
+     *
      * @param SectionModel[] $sections
      * @param array|null     $allowedEntryTypeIds
      *
@@ -29,6 +35,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Get section definition.
+     *
      * @param SectionModel $section
      * @param $allowedEntryTypeIds
      *
@@ -49,6 +57,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Get locale definitions.
+     *
      * @param SectionLocaleModel[] $locales
      *
      * @return array
@@ -65,6 +75,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Get locale definition.
+     *
      * @param SectionLocaleModel $locale
      *
      * @return array
@@ -79,6 +91,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Get entry type definitions.
+     *
      * @param array $entryTypes
      * @param $allowedEntryTypeIds
      *
@@ -98,6 +112,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Get entry type definition.
+     *
      * @param EntryTypeModel $entryType
      *
      * @return array
@@ -112,10 +128,6 @@ class Schematic_SectionsService extends BaseApplicationComponent
             'fieldLayout' => craft()->schematic_fields->getFieldLayoutDefinition($entryType->getFieldLayout()),
         );
     }
-
-    //==============================================================================================================
-    //=================================================  IMPORT  ===================================================
-    //==============================================================================================================
 
     /**
      * Attempt to import sections.
@@ -220,6 +232,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate section.
+     *
      * @param SectionModel $section
      * @param array        $sectionDefinition
      * @param string       $sectionHandle
@@ -240,6 +254,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate section locales.
+     *
      * @param SectionModel $section
      * @param $localeDefinitions
      */
@@ -270,6 +286,8 @@ class Schematic_SectionsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate entry type.
+     *
      * @param EntryTypeModel $entryType
      * @param array          $entryTypeDefinition
      * @param string         $entryTypeHandle

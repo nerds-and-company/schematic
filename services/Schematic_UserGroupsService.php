@@ -3,7 +3,15 @@
 namespace Craft;
 
 /**
- * Class Schematic_GlobalsService.
+ * Schematic User Groups Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
  */
 class Schematic_UserGroupsService extends BaseApplicationComponent
 {
@@ -27,11 +35,9 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
         $this->assetSourceById = $assetSources = craft()->assetSources->getAllSources('id');
     }
 
-    //==============================================================================================================
-    //=================================================  EXPORT  ===================================================
-    //==============================================================================================================
-
     /**
+     * Export user groups.
+     *
      * @param UserGroupModel[] $groups
      *
      * @return array
@@ -48,6 +54,8 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     }
 
     /**
+     * Get group definition.
+     *
      * @param UserGroupModel $group
      *
      * @return array
@@ -67,6 +75,8 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     }
 
     /**
+     * Get group permissions.
+     *
      * @param $group
      * @param $permissions
      *
@@ -88,6 +98,8 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     }
 
     /**
+     * Get permission definition.
+     *
      * @param string $permission
      *
      * @return string
@@ -110,11 +122,9 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
         return $permission;
     }
 
-    //==============================================================================================================
-    //=================================================  IMPORT  ===================================================
-    //==============================================================================================================
-
     /**
+     * Import usergroups.
+     *
      * @param array $groupDefinitions
      * @param bool  $force            if set to true items not in the import will be deleted
      *
@@ -153,6 +163,8 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     }
 
     /**
+     * Get permissions.
+     *
      * @param array $permissionDefinitions
      *
      * @return array
@@ -168,6 +180,8 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     }
 
     /**
+     * Get permission.
+     *
      * @param string $permissionDefinition
      *
      * @return string

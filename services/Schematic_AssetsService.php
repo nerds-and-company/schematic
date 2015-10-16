@@ -2,9 +2,22 @@
 
 namespace Craft;
 
+/**
+ * Schematic Assets Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
+ */
 class Schematic_AssetsService extends BaseApplicationComponent
 {
     /**
+     * Import asset source definitions.
+     *
      * @param array $assetSourceDefinitions
      *
      * @return Schematic_ResultModel
@@ -29,6 +42,8 @@ class Schematic_AssetsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate asset source.
+     *
      * @param string $assetHandle
      * @param array  $assetSourceDefinition
      *

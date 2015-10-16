@@ -3,15 +3,21 @@
 namespace Craft;
 
 /**
- * Class Schematic_FieldsService.
+ * Schematic Fields Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
  */
 class Schematic_FieldsService extends BaseApplicationComponent
 {
-    //==============================================================================================================
-    //=================================================  EXPORT  ===================================================
-    //==============================================================================================================
-
     /**
+     * Export fields.
+     *
      * @param FieldGroupModel[] $groups
      *
      * @return array
@@ -34,6 +40,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Export tab fields.
+     *
      * @param SectionModel[] $sections
      * @param EntryTypeModel $entryType
      * @param string         $tabName
@@ -59,6 +67,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Export section fields.
+     *
      * @param SectionModel[] $sections
      * @param array          $allowedEntryTypeIds
      *
@@ -89,6 +99,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Export field names.
+     *
      * @param $fieldNames
      *
      * @return array
@@ -115,6 +127,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get field definition.
+     *
      * @param FieldModel $field
      * @param bool       $includeContext
      *
@@ -148,6 +162,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get source handles.
+     *
      * @param array $sources
      *
      * @return array
@@ -164,6 +180,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get block type definitions.
+     *
      * @param FieldModel $field
      *
      * @return array
@@ -188,11 +206,6 @@ class Schematic_FieldsService extends BaseApplicationComponent
 
         return $blockTypeDefinitions;
     }
-
-    //==============================================================================================================
-    //=================================================  IMPORT  ===================================================
-    //==============================================================================================================
-
 
     /**
      * Attempt to import fields.
@@ -262,6 +275,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate blocktype.
+     *
      * @param FieldModel           $field
      * @param MatrixBlockTypeModel $blockType
      * @param array                $blockTypeDef
@@ -294,6 +309,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate field.
+     *
      * @param array           $fieldDefinition
      * @param FieldModel      $field
      * @param string          $fieldHandle
@@ -327,6 +344,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get source id's.
+     *
      * @param array $sourceHandles
      *
      * @return array
@@ -345,6 +364,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get blocktypes.
+     *
      * @param array      $fieldDefinition
      * @param FieldModel $field
      *
@@ -367,11 +388,9 @@ class Schematic_FieldsService extends BaseApplicationComponent
         return $blockTypes;
     }
 
-    //==============================================================================================================
-    //==============================================  FIELD LAYOUT  ================================================
-    //==============================================================================================================
-
     /**
+     * Get field layout definition.
+     *
      * @param FieldLayoutModel $fieldLayout
      *
      * @return array
@@ -392,6 +411,8 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Get field layout fields definition.
+     *
      * @param FieldLayoutFieldModel[] $fields
      *
      * @return array

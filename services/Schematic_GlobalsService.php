@@ -2,9 +2,22 @@
 
 namespace Craft;
 
+/**
+ * Schematic Globals Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
+ */
 class Schematic_GlobalsService extends BaseApplicationComponent
 {
     /**
+     * Export globalsets.
+     *
      * @param GlobalSetModel[] $globalSets
      *
      * @return array
@@ -21,6 +34,8 @@ class Schematic_GlobalsService extends BaseApplicationComponent
     }
 
     /**
+     * Get global definition.
+     *
      * @param GlobalSetModel $globalSet
      *
      * @return array
@@ -76,6 +91,8 @@ class Schematic_GlobalsService extends BaseApplicationComponent
     }
 
     /**
+     * Populate globalset.
+     *
      * @param GlobalSetModel $globalSet
      * @param array          $globalSetDefinition
      * @param string         $globalSetHandle

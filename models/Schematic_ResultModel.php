@@ -3,12 +3,23 @@
 namespace Craft;
 
 /**
+ * Schematic Result Model.
+ *
  * Encapsulates the result of an action, including error messages.
  *
- * @author Itmundi
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
  */
 class Schematic_ResultModel extends BaseModel
 {
+    /**
+     * Define attributes.
+     *
+     * @return array
+     */
     protected function defineAttributes()
     {
         return array(
@@ -17,6 +28,11 @@ class Schematic_ResultModel extends BaseModel
         );
     }
 
+    /**
+     * Initialize.
+     *
+     * @param null|array $errors
+     */
     public function __construct($errors = null)
     {
         parent::__construct(array(

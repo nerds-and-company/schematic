@@ -3,18 +3,15 @@
 namespace Craft;
 
 /**
+ * Schematic Exported Data Model.
+ *
  * Encapsulates data that has been exported via schematic.
  *
- * @property mixed assets
- * @property mixed categories
- * @property mixed fields
- * @property mixed globals
- * @property mixed plugins
- * @property mixed sections
- * @property mixed tags
- * @property mixed userGroups
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
  *
- * @author Itmundi
+ * @link      http://www.itmundi.nl
  */
 class Schematic_ExportedDataModel extends BaseModel
 {
@@ -33,6 +30,8 @@ class Schematic_ExportedDataModel extends BaseModel
     }
 
     /**
+     * Define attributes.
+     *
      * @inheritdoc
      */
     protected function defineAttributes()

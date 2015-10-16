@@ -2,12 +2,30 @@
 
 namespace Craft;
 
+/**
+ * Schematic Content Tab Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
+ */
 class Schematic_ContentTabsService extends BaseApplicationComponent
 {
-    public function export($section, $entryType, $tabName)
+    /**
+     * Export content tabs.
+     *
+     * @param EntryTypeModel $entryType
+     * @param string         $tabName
+     *
+     * @return array
+     */
+    public function export(EntryTypeModel $entryType, $tabName)
     {
         $entryTypeDefs = array();
-
         $fieldnames = array();
 
         foreach ($this->_exportFieldLayout($entryType->getFieldLayout()) as $contenttype) {
@@ -24,6 +42,13 @@ class Schematic_ContentTabsService extends BaseApplicationComponent
         return $entryTypeDefs;
     }
 
+    /**
+     * Export field layout.
+     *
+     * @param FieldLayoutModel $fieldLayout
+     *
+     * @return array
+     */
     private function _exportFieldLayout(FieldLayoutModel $fieldLayout)
     {
         if ($fieldLayout->getTabs()) {
@@ -73,8 +98,6 @@ class Schematic_ContentTabsService extends BaseApplicationComponent
             $entryTypeIds = array();
             $sections = array();
 
-            print $tabname;
-
             foreach ($applyToTabs->applyTo as $sec) {
                 $secet = explode('||', $sec);
                 $entryTypeHandle = $secet[1];
@@ -92,9 +115,7 @@ class Schematic_ContentTabsService extends BaseApplicationComponent
             $sectionDefs = craft()->schematic_sections->export($sections, $entryTypeIds);
 
             foreach ($sectionDefs as $sectionName => $sectionDef) {
-                print('here');
                 foreach ($sectionDef['entryTypes'] as $entryHandle => $entryType) {
-                    print 'ADD TAB '.$tabname;
                     $sectionDefs[$sectionName]['entryTypes'][$entryHandle]['fieldLayout']['tabs'][$tabname] = $tabDef;
                 }
             }

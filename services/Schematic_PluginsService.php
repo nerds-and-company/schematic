@@ -3,11 +3,21 @@
 namespace Craft;
 
 /**
- * Class Schematic_PluginsService.
+ * Schematic Plugins Service.
+ *
+ * Sync Craft Setups.
+ *
+ * @author    Itmundi
+ * @copyright Copyright (c) 2015, Itmundi
+ * @license   MIT
+ *
+ * @link      http://www.itmundi.nl
  */
 class Schematic_PluginsService extends BaseApplicationComponent
 {
     /**
+     * Import plugins.
+     *
      * @param array $pluginDefinitions
      *
      * @return Schematic_ResultModel
@@ -45,6 +55,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
+     * Export plugins.
+     *
      * @return array
      */
     public function export()
@@ -62,6 +74,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
+     * Get plugin definition.
+     *
      * @param BasePlugin $plugin
      *
      * @return array

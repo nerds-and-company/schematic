@@ -108,20 +108,16 @@ class SchematicService extends BaseApplicationComponent
         if ($model !== null) {
             $pluginImportResult = craft()->schematic_plugins->import($model->plugins);
             $assetImportResult = craft()->schematic_assets->import($model->assets);
-            $categoryImportResult = craft()->schematic_categories->import($model->categories);
             $fieldImportResult = craft()->schematic_fields->import($model->fields, $force);
             $globalImportResult = craft()->schematic_globals->import($model->globals, $force);
             $sectionImportResult = craft()->schematic_sections->import($model->sections, $force);
-            $tagImportResult = craft()->schematic_tags->import($model->tags);
             $userGroupImportResult = craft()->schematic_userGroups->import($model->userGroups, $force);
 
             $result->consume($pluginImportResult);
             $result->consume($assetImportResult);
-            $result->consume($categoryImportResult);
             $result->consume($fieldImportResult);
             $result->consume($globalImportResult);
             $result->consume($sectionImportResult);
-            $result->consume($tagImportResult);
             $result->consume($userGroupImportResult);
 
             // run plugin imports through hook
