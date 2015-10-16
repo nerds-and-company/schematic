@@ -100,7 +100,8 @@ class SchematicService extends BaseApplicationComponent
             $services = craft()->plugins->callFirst('registerMigrationService');
             if (is_array($services)) {
                 foreach ($services as $handle => $service) {
-                    $service->import($model->pluginData[$handle], $force);
+                    $hookResult = $service->import($model->pluginData[$handle], $force);
+                    $result->consume($hookResult);
                 }
             }
         }
