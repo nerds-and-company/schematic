@@ -19,6 +19,12 @@
             "email": "g.stegehuis@itmundi.nl",
             "homepage": "http://www.itmundi.nl",
             "role": "Developer"
+        },
+        {
+            "name": "Nick Obermeijer",
+            "email": "n.obermeijer@itmundi.nl",
+            "homepage": "http://www.itmundi.nl",
+            "role": "Developer"
         }
     ],
     "license": "MIT",
