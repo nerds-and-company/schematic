@@ -3,12 +3,31 @@
     "description": "Sync Craft setups",
     "authors": [
         {
-            "name": "Itmundi",
-            "email": "info@itmundi.nl"
+            "name": "Bart van Gennepg",
+            "email": "b.vangennep@itmundi.nl",
+            "homepage": "http://www.itmundi.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Bob Olde Hampsink",
+            "email": "b.oldehampsink@itmundi.nl",
+            "homepage": "http://www.itmundi.nl",
+            "role": "Developer"
+        },
+        {
+            "name": "Gijs Stegehuis",
+            "email": "g.stegehuis@itmundi.nl",
+            "homepage": "http://www.itmundi.nl",
+            "role": "Developer"
         }
     ],
+    "license": "MIT",
     "type": "craft-plugin",
     "require": {
+        "php": "^5.3",
+        "ext-gd": "*",
+        "ext-mbstring": "*",
+        "ext-mcrypt": "*",
         "composer/installers": "~1.0"
     }
 }
