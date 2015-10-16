@@ -126,7 +126,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
         foreach ($plugins as $handle => $plugin) {
             $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
         }
-
+        ksort($pluginDefinitions);
         return $pluginDefinitions;
     }
 
