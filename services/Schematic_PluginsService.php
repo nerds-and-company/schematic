@@ -85,7 +85,6 @@ class Schematic_PluginsService extends BaseApplicationComponent
         return array(
             'isInstalled' => $plugin->isInstalled,
             'isEnabled' => $plugin->isEnabled,
-            'settings' => $plugin->getSettings()->attributes,
         );
     }
 }
