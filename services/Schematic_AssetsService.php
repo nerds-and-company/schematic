@@ -59,6 +59,7 @@ class Schematic_AssetsService extends BaseApplicationComponent
             'type'         => $assetSourceDefinition['type'],
             'name'         => $assetSourceDefinition['name'],
             'sortOrder'    => $assetSourceDefinition['sortOrder'],
+            'settings'     => $assetSourceDefinition['settings'],
         ));
 
         return $assetSource;
@@ -92,6 +93,7 @@ class Schematic_AssetsService extends BaseApplicationComponent
             'type' => $assetSource->type,
             'name' => $assetSource->name,
             'sortOrder' => $assetSource->sortOrder,
+            'settings' => $assetSource->settings,
         );
     }
 }
