@@ -38,13 +38,10 @@ class Schematic_ExportedDataModel extends BaseModel
     {
         return array(
             'assets'            => AttributeType::Mixed,
-            'categories'        => AttributeType::Mixed,
             'fields'            => AttributeType::Mixed,
             'globals'           => AttributeType::Mixed,
             'plugins'           => AttributeType::Mixed,
             'sections'          => AttributeType::Mixed,
-            'contenttabs'       => AttributeType::Mixed,
-            'tags'              => AttributeType::Mixed,
             'userGroups'        => AttributeType::Mixed,
             'pluginData'        => AttributeType::Mixed,
         );

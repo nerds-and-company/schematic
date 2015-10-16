@@ -31,22 +31,6 @@ class SchematicService extends BaseApplicationComponent
     }
 
     /**
-     * Import tabs from JSON.
-     *
-     * @param string $json
-     * @param string $applyTo
-     *
-     * @return Schematic_ResultModel
-     */
-    public function importTabsFromJson($json, $applyTo)
-    {
-        $exportedDataModel = Schematic_ExportedDataModel::fromJson($json);
-        $applyToModel = JsonHelper::decode($applyTo, false);
-
-        return $this->importTabsFromExportedDataModel($exportedDataModel, $applyToModel);
-    }
-
-    /**
      * Load from JSON.
      *
      * @param string $json
@@ -73,24 +57,6 @@ class SchematicService extends BaseApplicationComponent
         $exportedDataModel = new Schematic_ExportedDataModel($array);
 
         return $this->importFromExportedDataModel($exportedDataModel, $force);
-    }
-
-    /**
-     * Import tabs from exported data model.
-     *
-     * @param $model
-     *
-     * @return Schematic_ResultModel
-     */
-    private function importTabsFromExportedDataModel($model, $applyTo)
-    {
-        $result = new Schematic_ResultModel();
-
-        if ($model !== null) {
-            $contentTabsImportResult = craft()->schematic_contentTabs->import($model->contenttabs, $applyTo);
-        }
-
-        return $result;
     }
 
     /**
