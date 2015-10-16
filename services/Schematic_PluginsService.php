@@ -44,8 +44,6 @@ class Schematic_PluginsService extends BaseApplicationComponent
                 } else {
                     craft()->plugins->disablePlugin($handle);
                 }
-
-                craft()->plugins->savePluginSettings($plugin, $pluginDefinition['settings']);
             } else {
                 craft()->plugins->uninstallPlugin($handle);
             }
