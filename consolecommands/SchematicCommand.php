@@ -18,19 +18,17 @@ class SchematicCommand extends BaseCommand
     /**
      * Imports the Craft datamodel.
      *
-     * @param string $file  json file containing the schema definition
+     * @param string $file  yml file containing the schema definition
      * @param bool   $force if set to true items not in the import will be deleted
      */
-    public function actionImport($file = 'craft/config/schema.json', $force = false)
+    public function actionImport($file = 'craft/config/schema.yml', $force = false)
     {
         if (!IOHelper::fileExists($file)) {
             $this->usageError(Craft::t('File not found.'));
             exit(1);
         }
 
-        $json = IOHelper::getFileContents($file);
-
-        $result = craft()->schematic->importFromJson($json, $force);
+        $result = craft()->schematic->importFromYaml($file, $force);
 
         if (!$result->hasErrors()) {
             echo Craft::t('Loaded schema from {file}', array('file' => $file))."\n";
@@ -47,12 +45,11 @@ class SchematicCommand extends BaseCommand
      *
      * @param string $file file to write the schema to
      */
-    public function actionExport($file = 'craft/config/schema.json')
+    public function actionExport($file = 'craft/config/schema.yml')
     {
-        $schema = craft()->schematic->export();
+        craft()->schematic->exportToYaml($file);
 
-        IOHelper::writeToFile($file, json_encode($schema, JSON_PRETTY_PRINT));
-
+        echo Craft::t('Exported schema to {file}', array('file' => $file))."\n";
         exit(0);
     }
 }
