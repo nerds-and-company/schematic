@@ -106,6 +106,10 @@ class Schematic_PluginsService extends BaseApplicationComponent
                     $this->installPluginByHandle($handle);
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
+
+                    if(array_key_exists('settings', $pluginDefinition)){
+                        $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
+                    }
                 } else {
                     $this->uninstallPluginByHandle($handle);
                 }
