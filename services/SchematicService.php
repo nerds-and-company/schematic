@@ -49,12 +49,12 @@ class SchematicService extends BaseApplicationComponent
     /**
      * Import data model.
      *
-     * @param array $model
-     * @param bool  $force if set to true items not in the import will be deleted
+     * @param Schematic_DataModel $model
+     * @param bool                $force if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
-    private function importDataModel(array $model, $force)
+    private function importDataModel(Schematic_DataModel $model, $force)
     {
         // Import schema
         $pluginImportResult = craft()->schematic_plugins->import($model->plugins);
