@@ -106,6 +106,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
                     $this->installPluginByHandle($handle);
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
+
+                    $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                 } else {
                     $this->uninstallPluginByHandle($handle);
                 }
@@ -137,8 +139,9 @@ class Schematic_PluginsService extends BaseApplicationComponent
     private function getPluginDefinition(BasePlugin $plugin)
     {
         return array(
-            'isInstalled' => $plugin->isInstalled,
-            'isEnabled' => $plugin->isEnabled
+            'isInstalled'       => $plugin->isInstalled,
+            'isEnabled'         => $plugin->isEnabled,
+            'settings'          => $plugin->getSettings()->attributes
         );
     }
 }

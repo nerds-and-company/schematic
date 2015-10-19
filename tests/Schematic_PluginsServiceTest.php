@@ -181,6 +181,10 @@ class Schematic_PluginsServiceTest extends BaseTest
         $mockBasePlugin = $this->getMockBasePlugin();
         $mockBasePlugin->isInstalled = true;
         $mockBasePlugin->isEnabled = true;
+        $mockBasePlugin
+            ->expects($this->any())
+            ->method('getSettings')
+            ->willReturn((Object) array('attributes' => $data['itmundiplugin']['settings']));
 
         $mockPluginsService = $this->getMockPluginsService();
         $mockPluginsService->expects($this->any())
@@ -200,9 +204,14 @@ class Schematic_PluginsServiceTest extends BaseTest
     public function getPluginsData()
     {
         return array(
-            'itmundiplugin' => array(
-                'isInstalled'   => true,
-                'isEnabled'     => true,
+            'itmundiplugin'         => array(
+                'isInstalled'       => true,
+                'isEnabled'         => true,
+                'settings'          => array(
+                    'pluginName'    => 'Menu',
+                    'canDoActions'  => '',
+                    'quietErrors'   => ''
+                )
             )
         );
     }
