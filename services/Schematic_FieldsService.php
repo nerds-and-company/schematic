@@ -148,10 +148,14 @@ class Schematic_FieldsService extends BaseApplicationComponent
                 ? $groups[$groupName]
                 : new FieldGroupModel();
 
+            unset($groups[$groupName]);
+
             $group->name = $groupName;
 
             if (!craft()->fields->saveGroup($group)) {
-                return $result->error($group->getAllErrors());
+                $result->addErrors(array('errors' => $group->getAllErrors()));
+
+                continue;
             }
 
             foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
@@ -159,20 +163,22 @@ class Schematic_FieldsService extends BaseApplicationComponent
                     ? $fields[$fieldHandle]
                     : new FieldModel();
 
+                unset($fields[$fieldHandle]);
+
                 $this->populateField($fieldDef, $field, $fieldHandle, $group);
 
                 if (!$field->getFieldType()) {
-                    return $field->type == 'Matrix'
-                        ? $result->error("One of the field's types does not exist. Are you missing a plugin?")
-                        : $result->error("Field type '$field->type' does not exist. Are you missing a plugin?");
+                    ($field->type == 'Matrix')
+                        ? $result->addError("errors", "One of the field's types does not exist. Are you missing a plugin?")
+                        : $result->addError("errors", "Field type '$field->type' does not exist. Are you missing a plugin?");
+
+                    break;
                 }
 
                 if (!craft()->fields->saveField($field)) {
-                    return $result->error($field->getAllErrors());
+                    $result->addErrors(array('errors' => $field->getAllErrors()));
                 }
-                unset($fields[$fieldHandle]);
             }
-            unset($groups[$groupName]);
         }
 
         if ($force) {

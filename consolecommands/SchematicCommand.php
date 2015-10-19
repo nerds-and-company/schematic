@@ -32,7 +32,7 @@ class SchematicCommand extends BaseCommand
 
         $result = craft()->schematic->importFromJson($json, $force);
 
-        if ($result->ok) {
+        if (!$result->hasErrors()) {
             echo Craft::t('Loaded schema from {file}', array('file' => $file))."\n";
             exit(0);
         }
