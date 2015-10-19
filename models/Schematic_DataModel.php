@@ -2,8 +2,10 @@
 
 namespace Craft;
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
- * Schematic Exported Data Model.
+ * Schematic Data Model.
  *
  * Encapsulates data that has been exported via schematic.
  *
@@ -13,22 +15,8 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_ExportedDataModel extends BaseModel
+class Schematic_DataModel extends BaseModel
 {
-    /**
-     * Creates an Schematic_ExportedDataModel from JSON input.
-     *
-     * @param string $json The input JSON.
-     *
-     * @return Schematic_ExportedDataModel|null The new Schematic_ExportedDataMode on success, null on invalid JSON.
-     */
-    public static function fromJson($json)
-    {
-        $data = json_decode($json, true);
-
-        return $data === null ? null : new static($data);
-    }
-
     /**
      * Define attributes.
      *
@@ -48,12 +36,30 @@ class Schematic_ExportedDataModel extends BaseModel
     }
 
     /**
-     * Returns a JSON representation of this model.
+     * Populate data model from yaml.
      *
-     * @return string
+     * @param string $yaml
+     *
+     * @return Schematic_DataModel
      */
-    public function toJson()
+    public static function fromYaml($yaml)
     {
-        return json_encode($this->getAttributes(), JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+        $data = Yaml::parse($yaml);
+
+        return $data === null ? null : new static($data);
+    }
+
+    /**
+     * Populate yaml from data model.
+     *
+     * @param string $yaml
+     *
+     * @return Schematic_DataModel
+     */
+    public static function toYaml($data)
+    {
+        $data = $data === null ? null : new static($data);
+
+        return Yaml::dump($data->attributes, 12);
     }
 }
