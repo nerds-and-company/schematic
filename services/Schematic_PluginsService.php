@@ -46,10 +46,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
         try {
             $this->getPluginService()->installPlugin($handle);
         } catch (\Exception $e) {
-            $this->resultModel->addError(
-                'errors',
-                "An error occurred while installing plugin $handle, continuing anyway" . PHP_EOL
-            );
+            $this->addError("An error occurred while installing plugin $handle, continuing anyway");
         }
     }
 
@@ -71,10 +68,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
     {
         $plugin = $this->getPluginService()->getPlugin($handle, false);
         if (!$plugin) {
-            $this->resultModel->addError(
-                'errors',
-                "Plugin $handle could not be found, make sure it's files are located in the plugins folder" . PHP_EOL
-            );
+            $this->addError("Plugin $handle could not be found, make sure it's files are located in the plugins folder");
         }
 
         return $plugin;
@@ -92,6 +86,28 @@ class Schematic_PluginsService extends BaseApplicationComponent
         } else {
             $this->getPluginService()->disablePlugin($handle);
         }
+    }
+
+    /**
+     * Add error to errors collection
+     * @param $message
+     */
+    private function addError($message)
+    {
+        $this->resultModel->addError('errors', $message);
+    }
+
+    /**
+     * @param BasePlugin $plugin
+     * @return array
+     */
+    private function getPluginDefinition(BasePlugin $plugin)
+    {
+        return array(
+            'isInstalled'       => $plugin->isInstalled,
+            'isEnabled'         => $plugin->isEnabled,
+            'settings'          => $plugin->getSettings()->attributes
+        );
     }
 
     /**
@@ -132,18 +148,5 @@ class Schematic_PluginsService extends BaseApplicationComponent
         }
         ksort($pluginDefinitions);
         return $pluginDefinitions;
-    }
-
-    /**
-     * @param BasePlugin $plugin
-     * @return array
-     */
-    private function getPluginDefinition(BasePlugin $plugin)
-    {
-        return array(
-            'isInstalled'       => $plugin->isInstalled,
-            'isEnabled'         => $plugin->isEnabled,
-            'settings'          => $plugin->getSettings()->attributes
-        );
     }
 }

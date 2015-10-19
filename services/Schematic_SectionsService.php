@@ -150,22 +150,30 @@ class Schematic_SectionsService extends BaseApplicationComponent
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {
             if (!array_key_exists('locales', $sectionDefinition)) {
-                return $result->error('`sections[handle].locales` must be defined');
+                $result->addError('errors', '`sections[handle].locales` must be defined');
+
+                continue;
             }
 
             if (!array_key_exists('entryTypes', $sectionDefinition)) {
-                return $result->error('`sections[handle].entryTypes` must exist be defined');
+                $result->addError('errors', '`sections[handle].entryTypes` must exist be defined');
+
+                continue;
             }
 
             $section = array_key_exists($sectionHandle, $sections)
                 ? $sections[$sectionHandle]
                 : new SectionModel();
 
+            unset($sections[$sectionHandle]);
+
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
 
             // Create initial section record
             if (!$this->preSaveSection($section)) {
-                return $result->error($section->getAllErrors());
+                $result->addErrors(array('errors' => $section->getAllErrors()));
+
+                continue;
             }
 
             $entryTypes = $section->getEntryTypes('handle');
@@ -178,15 +186,16 @@ class Schematic_SectionsService extends BaseApplicationComponent
                 $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
 
                 if (!craft()->sections->saveEntryType($entryType)) {
-                    return $result->error($entryType->getAllErrors());
+                    $result->addError('errors', $entryType->getAllErrors());
+
+                    continue;
                 }
             }
 
             // Save section via craft after entrytypes have been created
             if (!craft()->sections->saveSection($section)) {
-                return $result->error($section->getAllErrors());
+                $result->addErrors(array('errors' => $section->getAllErrors()));
             }
-            unset($sections[$sectionHandle]);
         }
 
         if ($force) {
@@ -219,7 +228,7 @@ class Schematic_SectionsService extends BaseApplicationComponent
             $sectionRecord->enableVersioning = $section->enableVersioning;
 
             if (!$sectionRecord->save()) {
-                $section->addErrors($sectionRecord->getErrors());
+                $section->addErrors(array('errors' => $sectionRecord->getErrors()));
 
                 return false;
             };

@@ -34,7 +34,7 @@ class Schematic_AssetsService extends BaseApplicationComponent
             $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
 
             if (!craft()->assetSources->saveSource($assetSource)) {
-                return $result->error($assetSource->getAllErrors());
+                $result->addErrors(array('errors' => $assetSource->getAllErrors()));
             }
         }
 

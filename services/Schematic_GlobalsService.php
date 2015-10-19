@@ -72,13 +72,16 @@ class Schematic_GlobalsService extends BaseApplicationComponent
                 ? $globalSets[$globalSetHandle]
                 : new GlobalSetModel();
 
+            unset($globalSets[$globalSetHandle]);
+
             $this->populateGlobalSet($global, $globalSetDefinition, $globalSetHandle);
 
             // Save globalset via craft
             if (!craft()->globals->saveSet($global)) {
-                return $result->error($global->getAllErrors());
+                $result->addErrors(array('errors' => $global->getAllErrors()));
+
+                continue;
             }
-            unset($globalSets[$globalSetHandle]);
         }
 
         if ($force) {

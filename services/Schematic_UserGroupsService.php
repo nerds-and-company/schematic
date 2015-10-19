@@ -139,18 +139,21 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
             $group = array_key_exists($groupHandle, $userGroups)
                 ? $userGroups[$groupHandle]
                 : new UserGroupModel();
+
+            unset($userGroups[$groupHandle]);
+
             $group->name = $groupDefinition['name'];
             $group->handle = $groupHandle;
 
             if (!craft()->userGroups->saveGroup($group)) {
-                return $result->error($group->getAllErrors());
+                $result->addErrors(array('errors' => $group->getAllErrors()));
+
+                continue;
             }
 
             $permissions = $this->getPermissions($groupDefinition['permissions']);
 
             craft()->userPermissions->saveGroupPermissions($group->id, $permissions);
-
-            unset($userGroups[$groupHandle]);
         }
 
         if ($force) {
