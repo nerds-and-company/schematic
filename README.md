@@ -35,6 +35,10 @@ public function registerMigrationService()
 
 ## Changelog
 
+###1.1.0###
+ - Replaced custom error handling with existing error handling
+ - Refactored import/export with yaml support
+
 ###1.0.0###
  - Initial release
 
