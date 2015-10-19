@@ -107,13 +107,15 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     private function getPermissionDefinition($permission)
     {
         if (strpos($permission, ':') > -1) {
+            $source = false;
             $permissionArray = explode(':', $permission);
 
             if (strpos($permission, 'Asset') > -1) {
                 $source = $this->assetSourceById[$permissionArray[1]];
-            } else {
+            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
                 $source = $this->sectionsById[$permissionArray[1]];
             }
+
             if ($source) {
                 $permission = $permissionArray[0].':'.$source->handle;
             }
@@ -192,13 +194,15 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     private function getPermission($permissionDefinition)
     {
         if (strpos($permissionDefinition, ':') > -1) {
+            $source = false;
             $permissionArray = explode(':', $permissionDefinition);
 
             if (strpos($permissionDefinition, 'Asset') > -1) {
                 $source = $this->assetSourceByHandle[$permissionArray[1]];
-            } else {
+            } elseif (isset($this->sectionsByHandle[$permissionArray[1]])) {
                 $source = $this->sectionsByHandle[$permissionArray[1]];
             }
+
             if ($source) {
                 $permissionDefinition = $permissionArray[0].':'.$source->id;
             }
