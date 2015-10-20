@@ -58,7 +58,7 @@ class Schematic_PluginsServiceTest extends BaseTest
         $disablePluginResponse = true,
         $uninstallPluginResponse = true
     ) {
-        $mock = $this->getMockBuilder(PluginsService::class)->getMock();
+        $mock = $this->getMockBuilder('Craft\PluginsService')->getMock();
 
         $mock->expects($this->any())->method('getPlugin')->willReturn(($returnPlugin) ? $this->getMockBasePlugin() : null);
 
@@ -80,7 +80,7 @@ class Schematic_PluginsServiceTest extends BaseTest
      */
     public function getMockBasePlugin()
     {
-        $mock = $this->getMockBuilder(BasePlugin::class)->getMock();
+        $mock = $this->getMockBuilder('Craft\BasePlugin')->getMock();
 
         return $mock;
     }
