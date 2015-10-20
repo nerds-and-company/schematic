@@ -127,6 +127,8 @@ class Schematic_PluginsServiceTest extends BaseTest
         $data['itmundiplugin']['isEnabled'] = false;
         $mockPluginsService = $this->getMockPluginsService();
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $mockMigrationsService = $this->getMockMigrationsService();
+        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -163,6 +165,8 @@ class Schematic_PluginsServiceTest extends BaseTest
 
         $mockPluginsService = $this->getMockPluginsService(true, false);
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $mockMigrationsService = $this->getMockMigrationsService();
+        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
 
         $import = $this->schematicPluginsService->import($data);
 
