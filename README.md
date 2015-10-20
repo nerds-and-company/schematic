@@ -1,4 +1,4 @@
-# Schematic
+# Schematic [![Build Status](https://travis-ci.org/itmundi/schematic.svg?branch=master)](https://travis-ci.org/itmundi/schematic) [![Latest Stable Version](https://poser.pugx.org/itmundi/schematic/v/stable)](https://packagist.org/packages/itmundi/schematic) [![Total Downloads](https://poser.pugx.org/itmundi/schematic/downloads)](https://packagist.org/packages/itmundi/schematic) [![Latest Unstable Version](https://poser.pugx.org/itmundi/schematic/v/unstable)](https://packagist.org/packages/itmundi/schematic) [![License](https://poser.pugx.org/itmundi/schematic/license)](https://packagist.org/packages/itmundi/schematic)
 
 Schematic allows you to synchronize your Craft setup over multiple environments
 

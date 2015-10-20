@@ -13,7 +13,7 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_UserGroupsService extends BaseApplicationComponent
+class Schematic_UserGroupsService extends Schematic_AbstractService
 {
     /** @var SectionModel[] */
     private $sectionsByHandle = array();
@@ -24,11 +24,13 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
 
+
     /**
      * Set the sections fields.
      */
     public function __construct()
     {
+        parent::__construct();
         $this->sectionsByHandle = craft()->sections->getAllSections('handle');
         $this->sectionsById = craft()->sections->getAllSections('id');
         $this->assetSourceByHandle = $assetSources = craft()->assetSources->getAllSources('handle');
@@ -42,7 +44,7 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function export(array $groups)
+    public function export(array $groups = array())
     {
         $groupDefinitions = array();
 
@@ -134,13 +136,10 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        $result = new Schematic_ResultModel();
         $userGroups = craft()->userGroups->getAllGroups('handle');
 
         foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
-            $group = array_key_exists($groupHandle, $userGroups)
-                ? $userGroups[$groupHandle]
-                : new UserGroupModel();
+            $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
 
             unset($userGroups[$groupHandle]);
 
@@ -148,7 +147,7 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
             $group->handle = $groupHandle;
 
             if (!craft()->userGroups->saveGroup($group)) {
-                $result->addErrors(array('errors' => $group->getAllErrors()));
+                $this->addErrors($group->getAllErrors());
 
                 continue;
             }
@@ -164,7 +163,7 @@ class Schematic_UserGroupsService extends BaseApplicationComponent
             }
         }
 
-        return $result;
+        return $this->getResultModel();
     }
 
     /**
