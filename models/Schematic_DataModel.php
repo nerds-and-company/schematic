@@ -52,11 +52,11 @@ class Schematic_DataModel extends BaseModel
     /**
      * Populate yaml from data model.
      *
-     * @param string $yaml
+     * @param array $data
      *
      * @return Schematic_DataModel
      */
-    public static function toYaml($data)
+    public static function toYaml(array $data)
     {
         $data = $data === null ? null : new static($data);
 

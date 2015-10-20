@@ -24,7 +24,6 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
 
-
     /**
      * Set the sections fields.
      */
@@ -33,8 +32,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         parent::__construct();
         $this->sectionsByHandle = craft()->sections->getAllSections('handle');
         $this->sectionsById = craft()->sections->getAllSections('id');
-        $this->assetSourceByHandle = $assetSources = craft()->assetSources->getAllSources('handle');
-        $this->assetSourceById = $assetSources = craft()->assetSources->getAllSources('id');
+        $this->assetSourceByHandle = craft()->assetSources->getAllSources('handle');
+        $this->assetSourceById = craft()->assetSources->getAllSources('id');
     }
 
     /**
@@ -89,7 +88,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         $permissionDefinitions = array();
         foreach ($permissions as $permission => $options) {
             if (craft()->userPermissions->doesGroupHavePermission($group->id, $permission)) {
-                $permissionDefinitions[] = $this->getPermissionDefinition($permission);
+                $permissionDefinitions[] = $this->getPermission($permission);
                 if (array_key_exists('nested', $options)) {
                     $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $options['nested']));
                 }
@@ -97,33 +96,6 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         }
 
         return $permissionDefinitions;
-    }
-
-    /**
-     * Get permission definition.
-     *
-     * @param string $permission
-     *
-     * @return string
-     */
-    private function getPermissionDefinition($permission)
-    {
-        if (strpos($permission, ':') > -1) {
-            $source = false;
-            $permissionArray = explode(':', $permission);
-
-            if (strpos($permission, 'Asset') > -1) {
-                $source = $this->assetSourceById[$permissionArray[1]];
-            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
-                $source = $this->sectionsById[$permissionArray[1]];
-            }
-
-            if ($source) {
-                $permission = $permissionArray[0].':'.$source->handle;
-            }
-        }
-
-        return $permission;
     }
 
     /**
