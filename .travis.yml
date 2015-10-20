@@ -38,3 +38,8 @@ before_script:
 
 # execute tests
 script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration craft/plugins/schematic/phpunit.xml.dist --coverage-clover coverage.clover craft/plugins/schematic/tests
+
+# upload coverage to scrutinizer
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
