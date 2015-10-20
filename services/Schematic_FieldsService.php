@@ -41,7 +41,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
 
     /**
      * Returns fields service
-     * @return \Craft\FieldsService
+     * @return FieldsService
      */
     private function getFieldsService()
     {
@@ -58,6 +58,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
+     * Returns matrix service
      * @return MatrixService
      */
     private function getMatrixService()
