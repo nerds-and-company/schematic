@@ -2,6 +2,8 @@
 
 namespace Craft;
 
+use Mockery\CountValidator\Exception;
+
 /**
  * Schematic Fields Service.
  *
@@ -13,8 +15,57 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_FieldsService extends BaseApplicationComponent
+class Schematic_FieldsService extends Schematic_AbstractService
 {
+    /**
+     * @var FieldModel[]
+     */
+    private $fields = array();
+
+    /**
+     * @var FieldGroupModel[]
+     */
+    private $groups = array();
+
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        parent::__construct();
+
+        $this->groups = $this->getFieldsService()->getAllGroups('name');
+        $this->fields = $this->getFieldsService()->getAllFields('handle');
+    }
+
+
+    /**
+     * Returns fields service
+     * @return FieldsService
+     */
+    private function getFieldsService()
+    {
+        return craft()->fields;
+    }
+
+    /**
+     * Returns content service
+     * @return ContentService
+     */
+    private function getContentService()
+    {
+        return craft()->content;
+    }
+
+    /**
+     * Returns matrix service
+     * @return MatrixService
+     */
+    private function getMatrixService()
+    {
+        return craft()->matrix;
+    }
+
     /**
      * Export fields.
      *
@@ -22,7 +73,7 @@ class Schematic_FieldsService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function export(array $groups)
+    public function export(array $groups = array())
     {
         $groupDefinitions = array();
 
@@ -103,7 +154,7 @@ class Schematic_FieldsService extends BaseApplicationComponent
     {
         $blockTypeDefinitions = array();
 
-        $blockTypes = craft()->matrix->getBlockTypesByFieldId($field->id);
+        $blockTypes = $this->getMatrixService()->getBlockTypesByFieldId($field->id);
         foreach ($blockTypes as $blockType) {
             $blockTypeFieldDefinitions = array();
 
@@ -121,6 +172,138 @@ class Schematic_FieldsService extends BaseApplicationComponent
     }
 
     /**
+     * Save field group
+     * @param FieldGroupModel $group
+     * @throws Exception
+     */
+    private function saveFieldGroupModel(FieldGroupModel $group)
+    {
+        if (!$this->getFieldsService()->saveGroup($group)) {
+            $this->addErrors($group->getAllErrors());
+
+            throw new Exception('Failed to save group');
+        }
+    }
+
+    /**
+     * Save field
+     * @param FieldModel $field
+     * @throws \Exception
+     */
+    private function saveFieldModel(FieldModel $field)
+    {
+        $this->validateFieldModel($field); // Validate field
+        if (!$this->getFieldsService()->saveField($field)) {
+            $this->addErrors($field->getAllErrors());
+
+            throw new \Exception('Failed to save field');
+        }
+    }
+
+    /**
+     * Removes fields that where not imported
+     */
+    private function deleteFields()
+    {
+        $fieldsService = $this->getFieldsService();
+        foreach ($this->fields as $field) {
+            $fieldsService->deleteFieldById($field->id);
+        }
+    }
+
+    /**
+     * Removes groups that where not imported
+     */
+    private function deleteGroups()
+    {
+        $fieldsService = $this->getFieldsService();
+        foreach ($this->groups as $group) {
+            $fieldsService->deleteGroupById($group->id);
+        }
+    }
+
+    /**
+     * Removes fields and groups that where not imported
+     */
+    private function deleteFieldsAndGroups()
+    {
+        $this->deleteFields();
+        $this->deleteGroups();
+    }
+
+    /**
+     * Creates new or updates existing group model
+     * @param string $group
+     * @return FieldGroupModel
+     */
+    private function createFieldGroupModel($group)
+    {
+        $groupModel = (array_key_exists($group, $this->groups) ? $this->groups[$group] : new FieldGroupModel());
+        $groupModel->name = $group;
+
+        $this->saveFieldGroupModel($groupModel);
+
+        return $groupModel;
+    }
+
+    /**
+     * @param string $field
+     * @return FieldModel
+     */
+    private function getFieldModel($field)
+    {
+        return (array_key_exists($field, $this->fields) ? $this->fields[$field] : new FieldModel());
+    }
+
+    /**
+     * Validates field type, throw error when it's incorrect
+     * @param FieldModel $field
+     * @throws \Exception
+     */
+    private function validateFieldModel(FieldModel $field)
+    {
+        if(!$field->getFieldType()) {
+            $fieldType = $field->type;
+            ($fieldType == 'Matrix')
+                ? $this->addError("One of the field's types does not exist. Are you missing a plugin?")
+                : $this->addError("Field type '$fieldType' does not exist. Are you missing a plugin?");
+
+            throw new \Exception('Failed to save field');
+        }
+    }
+
+    /**
+     * Import field group fields
+     * @param array $fieldDefinitions=
+     * @param FieldGroupModel $group
+     * @throws \Exception
+     */
+    private function importFields(array $fieldDefinitions, FieldGroupModel $group)
+    {
+        foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
+            $field = $this->getFieldModel($fieldHandle);
+
+            $this->populateField($fieldDef, $field, $fieldHandle, $group);
+
+            $this->saveFieldModel($field);
+        }
+    }
+
+    /**
+     * Unset group and field data else $force flag will delete it
+     * @param string $name
+     * @param array $definitions
+     */
+    private function unsetData($name, array $definitions) {
+        if(array_key_exists($name, $this->groups)) {
+            unset($this->groups[$name]);
+            foreach ($definitions as $handle => $definition) {
+                unset($this->fields[$handle]);
+            }
+        }
+    }
+
+    /**
      * Attempt to import fields.
      *
      * @param array $groupDefinitions
@@ -128,69 +311,38 @@ class Schematic_FieldsService extends BaseApplicationComponent
      *
      * @return Schematic_ResultModel
      */
-    public function import($groupDefinitions, $force = false)
+    public function import(array $groupDefinitions, $force = false)
     {
-        $result = new Schematic_ResultModel();
+        if (!empty($groupDefinitions)) {
+            $contentService = $this->getContentService();
 
-        if (empty($groupDefinitions)) {
-            // Ignore importing fields.
-            return $result;
-        }
+            $contentService->fieldContext = 'global';
+            $contentService->contentTable = 'content';
 
-        $groups = craft()->fields->getAllGroups('name');
-        $fields = craft()->fields->getAllFields('handle');
+            foreach ($groupDefinitions as $name => $fieldDefinitions) {
+                try {
+                    $this->beginTransaction();
 
-        craft()->content->fieldContext = 'global';
-        craft()->content->contentTable = 'content';
+                    $group = $this->createFieldGroupModel($name);
 
-        foreach ($groupDefinitions as $groupName => $fieldDefinitions) {
-            $group = array_key_exists($groupName, $groups)
-                ? $groups[$groupName]
-                : new FieldGroupModel();
+                    $this->importFields($fieldDefinitions, $group);
 
-            unset($groups[$groupName]);
+                    $this->commitTransaction();
+                } catch (\Exception $e) {
+                    $this->rollbackTransaction();
 
-            $group->name = $groupName;
-
-            if (!craft()->fields->saveGroup($group)) {
-                $result->addErrors(array('errors' => $group->getAllErrors()));
-
-                continue;
-            }
-
-            foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
-                $field = array_key_exists($fieldHandle, $fields)
-                    ? $fields[$fieldHandle]
-                    : new FieldModel();
-
-                unset($fields[$fieldHandle]);
-
-                $this->populateField($fieldDef, $field, $fieldHandle, $group);
-
-                if (!$field->getFieldType()) {
-                    ($field->type == 'Matrix')
-                        ? $result->addError("errors", "One of the field's types does not exist. Are you missing a plugin?")
-                        : $result->addError("errors", "Field type '$field->type' does not exist. Are you missing a plugin?");
-
-                    break;
+                    $this->addError($e->getMessage());
                 }
 
-                if (!craft()->fields->saveField($field)) {
-                    $result->addErrors(array('errors' => $field->getAllErrors()));
-                }
+                $this->unsetData($name, $fieldDefinitions);
+            }
+
+            if ($force) { // Remove not imported data
+                $this->deleteFieldsAndGroups();
             }
         }
 
-        if ($force) {
-            foreach ($fields as $field) {
-                craft()->fields->deleteFieldById($field->id);
-            }
-            foreach ($groups as $group) {
-                craft()->fields->deleteGroupById($group->id);
-            }
-        }
-
-        return $result;
+        return $this->getResultModel();
     }
 
     /**
@@ -235,8 +387,12 @@ class Schematic_FieldsService extends BaseApplicationComponent
      * @param string          $fieldHandle
      * @param FieldGroupModel $group
      */
-    private function populateField(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
-    {
+    private function populateField(
+        array $fieldDefinition,
+        FieldModel $field,
+        $fieldHandle,
+        FieldGroupModel $group = null
+    ) {
         $field->name = $fieldDefinition['name'];
         $field->handle = $fieldHandle;
         $field->required = $fieldDefinition['required'];

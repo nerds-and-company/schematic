@@ -13,7 +13,7 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_GlobalsService extends BaseApplicationComponent
+class Schematic_GlobalsService extends Schematic_AbstractService
 {
     /**
      * Export globalsets.
@@ -22,7 +22,7 @@ class Schematic_GlobalsService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function export(array $globalSets)
+    public function export(array $globalSets = array())
     {
         $globalDefinitions = array();
 
@@ -56,15 +56,8 @@ class Schematic_GlobalsService extends BaseApplicationComponent
      *
      * @return Schematic_ResultModel
      */
-    public function import($globalSetDefinitions, $force = false)
+    public function import(array $globalSetDefinitions, $force = false)
     {
-        $result = new Schematic_ResultModel();
-
-        if (empty($globalSetDefinitions)) {
-            // Ignore importing globals.
-            return $result;
-        }
-
         $globalSets = craft()->globals->getAllSets('handle');
 
         foreach ($globalSetDefinitions as $globalSetHandle => $globalSetDefinition) {
@@ -76,9 +69,8 @@ class Schematic_GlobalsService extends BaseApplicationComponent
 
             $this->populateGlobalSet($global, $globalSetDefinition, $globalSetHandle);
 
-            // Save globalset via craft
-            if (!craft()->globals->saveSet($global)) {
-                $result->addErrors(array('errors' => $global->getAllErrors()));
+            if (!craft()->globals->saveSet($global)) { // Save globalset via craft
+                $this->addErrors($global->getAllErrors());
 
                 continue;
             }
@@ -90,7 +82,7 @@ class Schematic_GlobalsService extends BaseApplicationComponent
             }
         }
 
-        return $result;
+        return $this->getResultModel();
     }
 
     /**

@@ -13,32 +13,27 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_AssetsService extends BaseApplicationComponent
+class Schematic_AssetsService extends Schematic_AbstractService
 {
     /**
      * Import asset source definitions.
      *
      * @param array $assetSourceDefinitions
      *
+     * @param bool $force
      * @return Schematic_ResultModel
      */
-    public function import(array $assetSourceDefinitions)
+    public function import(array $assetSourceDefinitions, $force = false)
     {
-        $result = new Schematic_ResultModel();
-
-        if (empty($assetSourceDefinitions)) {
-            return $result;
-        }
-
         foreach ($assetSourceDefinitions as $assetHandle => $assetSourceDefinition) {
             $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
 
             if (!craft()->assetSources->saveSource($assetSource)) {
-                $result->addErrors(array('errors' => $assetSource->getAllErrors()));
+                $this->addErrors($assetSource->getAllErrors());
             }
         }
 
-        return $result;
+        return $this->getResultModel();
     }
 
     /**
@@ -68,9 +63,10 @@ class Schematic_AssetsService extends BaseApplicationComponent
     /**
      * Export all asset sources.
      *
+     * @param array $data
      * @return array
      */
-    public function export()
+    public function export(array $data = array())
     {
         $assetSources = craft()->assetSources->getAllSources();
 
