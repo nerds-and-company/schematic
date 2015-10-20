@@ -20,9 +20,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
      */
     protected $resultModel;
 
-
     /**
-     * Constructor to setup result model
+     * Constructor to setup result model.
      */
     public function __construct()
     {
@@ -38,7 +37,16 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Installs plugin by handle
+     * @return MigrationsService
+     */
+    protected function getMigrationsService()
+    {
+        return craft()->migrations;
+    }
+
+    /**
+     * Installs plugin by handle.
+     *
      * @param string $handle
      */
     protected function installPluginByHandle($handle)
@@ -51,7 +59,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Uninstalls plugin by handle
+     * Uninstalls plugin by handle.
+     *
      * @param $handle
      */
     protected function uninstallPluginByHandle($handle)
@@ -60,8 +69,10 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Returns plugin by handle
+     * Returns plugin by handle.
+     *
      * @param string $handle
+     *
      * @return BasePlugin|null
      */
     protected function getPlugin($handle)
@@ -75,9 +86,10 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Toggles plugin based on enabled flag
+     * Toggles plugin based on enabled flag.
+     *
      * @param string $handle
-     * @param bool $isEnabled
+     * @param bool   $isEnabled
      */
     protected function togglePluginByHandle($handle, $isEnabled)
     {
@@ -89,7 +101,8 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Add error to errors collection
+     * Add error to errors collection.
+     *
      * @param $message
      */
     private function addError($message)
@@ -99,6 +112,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
 
     /**
      * @param BasePlugin $plugin
+     *
      * @return array
      */
     private function getPluginDefinition(BasePlugin $plugin)
@@ -106,26 +120,29 @@ class Schematic_PluginsService extends BaseApplicationComponent
         return array(
             'isInstalled'       => $plugin->isInstalled,
             'isEnabled'         => $plugin->isEnabled,
-            'settings'          => $plugin->getSettings()->attributes
+            'settings'          => $plugin->getSettings()->attributes,
         );
     }
 
     /**
      * @param array $pluginDefinitions
+     *
      * @return Schematic_ResultModel
      */
     public function import(array $pluginDefinitions)
     {
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            if($plugin = $this->getPlugin($handle)) {
+            if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
                     $this->installPluginByHandle($handle);
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
-                    if(array_key_exists('settings', $pluginDefinition)){
+                    if (array_key_exists('settings', $pluginDefinition)) {
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
+
+                    $this->getMigrationsService()->runToTop($plugin);
                 } else {
                     $this->uninstallPluginByHandle($handle);
                 }
@@ -147,6 +164,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
             $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
         }
         ksort($pluginDefinitions);
+
         return $pluginDefinitions;
     }
 }

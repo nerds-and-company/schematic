@@ -5,7 +5,7 @@ namespace Craft;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class Schematic_PluginsServiceTest
+ * Class Schematic_PluginsServiceTest.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -49,6 +49,7 @@ class Schematic_PluginsServiceTest extends BaseTest
      * @param bool $enablePluginResponse
      * @param bool $disablePluginResponse
      * @param bool $uninstallPluginResponse
+     *
      * @return PluginsService|Mock
      */
     public function getMockPluginsService(
@@ -62,7 +63,7 @@ class Schematic_PluginsServiceTest extends BaseTest
 
         $mock->expects($this->any())->method('getPlugin')->willReturn(($returnPlugin) ? $this->getMockBasePlugin() : null);
 
-        if($installPluginResponse) {
+        if ($installPluginResponse) {
             $mock->expects($this->any())->method('installPlugin')->willReturn($installPluginResponse);
         } else {
             $mock->expects($this->any())->method('installPlugin')->willThrowException(new Exception());
@@ -71,6 +72,17 @@ class Schematic_PluginsServiceTest extends BaseTest
         $mock->expects($this->any())->method('enablePlugin')->willReturn($enablePluginResponse);
         $mock->expects($this->any())->method('disablePlugin')->willReturn($disablePluginResponse);
         $mock->expects($this->any())->method('uninstallPlugin')->willReturn($uninstallPluginResponse);
+
+        return $mock;
+    }
+
+    /**
+     * @return MigrationsService|Mock
+     */
+    public function getMockMigrationsService()
+    {
+        $mock = $this->getMockBuilder('Craft\MigrationsService')->getMock();
+        $mock->expects($this->any())->method('runToTop')->willReturn(true);
 
         return $mock;
     }
@@ -86,7 +98,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test default import functionality
+     * Test default import functionality.
+     *
      * @covers ::import
      */
     public function testImportWithInstalledPlugins()
@@ -94,6 +107,8 @@ class Schematic_PluginsServiceTest extends BaseTest
         $data = $this->getPluginsData();
         $mockPluginsService = $this->getMockPluginsService();
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $mockMigrationsService = $this->getMockMigrationsService();
+        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -102,7 +117,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test default import functionality
+     * Test default import functionality.
+     *
      * @covers ::import
      */
     public function testImportWithInstalledDisabledPlugins()
@@ -119,7 +135,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test default import functionality
+     * Test default import functionality.
+     *
      * @covers ::import
      */
     public function testImportWithMissingPlugin()
@@ -136,7 +153,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test default import functionality
+     * Test default import functionality.
+     *
      * @covers ::import
      */
     public function testImportWithInstallException()
@@ -153,7 +171,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test default import functionality
+     * Test default import functionality.
+     *
      * @covers ::import
      */
     public function testImportWithNotInstalledPlugin()
@@ -171,7 +190,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Test export functionality
+     * Test export functionality.
+     *
      * @covers ::export
      */
     public function testExport()
@@ -198,7 +218,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
-     * Returns plugins data
+     * Returns plugins data.
+     *
      * @return array
      */
     public function getPluginsData()
@@ -210,9 +231,9 @@ class Schematic_PluginsServiceTest extends BaseTest
                 'settings'          => array(
                     'pluginName'    => 'Menu',
                     'canDoActions'  => '',
-                    'quietErrors'   => ''
-                )
-            )
+                    'quietErrors'   => '',
+                ),
+            ),
         );
     }
 }
