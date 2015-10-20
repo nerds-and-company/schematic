@@ -1,4 +1,4 @@
-# Schematic
+# Schematic [![Build Status](https://travis-ci.org/itmundi/schematic.svg?branch=master)](https://travis-ci.org/itmundi/schematic)
 
 Schematic allows you to synchronize your Craft setup over multiple environments
 
