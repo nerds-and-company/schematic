@@ -73,12 +73,14 @@ class SchematicService extends BaseApplicationComponent
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
 
-        // Run plugin imports through hook
+        /** @var Schematic_AbstractService[] $services */
         $services = craft()->plugins->callFirst('registerMigrationService');
         if (is_array($services)) {
             foreach ($services as $handle => $service) {
-                $hookResult = $service->import($model->pluginData[$handle], $force);
-                $result->consume($hookResult);
+                if (array_key_exists($handle, $model->pluginData)) { // Make sure we got data
+                    $hookResult = $service->import($model->pluginData[$handle], $force);
+                    $result->consume($hookResult);
+                }
             }
         }
 

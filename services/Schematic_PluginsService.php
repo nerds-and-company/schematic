@@ -13,22 +13,8 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_PluginsService extends BaseApplicationComponent
+class Schematic_PluginsService extends Schematic_AbstractService
 {
-    /**
-     * @var Schematic_ResultModel
-     */
-    protected $resultModel;
-
-
-    /**
-     * Constructor to setup result model
-     */
-    public function __construct()
-    {
-        $this->resultModel = new Schematic_ResultModel();
-    }
-
     /**
      * @return PluginsService
      */
@@ -46,7 +32,7 @@ class Schematic_PluginsService extends BaseApplicationComponent
         try {
             $this->getPluginService()->installPlugin($handle);
         } catch (\Exception $e) {
-            $this->addError("An error occurred while installing plugin $handle, continuing anyway");
+            $this->addError($e->getMessage());
         }
     }
 
@@ -89,15 +75,6 @@ class Schematic_PluginsService extends BaseApplicationComponent
     }
 
     /**
-     * Add error to errors collection
-     * @param $message
-     */
-    private function addError($message)
-    {
-        $this->resultModel->addError('errors', $message);
-    }
-
-    /**
      * @param BasePlugin $plugin
      * @return array
      */
@@ -112,18 +89,19 @@ class Schematic_PluginsService extends BaseApplicationComponent
 
     /**
      * @param array $pluginDefinitions
+     * @param bool $force
      * @return Schematic_ResultModel
      */
-    public function import(array $pluginDefinitions)
+    public function import(array $pluginDefinitions, $force = false)
     {
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            if($plugin = $this->getPlugin($handle)) {
+            if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
                     $this->installPluginByHandle($handle);
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
-                    if(array_key_exists('settings', $pluginDefinition)){
+                    if (array_key_exists('settings', $pluginDefinition)) {
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
                 } else {
@@ -132,13 +110,14 @@ class Schematic_PluginsService extends BaseApplicationComponent
             }
         }
 
-        return $this->resultModel;
+        return $this->getResultModel();
     }
 
     /**
+     * @param array $data
      * @return array
      */
-    public function export()
+    public function export(array $data = array())
     {
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = array();

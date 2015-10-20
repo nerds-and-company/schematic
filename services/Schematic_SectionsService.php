@@ -13,7 +13,7 @@ namespace Craft;
  *
  * @link      http://www.itmundi.nl
  */
-class Schematic_SectionsService extends BaseApplicationComponent
+class Schematic_SectionsService extends Schematic_AbstractService
 {
     /**
      * Export sections.
@@ -23,7 +23,7 @@ class Schematic_SectionsService extends BaseApplicationComponent
      *
      * @return array
      */
-    public function export(array $sections, array $allowedEntryTypeIds = null)
+    public function export(array $sections = array(), array $allowedEntryTypeIds = null)
     {
         $sectionDefinitions = array();
 
@@ -137,41 +137,34 @@ class Schematic_SectionsService extends BaseApplicationComponent
      *
      * @return Schematic_ResultModel
      */
-    public function import($sectionDefinitions, $force = false)
+    public function import(array $sectionDefinitions, $force = false)
     {
-        $result = new Schematic_ResultModel();
-
-        if (empty($sectionDefinitions)) {
-            // Ignore importing sections.
-            return $result;
-        }
-
         $sections = craft()->sections->getAllSections('handle');
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {
-            if (!array_key_exists('locales', $sectionDefinition)) {
-                $result->addError('errors', '`sections[handle].locales` must be defined');
-
-                continue;
-            }
-
-            if (!array_key_exists('entryTypes', $sectionDefinition)) {
-                $result->addError('errors', '`sections[handle].entryTypes` must exist be defined');
-
-                continue;
-            }
-
             $section = array_key_exists($sectionHandle, $sections)
                 ? $sections[$sectionHandle]
                 : new SectionModel();
 
             unset($sections[$sectionHandle]);
 
+            if (!array_key_exists('locales', $sectionDefinition)) {
+                $this->addError('`sections[handle].locales` must be defined');
+
+                continue;
+            }
+
+            if (!array_key_exists('entryTypes', $sectionDefinition)) {
+                $this->addError('errors', '`sections[handle].entryTypes` must exist be defined');
+
+                continue;
+            }
+
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
 
             // Create initial section record
             if (!$this->preSaveSection($section)) {
-                $result->addErrors(array('errors' => $section->getAllErrors()));
+                $this->addErrors($section->getAllErrors());
 
                 continue;
             }
@@ -186,7 +179,7 @@ class Schematic_SectionsService extends BaseApplicationComponent
                 $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
 
                 if (!craft()->sections->saveEntryType($entryType)) {
-                    $result->addError('errors', $entryType->getAllErrors());
+                    $this->addError($entryType->getAllErrors());
 
                     continue;
                 }
@@ -194,7 +187,7 @@ class Schematic_SectionsService extends BaseApplicationComponent
 
             // Save section via craft after entrytypes have been created
             if (!craft()->sections->saveSection($section)) {
-                $result->addErrors(array('errors' => $section->getAllErrors()));
+                $this->addErrors($section->getAllErrors());
             }
         }
 
@@ -204,7 +197,7 @@ class Schematic_SectionsService extends BaseApplicationComponent
             }
         }
 
-        return $result;
+        return $this->getResultModel();
     }
 
     /**
