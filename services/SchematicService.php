@@ -77,7 +77,7 @@ class SchematicService extends BaseApplicationComponent
         $services = craft()->plugins->callFirst('registerMigrationService');
         if (is_array($services)) {
             foreach ($services as $handle => $service) {
-                if (array_key_exists($handle, $model->pluginData)) { // Make sure we got data
+                if ($services instanceof Schematic_AbstractService && array_key_exists($handle, $model->pluginData)) {
                     $hookResult = $service->import($model->pluginData[$handle], $force);
                     $result->consume($hookResult);
                 }
@@ -108,12 +108,14 @@ class SchematicService extends BaseApplicationComponent
             'userGroups' => craft()->schematic_userGroups->export($userGroups),
         );
 
-        // Run plugin exports through hook
+        /** @var Schematic_AbstractService[] $services */
         $services = craft()->plugins->callFirst('registerMigrationService');
         if (is_array($services)) {
             $export['pluginData'] = array();
             foreach ($services as $handle => $service) {
-                $export['pluginData'][$handle] = $service->export();
+                if ($services instanceof Schematic_AbstractService) {
+                    $export['pluginData'][$handle] = $service->export();
+                }
             }
         }
 
