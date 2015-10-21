@@ -24,17 +24,45 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
 
+    //==============================================================================================================
+    //===============================================  SERVICES  ===================================================
+    //==============================================================================================================
+
     /**
-     * Set the sections fields.
+     * @return SectionsService
      */
-    public function __construct()
+    private function getSectionsService()
     {
-        parent::__construct();
-        $this->sectionsByHandle = craft()->sections->getAllSections('handle');
-        $this->sectionsById = craft()->sections->getAllSections('id');
-        $this->assetSourceByHandle = craft()->assetSources->getAllSources('handle');
-        $this->assetSourceById = craft()->assetSources->getAllSources('id');
+        return craft()->sections;
     }
+
+    /**
+     * @return AssetSourcesService
+     */
+    private function getAssetSourcesService()
+    {
+        return craft()->assetSources;
+    }
+
+    /**
+     * @return UserPermissionsService
+     */
+    private function getUserPermissionsService()
+    {
+        return craft()->userPermissions;
+    }
+
+    /**
+     * @return UserGroupsService
+     */
+    private function getUserGroupsService()
+    {
+        return craft()->userGroups;
+    }
+
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Export user groups.
@@ -46,6 +74,9 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     public function export(array $groups = array())
     {
         $groupDefinitions = array();
+
+        $this->sectionsById = $this->getSectionsService()->getAllSections('id');
+        $this->assetSourceById = $this->getAssetSourcesService()->getAllSources('id');
 
         foreach ($groups as $group) {
             $groupDefinitions[$group->handle] = $this->getGroupDefinition($group);
@@ -65,7 +96,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     {
         $permissionDefinitions = array();
 
-        foreach (craft()->userPermissions->getAllPermissions() as $label => $permissions) {
+        foreach ($this->getUserPermissionsService()->getAllPermissions() as $label => $permissions) {
             $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $permissions));
         }
 
@@ -87,7 +118,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     {
         $permissionDefinitions = array();
         foreach ($permissions as $permission => $options) {
-            if (craft()->userPermissions->doesGroupHavePermission($group->id, $permission)) {
+            if ($this->getUserPermissionsService()->doesGroupHavePermission($group->id, $permission)) {
                 $permissionDefinitions[] = $this->getPermissionDefinition($permission);
                 if (array_key_exists('nested', $options)) {
                     $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $options['nested']));
@@ -97,6 +128,11 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
         return $permissionDefinitions;
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
+
 
     /**
      * Import usergroups.
@@ -108,7 +144,10 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        $userGroups = craft()->userGroups->getAllGroups('handle');
+        $this->sectionsByHandle = $this->getSectionsService()->getAllSections('handle');
+        $this->assetSourceByHandle = $this->getAssetSourcesService()->getAllSources('handle');
+
+        $userGroups = $this->getUserGroupsService()->getAllGroups('handle');
 
         foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
             $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
@@ -118,7 +157,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
             $group->name = $groupDefinition['name'];
             $group->handle = $groupHandle;
 
-            if (!craft()->userGroups->saveGroup($group)) {
+            if (!$this->getUserGroupsService()->saveGroup($group)) {
                 $this->addErrors($group->getAllErrors());
 
                 continue;
@@ -126,12 +165,12 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
             $permissions = $this->getPermissions($groupDefinition['permissions']);
 
-            craft()->userPermissions->saveGroupPermissions($group->id, $permissions);
+            $this->getUserPermissionsService()->saveGroupPermissions($group->id, $permissions);
         }
 
         if ($force) {
             foreach ($userGroups as $group) {
-                craft()->userGroups->deleteGroupById($group->id);
+                $this->getUserGroupsService()->deleteGroupById($group->id);
             }
         }
 
@@ -207,4 +246,9 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
         return $permissionDefinition;
     }
+
+    //==============================================================================================================
+    //===============================================  HELPERS  ====================================================
+    //==============================================================================================================
+
 }
