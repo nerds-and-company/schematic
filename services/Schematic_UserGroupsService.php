@@ -88,7 +88,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         $permissionDefinitions = array();
         foreach ($permissions as $permission => $options) {
             if (craft()->userPermissions->doesGroupHavePermission($group->id, $permission)) {
-                $permissionDefinitions[] = $this->getPermission($permission);
+                $permissionDefinitions[] = $this->getPermissionDefinition($permission);
                 if (array_key_exists('nested', $options)) {
                     $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $options['nested']));
                 }
@@ -102,7 +102,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      * Import usergroups.
      *
      * @param array $groupDefinitions
-     * @param bool  $force            if set to true items not in the import will be deleted
+     * @param bool $force if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -156,6 +156,32 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     }
 
     /**
+     * Get permission definition.
+     *
+     * @param string $permission
+     *
+     * @return string
+     */
+    private function getPermissionDefinition($permission)
+    {
+        if (strpos($permission, ':') > -1) {
+            $source = false;
+            $permissionArray = explode(':', $permission);
+
+            if (strpos($permission, 'Asset') > -1) {
+                $source = $this->assetSourceById[$permissionArray[1]];
+            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
+                $source = $this->sectionsById[$permissionArray[1]];
+            }
+
+            if ($source) {
+                $permission = $permissionArray[0] . ':' . $source->handle;
+            }
+        }
+        return $permission;
+    }
+
+    /**
      * Get permission.
      *
      * @param string $permissionDefinition
@@ -175,7 +201,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
             }
 
             if ($source) {
-                $permissionDefinition = $permissionArray[0].':'.$source->id;
+                $permissionDefinition = $permissionArray[0] . ':' . $source->id;
             }
         }
 
