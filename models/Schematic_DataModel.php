@@ -60,6 +60,6 @@ class Schematic_DataModel extends BaseModel
     {
         $data = $data === null ? null : new static($data);
 
-        return Yaml::dump($data->attributes, 12);
+        return Yaml::dump($data->attributes, 12, 2);
     }
 }
