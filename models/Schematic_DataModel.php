@@ -31,7 +31,7 @@ class Schematic_DataModel extends BaseModel
             'plugins'           => AttributeType::Mixed,
             'sections'          => AttributeType::Mixed,
             'userGroups'        => AttributeType::Mixed,
-            'users'             => AttributeType::Mixed,
+            'users'             => array(AttributeType::Mixed, 'default' => array()),
             'pluginData'        => array(AttributeType::Mixed, 'default' => array()),
         );
     }
