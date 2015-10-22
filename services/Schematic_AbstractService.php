@@ -3,7 +3,7 @@
 namespace Craft;
 
 /**
- * Schematic Base Service for some easy access methods
+ * Schematic Base Service for some easy access methods.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -19,22 +19,26 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     protected $resultModel;
 
     /**
-     * Required import method
+     * Required import method.
+     *
      * @param array $data
-     * @param bool $force
+     * @param bool  $force
+     *
      * @return Schematic_ResultModel
      */
-    public abstract function import(array $data, $force);
+    abstract public function import(array $data, $force);
 
     /**
-     * Required export method
+     * Required export method.
+     *
      * @param array|null $data
+     *
      * @return mixed
      */
-    public abstract function export(array $data = array());
+    abstract public function export(array $data = array());
 
     /**
-     * Constructor to setup result model
+     * Constructor to setup result model.
      */
     public function __construct()
     {
@@ -50,8 +54,10 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Returns current transaction
+     * Returns current transaction.
+     *
      * @return \CDbTransaction
+     *
      * @throws \CDbException
      */
     protected function getTransaction()
@@ -63,7 +69,7 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Starts DB transaction
+     * Starts DB transaction.
      */
     protected function beginTransaction()
     {
@@ -71,7 +77,7 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Commits transaction
+     * Commits transaction.
      */
     protected function commitTransaction()
     {
@@ -83,7 +89,7 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Rolls back transaction
+     * Rolls back transaction.
      */
     protected function rollbackTransaction()
     {
@@ -95,7 +101,8 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Adds error to result model
+     * Adds error to result model.
+     *
      * @param $message
      * @param string $attribute
      */
@@ -105,8 +112,9 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Adds multiple errors to result model
-     * @param array $messages
+     * Adds multiple errors to result model.
+     *
+     * @param array  $messages
      * @param string $attribute
      */
     protected function addErrors(array $messages, $attribute = 'errors')
@@ -115,8 +123,10 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Returns if there are errors or not
+     * Returns if there are errors or not.
+     *
      * @param string $attribute
+     *
      * @return bool
      */
     protected function hasErrors($attribute = 'errors')
@@ -125,7 +135,8 @@ abstract class Schematic_AbstractService extends BaseApplicationComponent
     }
 
     /**
-     * Returns current result model
+     * Returns current result model.
+     *
      * @return Schematic_ResultModel
      */
     public function getResultModel()

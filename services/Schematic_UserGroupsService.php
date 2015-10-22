@@ -24,7 +24,6 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
 
-
     /**
      * Set the sections fields.
      */
@@ -33,8 +32,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         parent::__construct();
         $this->sectionsByHandle = craft()->sections->getAllSections('handle');
         $this->sectionsById = craft()->sections->getAllSections('id');
-        $this->assetSourceByHandle = $assetSources = craft()->assetSources->getAllSources('handle');
-        $this->assetSourceById = $assetSources = craft()->assetSources->getAllSources('id');
+        $this->assetSourceByHandle = craft()->assetSources->getAllSources('handle');
+        $this->assetSourceById = craft()->assetSources->getAllSources('id');
     }
 
     /**
@@ -100,37 +99,10 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     }
 
     /**
-     * Get permission definition.
-     *
-     * @param string $permission
-     *
-     * @return string
-     */
-    private function getPermissionDefinition($permission)
-    {
-        if (strpos($permission, ':') > -1) {
-            $source = false;
-            $permissionArray = explode(':', $permission);
-
-            if (strpos($permission, 'Asset') > -1) {
-                $source = $this->assetSourceById[$permissionArray[1]];
-            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
-                $source = $this->sectionsById[$permissionArray[1]];
-            }
-
-            if ($source) {
-                $permission = $permissionArray[0].':'.$source->handle;
-            }
-        }
-
-        return $permission;
-    }
-
-    /**
      * Import usergroups.
      *
      * @param array $groupDefinitions
-     * @param bool  $force            if set to true items not in the import will be deleted
+     * @param bool $force if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -184,6 +156,32 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     }
 
     /**
+     * Get permission definition.
+     *
+     * @param string $permission
+     *
+     * @return string
+     */
+    private function getPermissionDefinition($permission)
+    {
+        if (strpos($permission, ':') > -1) {
+            $source = false;
+            $permissionArray = explode(':', $permission);
+
+            if (strpos($permission, 'Asset') > -1) {
+                $source = $this->assetSourceById[$permissionArray[1]];
+            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
+                $source = $this->sectionsById[$permissionArray[1]];
+            }
+
+            if ($source) {
+                $permission = $permissionArray[0] . ':' . $source->handle;
+            }
+        }
+        return $permission;
+    }
+
+    /**
      * Get permission.
      *
      * @param string $permissionDefinition
@@ -203,7 +201,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
             }
 
             if ($source) {
-                $permissionDefinition = $permissionArray[0].':'.$source->id;
+                $permissionDefinition = $permissionArray[0] . ':' . $source->id;
             }
         }
 

@@ -19,8 +19,8 @@ class Schematic_AssetsService extends Schematic_AbstractService
      * Import asset source definitions.
      *
      * @param array $assetSourceDefinitions
+     * @param bool  $force
      *
-     * @param bool $force
      * @return Schematic_ResultModel
      */
     public function import(array $assetSourceDefinitions, $force = false)
@@ -46,7 +46,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
      */
     private function populateAssetSource($assetHandle, array $assetSourceDefinition)
     {
-        $assetSource = $sourceRecord = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
+        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
         $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
 
         $assetSource->setAttributes(array(
@@ -64,6 +64,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
      * Export all asset sources.
      *
      * @param array $data
+     *
      * @return array
      */
     public function export(array $data = array())

@@ -31,6 +31,7 @@ class Schematic_DataModel extends BaseModel
             'plugins'           => AttributeType::Mixed,
             'sections'          => AttributeType::Mixed,
             'userGroups'        => AttributeType::Mixed,
+            'users'             => AttributeType::Mixed,
             'pluginData'        => array(AttributeType::Mixed, 'default' => array()),
         );
     }
@@ -52,14 +53,14 @@ class Schematic_DataModel extends BaseModel
     /**
      * Populate yaml from data model.
      *
-     * @param string $yaml
+     * @param array $data
      *
      * @return Schematic_DataModel
      */
-    public static function toYaml($data)
+    public static function toYaml(array $data)
     {
         $data = $data === null ? null : new static($data);
 
-        return Yaml::dump($data->attributes, 12);
+        return Yaml::dump($data->attributes, 12, 2);
     }
 }

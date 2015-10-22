@@ -27,20 +27,20 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private $groups = array();
 
-
     /**
-     * Constructor
+     * Constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->groups = $this->getFieldsService()->getAllGroups('name');
         $this->fields = $this->getFieldsService()->getAllFields('handle');
     }
 
-
     /**
-     * Returns fields service
+     * Returns fields service.
+     *
      * @return FieldsService
      */
     private function getFieldsService()
@@ -49,7 +49,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Returns content service
+     * Returns content service.
+     *
      * @return ContentService
      */
     private function getContentService()
@@ -58,7 +59,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Returns matrix service
+     * Returns matrix service.
+     *
      * @return MatrixService
      */
     private function getMatrixService()
@@ -172,8 +174,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Save field group
+     * Save field group.
+     *
      * @param FieldGroupModel $group
+     *
      * @throws Exception
      */
     private function saveFieldGroupModel(FieldGroupModel $group)
@@ -186,8 +190,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Save field
+     * Save field.
+     *
      * @param FieldModel $field
+     *
      * @throws \Exception
      */
     private function saveFieldModel(FieldModel $field)
@@ -201,7 +207,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Removes fields that where not imported
+     * Removes fields that where not imported.
      */
     private function deleteFields()
     {
@@ -212,7 +218,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Removes groups that where not imported
+     * Removes groups that where not imported.
      */
     private function deleteGroups()
     {
@@ -223,7 +229,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Removes fields and groups that where not imported
+     * Removes fields and groups that where not imported.
      */
     private function deleteFieldsAndGroups()
     {
@@ -232,8 +238,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Creates new or updates existing group model
+     * Creates new or updates existing group model.
+     *
      * @param string $group
+     *
      * @return FieldGroupModel
      */
     private function createFieldGroupModel($group)
@@ -248,6 +256,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
 
     /**
      * @param string $field
+     *
      * @return FieldModel
      */
     private function getFieldModel($field)
@@ -256,13 +265,15 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Validates field type, throw error when it's incorrect
+     * Validates field type, throw error when it's incorrect.
+     *
      * @param FieldModel $field
+     *
      * @throws \Exception
      */
     private function validateFieldModel(FieldModel $field)
     {
-        if(!$field->getFieldType()) {
+        if (!$field->getFieldType()) {
             $fieldType = $field->type;
             ($fieldType == 'Matrix')
                 ? $this->addError("One of the field's types does not exist. Are you missing a plugin?")
@@ -273,9 +284,11 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Import field group fields
-     * @param array $fieldDefinitions=
+     * Import field group fields.
+     *
+     * @param array           $fieldDefinitions
      * @param FieldGroupModel $group
+     *
      * @throws \Exception
      */
     private function importFields(array $fieldDefinitions, FieldGroupModel $group)
@@ -290,12 +303,14 @@ class Schematic_FieldsService extends Schematic_AbstractService
     }
 
     /**
-     * Unset group and field data else $force flag will delete it
+     * Unset group and field data else $force flag will delete it.
+     *
      * @param string $name
-     * @param array $definitions
+     * @param array  $definitions
      */
-    private function unsetData($name, array $definitions) {
-        if(array_key_exists($name, $this->groups)) {
+    private function unsetData($name, array $definitions)
+    {
+        if (array_key_exists($name, $this->groups)) {
             unset($this->groups[$name]);
             foreach ($definitions as $handle => $definition) {
                 unset($this->fields[$handle]);

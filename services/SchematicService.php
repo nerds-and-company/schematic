@@ -63,6 +63,7 @@ class SchematicService extends BaseApplicationComponent
         $globalImportResult = craft()->schematic_globals->import($model->globals, $force);
         $sectionImportResult = craft()->schematic_sections->import($model->sections, $force);
         $userGroupImportResult = craft()->schematic_userGroups->import($model->userGroups, $force);
+        $userImportResult = craft()->schematic_users->import($model->users, true);
 
         // Verify results
         $result = new Schematic_ResultModel();
@@ -72,6 +73,7 @@ class SchematicService extends BaseApplicationComponent
         $result->consume($globalImportResult);
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
+        $result->consume($userImportResult);
 
         /** @var Schematic_AbstractService[] $services */
         $services = craft()->plugins->callFirst('registerMigrationService');
@@ -106,6 +108,7 @@ class SchematicService extends BaseApplicationComponent
             'sections' => craft()->schematic_sections->export($sections),
             'globals' => craft()->schematic_globals->export($globals),
             'userGroups' => craft()->schematic_userGroups->export($userGroups),
+            'users' => craft()->schematic_users->export(),
         );
 
         /** @var Schematic_AbstractService[] $services */
