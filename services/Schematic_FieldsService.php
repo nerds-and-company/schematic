@@ -136,7 +136,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
     {
         $handleSources = array();
         foreach ($sources as $source) {
-            $sectionId = explode(':', $source)[1];
+            $parts = explode(':', $source);
+            $sectionId = $parts[1];
             $handleSources[] = craft()->sections->getSectionById($sectionId)->handle;
         }
 
