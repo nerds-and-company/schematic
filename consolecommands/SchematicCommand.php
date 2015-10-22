@@ -25,18 +25,17 @@ class SchematicCommand extends BaseCommand
     {
         if (!IOHelper::fileExists($file)) {
             $this->usageError(Craft::t('File not found.'));
-            exit(1);
         }
 
         $result = craft()->schematic->importFromYaml($file, $force);
 
         if (!$result->hasErrors()) {
-            echo Craft::t('Loaded schema from {file}', array('file' => $file))."\n";
+            SchematicPlugin::log(Craft::t('Loaded schema from {file}', array('file' => $file)));
             exit(0);
         }
 
-        echo Craft::t('There was an error loading schema from {file}', array('file' => $file))."\n";
-        print_r($result->errors);
+        SchematicPlugin::log(Craft::t('There was an error loading schema from {file}', array('file' => $file)));
+        print_r($result->getErrors());
         exit(1);
     }
 
@@ -49,7 +48,7 @@ class SchematicCommand extends BaseCommand
     {
         craft()->schematic->exportToYaml($file);
 
-        echo Craft::t('Exported schema to {file}', array('file' => $file))."\n";
+        SchematicPlugin::log(Craft::t('Exported schema to {file}', array('file' => $file)));
         exit(0);
     }
 }
