@@ -23,6 +23,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     private $assetSourceByHandle = array();
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
+    /** @var string[] */
+    private $mappedPermissions = array();
 
     //==============================================================================================================
     //===============================================  SERVICES  ===================================================
@@ -77,6 +79,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
         $this->sectionsById = $this->getSectionsService()->getAllSections('id');
         $this->assetSourceById = $this->getAssetSourcesService()->getAllSources('id');
+        $this->mappedPermissions = $this->getAllMappedPermissions();
 
         foreach ($groups as $group) {
             $groupDefinitions[$group->handle] = $this->getGroupDefinition($group);
@@ -94,15 +97,9 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     private function getGroupDefinition(UserGroupModel $group)
     {
-        $permissionDefinitions = array();
-
-        foreach ($this->getUserPermissionsService()->getAllPermissions() as $label => $permissions) {
-            $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $permissions));
-        }
-
         return array(
             'name' => $group->name,
-            'permissions' => $permissionDefinitions,
+            'permissions' => $this->getGroupPermissionDefinitions($group),
         );
     }
 
@@ -110,23 +107,51 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      * Get group permissions.
      *
      * @param $group
-     * @param $permissions
      *
      * @return array|string
      */
-    private function getGroupPermissions($group, $permissions)
+    private function getGroupPermissionDefinitions($group)
     {
         $permissionDefinitions = array();
-        foreach ($permissions as $permission => $options) {
-            if ($this->getUserPermissionsService()->doesGroupHavePermission($group->id, $permission)) {
-                $permissionDefinitions[] = $this->getPermissionDefinition($permission);
-                if (array_key_exists('nested', $options)) {
-                    $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $options['nested']));
-                }
-            }
+        $groupPermissions = $this->getUserPermissionsService()->getPermissionsByGroupId($group->id);
+
+        foreach ($groupPermissions as $permission) {
+            $permission = $this->mappedPermissions[$permission];
+            $permissionDefinitions[] = $this->getPermissionDefinition($permission);
         }
 
         return $permissionDefinitions;
+    }
+
+    /**
+     * Get a mapping of all permissions from lowercase to camelcase
+     * savePermissions only accepts camelcase
+     * @return array
+     */
+    private function getAllMappedPermissions()
+    {
+        $mappedPermissions = array();
+        foreach ($this->getUserPermissionsService()->getAllPermissions() as $permissions) {
+            $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
+        }
+        return $mappedPermissions;
+    }
+
+    /**
+     * @param array $permissions
+     * @return array
+     */
+    private function getMappedPermissions(array $permissions)
+    {
+        $mappedPermissions = array();
+        foreach ($permissions as $permission => $options) {
+            $mappedPermissions[strtolower($permission)] = $permission;
+            if (array_key_exists('nested', $options)) {
+                $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($options['nested']));
+            }
+        }
+
+        return $mappedPermissions;
     }
 
     //==============================================================================================================
@@ -250,5 +275,4 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     //==============================================================================================================
     //===============================================  HELPERS  ====================================================
     //==============================================================================================================
-
 }

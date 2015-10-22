@@ -91,11 +91,27 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             ),
             'single group without permissions' => array(
                 'userGroups' => array(
-                    'group1' => $this->getMockUserGroup('groupHandle', 'groupName', array())
+                    'group1' => $this->getMockUserGroup('groupHandle', 'groupName', array()),
                 ),
                 'expectedResult' => array(
                     'groupHandle' => array(
                         'name' => 'groupName',
+                        'permissions' => array(),
+                    )
+                )
+            ),
+            'multiple groups without permissions' => array(
+                'userGroups' => array(
+                    'group1' => $this->getMockUserGroup('groupHandle1', 'groupName1', array()),
+                    'group2' => $this->getMockUserGroup('groupHandle2', 'groupName2', array()),
+                ),
+                'expectedResult' => array(
+                    'groupHandle1' => array(
+                        'name' => 'groupName1',
+                        'permissions' => array(),
+                    ),
+                    'groupHandle2' => array(
+                        'name' => 'groupName2',
                         'permissions' => array(),
                     )
                 )
@@ -203,7 +219,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param array $permissions
-     * @return UserPermissionsService|MockObject
+     * @return MockObject|UserPermissionsService
      */
     private function setMockUserPermissionsService(array $permissions = array())
     {
@@ -214,6 +230,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $mockUserPermissionsService->expects($this->any())
             ->method('getAllPermissions')
             ->willReturn($permissions);
+
+        $mockUserPermissionsService->expects($this->any())
+            ->method('getPermissionsByGroupId')
+            ->willReturn(array());
 
         $this->setComponent(craft(), 'userPermissions', $mockUserPermissionsService);
 
