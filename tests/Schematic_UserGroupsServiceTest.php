@@ -44,7 +44,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @param string[] $groupPermissions
      * @param array $expectedResult
      */
-    public function testExportDefault(array $groups, array $groupPermissions, array $expectedResult = array())
+    public function testSuccessfulExport(array $groups, array $groupPermissions, array $expectedResult = array())
     {
         $this->setMockUserGroupsService();
         $this->setMockUserPermissionsService($groupPermissions);
@@ -61,11 +61,14 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @covers ::import
+     * @dataProvider provideValidUserGroupDefinitions
      *
      * @param array $groupDefinitions
      */
-    public function testImportDefault(array $groupDefinitions = array())
+    public function testSuccessfulImport(array $groupDefinitions)
     {
+        $this->setMockUserGroupsService();
+        $this->setMockUserPermissionsService();
         $this->setMockSectionsService('handle');
         $this->setMockAssetSourcesService('handle');
         $this->setMockGlobalsService('handle');
@@ -73,6 +76,51 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $schematicUserGroupsService = new Schematic_UserGroupsService();
 
         $import = $schematicUserGroupsService->import($groupDefinitions);
+
+        $this->assertTrue($import instanceof Schematic_ResultModel);
+        $this->assertFalse($import->hasErrors());
+    }
+
+    /**
+     * @covers ::import
+     * @dataProvider provideValidUserGroupDefinitions
+     *
+     * @param array $groupDefinitions
+     */
+    public function testImportWhereSavingGroupFails(array $groupDefinitions)
+    {
+        $this->setMockUserGroupsService(false);
+        $this->setMockUserPermissionsService();
+        $this->setMockSectionsService('handle');
+        $this->setMockAssetSourcesService('handle');
+        $this->setMockGlobalsService('handle');
+
+        $schematicUserGroupsService = new Schematic_UserGroupsService();
+        $import = $schematicUserGroupsService->import($groupDefinitions);
+
+        $this->assertTrue($import instanceof Schematic_ResultModel);
+        if(!empty($groupDefinitions)){
+            $this->assertTrue($import->hasErrors());
+        }
+    }
+
+    /**
+     * @covers ::import
+     * @dataProvider provideValidUserGroupDefinitions
+     *
+     * @param array $groupDefinitions
+     */
+    public function testImportWithForceOption(array $groupDefinitions)
+    {
+        $this->setMockUserGroupsService();
+        $this->setMockUserPermissionsService();
+        $this->setMockSectionsService('handle');
+        $this->setMockAssetSourcesService('handle');
+        $this->setMockGlobalsService('handle');
+
+        $schematicUserGroupsService = new Schematic_UserGroupsService();
+
+        $import = $schematicUserGroupsService->import($groupDefinitions, true);
 
         $this->assertTrue($import instanceof Schematic_ResultModel);
         $this->assertFalse($import->hasErrors());
@@ -162,15 +210,33 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      */
     public function provideValidUserGroupDefinitions()
     {
-        return array();
-    }
-
-    /**
-     * @return array
-     */
-    public function provideInvalidUserGroupDefinitions()
-    {
-        return array();
+        return array(
+            'emptyArray' => array(
+                'groupDefinitions' => array(),
+            ),
+            'single group without permissions' => array(
+                'groupDefinitions' => array(
+                    'groupHandle1' => array(
+                        'name' => 'groupName1',
+                        'permissions' => array(),
+                    )
+                )
+            ),
+            'single group with permissions' => array(
+                'groupDefinitions' => array(
+                    'groupHandle1' => array(
+                        'name' => 'groupName1',
+                        'permissions' => array(
+                            'accessSiteWhenSystemIsOff',
+                            'performUpdates',
+                            'editEntries:sectionHandle1',
+                            'editGlobalSet:globalSetHandle1',
+                            'viewAssetSource:assetSourceHandle1',
+                        ),
+                    )
+                )
+            ),
+        );
     }
 
     //==============================================================================================================
@@ -195,6 +261,12 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                 array('name', 'groupName' . $groupId),
             ));
 
+        $mockUserGroup->expects($this->any())
+            ->method('getAllErrors')
+            ->willReturn(array(
+                'ohnoes' => 'horrible error'
+            ));
+
         return $mockUserGroup;
     }
 
@@ -208,7 +280,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockSectionService->expects($this->exactly(1))
+        $mockSectionService->expects($this->any())
             ->method('getAllSections')
             ->with($indexBy)
             ->willReturn($this->getMockSections($indexBy, 2));
@@ -340,13 +412,24 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     }
 
     /**
-     * @return MockObject|UserGroupsService
+     * @param bool $success
+     * @return UserGroupsService|MockObject
      */
-    private function setMockUserGroupsService()
+    private function setMockUserGroupsService($success = true)
     {
         $mockUserGroupsService = $this->getMockBuilder('Craft\UserGroupsService')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $mockUserGroupsService->expects($this->any())
+            ->method('getAllGroups')
+            ->with('handle')
+            ->willReturn($this->getMockuserGroups(2));
+
+        $mockUserGroupsService->expects($this->any())
+            ->method('saveGroup')
+            ->with($this->isInstanceOf('Craft\UserGroupModel'))
+            ->willReturn($success);
 
         $this->setComponent(craft(), 'userGroups', $mockUserGroupsService);
 
@@ -354,10 +437,24 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     }
 
     /**
-     * @param array $permissions
-     * @return MockObject|UserPermissionsService
+     * @param int $count
+     * @return array
      */
-    private function setMockUserPermissionsService(array $permissions = array())
+    private function getMockUserGroups($count)
+    {
+        $mockUserGroups = array();
+        for ($x = 0; $x <= $count; $x++) {
+            $mockUserGroups['groupHandle' . $x] = $this->getMockUserGroup($x);;
+        }
+        return $mockUserGroups;
+    }
+
+    /**
+     * @param array $permissions
+     * @param bool $success
+     * @return UserPermissionsService|MockObject
+     */
+    private function setMockUserPermissionsService(array $permissions = array(), $success = true)
     {
         $mockUserPermissionsService = $this->getMockBuilder('Craft\UserPermissionsService')
             ->disableOriginalConstructor()
@@ -370,6 +467,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $mockUserPermissionsService->expects($this->any())
             ->method('getPermissionsByGroupId')
             ->willReturnMap($permissions);
+
+        $mockUserPermissionsService->expects($this->any())
+            ->method('saveGroupPermissions')
+            ->willReturn($success);
 
         $this->setComponent(craft(), 'userPermissions', $mockUserPermissionsService);
 
