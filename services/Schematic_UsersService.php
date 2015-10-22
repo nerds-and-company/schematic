@@ -66,8 +66,6 @@ class Schematic_UsersService extends Schematic_AbstractService
 		if (!craft()->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
 
             $this->addErrors($fieldLayout->getAllErrors());
-
-            continue;
         }
 
         return $this->getResultModel();

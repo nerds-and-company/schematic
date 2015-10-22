@@ -2,8 +2,6 @@
 
 namespace Craft;
 
-use Mockery\CountValidator\Exception;
-
 /**
  * Schematic Fields Service.
  *
@@ -136,9 +134,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private function getSourceHandles(array $sources)
     {
-        $handleSources = [];
+        $handleSources = array();
         foreach ($sources as $source) {
-            $sectionId = explode(':', $source)[1];
+            $parts = explode(':', $source);
+            $sectionId = $parts[1];
             $handleSources[] = craft()->sections->getSectionById($sectionId)->handle;
         }
 
@@ -202,7 +201,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
         if (!$this->getFieldsService()->saveField($field)) {
             $this->addErrors($field->getAllErrors());
 
-            throw new \Exception('Failed to save field');
+            throw new Exception('Failed to save field');
         }
     }
 
@@ -279,7 +278,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
                 ? $this->addError("One of the field's types does not exist. Are you missing a plugin?")
                 : $this->addError("Field type '$fieldType' does not exist. Are you missing a plugin?");
 
-            throw new \Exception('Failed to save field');
+            throw new Exception('Failed to save field');
         }
     }
 
@@ -443,7 +442,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     private function getSourceIds($sourceHandles)
     {
         $sections = craft()->sections->getAllSections('handle');
-        $sources = [];
+        $sources = array();
         foreach ($sourceHandles as $sourceHandle) {
             if (array_key_exists($sourceHandle, $sections)) {
                 $sources[] = 'section:'.$sections[$sourceHandle]->id;
