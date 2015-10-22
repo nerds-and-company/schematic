@@ -36,6 +36,12 @@ public function registerMigrationService()
 
 ## Changelog
 
+###1.2.0###
+ - Use 2 spaces indent in yaml file
+ - Added user fields support
+ - Automatically run migrations on plugin update
+ - More verbose logging in devMode
+
 ###1.1.0###
  - Replaced custom error handling with existing error handling
  - Refactored import/export with yaml support
