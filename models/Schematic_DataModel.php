@@ -25,13 +25,13 @@ class Schematic_DataModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
-            'assets'            => AttributeType::Mixed,
-            'fields'            => AttributeType::Mixed,
-            'globals'           => AttributeType::Mixed,
-            'plugins'           => AttributeType::Mixed,
-            'sections'          => AttributeType::Mixed,
-            'userGroups'        => AttributeType::Mixed,
-            'users'             => AttributeType::Mixed,
+            'assets'            => array(AttributeType::Mixed, 'default' => array()),
+            'fields'            => array(AttributeType::Mixed, 'default' => array()),
+            'globals'           => array(AttributeType::Mixed, 'default' => array()),
+            'plugins'           => array(AttributeType::Mixed, 'default' => array()),
+            'sections'          => array(AttributeType::Mixed, 'default' => array()),
+            'userGroups'        => array(AttributeType::Mixed, 'default' => array()),
+            'users'             => array(AttributeType::Mixed, 'default' => array()),
             'pluginData'        => array(AttributeType::Mixed, 'default' => array()),
         );
     }

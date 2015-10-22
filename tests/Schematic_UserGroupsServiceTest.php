@@ -41,14 +41,16 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @dataProvider provideValidUserGroups
      *
      * @param UserGroupModel[] $groups
+     * @param string[] $groupPermissions
      * @param array $expectedResult
      */
-    public function testExportDefault(array $groups, array $expectedResult = array())
+    public function testExportDefault(array $groups, array $groupPermissions, array $expectedResult = array())
     {
         $this->setMockUserGroupsService();
-        $this->setMockUserPermissionsService();
+        $this->setMockUserPermissionsService($groupPermissions);
         $this->setMockSectionsService('id');
         $this->setMockAssetSourcesService('id');
+        $this->setMockGlobalsService('id');
 
         $schematicUserGroupsService = new Schematic_UserGroupsService();
 
@@ -66,6 +68,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     {
         $this->setMockSectionsService('handle');
         $this->setMockAssetSourcesService('handle');
+        $this->setMockGlobalsService('handle');
 
         $schematicUserGroupsService = new Schematic_UserGroupsService();
 
@@ -87,23 +90,31 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         return array(
             'emptyArray' => array(
                 'userGroups' => array(),
+                'groupPermissions' => array(),
                 'expectedResult' => array(),
             ),
             'single group without permissions' => array(
                 'userGroups' => array(
-                    'group1' => $this->getMockUserGroup('groupHandle', 'groupName', array()),
+                    'group1' => $this->getMockUserGroup(1),
+                ),
+                'groupPermissions' => array(
+                    array(1, array()),
                 ),
                 'expectedResult' => array(
-                    'groupHandle' => array(
-                        'name' => 'groupName',
+                    'groupHandle1' => array(
+                        'name' => 'groupName1',
                         'permissions' => array(),
                     )
                 )
             ),
             'multiple groups without permissions' => array(
                 'userGroups' => array(
-                    'group1' => $this->getMockUserGroup('groupHandle1', 'groupName1', array()),
-                    'group2' => $this->getMockUserGroup('groupHandle2', 'groupName2', array()),
+                    'group1' => $this->getMockUserGroup(1),
+                    'group2' => $this->getMockUserGroup(2),
+                ),
+                'groupPermissions' => array(
+                    array(1, array()),
+                    array(2, array()),
                 ),
                 'expectedResult' => array(
                     'groupHandle1' => array(
@@ -113,6 +124,33 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                     'groupHandle2' => array(
                         'name' => 'groupName2',
                         'permissions' => array(),
+                    )
+                )
+            ),
+            'single group with permissions' => array(
+                'userGroups' => array(
+                    'group1' => $this->getMockUserGroup(1),
+                ),
+                'groupPermissions' => array(
+                    array(1, array(
+                        'accesssitewhensystemisoff',
+                        'performupdates',
+                        'editentries:1',
+                        'editglobalset:1',
+                        'viewassetsource:1',
+
+                    )),
+                ),
+                'expectedResult' => array(
+                    'groupHandle1' => array(
+                        'name' => 'groupName1',
+                        'permissions' => array(
+                            'accessSiteWhenSystemIsOff',
+                            'performUpdates',
+                            'editEntries:sectionHandle1',
+                            'editGlobalSet:globalSetHandle1',
+                            'viewAssetSource:assetSourceHandle1',
+                        ),
                     )
                 )
             )
@@ -140,12 +178,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     //==============================================================================================================
 
     /**
-     * @param string $handle
-     * @param string $name
-     * @param array $permissions
+     * @param string $groupId
      * @return MockObject|UserGroupModel
      */
-    private function getMockUserGroup($handle, $name, array $permissions = array())
+    private function getMockUserGroup($groupId)
     {
         $mockUserGroup = $this->getMockBuilder('Craft\UserGroupModel')
             ->disableOriginalConstructor()
@@ -154,8 +190,9 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $mockUserGroup->expects($this->any())
             ->method('__get')
             ->willReturnMap(array(
-                array('handle', $handle),
-                array('name', $name),
+                array('id', $groupId),
+                array('handle', 'groupHandle' . $groupId),
+                array('name', 'groupName' . $groupId),
             ));
 
         return $mockUserGroup;
@@ -163,10 +200,9 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param $indexBy
-     * @param array $sections
      * @return MockObject|SectionsService
      */
-    private function setMockSectionsService($indexBy, array $sections = array())
+    private function setMockSectionsService($indexBy)
     {
         $mockSectionService = $this->getMockBuilder('Craft\SectionsService')
             ->disableOriginalConstructor()
@@ -175,7 +211,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $mockSectionService->expects($this->exactly(1))
             ->method('getAllSections')
             ->with($indexBy)
-            ->willReturn($sections);
+            ->willReturn($this->getMockSections($indexBy, 2));
 
         $this->setComponent(craft(), 'sections', $mockSectionService);
 
@@ -184,10 +220,36 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @param AssetSourceModel[] $assetSources
+     * @param int $count
+     * @return MockObject[]|SectionModel[]
+     */
+    private function getMockSections($indexBy, $count)
+    {
+        $keyPrefix = $indexBy == 'id' ? '' : 'sectionHandle';
+        $mockSections = array();
+        for ($x = 0; $x <= $count; $x++) {
+            $mockSection = $this->getMockBuilder('Craft\SectionModel')
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $mockSection->expects($this->any())
+                ->method('__get')
+                ->willReturnMap(array(
+                    array('handle', 'sectionHandle' . $x),
+                    array('id', $x),
+                    array('name', 'sectionName' . $x)
+                ));
+
+            $mockSections[$keyPrefix . $x] = $mockSection;
+        }
+        return $mockSections;
+    }
+
+    /**
+     * @param string $indexBy
      * @return MockObject|AssetSourcesService
      */
-    private function setMockAssetSourcesService($indexBy, array $assetSources = array())
+    private function setMockAssetSourcesService($indexBy)
     {
         $mockAssetSourcesService = $this->getMockBuilder('Craft\AssetSourcesService')
             ->disableOriginalConstructor()
@@ -196,11 +258,85 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $mockAssetSourcesService->expects($this->exactly(1))
             ->method('getAllSources')
             ->with($indexBy)
-            ->willReturn($assetSources);
+            ->willReturn($this->getMockAssetSources($indexBy, 1));
 
         $this->setComponent(craft(), 'assetSources', $mockAssetSourcesService);
 
         return $mockAssetSourcesService;
+    }
+
+    /**
+     * @param string $indexBy
+     * @param int $count
+     * @return MockObject[]|AssetSourceModel[]
+     */
+    private function getMockAssetSources($indexBy, $count)
+    {
+        $keyPrefix = $indexBy == 'id' ? '' : 'assetSourceHandle';
+        $mockAssetSources = array();
+        for ($x = 0; $x <= $count; $x++) {
+            $mockAssetSource = $this->getMockBuilder('Craft\AssetSourceModel')
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $mockAssetSource->expects($this->any())
+                ->method('__get')
+                ->willReturnMap(array(
+                    array('handle', 'assetSourceHandle' . $x),
+                    array('id', $x),
+                    array('name', 'assetSourceName' . $x)
+                ));
+
+            $mockAssetSources[$keyPrefix . $x] = $mockAssetSource;
+        }
+        return $mockAssetSources;
+    }
+
+    /**
+     * @param string $indexBy
+     * @return MockObject|AssetSourcesService
+     */
+    private function setMockGlobalsService($indexBy)
+    {
+        $mockAssetSourcesService = $this->getMockBuilder('Craft\GlobalsService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockAssetSourcesService->expects($this->exactly(1))
+            ->method('getAllSets')
+            ->with($indexBy)
+            ->willReturn($this->getMockGlobalSets($indexBy, 1));
+
+        $this->setComponent(craft(), 'globals', $mockAssetSourcesService);
+
+        return $mockAssetSourcesService;
+    }
+
+    /**
+     * @param string $indexBy
+     * @param int $count
+     * @return MockObject[]|GlobalSetModel[]
+     */
+    private function getMockGlobalSets($indexBy, $count)
+    {
+        $keyPrefix = $indexBy == 'id' ? '' : 'globalSetHandle';
+        $mockGlobalSets = array();
+        for ($x = 0; $x <= $count; $x++) {
+            $mockGlobalSet = $this->getMockBuilder('Craft\GlobalSetModel')
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $mockGlobalSet->expects($this->any())
+                ->method('__get')
+                ->willReturnMap(array(
+                    array('handle', 'globalSetHandle' . $x),
+                    array('id', $x),
+                    array('name', 'globalSetName' . $x)
+                ));
+
+            $mockGlobalSets[$keyPrefix . $x] = $mockGlobalSet;
+        }
+        return $mockGlobalSets;
     }
 
     /**
@@ -229,14 +365,85 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
         $mockUserPermissionsService->expects($this->any())
             ->method('getAllPermissions')
-            ->willReturn($permissions);
+            ->willReturn($this->getAllPermissionsExample());
 
         $mockUserPermissionsService->expects($this->any())
             ->method('getPermissionsByGroupId')
-            ->willReturn(array());
+            ->willReturnMap($permissions);
 
         $this->setComponent(craft(), 'userPermissions', $mockUserPermissionsService);
 
         return $mockUserPermissionsService;
+    }
+
+    /**
+     * @return array of example permissions
+     */
+    private function getAllPermissionsExample()
+    {
+        return array(
+            "General" => array(
+                "accessSiteWhenSystemIsOff" => array(
+                    "nested" => array(
+                        "accessCpWhenSystemIsOff" => array(),
+                        "performUpdates" => array(),
+                        "accessPlugin-PluginName1" => array(),
+                        "accessPlugin-PluginName2" => array(),
+                    )
+                )
+            ),
+            "Users" => array(
+                "editUsers" => array(
+                    "nested" => array(
+                        "registerUsers" => array(),
+                        "assignUserPermissions" => array(),
+                        "administrateUsers" => array(
+                            "nested" => array(
+                                "changeUserEmails" => array(),
+                            )
+                        ),
+                        "deleteUsers" => array(),
+                    )
+                )
+            ),
+            'Section - 1' => array(
+                'editEntries:1' => array(
+                    'nested' => array(
+                        'publishEntries:1' => array(),
+                        'editPeerEntryDrafts:1' => array(
+                            'nested' => array(
+                                'publishPeerEntryDrafts:1' => array(),
+                                'deletePeerEntryDrafts:1' => array(),
+                            )
+                        ),
+                    )
+                )
+            ),
+            'Section - 2' => array(
+                'editEntries:2' => array(
+                    'nested' => array(
+                        'publishEntries:2' => array(),
+                        'editPeerEntryDrafts:2' => array(
+                            'nested' => array(
+                                'publishPeerEntryDrafts:2' => array(),
+                                'deletePeerEntryDrafts:2' => array(),
+                            )
+                        ),
+                    )
+                )
+            ),
+            'GlobalSet - 1' => array(
+                'editGlobalSet:1' => array(),
+            ),
+            'AssetSources - 1' => array(
+                'viewAssetSource:1' => array(
+                    'nested' => array(
+                        'uploadToAssetSource:1' => array(),
+                        'createSubfoldersInAssetSource:1' => array(),
+                        'removeFromAssetSource:1' => array()
+                    )
+                )
+            )
+        );
     }
 }
