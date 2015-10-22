@@ -31,12 +31,14 @@ class SchematicCommand extends BaseCommand
 
         if (!$result->hasErrors()) {
             SchematicPlugin::log(Craft::t('Loaded schema from {file}', array('file' => $file)));
-            exit(0);
+
+            return 0;
         }
 
         SchematicPlugin::log(Craft::t('There was an error loading schema from {file}', array('file' => $file)));
         print_r($result->getErrors());
-        exit(1);
+
+        return 1;
     }
 
     /**
@@ -49,6 +51,7 @@ class SchematicCommand extends BaseCommand
         craft()->schematic->exportToYaml($file);
 
         SchematicPlugin::log(Craft::t('Exported schema to {file}', array('file' => $file)));
-        exit(0);
+
+        return 0;
     }
 }
