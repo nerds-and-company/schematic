@@ -89,6 +89,17 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
+     * @return UpdatesService|Mock
+     */
+    public function getMockUpdatesService()
+    {
+        $mock = $this->getMockBuilder('Craft\UpdatesService')->getMock();
+        $mock->expects($this->any())->method('setNewPluginInfo')->willReturn(true);
+
+        return $mock;
+    }
+
+    /**
      * @return Mock|BasePlugin
      */
     public function getMockBasePlugin()
@@ -110,6 +121,8 @@ class Schematic_PluginsServiceTest extends BaseTest
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
         $mockMigrationsService = $this->getMockMigrationsService();
         $this->setComponent(craft(), 'migrations', $mockMigrationsService);
+        $mockUpdatesService = $this->getMockUpdatesService();
+        $this->setComponent(craft(), 'updates', $mockUpdatesService);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -130,6 +143,8 @@ class Schematic_PluginsServiceTest extends BaseTest
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
         $mockMigrationsService = $this->getMockMigrationsService();
         $this->setComponent(craft(), 'migrations', $mockMigrationsService);
+        $mockUpdatesService = $this->getMockUpdatesService();
+        $this->setComponent(craft(), 'updates', $mockUpdatesService);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -168,6 +183,8 @@ class Schematic_PluginsServiceTest extends BaseTest
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
         $mockMigrationsService = $this->getMockMigrationsService();
         $this->setComponent(craft(), 'migrations', $mockMigrationsService);
+        $mockUpdatesService = $this->getMockUpdatesService();
+        $this->setComponent(craft(), 'updates', $mockUpdatesService);
 
         $import = $this->schematicPluginsService->import($data);
 

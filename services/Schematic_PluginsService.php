@@ -32,6 +32,14 @@ class Schematic_PluginsService extends Schematic_AbstractService
     }
 
     /**
+     * @return UpdatesService
+     */
+    protected function getUpdatesService()
+    {
+        return craft()->updates;
+    }
+
+    /**
      * Installs plugin by handle.
      *
      * @param string $handle
@@ -88,6 +96,21 @@ class Schematic_PluginsService extends Schematic_AbstractService
     }
 
     /**
+     * Run plugin migrations automatically.
+     *
+     * @param BasePlugin $plugin
+     */
+    protected function runMigrations(BasePlugin $plugin)
+    {
+        if (!$this->getMigrationsService()->runToTop($plugin)) {
+            throw new Exception(Craft::t('There was a problem updating your database.'));
+        }
+        if (!$this->getUpdatesService()->setNewPluginInfo($plugin)) {
+            throw new Exception(Craft::t('The update was performed successfully, but there was a problem setting the new info in the plugins table.'));
+        }
+    }
+
+    /**
      * @param BasePlugin $plugin
      *
      * @return array
@@ -116,7 +139,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
-                    $this->getMigrationsService()->runToTop($plugin);
+                    $this->runMigrations($plugin);
 
                     if (array_key_exists('settings', $pluginDefinition)) {
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
