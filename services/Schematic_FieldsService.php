@@ -134,7 +134,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private function getSourceHandles(array $sources)
     {
-        $handleSources = [];
+        $handleSources = array();
         foreach ($sources as $source) {
             $sectionId = explode(':', $source)[1];
             $handleSources[] = craft()->sections->getSectionById($sectionId)->handle;
@@ -441,7 +441,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     private function getSourceIds($sourceHandles)
     {
         $sections = craft()->sections->getAllSections('handle');
-        $sources = [];
+        $sources = array();
         foreach ($sourceHandles as $sourceHandle) {
             if (array_key_exists($sourceHandle, $sections)) {
                 $sources[] = 'section:'.$sections[$sourceHandle]->id;
