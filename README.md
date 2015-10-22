@@ -22,6 +22,7 @@ You can also generate a schema.yml with
 ```
 
 ## Hooks
+
 * Has a hook "registerMigrationService" to add exports with your own data.
 
 ```php
