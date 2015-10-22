@@ -116,11 +116,11 @@ class Schematic_PluginsService extends Schematic_AbstractService
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
+                    $this->getMigrationsService()->runToTop($plugin);
+
                     if (array_key_exists('settings', $pluginDefinition)) {
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
-
-                    $this->getMigrationsService()->runToTop($plugin);
                 } else {
                     $this->uninstallPluginByHandle($handle);
                 }
