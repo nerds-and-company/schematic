@@ -46,10 +46,15 @@ class Schematic_PluginsServiceTest extends BaseTest
 
     /**
      * Prevent code duplication by mocking multiple services.
+     *
+     * @param bool $returnPlugin
+     * @param bool $installPluginResponse
      */
-    public function mockMultipleServices()
-    {
-        $mockPluginsService = $this->getMockPluginsService();
+    public function mockMultipleServices(
+        $returnPlugin = true,
+        $installPluginResponse = true
+    ) {
+        $mockPluginsService = $this->getMockPluginsService($returnPlugin, $installPluginResponse);
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
         $mockMigrationsService = $this->getMockMigrationsService();
         $this->setComponent(craft(), 'migrations', $mockMigrationsService);
@@ -184,7 +189,7 @@ class Schematic_PluginsServiceTest extends BaseTest
     {
         $data = $this->getPluginsData();
 
-        $this->mockMultipleServices();
+        $this->mockMultipleServices(true, false);
 
         $import = $this->schematicPluginsService->import($data);
 
