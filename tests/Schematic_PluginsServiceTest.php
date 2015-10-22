@@ -45,6 +45,19 @@ class Schematic_PluginsServiceTest extends BaseTest
     }
 
     /**
+     * Prevent code duplication by mocking multiple services.
+     */
+    public function mockMultipleServices()
+    {
+        $mockPluginsService = $this->getMockPluginsService();
+        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $mockMigrationsService = $this->getMockMigrationsService();
+        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
+        $mockUpdatesService = $this->getMockUpdatesService();
+        $this->setComponent(craft(), 'updates', $mockUpdatesService);
+    }
+
+    /**
      * @param bool $returnPlugin
      * @param bool $installPluginResponse
      * @param bool $enablePluginResponse
@@ -117,12 +130,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     public function testImportWithInstalledPlugins()
     {
         $data = $this->getPluginsData();
-        $mockPluginsService = $this->getMockPluginsService();
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
-        $mockMigrationsService = $this->getMockMigrationsService();
-        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
-        $mockUpdatesService = $this->getMockUpdatesService();
-        $this->setComponent(craft(), 'updates', $mockUpdatesService);
+
+        $this->mockMultipleServices();
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -139,12 +148,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     {
         $data = $this->getPluginsData();
         $data['itmundiplugin']['isEnabled'] = false;
-        $mockPluginsService = $this->getMockPluginsService();
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
-        $mockMigrationsService = $this->getMockMigrationsService();
-        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
-        $mockUpdatesService = $this->getMockUpdatesService();
-        $this->setComponent(craft(), 'updates', $mockUpdatesService);
+
+        $this->mockMultipleServices();
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -179,12 +184,7 @@ class Schematic_PluginsServiceTest extends BaseTest
     {
         $data = $this->getPluginsData();
 
-        $mockPluginsService = $this->getMockPluginsService(true, false);
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
-        $mockMigrationsService = $this->getMockMigrationsService();
-        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
-        $mockUpdatesService = $this->getMockUpdatesService();
-        $this->setComponent(craft(), 'updates', $mockUpdatesService);
+        $this->mockMultipleServices();
 
         $import = $this->schematicPluginsService->import($data);
 
