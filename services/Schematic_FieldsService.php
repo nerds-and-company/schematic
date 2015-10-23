@@ -150,18 +150,20 @@ class Schematic_FieldsService extends Schematic_AbstractService
     private function getSourceHandle($source)
     {
         if (strpos($source, ':') > -1) {
+            /** @var BaseElementModel $sourceObject */
+            $sourceObject = null;
             list($sourceType, $sourceId) = explode(':', $source);
 
             switch ($sourceType) {
                 case 'section':
-                    $sourceHandle = craft()->sections->getSectionById($sourceId)->handle;
+                    $sourceObject = craft()->sections->getSectionById($sourceId);
                     break;
                 case 'group':
-                    $sourceHandle = craft()->userGroups->getGroupById($sourceId)->handle;
+                    $sourceObject = craft()->userGroups->getGroupById($sourceId);
                     break;
             }
-            if (isset($sourceHandle)) {
-                $source = $sourceType . ':' . $sourceHandle;
+            if ($sourceObject) {
+                $source = $sourceType . ':' . $sourceObject->handle;
             }
         }
         return $source;
