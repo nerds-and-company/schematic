@@ -94,7 +94,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Get field definition.
      *
      * @param FieldModel $field
-     * @param bool       $includeContext
+     * @param bool $includeContext
      *
      * @return array
      */
@@ -112,14 +112,12 @@ class Schematic_FieldsService extends Schematic_AbstractService
         if ($includeContext) {
             $definition['context'] = $field->context;
         }
+        if (isset($definition['settings']['sources'])) {
+            $definition['settings']['sources'] = $this->getSourceHandles($definition['settings']['sources']);
+        }
 
-        switch ($field->type) {
-            case 'Entries':
-                $definition['settings']['sources'] = $this->getSourceHandles($definition['settings']['sources']);
-                break;
-            case 'Matrix':
-                $definition['blockTypes'] = $this->getBlockTypeDefinitions($field);
-                break;
+        if ($field->type == 'Matrix') {
+            $definition['blockTypes'] = $this->getBlockTypeDefinitions($field);
         }
 
         return $definition;
@@ -128,20 +126,47 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Get source handles.
      *
-     * @param array $sources
+     * @param string|array $sourcesWithIds
      *
-     * @return array
+     * @return string|array
      */
-    private function getSourceHandles(array $sources)
+    private function getSourceHandles($sourcesWithIds)
     {
-        $handleSources = array();
-        foreach ($sources as $source) {
-            $parts = explode(':', $source);
-            $sectionId = $parts[1];
-            $handleSources[] = craft()->sections->getSectionById($sectionId)->handle;
+        if (!is_array($sourcesWithIds)) {
+            return $sourcesWithIds;
+        }
+        $sourcesWithHandles = array();
+        foreach ($sourcesWithIds as $sourceWithId) {
+            $sourcesWithHandles[] = $this->getSourceHandle($sourceWithId);
         }
 
-        return $handleSources;
+        return $sourcesWithHandles;
+    }
+
+    /**
+     * @param string $source with id
+     * @return string source with handle
+     */
+    private function getSourceHandle($source)
+    {
+        if (strpos($source, ':') > -1) {
+            /** @var BaseElementModel $sourceObject */
+            $sourceObject = null;
+            list($sourceType, $sourceId) = explode(':', $source);
+
+            switch ($sourceType) {
+                case 'section':
+                    $sourceObject = craft()->sections->getSectionById($sourceId);
+                    break;
+                case 'group':
+                    $sourceObject = craft()->userGroups->getGroupById($sourceId);
+                    break;
+            }
+            if ($sourceObject) {
+                $source = $sourceType . ':' . $sourceObject->handle;
+            }
+        }
+        return $source;
     }
 
     /**
@@ -285,7 +310,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Import field group fields.
      *
-     * @param array           $fieldDefinitions
+     * @param array $fieldDefinitions
      * @param FieldGroupModel $group
      *
      * @throws \Exception
@@ -305,7 +330,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Unset group and field data else $force flag will delete it.
      *
      * @param string $name
-     * @param array  $definitions
+     * @param array $definitions
      */
     private function unsetData($name, array $definitions)
     {
@@ -321,7 +346,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Attempt to import fields.
      *
      * @param array $groupDefinitions
-     * @param bool  $force            if set to true items not in the import will be deleted
+     * @param bool $force if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -362,10 +387,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Populate blocktype.
      *
-     * @param FieldModel           $field
+     * @param FieldModel $field
      * @param MatrixBlockTypeModel $blockType
-     * @param array                $blockTypeDef
-     * @param string               $blockTypeHandle
+     * @param array $blockTypeDef
+     * @param string $blockTypeHandle
      */
     private function populateBlockType(FieldModel $field, MatrixBlockTypeModel $blockType, array $blockTypeDef, $blockTypeHandle)
     {
@@ -396,9 +421,9 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Populate field.
      *
-     * @param array           $fieldDefinition
-     * @param FieldModel      $field
-     * @param string          $fieldHandle
+     * @param array $fieldDefinition
+     * @param FieldModel $field
+     * @param string $fieldHandle
      * @param FieldGroupModel $group
      */
     private function populateField(
@@ -406,7 +431,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
         FieldModel $field,
         $fieldHandle,
         FieldGroupModel $group = null
-    ) {
+    )
+    {
         $field->name = $fieldDefinition['name'];
         $field->handle = $fieldHandle;
         $field->required = $fieldDefinition['required'];
@@ -425,6 +451,16 @@ class Schematic_FieldsService extends Schematic_AbstractService
             $field->settings = $settings;
         }
 
+        if ($field->type == 'PositionSelect') {
+            $options = array();
+            $settings = $fieldDefinition['settings'];
+            foreach ($settings['options'] as $option) {
+                $options[$option] = $option;
+            }
+            $settings['options'] = $options;
+            $field->settings = $settings;
+        }
+
         if ($field->type == 'Matrix') {
             $field->settings = $field->getFieldType()->getSettings();
             $field->settings->setAttributes($fieldDefinition['settings']);
@@ -435,27 +471,57 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Get source id's.
      *
-     * @param array $sourceHandles
+     * @param string|array $sourcesWithHandle
      *
-     * @return array
+     * @return string|array
      */
-    private function getSourceIds($sourceHandles)
+    private function getSourceIds($sourcesWithHandle)
     {
-        $sections = craft()->sections->getAllSections('handle');
-        $sources = array();
-        foreach ($sourceHandles as $sourceHandle) {
-            if (array_key_exists($sourceHandle, $sections)) {
-                $sources[] = 'section:'.$sections[$sourceHandle]->id;
+        if (!is_array($sourcesWithHandle)) {
+            return $sourcesWithHandle;
+        }
+        $sourcesWithIds = array();
+        foreach ($sourcesWithHandle as $sourceWithHandle) {
+            $sourcesWithIds[] = $this->getSourceId($sourceWithHandle);
+        }
+        return $sourcesWithIds;
+    }
+
+    /**
+     * @param $source
+     * @return string
+     */
+    private function getSourceId($source)
+    {
+        /** @var BaseElementModel $sourceObject */
+        $sourceObject = null;
+        if (strpos($source, ':') > -1) {
+            list($sourceType, $sourceHandle) = explode(':', $source);
+
+            switch ($sourceType) {
+                case 'section':
+                    $sourceObject = craft()->sections->getSectionByHandle($sourceHandle);
+                    break;
+                case 'group':
+                    $sourceObject = craft()->userGroups->getGroupByHandle($sourceHandle);
+                    break;
             }
+        } elseif ($source !== 'singles') {
+            //Backwards compatibility
+            $sourceType = 'section';
+            $sourceObject = craft()->userGroups->getSectionByHandle($source);
+        }
+        if ($sourceObject && isset($sourceType)) {
+            $source = $sourceType . ':' . $sourceObject->id;
         }
 
-        return $sources;
+        return $source;
     }
 
     /**
      * Get blocktypes.
      *
-     * @param array      $fieldDefinition
+     * @param array $fieldDefinition
      * @param FieldModel $field
      *
      * @return mixed

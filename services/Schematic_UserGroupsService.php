@@ -23,18 +23,60 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     private $assetSourceByHandle = array();
     /** @var AssetSourceModel[] */
     private $assetSourceById = array();
+    /** @var GlobalSetModel[] */
+    private $globalSetsByHandle = array();
+    /** @var GlobalSetModel[] */
+    private $globalSetsById = array();
+    /** @var string[] */
+    private $mappedPermissions = array();
+
+    //==============================================================================================================
+    //===============================================  SERVICES  ===================================================
+    //==============================================================================================================
 
     /**
-     * Set the sections fields.
+     * @return SectionsService
      */
-    public function __construct()
+    private function getSectionsService()
     {
-        parent::__construct();
-        $this->sectionsByHandle = craft()->sections->getAllSections('handle');
-        $this->sectionsById = craft()->sections->getAllSections('id');
-        $this->assetSourceByHandle = craft()->assetSources->getAllSources('handle');
-        $this->assetSourceById = craft()->assetSources->getAllSources('id');
+        return craft()->sections;
     }
+
+    /**
+     * @return AssetSourcesService
+     */
+    private function getAssetSourcesService()
+    {
+        return craft()->assetSources;
+    }
+
+    /**
+     * @return GlobalsService
+     */
+    private function getGlobalsService()
+    {
+        return craft()->globals;
+    }
+
+    /**
+     * @return UserPermissionsService
+     */
+    private function getUserPermissionsService()
+    {
+        return craft()->userPermissions;
+    }
+
+    /**
+     * @return UserGroupsService
+     */
+    private function getUserGroupsService()
+    {
+        return craft()->userGroups;
+    }
+
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Export user groups.
@@ -46,6 +88,11 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     public function export(array $groups = array())
     {
         $groupDefinitions = array();
+
+        $this->sectionsById = $this->getSectionsService()->getAllSections('id');
+        $this->assetSourceById = $this->getAssetSourcesService()->getAllSources('id');
+        $this->globalSetsById = $this->getGlobalsService()->getAllSets('id');
+        $this->mappedPermissions = $this->getAllMappedPermissions();
 
         foreach ($groups as $group) {
             $groupDefinitions[$group->handle] = $this->getGroupDefinition($group);
@@ -63,15 +110,9 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     private function getGroupDefinition(UserGroupModel $group)
     {
-        $permissionDefinitions = array();
-
-        foreach (craft()->userPermissions->getAllPermissions() as $label => $permissions) {
-            $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $permissions));
-        }
-
         return array(
             'name' => $group->name,
-            'permissions' => $permissionDefinitions,
+            'permissions' => $this->getGroupPermissionDefinitions($group),
         );
     }
 
@@ -79,24 +120,78 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      * Get group permissions.
      *
      * @param $group
-     * @param $permissions
      *
      * @return array|string
      */
-    private function getGroupPermissions($group, $permissions)
+    private function getGroupPermissionDefinitions($group)
     {
         $permissionDefinitions = array();
-        foreach ($permissions as $permission => $options) {
-            if (craft()->userPermissions->doesGroupHavePermission($group->id, $permission)) {
+        $groupPermissions = $this->getUserPermissionsService()->getPermissionsByGroupId($group->id);
+
+        foreach ($groupPermissions as $permission) {
+            if(array_key_exists($permission, $this->mappedPermissions)){
+                $permission = $this->mappedPermissions[$permission];
                 $permissionDefinitions[] = $this->getPermissionDefinition($permission);
-                if (array_key_exists('nested', $options)) {
-                    $permissionDefinitions = array_merge($permissionDefinitions, $this->getGroupPermissions($group, $options['nested']));
-                }
             }
         }
 
         return $permissionDefinitions;
     }
+
+    /**
+     * Get a mapping of all permissions from lowercase to camelcase
+     * savePermissions only accepts camelcase
+     * @return array
+     */
+    private function getAllMappedPermissions()
+    {
+        $mappedPermissions = array();
+        foreach ($this->getUserPermissionsService()->getAllPermissions() as $permissions) {
+            $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
+        }
+        return $mappedPermissions;
+    }
+
+    /**
+     * @param array $permissions
+     * @return array
+     */
+    private function getMappedPermissions(array $permissions)
+    {
+        $mappedPermissions = array();
+        foreach ($permissions as $permission => $options) {
+            $mappedPermissions[strtolower($permission)] = $permission;
+            if (array_key_exists('nested', $options)) {
+                $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($options['nested']));
+            }
+        }
+
+        return $mappedPermissions;
+    }
+
+    /**
+     * Get permission definition.
+     *
+     * @param string $permission
+     *
+     * @return string
+     */
+    private function getPermissionDefinition($permission)
+    {
+        if (strpos($permission, 'Asset') > -1) {
+            $permission = $this->mapPermissionSource($this->assetSourceById, $permission, true);
+        } elseif (strpos($permission, 'GlobalSet') > -1) {
+            $permission = $this->mapPermissionSource($this->globalSetsById, $permission, true);
+        } else {
+            $permission = $this->mapPermissionSource($this->sectionsById, $permission, true);
+        }
+        return $permission;
+    }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
+
 
     /**
      * Import usergroups.
@@ -108,7 +203,11 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        $userGroups = craft()->userGroups->getAllGroups('handle');
+        $this->sectionsByHandle = $this->getSectionsService()->getAllSections('handle');
+        $this->assetSourceByHandle = $this->getAssetSourcesService()->getAllSources('handle');
+        $this->globalSetsByHandle = $this->getGlobalsService()->getAllSets('handle');
+
+        $userGroups = $this->getUserGroupsService()->getAllGroups('handle');
 
         foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
             $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
@@ -118,7 +217,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
             $group->name = $groupDefinition['name'];
             $group->handle = $groupHandle;
 
-            if (!craft()->userGroups->saveGroup($group)) {
+            if (!$this->getUserGroupsService()->saveGroup($group)) {
                 $this->addErrors($group->getAllErrors());
 
                 continue;
@@ -126,12 +225,12 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
             $permissions = $this->getPermissions($groupDefinition['permissions']);
 
-            craft()->userPermissions->saveGroupPermissions($group->id, $permissions);
+            $this->getUserPermissionsService()->saveGroupPermissions($group->id, $permissions);
         }
 
         if ($force) {
             foreach ($userGroups as $group) {
-                craft()->userGroups->deleteGroupById($group->id);
+                $this->getUserGroupsService()->deleteGroupById($group->id);
             }
         }
 
@@ -156,32 +255,6 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     }
 
     /**
-     * Get permission definition.
-     *
-     * @param string $permission
-     *
-     * @return string
-     */
-    private function getPermissionDefinition($permission)
-    {
-        if (strpos($permission, ':') > -1) {
-            $source = false;
-            $permissionArray = explode(':', $permission);
-
-            if (strpos($permission, 'Asset') > -1) {
-                $source = $this->assetSourceById[$permissionArray[1]];
-            } elseif (isset($this->sectionsById[$permissionArray[1]])) {
-                $source = $this->sectionsById[$permissionArray[1]];
-            }
-
-            if ($source) {
-                $permission = $permissionArray[0] . ':' . $source->handle;
-            }
-        }
-        return $permission;
-    }
-
-    /**
      * Get permission.
      *
      * @param string $permissionDefinition
@@ -190,21 +263,41 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     private function getPermission($permissionDefinition)
     {
-        if (strpos($permissionDefinition, ':') > -1) {
-            $source = false;
-            $permissionArray = explode(':', $permissionDefinition);
+        if (strpos($permissionDefinition, 'Asset') > -1) {
+            $permissionDefinition = $this->mapPermissionSource($this->assetSourceByHandle, $permissionDefinition, false);
+        } elseif (strpos($permissionDefinition, 'GlobalSet') > -1) {
+            $permissionDefinition = $this->mapPermissionSource($this->globalSetsByHandle, $permissionDefinition, false);
+        } else {
+            $permissionDefinition = $this->mapPermissionSource($this->sectionsByHandle, $permissionDefinition, false);
+        }
+        return $permissionDefinition;
+    }
 
-            if (strpos($permissionDefinition, 'Asset') > -1) {
-                $source = $this->assetSourceByHandle[$permissionArray[1]];
-            } elseif (isset($this->sectionsByHandle[$permissionArray[1]])) {
-                $source = $this->sectionsByHandle[$permissionArray[1]];
+    //==============================================================================================================
+    //===============================================  HELPERS  ====================================================
+    //==============================================================================================================
+
+    /**
+     * @param BaseElementModel[] $mapping AssetSources or Sections
+     * @param string $permission
+     * @param bool $export is it an export or import
+     * @return string mapped permission
+     */
+    private function mapPermissionSource(array $mapping, $permission, $export)
+    {
+        if (strpos($permission, ':') > -1) {
+            /** @var BaseElementModel $source */
+            $source = false;
+            list($permissionName, $sourceId) = explode(':', $permission);
+
+            if (isset($mapping[$sourceId])) {
+                $source = $mapping[$sourceId];
             }
 
             if ($source) {
-                $permissionDefinition = $permissionArray[0] . ':' . $source->id;
+                $permission = $permissionName . ':' . ($export ? $source->handle : $source->id);
             }
         }
-
-        return $permissionDefinition;
+        return $permission;
     }
 }
