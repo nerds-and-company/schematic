@@ -116,7 +116,7 @@ class SchematicService extends BaseApplicationComponent
         if (is_array($services)) {
             $export['pluginData'] = array();
             foreach ($services as $handle => $service) {
-                if ($services instanceof Schematic_AbstractService) {
+                if ($service instanceof Schematic_AbstractService) {
                     $export['pluginData'][$handle] = $service->export();
                 }
             }
