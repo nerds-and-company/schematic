@@ -509,7 +509,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
         } elseif ($source !== 'singles') {
             //Backwards compatibility
             $sourceType = 'section';
-            $sourceObject = craft()->userGroups->getSectionByHandle($source);
+            $sourceObject = craft()->sections->getSectionByHandle($source);
         }
         if ($sourceObject && isset($sourceType)) {
             $source = $sourceType . ':' . $sourceObject->id;
