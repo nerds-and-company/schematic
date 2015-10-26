@@ -451,6 +451,16 @@ class Schematic_FieldsService extends Schematic_AbstractService
             $field->settings = $settings;
         }
 
+        if ($field->type == 'PositionSelect') {
+            $options = array();
+            $settings = $fieldDefinition['settings'];
+            foreach ($settings['options'] as $option) {
+                $options[$option] = $option;
+            }
+            $settings['options'] = $options;
+            $field->settings = $settings;
+        }
+
         if ($field->type == 'Matrix') {
             $field->settings = $field->getFieldType()->getSettings();
             $field->settings->setAttributes($fieldDefinition['settings']);
