@@ -3,6 +3,7 @@
 namespace Craft;
 
 use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
 
 /**
  * Class Schematic_UsersServiceTest.
@@ -71,15 +72,30 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * @return Mock|\Craft\UserGroupsService
+     * @return Mock|\Craft\FieldsService
      */
-    public function getMockUserGroupsService()
+    public function getMockFieldsService()
     {
-        $mock = $this->getMockBuilder('Craft\UserGroupsService')
+        $mock = $this->getMockBuilder('Craft\FieldsService')
             ->disableOriginalConstructor()
             ->getMock();
 
         $mock->expects($this->exactly(1))->method('getAllGroups')->willReturn(array());
+
+        return $mock;
+    }
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param Invocation $invocation
+     * @param mixed $returnValue
+     * @return Mock
+     */
+    public function getDynamicallyMockedService($class, $method, Invocation $invocation, $returnValue) {
+        $mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
+
+        $mock->expects($invocation)->method($method)->willReturn($returnValue);
 
         return $mock;
     }
@@ -108,20 +124,6 @@ class Schematic_SchematicServiceTest extends BaseTest
             ->getMock();
 
         $mock->expects($this->exactly(1))->method('getAllSections')->willReturn(array());
-
-        return $mock;
-    }
-
-    /**
-     * @return Mock|\Craft\FieldsService
-     */
-    public function getMockFieldsService()
-    {
-        $mock = $this->getMockBuilder('Craft\FieldsService')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mock->expects($this->exactly(1))->method('getAllGroups')->willReturn(array());
 
         return $mock;
     }
@@ -213,6 +215,14 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
+     * @param $service
+     * @return Mock
+     */
+    private function getMockAllGroupsMethodService($service) {
+        return $this->getDynamicallyMockedService($service, 'getAllGroups', $this->exactly(1), array());
+    }
+
+    /**
      * Prep export services
      */
     private function prepExportMockServices()
@@ -220,7 +230,7 @@ class Schematic_SchematicServiceTest extends BaseTest
         $mockPluginsService = $this->getMockPluginsService();
         $this->setCraftComponent('plugins', $mockPluginsService);
 
-        $mockFieldsService = $this->getMockFieldsService();
+        $mockFieldsService = $this->getMockAllGroupsMethodService('Craft\FieldsService');
         $this->setCraftComponent('fields', $mockFieldsService);
 
         $mockSectionsService = $this->getMockSectionsService();
@@ -229,7 +239,7 @@ class Schematic_SchematicServiceTest extends BaseTest
         $mockGlobalsService = $this->getMockGlobalsService();
         $this->setCraftComponent('globals', $mockGlobalsService);
 
-        $mockUserGroupsService = $this->getMockUserGroupsService();
+        $mockUserGroupsService = $this->getMockAllGroupsMethodService('Craft\UserGroupsService');
         $this->setCraftComponent('userGroups', $mockUserGroupsService);
     }
 
