@@ -18,9 +18,6 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  */
 class Schematic_SchematicServiceTest extends BaseTest
 {
-    const SCHEMA_TEST_YAML = __DIR__ . '/data/test_schema.yml';
-
-
     /**
      * @var SchematicService
      */
@@ -54,6 +51,14 @@ class Schematic_SchematicServiceTest extends BaseTest
         require_once __DIR__.'/../services/Schematic_UserGroupsService.php';
         require_once __DIR__.'/../services/Schematic_UsersService.php';
         require_once __DIR__.'/../services/SchematicService.php';
+    }
+
+    /**
+     * @return string
+     */
+    private function getYamlTestFile()
+    {
+        return __DIR__ . '/data/test_schema.yml';
     }
 
     /**
@@ -203,7 +208,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     public function testImportFromYamlWithForce()
     {
-       $results = $this->schematicService->importFromYaml(self::SCHEMA_TEST_YAML, true);
+       $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), true);
        $this->assertFalse($results->hasErrors());
     }
 
@@ -236,7 +241,7 @@ class Schematic_SchematicServiceTest extends BaseTest
     {
         $this->prepExportMockServices();
 
-        $results = $this->schematicService->exportToYaml(self::SCHEMA_TEST_YAML);
+        $results = $this->schematicService->exportToYaml($this->getYamlTestFile());
         $this->assertFalse($results->hasErrors());
     }
 
