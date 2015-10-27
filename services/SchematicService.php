@@ -15,6 +15,21 @@ namespace Craft;
  */
 class SchematicService extends BaseApplicationComponent
 {
+    const SCHEMATIC_METHOD_IMPORT = 'import';
+    const SCHEMATIC_METHOD_EXPORT = 'export';
+
+    /**
+     * Returns data from import model or default
+     * @param array $data
+     * @param string $handle
+     * @param array $default
+     * @return array
+     */
+    private function getPluginData(array $data, $handle, array $default = array())
+    {
+        return (array_key_exists($handle, $data)) ? $data[$handle] : $default;
+    }
+
     /**
      * Import from Yaml file.
      *
@@ -75,18 +90,29 @@ class SchematicService extends BaseApplicationComponent
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
 
-        /** @var Schematic_AbstractService[] $services */
-        $services = craft()->plugins->callFirst('registerMigrationService');
-        if (is_array($services)) {
-            foreach ($services as $handle => $service) {
-                if ($services instanceof Schematic_AbstractService && array_key_exists($handle, $model->pluginData)) {
-                    $hookResult = $service->import($model->pluginData[$handle], $force);
-                    $result->consume($hookResult);
-                }
-            }
-        }
+        $services = craft()->plugins->call('registerMigrationService');
+        $this->doImport($result, $model->pluginData, $services, $force);
 
         return $result;
+    }
+
+    /**
+     * Handles importing
+     * @param Schematic_ResultModel $result
+     * @param array $data
+     * @param array|Schematic_AbstractService[] $services
+     * @param $force
+     */
+    private function doImport(Schematic_ResultModel $result, array $data, $services, $force) {
+        foreach ($services as $handle => $service) {
+            if (is_array($service)) {
+                $this->doImport($result, $data, $service, $force);
+            } elseif ($service instanceof Schematic_AbstractService) {
+                $pluginData = $this->getPluginData($data, $handle);
+                $hookResult = $service->import($pluginData, $force);
+                $result->consume($hookResult);
+            }
+        }
     }
 
     /**
@@ -111,17 +137,28 @@ class SchematicService extends BaseApplicationComponent
             'users' => craft()->schematic_users->export(),
         );
 
-        /** @var Schematic_AbstractService[] $services */
-        $services = craft()->plugins->callFirst('registerMigrationService');
-        if (is_array($services)) {
-            $export['pluginData'] = array();
-            foreach ($services as $handle => $service) {
+        $export['pluginData'] = array();
+        $services = craft()->plugins->call('registerMigrationService');
+        $this->doExport($services, $export['pluginData']);
+
+        return $export;
+    }
+
+    /**
+     * Handles exporting
+     * @param array $services
+     * @param array $data
+     */
+    private function doExport(array $services, array &$data)
+    {
+        foreach ($services as $handle => $service) {
+            if (is_array($service)) {
+                $this->doExport($service, $data);
+            } elseif ($service instanceof Schematic_AbstractService) {
                 if ($service instanceof Schematic_AbstractService) {
-                    $export['pluginData'][$handle] = $service->export();
+                    $data[$handle] = $service->export();
                 }
             }
         }
-
-        return $export;
     }
 }
