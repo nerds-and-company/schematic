@@ -145,7 +145,8 @@ class Schematic_SchematicServiceTest extends BaseTest
      * @param string $service
      * @param string $handle
      */
-    private function createMockService($service, $handle) {
+    private function createMockService($service, $handle)
+    {
         $mock = $this->getMockBuilder($service)
             ->disableOriginalConstructor()
             ->getMock();
@@ -218,7 +219,8 @@ class Schematic_SchematicServiceTest extends BaseTest
      * @param $service
      * @return Mock
      */
-    private function getMockAllGroupsMethodService($service) {
+    private function getMockAllGroupsMethodService($service)
+    {
         return $this->getDynamicallyMockedService($service, 'getAllGroups', $this->exactly(1), array());
     }
 
@@ -266,5 +268,4 @@ class Schematic_SchematicServiceTest extends BaseTest
         $results = $this->schematicService->exportToYaml('non-existing-folder/not-a-file', false);
         $this->assertTrue($results->hasErrors());
     }
-
 }
