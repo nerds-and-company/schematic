@@ -16,6 +16,18 @@ namespace Craft;
 class SchematicService extends BaseApplicationComponent
 {
     /**
+     * Returns data from import model or default
+     * @param array $data
+     * @param $handle
+     * @param array $default
+     * @return array
+     */
+    private function getPluginData(array $data, $handle, array $default = array())
+    {
+        return (array_key_exists($handle, $data)) ? $data[$handle] : $default;
+    }
+
+    /**
      * Import from Yaml file.
      *
      * @param string $file
@@ -75,14 +87,12 @@ class SchematicService extends BaseApplicationComponent
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
 
-        /** @var Schematic_AbstractService[] $services */
-        $services = craft()->plugins->callFirst('registerMigrationService');
-        if (is_array($services)) {
-            foreach ($services as $handle => $service) {
-                if ($services instanceof Schematic_AbstractService && array_key_exists($handle, $model->pluginData)) {
-                    $hookResult = $service->import($model->pluginData[$handle], $force);
-                    $result->consume($hookResult);
-                }
+        $serviceModel = new Schematic_ServiceModel();
+        foreach ($serviceModel->getServices() as $handle => $service) {
+            if ($service instanceof Schematic_AbstractService) {
+                $data = $this->getPluginData($model->pluginData, $handle);
+                $hookResult = $service->import($data, $force);
+                $result->consume($hookResult);
             }
         }
 
@@ -109,16 +119,13 @@ class SchematicService extends BaseApplicationComponent
             'globals' => craft()->schematic_globals->export($globals),
             'userGroups' => craft()->schematic_userGroups->export($userGroups),
             'users' => craft()->schematic_users->export(),
+            'pluginData' => array(),
         );
 
-        /** @var Schematic_AbstractService[] $services */
-        $services = craft()->plugins->callFirst('registerMigrationService');
-        if (is_array($services)) {
-            $export['pluginData'] = array();
-            foreach ($services as $handle => $service) {
-                if ($service instanceof Schematic_AbstractService) {
-                    $export['pluginData'][$handle] = $service->export();
-                }
+        $serviceModel = new Schematic_ServiceModel();
+        foreach ($serviceModel->getServices() as $handle => $service) {
+            if ($service instanceof Schematic_AbstractService) {
+                $export['pluginData'][$handle] = $service->export();
             }
         }
 
