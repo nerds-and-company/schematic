@@ -27,58 +27,58 @@ class SchematicService extends BaseApplicationComponent
      */
     private function getPluginData(array $data, $handle, array $default = array())
     {
-        return (array_key_exists($handle, $data)) ? $data[$handle] : $default;
+        return (array_key_exists($handle, $data) && !is_null($data[$handle])) ? $data[$handle] : $default;
     }
 
     /**
      * Import from Yaml file.
-     *
      * @param string $file
      * @param bool   $force if set to true items not included in import will be deleted
-     *
      * @return Schematic_ResultModel
      */
     public function importFromYaml($file, $force = false)
     {
         $yaml = IOHelper::getFileContents($file);
-        $datamodel = Schematic_DataModel::fromYaml($yaml);
+        $dataModel = Schematic_DataModel::fromYaml($yaml);
 
-        return $this->importDataModel($datamodel, $force);
+        return $this->importDataModel($dataModel, $force);
     }
 
     /**
      * Export to Yaml file.
-     *
      * @param string $file
-     *
-     * @return bool
+     * @param bool $autoCreate
+     * @return Schematic_ResultModel
      */
-    public function exportToYaml($file)
+    public function exportToYaml($file, $autoCreate = true)
     {
-        $datamodel = $this->exportDataModel();
-        $yaml = Schematic_DataModel::toYaml($datamodel);
+        $result = new Schematic_ResultModel();
+        $dataModel = $this->exportDataModel();
+        $yaml = Schematic_DataModel::toYaml($dataModel);
 
-        return IOHelper::writeToFile($file, $yaml);
+        if (!IOHelper::writeToFile($file, $yaml, $autoCreate)) { // Do not auto create
+            $result->addError('errors', "Failed to write contents to \"$file\"");
+        }
+
+        return $result;
     }
 
     /**
      * Import data model.
-     *
      * @param Schematic_DataModel $model
      * @param bool                $force if set to true items not in the import will be deleted
-     *
      * @return Schematic_ResultModel
      */
     private function importDataModel(Schematic_DataModel $model, $force)
     {
         // Import schema
-        $pluginImportResult = craft()->schematic_plugins->import($model->plugins);
-        $assetImportResult = craft()->schematic_assets->import($model->assets);
-        $fieldImportResult = craft()->schematic_fields->import($model->fields, $force);
-        $globalImportResult = craft()->schematic_globals->import($model->globals, $force);
-        $sectionImportResult = craft()->schematic_sections->import($model->sections, $force);
-        $userGroupImportResult = craft()->schematic_userGroups->import($model->userGroups, $force);
-        $userImportResult = craft()->schematic_users->import($model->users, true);
+        $pluginImportResult = craft()->schematic_plugins->import($model->getAttribute('plugins', $force));
+        $assetImportResult = craft()->schematic_assets->import($model->getAttribute('assets'), $force);
+        $fieldImportResult = craft()->schematic_fields->import($model->getAttribute('fields'), $force);
+        $globalImportResult = craft()->schematic_globals->import($model->getAttribute('globals'), $force);
+        $sectionImportResult = craft()->schematic_sections->import($model->getAttribute('sections'), $force);
+        $userGroupImportResult = craft()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
+        $userImportResult = craft()->schematic_users->import($model->getAttribute('users'), true);
 
         // Verify results
         $result = new Schematic_ResultModel();
