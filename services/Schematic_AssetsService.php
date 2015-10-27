@@ -46,7 +46,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
      */
     private function populateAssetSource($assetHandle, array $assetSourceDefinition)
     {
-        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
+        $assetSource = AssetSourceRecord::model()->findByAttributes(array('handle' => $assetHandle));
         $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
 
         $assetSource->setAttributes(array(

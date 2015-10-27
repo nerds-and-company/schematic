@@ -63,4 +63,16 @@ class Schematic_DataModel extends BaseModel
 
         return Yaml::dump($data->attributes, 12, 2);
     }
+
+    /**
+     * @param string $attribute
+     * @param bool|false $flattenValue
+     * @param array $default
+     * @return array
+     */
+    public function getAttribute($attribute, $flattenValue = false, $default = array()) {
+        $attribute = parent::getAttribute($attribute, $flattenValue);
+
+        return (!is_null($attribute) ? $attribute : $default);
+    }
 }
