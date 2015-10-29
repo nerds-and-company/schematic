@@ -33,13 +33,15 @@ class SchematicService extends BaseApplicationComponent
     /**
      * Import from Yaml file.
      * @param string $file
+     * @param string $override
      * @param bool   $force if set to true items not included in import will be deleted
      * @return Schematic_ResultModel
      */
-    public function importFromYaml($file, $force = false)
+    public function importFromYaml($file, $override = null, $force = false)
     {
         $yaml = IOHelper::getFileContents($file);
-        $dataModel = Schematic_DataModel::fromYaml($yaml);
+        $yaml_override = IOHelper::getFileContents($override);
+        $dataModel = Schematic_DataModel::fromYaml($yaml, $yaml_override);
 
         return $this->importDataModel($dataModel, $force);
     }

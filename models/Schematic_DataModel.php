@@ -40,14 +40,21 @@ class Schematic_DataModel extends BaseModel
      * Populate data model from yaml.
      *
      * @param string $yaml
+     * @param string $overrideYaml
      *
      * @return Schematic_DataModel
      */
-    public static function fromYaml($yaml)
+    public static function fromYaml($yaml, $overrideYaml)
     {
         $data = Yaml::parse($yaml);
+        $overrideData = Yaml::parse($overrideYaml);
+        if ($overrideData != null) {
+            $mergedData = array_replace_recursive($data, $overrideData);
+        } else {
+            $mergedData = $data;
+        }
 
-        return $data === null ? null : new static($data);
+        return $mergedData === null ? null : new static($mergedData);
     }
 
     /**
