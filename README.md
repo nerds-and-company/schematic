@@ -40,6 +40,9 @@ public function registerMigrationService()
 
 ## Changelog
 
+###1.3.0###
+ - Added the ability to use an override file
+
 ###1.2.0###
  - Use 2 spaces indent in yaml file
  - Added user fields support
