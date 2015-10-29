@@ -211,7 +211,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     public function testImportFromYamlWithForce()
     {
-       $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), true);
+       $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), null, true);
        $this->assertFalse($results->hasErrors());
     }
 

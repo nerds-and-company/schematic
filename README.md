@@ -21,6 +21,10 @@ You can also generate a schema.yml with
 ./craft/app/etc/console/yiic schematic export
 ```
 
+## Overrides
+
+You can override certain keys by placing them in the file `craft/config/override.yml`. When you place this file in gitignore, you can have different settings for different environments. All the base settings go in `schema.yml` and any specific overrides in `override.yml`.
+
 ## Hooks
 
 * Has a hook "registerMigrationService" to add exports with your own data.

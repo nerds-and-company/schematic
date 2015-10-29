@@ -19,15 +19,16 @@ class SchematicCommand extends BaseCommand
      * Imports the Craft datamodel.
      *
      * @param string $file  yml file containing the schema definition
+     * @param string $override_file  yml file containing the override values
      * @param bool   $force if set to true items not in the import will be deleted
      */
-    public function actionImport($file = 'craft/config/schema.yml', $force = false)
+    public function actionImport($file = 'craft/config/schema.yml', $override_file = 'craft/config/override.yml', $force = false)
     {
         if (!IOHelper::fileExists($file)) {
             $this->usageError(Craft::t('File not found.'));
         }
 
-        $result = craft()->schematic->importFromYaml($file, $force);
+        $result = craft()->schematic->importFromYaml($file, $override_file, $force);
 
         if (!$result->hasErrors()) {
             SchematicPlugin::log(Craft::t('Loaded schema from {file}', array('file' => $file)));
