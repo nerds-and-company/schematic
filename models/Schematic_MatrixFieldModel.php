@@ -2,6 +2,9 @@
 
 namespace Craft;
 
+/**
+ * Class Schematic_MatrixFieldModel
+ */
 class Schematic_MatrixFieldModel extends Schematic_FieldModel
 {
 
@@ -36,7 +39,7 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
      *
      * @return array
      */
-    private function getBlockTypeDefinitions(FieldModel $field)
+    protected function getBlockTypeDefinitions(FieldModel $field)
     {
         $fieldFactory = $this->getFieldFactory();
         $blockTypeDefinitions = array();
