@@ -30,16 +30,6 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private $fieldFactory;
 
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->groups = $this->getFieldsService()->getAllGroups('name');
-        $this->fields = $this->getFieldsService()->getAllFields('handle');
-    }
 
     /**
      * @return Schematic_FieldFactoryModel
@@ -131,6 +121,9 @@ class Schematic_FieldsService extends Schematic_AbstractService
     public function import(array $groupDefinitions, $force = false)
     {
         if (!empty($groupDefinitions)) {
+            $this->groups = $this->getFieldsService()->getAllGroups('name');
+            $this->fields = $this->getFieldsService()->getAllFields('handle');
+
             $contentService = $this->getContentService();
 
             $contentService->fieldContext = 'global';
@@ -282,11 +275,11 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private function importFields(array $fieldDefinitions, FieldGroupModel $group)
     {
+        $fieldFactory = $this->getFieldFactory();
+
         foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
             $field = $this->getFieldModel($fieldHandle);
-
-            $this->populateField($fieldDef, $field, $fieldHandle, $group);
-
+            $fieldFactory->populate($fieldDef, $field, $fieldHandle, $group);
             $this->saveFieldModel($field);
         }
     }
@@ -307,164 +300,9 @@ class Schematic_FieldsService extends Schematic_AbstractService
         }
     }
 
-    /**
-     * Populate blocktype.
-     *
-     * @param FieldModel $field
-     * @param MatrixBlockTypeModel $blockType
-     * @param array $blockTypeDef
-     * @param string $blockTypeHandle
-     */
-    private function populateBlockType(FieldModel $field, MatrixBlockTypeModel $blockType, array $blockTypeDef, $blockTypeHandle)
-    {
-        $blockType->fieldId = $field->id;
-        $blockType->name = $blockTypeDef['name'];
-        $blockType->handle = $blockTypeHandle;
-
-        $blockTypeFields = array();
-        foreach ($blockType->getFields() as $blockTypeField) {
-            $blockTypeFields[$blockTypeField->handle] = $blockTypeField;
-        }
-
-        $newBlockTypeFields = array();
-
-        foreach ($blockTypeDef['fields'] as $blockTypeFieldHandle => $blockTypeFieldDef) {
-            $blockTypeField = array_key_exists($blockTypeFieldHandle, $blockTypeFields)
-                ? $blockTypeFields[$blockTypeFieldHandle]
-                : new FieldModel();
-
-            $this->populateField($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
-
-            $newBlockTypeFields[] = $blockTypeField;
-        }
-
-        $blockType->setFields($newBlockTypeFields);
-    }
-
-    /**
-     * Populate field.
-     *
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     * @param string $fieldHandle
-     * @param FieldGroupModel $group
-     */
-    private function populateField(
-        array $fieldDefinition,
-        FieldModel $field,
-        $fieldHandle,
-        FieldGroupModel $group = null
-    )
-    {
-        $field->name = $fieldDefinition['name'];
-        $field->handle = $fieldHandle;
-        $field->required = $fieldDefinition['required'];
-        $field->translatable = $fieldDefinition['translatable'];
-        $field->instructions = $fieldDefinition['instructions'];
-        $field->type = $fieldDefinition['type'];
-        $field->settings = $fieldDefinition['settings'];
-
-        if ($group) {
-            $field->groupId = $group->id;
-        }
-
-        if ($field->type == 'Entries') {
-            $settings = $fieldDefinition['settings'];
-            $settings['sources'] = $this->getSourceIds($settings['sources']);
-            $field->settings = $settings;
-        }
-
-        if ($field->type == 'PositionSelect') {
-            $options = array();
-            $settings = $fieldDefinition['settings'];
-            foreach ($settings['options'] as $option) {
-                $options[$option] = $option;
-            }
-            $settings['options'] = $options;
-            $field->settings = $settings;
-        }
-
-        if ($field->type == 'Matrix') {
-            $field->settings = $field->getFieldType()->getSettings();
-            $field->settings->setAttributes($fieldDefinition['settings']);
-            $field->settings->setBlockTypes($this->getBlockTypes($fieldDefinition, $field));
-        }
-    }
-
-    /**
-     * Get source id's.
-     *
-     * @param string|array $sourcesWithHandle
-     *
-     * @return string|array
-     */
-    private function getSourceIds($sourcesWithHandle)
-    {
-        if (!is_array($sourcesWithHandle)) {
-            return $sourcesWithHandle;
-        }
-        $sourcesWithIds = array();
-        foreach ($sourcesWithHandle as $sourceWithHandle) {
-            $sourcesWithIds[] = $this->getSourceId($sourceWithHandle);
-        }
-        return $sourcesWithIds;
-    }
-
-    /**
-     * @param $source
-     * @return string
-     */
-    private function getSourceId($source)
-    {
-        /** @var BaseElementModel $sourceObject */
-        $sourceObject = null;
-        if (strpos($source, ':') > -1) {
-            list($sourceType, $sourceHandle) = explode(':', $source);
-
-            switch ($sourceType) {
-                case 'section':
-                    $sourceObject = craft()->sections->getSectionByHandle($sourceHandle);
-                    break;
-                case 'group':
-                    $sourceObject = craft()->userGroups->getGroupByHandle($sourceHandle);
-                    break;
-            }
-        } elseif ($source !== 'singles') {
-            //Backwards compatibility
-            $sourceType = 'section';
-            $sourceObject = craft()->sections->getSectionByHandle($source);
-        }
-        if ($sourceObject && isset($sourceType)) {
-            $source = $sourceType . ':' . $sourceObject->id;
-        }
-
-        return $source;
-    }
-
-    /**
-     * Get blocktypes.
-     *
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     *
-     * @return mixed
-     */
-    private function getBlockTypes(array $fieldDefinition, FieldModel $field)
-    {
-        $blockTypes = craft()->matrix->getBlockTypesByFieldId($field->id, 'handle');
-
-        foreach ($fieldDefinition['blockTypes'] as $blockTypeHandle => $blockTypeDef) {
-            $blockType = array_key_exists($blockTypeHandle, $blockTypes)
-                ? $blockTypes[$blockTypeHandle]
-                : new MatrixBlockTypeModel();
-
-            $this->populateBlockType($field, $blockType, $blockTypeDef, $blockTypeHandle);
-
-            $blockTypes[$blockTypeHandle] = $blockType;
-        }
-
-        return $blockTypes;
-    }
+    //==============================================================================================================
+    //=============================================  FIELD LAYOUT  =================================================
+    //==============================================================================================================
 
     /**
      * Get field layout definition.

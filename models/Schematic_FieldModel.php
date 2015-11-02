@@ -2,6 +2,9 @@
 
 namespace Craft;
 
+/**
+ * Class Schematic_FieldModel
+ */
 class Schematic_FieldModel
 {
     /**
@@ -11,6 +14,10 @@ class Schematic_FieldModel
     {
         return craft()->schematic_fields->getFieldFactory();
     }
+
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * @param FieldModel $field
@@ -82,6 +89,87 @@ class Schematic_FieldModel
                 $source = $sourceType . ':' . $sourceObject->handle;
             }
         }
+        return $source;
+    }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
+
+    /**
+     * @param array $fieldDefinition
+     * @param FieldModel $field
+     * @param string $fieldHandle
+     * @param FieldGroupModel|null $group
+     */
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
+    {
+        $field->name = $fieldDefinition['name'];
+        $field->handle = $fieldHandle;
+        $field->required = $fieldDefinition['required'];
+        $field->translatable = $fieldDefinition['translatable'];
+        $field->instructions = $fieldDefinition['instructions'];
+        $field->type = $fieldDefinition['type'];
+        $field->settings = $fieldDefinition['settings'];
+
+        if ($group) {
+            $field->groupId = $group->id;
+        }
+
+        if (isset($definition['settings']['sources'])) {
+            $settings = $fieldDefinition['settings'];
+            $settings['sources'] = $this->getSourceIds($settings['sources']);
+            $field->settings = $settings;
+        }
+    }
+
+    /**
+     * Get source id's.
+     *
+     * @param string|array $sourcesWithHandle
+     *
+     * @return string|array
+     */
+    private function getSourceIds($sourcesWithHandle)
+    {
+        if (!is_array($sourcesWithHandle)) {
+            return $sourcesWithHandle;
+        }
+        $sourcesWithIds = array();
+        foreach ($sourcesWithHandle as $sourceWithHandle) {
+            $sourcesWithIds[] = $this->getSourceId($sourceWithHandle);
+        }
+        return $sourcesWithIds;
+    }
+
+    /**
+     * @param $source
+     * @return string
+     */
+    private function getSourceId($source)
+    {
+        /** @var BaseElementModel $sourceObject */
+        $sourceObject = null;
+        if (strpos($source, ':') > -1) {
+            list($sourceType, $sourceHandle) = explode(':', $source);
+
+            switch ($sourceType) {
+                case 'section':
+                    $sourceObject = craft()->sections->getSectionByHandle($sourceHandle);
+                    break;
+                case 'group':
+                    $sourceObject = craft()->userGroups->getGroupByHandle($sourceHandle);
+                    break;
+            }
+        } elseif ($source !== 'singles') {
+            //Backwards compatibility
+            $sourceType = 'section';
+            $sourceObject = craft()->sections->getSectionByHandle($source);
+        }
+        if ($sourceObject && isset($sourceType)) {
+            $source = $sourceType . ':' . $sourceObject->id;
+        }
+
         return $source;
     }
 }

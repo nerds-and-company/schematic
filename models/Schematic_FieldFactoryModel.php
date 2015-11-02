@@ -4,9 +4,20 @@ namespace Craft;
 
 class Schematic_FieldFactoryModel
 {
-    public function buildField(array $fieldDefinition)
-    {
 
+    /**
+     * @param array $fieldDefinition
+     * @param FieldModel $field
+     * @param string $fieldHandle
+     * @param FieldGroupModel|null $group
+     * @return FieldModel
+     */
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
+    {
+        $schematicFieldModel = $this->getSchematicFieldModel($fieldDefinition['type']);
+        $schematicFieldModel->populate($fieldDefinition, $field, $fieldHandle, $group);
+
+        return $field;
     }
 
     /**
@@ -17,6 +28,7 @@ class Schematic_FieldFactoryModel
     public function getDefinition(FieldModel $field, $includeContext = true)
     {
         $schematicFieldModel = $this->getSchematicFieldModel($field->type);
+
         return $schematicFieldModel->getDefinition($field, $includeContext);
     }
 
@@ -31,6 +43,7 @@ class Schematic_FieldFactoryModel
         if (class_exists($className)) {
             return new $className;
         }
+
         return new Schematic_FieldModel();
     }
 }
