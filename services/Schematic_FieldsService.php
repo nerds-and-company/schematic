@@ -26,6 +26,11 @@ class Schematic_FieldsService extends Schematic_AbstractService
     private $groups = array();
 
     /**
+     * @var Schematic_FieldFactoryModel
+     */
+    private $fieldFactory;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -35,6 +40,18 @@ class Schematic_FieldsService extends Schematic_AbstractService
         $this->groups = $this->getFieldsService()->getAllGroups('name');
         $this->fields = $this->getFieldsService()->getAllFields('handle');
     }
+
+    /**
+     * @return Schematic_FieldFactoryModel
+     */
+    public function getFieldFactory()
+    {
+        return isset($this->fieldFactory) ? $this->fieldFactory : new Schematic_FieldFactoryModel();
+    }
+
+    //==============================================================================================================
+    //===============================================  SERVICES  ===================================================
+    //==============================================================================================================
 
     /**
      * Returns fields service.
@@ -56,15 +73,9 @@ class Schematic_FieldsService extends Schematic_AbstractService
         return craft()->content;
     }
 
-    /**
-     * Returns matrix service.
-     *
-     * @return MatrixService
-     */
-    private function getMatrixService()
-    {
-        return craft()->matrix;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Export fields.
@@ -94,107 +105,61 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Get field definition.
      *
      * @param FieldModel $field
-     * @param bool $includeContext
      *
      * @return array
      */
-    private function getFieldDefinition(FieldModel $field, $includeContext = true)
+    private function getFieldDefinition(FieldModel $field)
     {
-        $definition = array(
-            'name' => $field->name,
-            'required' => $field->required,
-            'instructions' => $field->instructions,
-            'translatable' => $field->translatable,
-            'type' => $field->type,
-            'settings' => $field->settings,
-        );
-
-        if ($includeContext) {
-            $definition['context'] = $field->context;
-        }
-        if (isset($definition['settings']['sources'])) {
-            $definition['settings']['sources'] = $this->getSourceHandles($definition['settings']['sources']);
-        }
-
-        if ($field->type == 'Matrix') {
-            $definition['blockTypes'] = $this->getBlockTypeDefinitions($field);
-        }
+        $fieldFactory = $this->getFieldFactory();
+        $definition = $fieldFactory->getDefinition($field);
 
         return $definition;
     }
 
-    /**
-     * Get source handles.
-     *
-     * @param string|array $sourcesWithIds
-     *
-     * @return string|array
-     */
-    private function getSourceHandles($sourcesWithIds)
-    {
-        if (!is_array($sourcesWithIds)) {
-            return $sourcesWithIds;
-        }
-        $sourcesWithHandles = array();
-        foreach ($sourcesWithIds as $sourceWithId) {
-            $sourcesWithHandles[] = $this->getSourceHandle($sourceWithId);
-        }
-
-        return $sourcesWithHandles;
-    }
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * @param string $source with id
-     * @return string source with handle
+     * Attempt to import fields.
+     *
+     * @param array $groupDefinitions
+     * @param bool $force if set to true items not in the import will be deleted
+     *
+     * @return Schematic_ResultModel
      */
-    private function getSourceHandle($source)
+    public function import(array $groupDefinitions, $force = false)
     {
-        if (strpos($source, ':') > -1) {
-            /** @var BaseElementModel $sourceObject */
-            $sourceObject = null;
-            list($sourceType, $sourceId) = explode(':', $source);
+        if (!empty($groupDefinitions)) {
+            $contentService = $this->getContentService();
 
-            switch ($sourceType) {
-                case 'section':
-                    $sourceObject = craft()->sections->getSectionById($sourceId);
-                    break;
-                case 'group':
-                    $sourceObject = craft()->userGroups->getGroupById($sourceId);
-                    break;
+            $contentService->fieldContext = 'global';
+            $contentService->contentTable = 'content';
+
+            foreach ($groupDefinitions as $name => $fieldDefinitions) {
+                try {
+                    $this->beginTransaction();
+
+                    $group = $this->createFieldGroupModel($name);
+
+                    $this->importFields($fieldDefinitions, $group);
+
+                    $this->commitTransaction();
+                } catch (\Exception $e) {
+                    $this->rollbackTransaction();
+
+                    $this->addError($e->getMessage());
+                }
+
+                $this->unsetData($name, $fieldDefinitions);
             }
-            if ($sourceObject) {
-                $source = $sourceType . ':' . $sourceObject->handle;
+
+            if ($force) { // Remove not imported data
+                $this->deleteFieldsAndGroups();
             }
         }
-        return $source;
-    }
 
-    /**
-     * Get block type definitions.
-     *
-     * @param FieldModel $field
-     *
-     * @return array
-     */
-    private function getBlockTypeDefinitions(FieldModel $field)
-    {
-        $blockTypeDefinitions = array();
-
-        $blockTypes = $this->getMatrixService()->getBlockTypesByFieldId($field->id);
-        foreach ($blockTypes as $blockType) {
-            $blockTypeFieldDefinitions = array();
-
-            foreach ($blockType->getFields() as $blockTypeField) {
-                $blockTypeFieldDefinitions[$blockTypeField->handle] = $this->getFieldDefinition($blockTypeField, false);
-            }
-
-            $blockTypeDefinitions[$blockType->handle] = array(
-                'name' => $blockType->name,
-                'fields' => $blockTypeFieldDefinitions,
-            );
-        }
-
-        return $blockTypeDefinitions;
+        return $this->getResultModel();
     }
 
     /**
@@ -340,48 +305,6 @@ class Schematic_FieldsService extends Schematic_AbstractService
                 unset($this->fields[$handle]);
             }
         }
-    }
-
-    /**
-     * Attempt to import fields.
-     *
-     * @param array $groupDefinitions
-     * @param bool $force if set to true items not in the import will be deleted
-     *
-     * @return Schematic_ResultModel
-     */
-    public function import(array $groupDefinitions, $force = false)
-    {
-        if (!empty($groupDefinitions)) {
-            $contentService = $this->getContentService();
-
-            $contentService->fieldContext = 'global';
-            $contentService->contentTable = 'content';
-
-            foreach ($groupDefinitions as $name => $fieldDefinitions) {
-                try {
-                    $this->beginTransaction();
-
-                    $group = $this->createFieldGroupModel($name);
-
-                    $this->importFields($fieldDefinitions, $group);
-
-                    $this->commitTransaction();
-                } catch (\Exception $e) {
-                    $this->rollbackTransaction();
-
-                    $this->addError($e->getMessage());
-                }
-
-                $this->unsetData($name, $fieldDefinitions);
-            }
-
-            if ($force) { // Remove not imported data
-                $this->deleteFieldsAndGroups();
-            }
-        }
-
-        return $this->getResultModel();
     }
 
     /**
