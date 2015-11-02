@@ -90,7 +90,9 @@ class Schematic_FieldModel
      *
      * @param string|array $sources
      *
-     * @return string|array
+     * @param string $indexFrom
+     * @param string $indexTo
+     * @return array|string
      */
     private function getMappedSources($sources, $indexFrom, $indexTo)
     {
@@ -133,13 +135,14 @@ class Schematic_FieldModel
         } elseif ($source !== 'singles') {
             //Backwards compatibility
             $sourceType = 'section';
+            $sourceFrom = $source;
             $service = $this->getSectionsService();
             $method = 'getSectionBy';
         }
 
-        if(isset($service) && isset($method)){
+        if (isset($service) && isset($method) && isset($sourceFrom)) {
             $method = $method . $indexFrom;
-            $sourceObject = $service->$method($source->$indexFrom);
+            $sourceObject = $service->$method($sourceFrom);
         }
 
         if ($sourceObject && isset($sourceType)) {
