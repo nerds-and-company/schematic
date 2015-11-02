@@ -15,9 +15,21 @@ class Schematic_FieldModel
         return craft()->schematic_fields->getFieldFactory();
     }
 
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
+    /**
+     * @return SectionsService
+     */
+    private function getSectionsService()
+    {
+        return craft()->sections;
+    }
+
+    /**
+     * @return UserGroupsService
+     */
+    private function getUserGroupsService()
+    {
+        return craft()->userGroups;
+    }
 
     /**
      * @param FieldModel $field
@@ -40,61 +52,11 @@ class Schematic_FieldModel
         }
 
         if (isset($definition['settings']['sources'])) {
-            $definition['settings']['sources'] = $this->getSourceHandles($definition['settings']['sources']);
+            $definition['settings']['sources'] = $this->getMappedSources($definition['settings']['sources'], 'id', 'handle');
         }
 
         return $definition;
     }
-
-    /**
-     * Get source handles.
-     *
-     * @param string|array $sourcesWithIds
-     *
-     * @return string|array
-     */
-    private function getSourceHandles($sourcesWithIds)
-    {
-        if (!is_array($sourcesWithIds)) {
-            return $sourcesWithIds;
-        }
-        $sourcesWithHandles = array();
-        foreach ($sourcesWithIds as $sourceWithId) {
-            $sourcesWithHandles[] = $this->getSourceHandle($sourceWithId);
-        }
-
-        return $sourcesWithHandles;
-    }
-
-    /**
-     * @param string $source with id
-     * @return string source with handle
-     */
-    private function getSourceHandle($source)
-    {
-        if (strpos($source, ':') > -1) {
-            /** @var BaseElementModel $sourceObject */
-            $sourceObject = null;
-            list($sourceType, $sourceId) = explode(':', $source);
-
-            switch ($sourceType) {
-                case 'section':
-                    $sourceObject = craft()->sections->getSectionById($sourceId);
-                    break;
-                case 'group':
-                    $sourceObject = craft()->userGroups->getGroupById($sourceId);
-                    break;
-            }
-            if ($sourceObject) {
-                $source = $sourceType . ':' . $sourceObject->handle;
-            }
-        }
-        return $source;
-    }
-
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
 
     /**
      * @param array $fieldDefinition
@@ -118,56 +80,70 @@ class Schematic_FieldModel
 
         if (isset($definition['settings']['sources'])) {
             $settings = $fieldDefinition['settings'];
-            $settings['sources'] = $this->getSourceIds($settings['sources']);
+            $settings['sources'] = $this->getMappedSources($settings['sources'], 'handle', 'id');
             $field->settings = $settings;
         }
     }
 
     /**
-     * Get source id's.
+     * Get sources based on the indexFrom attribute and return them with the indexTo attribute
      *
-     * @param string|array $sourcesWithHandle
+     * @param string|array $sources
      *
      * @return string|array
      */
-    private function getSourceIds($sourcesWithHandle)
+    private function getMappedSources($sources, $indexFrom, $indexTo)
     {
-        if (!is_array($sourcesWithHandle)) {
-            return $sourcesWithHandle;
+        if (!is_array($sources)) {
+            return $sources;
         }
-        $sourcesWithIds = array();
-        foreach ($sourcesWithHandle as $sourceWithHandle) {
-            $sourcesWithIds[] = $this->getSourceId($sourceWithHandle);
+
+        $mappedSources = array();
+        foreach ($sources as $source) {
+            $mappedSources[] = $this->getSource($source, $indexFrom, $indexTo);
         }
-        return $sourcesWithIds;
+
+        return $mappedSources;
     }
 
     /**
-     * @param $source
+     * Gets a source by the attribute indexFrom, and returns it with attribute $indexTo
+     * @param string $source
+     * @param string $indexFrom
+     * @param string $indexTo
      * @return string
      */
-    private function getSourceId($source)
+    private function getSource($source, $indexFrom, $indexTo)
     {
         /** @var BaseElementModel $sourceObject */
         $sourceObject = null;
-        if (strpos($source, ':') > -1) {
-            list($sourceType, $sourceHandle) = explode(':', $source);
 
+        if (strpos($source, ':') > -1) {
+            list($sourceType, $sourceFrom) = explode(':', $source);
             switch ($sourceType) {
                 case 'section':
-                    $sourceObject = craft()->sections->getSectionByHandle($sourceHandle);
+                    $service = $this->getSectionsService();
+                    $method = 'getSectionBy';
                     break;
                 case 'group':
-                    $sourceObject = craft()->userGroups->getGroupByHandle($sourceHandle);
+                    $service = $this->getUserGroupsService();
+                    $method = 'getGroupBy';
                     break;
             }
         } elseif ($source !== 'singles') {
             //Backwards compatibility
             $sourceType = 'section';
-            $sourceObject = craft()->sections->getSectionByHandle($source);
+            $service = $this->getSectionsService();
+            $method = 'getSectionBy';
         }
+
+        if(isset($service) && isset($method)){
+            $method = $method . $indexFrom;
+            $sourceObject = $service->$method($source->$indexFrom);
+        }
+
         if ($sourceObject && isset($sourceType)) {
-            $source = $sourceType . ':' . $sourceObject->id;
+            $source = $sourceType . ':' . $sourceObject->$indexTo;
         }
 
         return $source;
