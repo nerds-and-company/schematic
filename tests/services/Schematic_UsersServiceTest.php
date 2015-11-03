@@ -7,11 +7,11 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Class Schematic_UsersServiceTest.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  *
  * @coversDefaultClass Craft\Schematic_UsersService
  * @covers ::__construct
@@ -94,7 +94,8 @@ class Schematic_UsersServiceTest extends BaseTest
     }
 
     /**
-     * Test users service export
+     * Test users service export.
+     *
      * @covers ::export
      */
     public function testUsersServiceExport()
@@ -121,6 +122,7 @@ class Schematic_UsersServiceTest extends BaseTest
     /**
      * @param bool $safeLayout
      * @param bool $deleteLayoutsByType
+     *
      * @return FieldsService|Mock
      */
     private function getMockFieldServiceForImport($safeLayout = true, $deleteLayoutsByType = true)
@@ -134,14 +136,15 @@ class Schematic_UsersServiceTest extends BaseTest
 
     /**
      * @param bool $errors
+     *
      * @return Schematic_FieldsService|Mock
      */
     private function getMockSchematicFieldServiceForImport($errors = false)
     {
         $mockFieldLayout = $this->getMockFieldLayout();
-        if($errors) {
+        if ($errors) {
             $mockFieldLayout->expects($this->exactly(1))->method('getAllErrors')->willReturn(array(
-                'errors' => array('error 1', 'error 2', 'error 3')
+                'errors' => array('error 1', 'error 2', 'error 3'),
             ));
         }
 
@@ -152,7 +155,8 @@ class Schematic_UsersServiceTest extends BaseTest
     }
 
     /**
-     * Test users service import
+     * Test users service import.
+     *
      * @covers ::import
      */
     public function testUsersServiceImportWithForce()
@@ -169,7 +173,8 @@ class Schematic_UsersServiceTest extends BaseTest
     }
 
     /**
-     * Test users service import
+     * Test users service import.
+     *
      * @covers ::import
      */
     public function testUsersServiceImportWithoutFieldLayout()
@@ -186,7 +191,8 @@ class Schematic_UsersServiceTest extends BaseTest
     }
 
     /**
-     * Test users service import
+     * Test users service import.
+     *
      * @covers ::import
      */
     public function testUsersServiceImportWithImportError()

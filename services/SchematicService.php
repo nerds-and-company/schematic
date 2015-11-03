@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class SchematicService extends BaseApplicationComponent
 {
@@ -19,10 +19,12 @@ class SchematicService extends BaseApplicationComponent
     const SCHEMATIC_METHOD_EXPORT = 'export';
 
     /**
-     * Returns data from import model or default
-     * @param array $data
+     * Returns data from import model or default.
+     *
+     * @param array  $data
      * @param string $handle
-     * @param array $default
+     * @param array  $default
+     *
      * @return array
      */
     private function getPluginData(array $data, $handle, array $default = array())
@@ -32,9 +34,11 @@ class SchematicService extends BaseApplicationComponent
 
     /**
      * Import from Yaml file.
+     *
      * @param string $file
      * @param string $override
-     * @param bool   $force if set to true items not included in import will be deleted
+     * @param bool   $force    if set to true items not included in import will be deleted
+     *
      * @return Schematic_ResultModel
      */
     public function importFromYaml($file, $override = null, $force = false)
@@ -48,8 +52,10 @@ class SchematicService extends BaseApplicationComponent
 
     /**
      * Export to Yaml file.
+     *
      * @param string $file
-     * @param bool $autoCreate
+     * @param bool   $autoCreate
+     *
      * @return Schematic_ResultModel
      */
     public function exportToYaml($file, $autoCreate = true)
@@ -67,8 +73,10 @@ class SchematicService extends BaseApplicationComponent
 
     /**
      * Import data model.
+     *
      * @param Schematic_DataModel $model
      * @param bool                $force if set to true items not in the import will be deleted
+     *
      * @return Schematic_ResultModel
      */
     private function importDataModel(Schematic_DataModel $model, $force)
@@ -99,13 +107,15 @@ class SchematicService extends BaseApplicationComponent
     }
 
     /**
-     * Handles importing
-     * @param Schematic_ResultModel $result
-     * @param array $data
+     * Handles importing.
+     *
+     * @param Schematic_ResultModel             $result
+     * @param array                             $data
      * @param array|Schematic_AbstractService[] $services
      * @param $force
      */
-    private function doImport(Schematic_ResultModel $result, array $data, $services, $force) {
+    private function doImport(Schematic_ResultModel $result, array $data, $services, $force)
+    {
         foreach ($services as $handle => $service) {
             if (is_array($service)) {
                 $this->doImport($result, $data, $service, $force);
@@ -147,7 +157,8 @@ class SchematicService extends BaseApplicationComponent
     }
 
     /**
-     * Handles exporting
+     * Handles exporting.
+     *
      * @param array $services
      * @param array $data
      */

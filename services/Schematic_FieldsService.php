@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_FieldsService extends Schematic_AbstractService
 {
@@ -269,7 +269,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Import field group fields.
      *
-     * @param array $fieldDefinitions
+     * @param array           $fieldDefinitions
      * @param FieldGroupModel $group
      *
      * @throws \Exception
@@ -290,7 +290,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Unset group and field data else $force flag will delete it.
      *
      * @param string $name
-     * @param array $definitions
+     * @param array  $definitions
      */
     private function unsetData($name, array $definitions)
     {

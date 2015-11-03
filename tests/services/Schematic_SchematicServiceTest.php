@@ -8,11 +8,11 @@ use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
 /**
  * Class Schematic_UsersServiceTest.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  *
  * @coversDefaultClass Craft\SchematicService
  * @covers ::<!public>
@@ -23,7 +23,6 @@ class Schematic_SchematicServiceTest extends BaseTest
      * @var SchematicService
      */
     private $schematicService;
-
 
     /**
      * {@inheritdoc}
@@ -64,7 +63,7 @@ class Schematic_SchematicServiceTest extends BaseTest
 
     /**
      * @param string $handle
-     * @param Mock $mock
+     * @param Mock   $mock
      */
     private function setCraftComponent($handle, Mock $mock)
     {
@@ -86,13 +85,15 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * @param string $class
-     * @param string $method
+     * @param string     $class
+     * @param string     $method
      * @param Invocation $invocation
-     * @param mixed $returnValue
+     * @param mixed      $returnValue
+     *
      * @return Mock
      */
-    public function getDynamicallyMockedService($class, $method, Invocation $invocation, $returnValue) {
+    public function getDynamicallyMockedService($class, $method, Invocation $invocation, $returnValue)
+    {
         $mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
 
         $mock->expects($invocation)->method($method)->willReturn($returnValue);
@@ -141,7 +142,8 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Creates mock for service
+     * Creates mock for service.
+     *
      * @param string $service
      * @param string $handle
      */
@@ -189,7 +191,7 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Mock all required services
+     * Mock all required services.
      */
     private function mockServices()
     {
@@ -206,17 +208,19 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Test import from Yaml
+     * Test import from Yaml.
+     *
      * @covers ::importFromYaml
      */
     public function testImportFromYamlWithForce()
     {
-       $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), null, true);
-       $this->assertFalse($results->hasErrors());
+        $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), null, true);
+        $this->assertFalse($results->hasErrors());
     }
 
     /**
      * @param $service
+     *
      * @return Mock
      */
     private function getMockAllGroupsMethodService($service)
@@ -225,7 +229,7 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Prep export services
+     * Prep export services.
      */
     private function prepExportMockServices()
     {
@@ -246,7 +250,8 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Test export to yml
+     * Test export to yml.
+     *
      * @covers ::exportToYaml
      */
     public function testExportFromYaml()
@@ -258,7 +263,8 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
-     * Test export to yml with error writing to file
+     * Test export to yml with error writing to file.
+     *
      * @covers ::exportToYaml
      */
     public function testExportFromYamlWithFileError()

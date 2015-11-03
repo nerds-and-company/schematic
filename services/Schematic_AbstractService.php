@@ -5,11 +5,11 @@ namespace Craft;
 /**
  * Schematic Base Service for some easy access methods.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 abstract class Schematic_AbstractService extends BaseApplicationComponent
 {

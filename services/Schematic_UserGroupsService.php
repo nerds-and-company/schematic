@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_UserGroupsService extends Schematic_AbstractService
 {
@@ -129,7 +129,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         $groupPermissions = $this->getUserPermissionsService()->getPermissionsByGroupId($group->id);
 
         foreach ($groupPermissions as $permission) {
-            if(array_key_exists($permission, $this->mappedPermissions)){
+            if (array_key_exists($permission, $this->mappedPermissions)) {
                 $permission = $this->mappedPermissions[$permission];
                 $permissionDefinitions[] = $this->getPermissionDefinition($permission);
             }
@@ -141,7 +141,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
 
     /**
      * Get a mapping of all permissions from lowercase to camelcase
-     * savePermissions only accepts camelcase
+     * savePermissions only accepts camelcase.
+     *
      * @return array
      */
     private function getAllMappedPermissions()
@@ -150,11 +151,13 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         foreach ($this->getUserPermissionsService()->getAllPermissions() as $permissions) {
             $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
         }
+
         return $mappedPermissions;
     }
 
     /**
      * @param array $permissions
+     *
      * @return array
      */
     private function getMappedPermissions(array $permissions)
@@ -186,6 +189,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         } else {
             $permission = $this->mapPermissionSource($this->sectionsById, $permission, true);
         }
+
         return $permission;
     }
 
@@ -198,7 +202,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      * Import usergroups.
      *
      * @param array $groupDefinitions
-     * @param bool $force if set to true items not in the import will be deleted
+     * @param bool  $force            if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -271,6 +275,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
         } else {
             $permissionDefinition = $this->mapPermissionSource($this->sectionsByHandle, $permissionDefinition, false);
         }
+
         return $permissionDefinition;
     }
 
@@ -279,9 +284,10 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
     //==============================================================================================================
 
     /**
-     * @param BaseElementModel[] $mapping AssetSources or Sections
-     * @param string $permission
-     * @param bool $export is it an export or import
+     * @param BaseElementModel[] $mapping    AssetSources or Sections
+     * @param string             $permission
+     * @param bool               $export     is it an export or import
+     *
      * @return string mapped permission
      */
     private function mapPermissionSource(array $mapping, $permission, $export)
@@ -296,9 +302,10 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
             }
 
             if ($source) {
-                $permission = $permissionName . ':' . ($export ? $source->handle : $source->id);
+                $permission = $permissionName.':'.($export ? $source->handle : $source->id);
             }
         }
+
         return $permission;
     }
 }
