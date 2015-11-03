@@ -38,6 +38,17 @@ public function registerMigrationService()
 }
 ```
 
+* Has a hook to add mappings for custom field types, the Plugin_CustomSchematicFieldModel must extend the Schematic_FieldModel
+
+```php
+public function registerSchematicFieldModels()
+{
+    return array(
+		'fieldType' => Plugin_CustomSchematicFieldModel
+	);
+}
+```
+
 ## Changelog
 
 ###1.3.0###
