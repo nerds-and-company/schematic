@@ -15,7 +15,6 @@ namespace Craft;
  */
 class Schematic_MatrixFieldModel extends Schematic_FieldModel
 {
-
     /**
      * Returns matrix service.
      *
@@ -33,6 +32,7 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
     /**
      * @param FieldModel $field
      * @param $includeContext
+     *
      * @return array
      */
     public function getDefinition(FieldModel $field, $includeContext)
@@ -78,9 +78,9 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
     //==============================================================================================================
 
     /**
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     * @param string $fieldHandle
+     * @param array                $fieldDefinition
+     * @param FieldModel           $field
+     * @param string               $fieldHandle
      * @param FieldGroupModel|null $group
      */
     public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
@@ -97,7 +97,7 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
     /**
      * Get blocktypes.
      *
-     * @param array $fieldDefinition
+     * @param array      $fieldDefinition
      * @param FieldModel $field
      *
      * @return mixed
@@ -111,7 +111,11 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
                 ? $blockTypes[$blockTypeHandle]
                 : new MatrixBlockTypeModel();
 
-            $this->populateBlockType($field, $blockType, $blockTypeDef, $blockTypeHandle);
+            $blockType->fieldId = $field->id;
+            $blockType->name = $blockTypeDef['name'];
+            $blockType->handle = $blockTypeHandle;
+
+            $this->populateBlockType($blockType, $blockTypeDef);
 
             $blockTypes[$blockTypeHandle] = $blockType;
         }
@@ -122,18 +126,12 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
     /**
      * Populate blocktype.
      *
-     * @param FieldModel $field
-     * @param MatrixBlockTypeModel $blockType
-     * @param array $blockTypeDef
-     * @param string $blockTypeHandle
+     * @param BaseModel $blockType
+     * @param array     $blockTypeDef
      */
-    private function populateBlockType(FieldModel $field, MatrixBlockTypeModel $blockType, array $blockTypeDef, $blockTypeHandle)
+    protected function populateBlockType(BaseModel $blockType, array $blockTypeDef)
     {
         $fieldFactory = $this->getFieldFactory();
-
-        $blockType->fieldId = $field->id;
-        $blockType->name = $blockTypeDef['name'];
-        $blockType->handle = $blockTypeHandle;
 
         $blockTypeFields = array();
         foreach ($blockType->getFields() as $blockTypeField) {

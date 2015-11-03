@@ -54,8 +54,9 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
     }
 
     /**
-     * @param array $fieldDefinition
+     * @param array      $fieldDefinition
      * @param FieldModel $field
+     *
      * @return SuperTable_BlockTypeModel[]
      */
     protected function getBlockTypes(array $fieldDefinition, FieldModel $field)
@@ -68,44 +69,14 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
                 ? $blockTypes[$index]
                 : new SuperTable_BlockTypeModel();
 
-            $this->populateBlockType($field, $blockType, $blockTypeDef);
+            $blockType->fieldId = $field->id;
+
+            $this->populateBlockType($blockType, $blockTypeDef);
 
             $blockTypes[$index] = $blockType;
             $index++;
         }
 
         return $blockTypes;
-    }
-
-    /**
-     * @param FieldModel $field
-     * @param SuperTable_BlockTypeModel $blockType
-     * @param array $blockTypeDef
-     */
-    private function populateBlockType(FieldModel $field, SuperTable_BlockTypeModel $blockType, array $blockTypeDef)
-    {
-        $fieldFactory = $this->getFieldFactory();
-
-        $blockType->fieldId = $field->id;
-
-        $blockTypeFields = array();
-        foreach ($blockType->getFields() as $blockTypeField) {
-            $blockTypeFields[$blockTypeField->handle] = $blockTypeField;
-        }
-
-        $newBlockTypeFields = array();
-
-        foreach ($blockTypeDef['fields'] as $blockTypeFieldHandle => $blockTypeFieldDef) {
-            $blockTypeField = array_key_exists($blockTypeFieldHandle, $blockTypeFields)
-                ? $blockTypeFields[$blockTypeFieldHandle]
-                : new FieldModel();
-
-            $schematicFieldModel = $fieldFactory->build($blockTypeFieldDef['type']);
-            $schematicFieldModel->populate($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
-
-            $newBlockTypeFields[] = $blockTypeField;
-        }
-
-        $blockType->setFields($newBlockTypeFields);
     }
 }
