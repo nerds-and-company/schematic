@@ -94,7 +94,7 @@ class Schematic_FieldModel
             $field->groupId = $group->id;
         }
 
-        if (isset($definition['settings']['sources'])) {
+        if (isset($fieldDefinition['settings']['sources'])) {
             $settings = $fieldDefinition['settings'];
             $settings['sources'] = $this->getMappedSources($settings['sources'], 'handle', 'id');
             $field->settings = $settings;
