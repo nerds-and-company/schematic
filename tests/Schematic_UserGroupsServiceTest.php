@@ -194,9 +194,9 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                         'name' => 'groupName1',
                         'permissions' => array(
                             'accessSiteWhenSystemIsOff',
-                            'performUpdates',
                             'editEntries:sectionHandle1',
                             'editGlobalSet:globalSetHandle1',
+                            'performUpdates',
                             'viewAssetSource:assetSourceHandle1',
                         ),
                     )
