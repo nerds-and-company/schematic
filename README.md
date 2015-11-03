@@ -51,6 +51,11 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###1.4.0###
+ - Reworked importing and exporting of fields
+ - Added hook to allow the addition of custom logic for importing and exporting fields
+ - Permissions are now sorted
+
 ###1.3.0###
  - Added the ability to use an override file
 
