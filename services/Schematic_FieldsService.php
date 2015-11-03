@@ -101,7 +101,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
     private function getFieldDefinition(FieldModel $field)
     {
         $fieldFactory = $this->getFieldFactory();
-        $definition = $fieldFactory->getDefinition($field);
+        $schematicFieldModel = $fieldFactory->build($field->type);
+        $definition = $schematicFieldModel->getDefinition($field, true);
 
         return $definition;
     }
@@ -279,7 +280,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
 
         foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
             $field = $this->getFieldModel($fieldHandle);
-            $fieldFactory->populate($fieldDef, $field, $fieldHandle, $group);
+            $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
+            $schematicFieldModel->populate($fieldDef, $field, $fieldHandle, $group);
             $this->saveFieldModel($field);
         }
     }

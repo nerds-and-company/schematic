@@ -33,7 +33,8 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
             $blockTypeFieldDefinitions = array();
 
             foreach ($blockType->getFields() as $blockTypeField) {
-                $blockTypeFieldDefinitions[$blockTypeField->handle] = $fieldFactory->getDefinition($blockTypeField, false);
+                $schematicFieldModel = $fieldFactory->build($blockTypeField->type);
+                $blockTypeFieldDefinitions[$blockTypeField->handle] = $schematicFieldModel->getDefinition($blockTypeField, false);
             }
 
             $blockTypeDefinitions[] = array(
@@ -84,7 +85,8 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
                 ? $blockTypeFields[$blockTypeFieldHandle]
                 : new FieldModel();
 
-            $fieldFactory->populate($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
+            $schematicFieldModel = $fieldFactory->build($blockTypeFieldDef['type']);
+            $schematicFieldModel->populate($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
 
             $newBlockTypeFields[] = $blockTypeField;
         }

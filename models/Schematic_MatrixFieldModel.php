@@ -52,7 +52,8 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
             $blockTypeFieldDefinitions = array();
 
             foreach ($blockType->getFields() as $blockTypeField) {
-                $blockTypeFieldDefinitions[$blockTypeField->handle] = $fieldFactory->getDefinition($blockTypeField, false);
+                $schematicFieldModel = $fieldFactory->build($blockTypeField->type);
+                $blockTypeFieldDefinitions[$blockTypeField->handle] = $schematicFieldModel->getDefinition($blockTypeField, false);
             }
 
             $blockTypeDefinitions[$blockType->handle] = array(
@@ -138,7 +139,8 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
                 ? $blockTypeFields[$blockTypeFieldHandle]
                 : new FieldModel();
 
-            $fieldFactory->populate($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
+            $schematicFieldModel = $fieldFactory->build($blockTypeFieldDef['type']);
+            $schematicFieldModel->populate($blockTypeFieldDef, $blockTypeField, $blockTypeFieldHandle);
 
             $newBlockTypeFields[] = $blockTypeField;
         }

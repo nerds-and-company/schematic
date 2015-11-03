@@ -10,7 +10,7 @@ class Schematic_FieldModel
     /**
      * @return Schematic_FieldFactoryModel
      */
-    public function getFieldFactory()
+    protected function getFieldFactory()
     {
         return craft()->schematic_fields->getFieldFactory();
     }
