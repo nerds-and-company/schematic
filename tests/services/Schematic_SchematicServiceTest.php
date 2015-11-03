@@ -40,18 +40,18 @@ class Schematic_SchematicServiceTest extends BaseTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        require_once __DIR__.'/../SchematicPlugin.php';
-        require_once __DIR__.'/../models/Schematic_DataModel.php';
-        require_once __DIR__.'/../models/Schematic_ResultModel.php';
-        require_once __DIR__.'/../services/Schematic_AbstractService.php';
-        require_once __DIR__.'/../services/Schematic_AssetsService.php';
-        require_once __DIR__.'/../services/Schematic_FieldsService.php';
-        require_once __DIR__.'/../services/Schematic_GlobalsService.php';
-        require_once __DIR__.'/../services/Schematic_PluginsService.php';
-        require_once __DIR__.'/../services/Schematic_SectionsService.php';
-        require_once __DIR__.'/../services/Schematic_UserGroupsService.php';
-        require_once __DIR__.'/../services/Schematic_UsersService.php';
-        require_once __DIR__.'/../services/SchematicService.php';
+        require_once __DIR__.'/../../SchematicPlugin.php';
+        require_once __DIR__.'/../../models/Schematic_DataModel.php';
+        require_once __DIR__.'/../../models/Schematic_ResultModel.php';
+        require_once __DIR__.'/../../services/Schematic_AbstractService.php';
+        require_once __DIR__.'/../../services/Schematic_AssetsService.php';
+        require_once __DIR__.'/../../services/Schematic_FieldsService.php';
+        require_once __DIR__.'/../../services/Schematic_GlobalsService.php';
+        require_once __DIR__.'/../../services/Schematic_PluginsService.php';
+        require_once __DIR__.'/../../services/Schematic_SectionsService.php';
+        require_once __DIR__.'/../../services/Schematic_UserGroupsService.php';
+        require_once __DIR__.'/../../services/Schematic_UsersService.php';
+        require_once __DIR__.'/../../services/SchematicService.php';
     }
 
     /**
@@ -59,7 +59,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function getYamlTestFile()
     {
-        return __DIR__ . '/data/test_schema.yml';
+        return __DIR__ . '/../data/test_schema.yml';
     }
 
     /**
