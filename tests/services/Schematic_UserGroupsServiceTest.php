@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Class Schematic_PluginsServiceTest
@@ -245,7 +245,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $groupId
-     * @return MockObject|UserGroupModel
+     * @return Mock|UserGroupModel
      */
     private function getMockUserGroup($groupId)
     {
@@ -272,7 +272,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param $indexBy
-     * @return MockObject|SectionsService
+     * @return Mock|SectionsService
      */
     private function setMockSectionsService($indexBy)
     {
@@ -293,7 +293,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $indexBy
      * @param int $count
-     * @return MockObject[]|SectionModel[]
+     * @return Mock[]|SectionModel[]
      */
     private function getMockSections($indexBy, $count)
     {
@@ -319,7 +319,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @return MockObject|AssetSourcesService
+     * @return Mock|AssetSourcesService
      */
     private function setMockAssetSourcesService($indexBy)
     {
@@ -340,7 +340,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $indexBy
      * @param int $count
-     * @return MockObject[]|AssetSourceModel[]
+     * @return Mock[]|AssetSourceModel[]
      */
     private function getMockAssetSources($indexBy, $count)
     {
@@ -366,7 +366,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @return MockObject|AssetSourcesService
+     * @return Mock|AssetSourcesService
      */
     private function setMockGlobalsService($indexBy)
     {
@@ -387,7 +387,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $indexBy
      * @param int $count
-     * @return MockObject[]|GlobalSetModel[]
+     * @return Mock[]|GlobalSetModel[]
      */
     private function getMockGlobalSets($indexBy, $count)
     {
@@ -413,7 +413,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param bool $success
-     * @return UserGroupsService|MockObject
+     * @return UserGroupsService|Mock
      */
     private function setMockUserGroupsService($success = true)
     {
@@ -452,7 +452,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param array $permissions
      * @param bool $success
-     * @return UserPermissionsService|MockObject
+     * @return UserPermissionsService|Mock
      */
     private function setMockUserPermissionsService(array $permissions = array(), $success = true)
     {
