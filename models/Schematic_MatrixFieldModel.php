@@ -96,7 +96,7 @@ class Schematic_MatrixFieldModel extends Schematic_FieldModel
      */
     protected function getBlockTypes(array $fieldDefinition, FieldModel $field)
     {
-        $blockTypes = craft()->matrix->getBlockTypesByFieldId($field->id, 'handle');
+        $blockTypes = $this->getMatrixService()->getBlockTypesByFieldId($field->id, 'handle');
 
         foreach ($fieldDefinition['blockTypes'] as $blockTypeHandle => $blockTypeDef) {
             $blockType = array_key_exists($blockTypeHandle, $blockTypes)

@@ -52,11 +52,18 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
      */
     protected function getBlockTypes(array $fieldDefinition, FieldModel $field)
     {
-        $blockTypes = array();
-        foreach ($fieldDefinition['blockTypes'] as $blockTypeId => $blockTypeDef) {
-            $blockType = new SuperTable_BlockTypeModel();
+        $blockTypes = $this->getSuperTableService()->getBlockTypesByFieldId($field->id);
+
+        $index = 0;
+        foreach ($fieldDefinition['blockTypes'] as $blockTypeDef) {
+            $blockType = array_key_exists($index, $blockTypes)
+                ? $blockTypes[$index]
+                : new SuperTable_BlockTypeModel();
+
             $this->populateBlockType($field, $blockType, $blockTypeDef);
-            $blockTypes[] = $blockType;
+
+            $blockTypes[$index] = $blockType;
+            $index++;
         }
 
         return $blockTypes;
