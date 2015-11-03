@@ -134,6 +134,7 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
                 $permissionDefinitions[] = $this->getPermissionDefinition($permission);
             }
         }
+        sort($permissionDefinitions);
 
         return $permissionDefinitions;
     }

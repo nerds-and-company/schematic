@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Class Schematic_PluginsServiceTest.
@@ -25,10 +25,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        require_once __DIR__.'/../SchematicPlugin.php';
-        require_once __DIR__.'/../models/Schematic_ResultModel.php';
-        require_once __DIR__.'/../services/Schematic_AbstractService.php';
-        require_once __DIR__.'/../services/Schematic_UserGroupsService.php';
+        require_once __DIR__.'/../../SchematicPlugin.php';
+        require_once __DIR__.'/../../models/Schematic_ResultModel.php';
+        require_once __DIR__.'/../../services/Schematic_AbstractService.php';
+        require_once __DIR__.'/../../services/Schematic_UserGroupsService.php';
     }
 
     //==============================================================================================================
@@ -193,9 +193,9 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                         'name' => 'groupName1',
                         'permissions' => array(
                             'accessSiteWhenSystemIsOff',
-                            'performUpdates',
                             'editEntries:sectionHandle1',
                             'editGlobalSet:globalSetHandle1',
+                            'performUpdates',
                             'viewAssetSource:assetSourceHandle1',
                         ),
                     ),
@@ -245,7 +245,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $groupId
      *
-     * @return MockObject|UserGroupModel
+     * @return Mock|UserGroupModel
      */
     private function getMockUserGroup($groupId)
     {
@@ -273,7 +273,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param $indexBy
      *
-     * @return MockObject|SectionsService
+     * @return Mock|SectionsService
      */
     private function setMockSectionsService($indexBy)
     {
@@ -295,7 +295,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @param string $indexBy
      * @param int    $count
      *
-     * @return MockObject[]|SectionModel[]
+     * @return Mock[]|SectionModel[]
      */
     private function getMockSections($indexBy, $count)
     {
@@ -323,7 +323,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $indexBy
      *
-     * @return MockObject|AssetSourcesService
+     * @return Mock|AssetSourcesService
      */
     private function setMockAssetSourcesService($indexBy)
     {
@@ -345,7 +345,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @param string $indexBy
      * @param int    $count
      *
-     * @return MockObject[]|AssetSourceModel[]
+     * @return Mock[]|AssetSourceModel[]
      */
     private function getMockAssetSources($indexBy, $count)
     {
@@ -373,7 +373,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param string $indexBy
      *
-     * @return MockObject|AssetSourcesService
+     * @return Mock|AssetSourcesService
      */
     private function setMockGlobalsService($indexBy)
     {
@@ -395,7 +395,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @param string $indexBy
      * @param int    $count
      *
-     * @return MockObject[]|GlobalSetModel[]
+     * @return Mock[]|GlobalSetModel[]
      */
     private function getMockGlobalSets($indexBy, $count)
     {
@@ -423,7 +423,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     /**
      * @param bool $success
      *
-     * @return UserGroupsService|MockObject
+     * @return UserGroupsService|Mock
      */
     private function setMockUserGroupsService($success = true)
     {
@@ -465,7 +465,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @param array $permissions
      * @param bool  $success
      *
-     * @return UserPermissionsService|MockObject
+     * @return UserPermissionsService|Mock
      */
     private function setMockUserPermissionsService(array $permissions = array(), $success = true)
     {
