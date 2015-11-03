@@ -3,7 +3,15 @@
 namespace Craft;
 
 /**
- * Class Schematic_MatrixFieldModel
+ * Schematic Matrix Field Model.
+ *
+ * A schematic field model for mapping matrix data
+ *
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
+ * @license   MIT
+ *
+ * @link      http://www.nerds.company
  */
 class Schematic_MatrixFieldModel extends Schematic_FieldModel
 {

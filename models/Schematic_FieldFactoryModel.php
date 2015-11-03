@@ -3,7 +3,15 @@
 namespace Craft;
 
 /**
- * Class Schematic_FieldFactoryModel
+ * Schematic Field Factory Model.
+ *
+ * Provides a schematic field model for mapping data
+ *
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
+ * @license   MIT
+ *
+ * @link      http://www.nerds.company
  */
 class Schematic_FieldFactoryModel
 {

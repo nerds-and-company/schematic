@@ -3,7 +3,15 @@
 namespace Craft;
 
 /**
- * Class Schematic_SuperTableFieldModel
+ * Schematic Super Table Field Model.
+ *
+ * A schematic field model for mapping super table data
+ *
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
+ * @license   MIT
+ *
+ * @link      http://www.nerds.company
  */
 class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
 {
