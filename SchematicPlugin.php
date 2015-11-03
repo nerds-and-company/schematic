@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class SchematicPlugin extends BasePlugin
 {
@@ -42,7 +42,7 @@ class SchematicPlugin extends BasePlugin
      */
     public function getDeveloper()
     {
-        return 'Itmundi';
+        return 'Nerds & Company';
     }
 
     /**
@@ -52,6 +52,6 @@ class SchematicPlugin extends BasePlugin
      */
     public function getDeveloperUrl()
     {
-        return 'http://www.itmundi.nl';
+        return 'http://www.nerds.company';
     }
 }

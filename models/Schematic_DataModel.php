@@ -9,11 +9,11 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Encapsulates data that has been exported via schematic.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_DataModel extends BaseModel
 {
@@ -72,12 +72,14 @@ class Schematic_DataModel extends BaseModel
     }
 
     /**
-     * @param string $attribute
+     * @param string     $attribute
      * @param bool|false $flattenValue
-     * @param array $default
+     * @param array      $default
+     *
      * @return array
      */
-    public function getAttribute($attribute, $flattenValue = false, $default = array()) {
+    public function getAttribute($attribute, $flattenValue = false, $default = array())
+    {
         $attribute = parent::getAttribute($attribute, $flattenValue);
 
         return (!is_null($attribute) ? $attribute : $default);

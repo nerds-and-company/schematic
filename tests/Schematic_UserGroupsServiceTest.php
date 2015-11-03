@@ -5,13 +5,13 @@ namespace Craft;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class Schematic_PluginsServiceTest
+ * Class Schematic_PluginsServiceTest.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  *
  * @coversDefaultClass Craft\Schematic_UserGroupsService
  * @covers ::__construct
@@ -19,7 +19,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class Schematic_UserGroupsServiceTest extends BaseTest
 {
-
     /**
      * {@inheritdoc}
      */
@@ -41,8 +40,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
      * @dataProvider provideValidUserGroups
      *
      * @param UserGroupModel[] $groups
-     * @param string[] $groupPermissions
-     * @param array $expectedResult
+     * @param string[]         $groupPermissions
+     * @param array            $expectedResult
      */
     public function testSuccessfulExport(array $groups, array $groupPermissions, array $expectedResult = array())
     {
@@ -99,7 +98,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
         $import = $schematicUserGroupsService->import($groupDefinitions);
 
         $this->assertTrue($import instanceof Schematic_ResultModel);
-        if(!empty($groupDefinitions)){
+        if (!empty($groupDefinitions)) {
             $this->assertTrue($import->hasErrors());
         }
     }
@@ -152,8 +151,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                     'groupHandle1' => array(
                         'name' => 'groupName1',
                         'permissions' => array(),
-                    )
-                )
+                    ),
+                ),
             ),
             'multiple groups without permissions' => array(
                 'userGroups' => array(
@@ -172,8 +171,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                     'groupHandle2' => array(
                         'name' => 'groupName2',
                         'permissions' => array(),
-                    )
-                )
+                    ),
+                ),
             ),
             'single group with permissions' => array(
                 'userGroups' => array(
@@ -199,9 +198,9 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                             'editGlobalSet:globalSetHandle1',
                             'viewAssetSource:assetSourceHandle1',
                         ),
-                    )
-                )
-            )
+                    ),
+                ),
+            ),
         );
     }
 
@@ -219,8 +218,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                     'groupHandle1' => array(
                         'name' => 'groupName1',
                         'permissions' => array(),
-                    )
-                )
+                    ),
+                ),
             ),
             'single group with permissions' => array(
                 'groupDefinitions' => array(
@@ -233,8 +232,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                             'editGlobalSet:globalSetHandle1',
                             'viewAssetSource:assetSourceHandle1',
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -245,6 +244,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $groupId
+     *
      * @return MockObject|UserGroupModel
      */
     private function getMockUserGroup($groupId)
@@ -257,14 +257,14 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             ->method('__get')
             ->willReturnMap(array(
                 array('id', $groupId),
-                array('handle', 'groupHandle' . $groupId),
-                array('name', 'groupName' . $groupId),
+                array('handle', 'groupHandle'.$groupId),
+                array('name', 'groupName'.$groupId),
             ));
 
         $mockUserGroup->expects($this->any())
             ->method('getAllErrors')
             ->willReturn(array(
-                'ohnoes' => 'horrible error'
+                'ohnoes' => 'horrible error',
             ));
 
         return $mockUserGroup;
@@ -272,6 +272,7 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param $indexBy
+     *
      * @return MockObject|SectionsService
      */
     private function setMockSectionsService($indexBy)
@@ -292,7 +293,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @param int $count
+     * @param int    $count
+     *
      * @return MockObject[]|SectionModel[]
      */
     private function getMockSections($indexBy, $count)
@@ -307,18 +309,20 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             $mockSection->expects($this->any())
                 ->method('__get')
                 ->willReturnMap(array(
-                    array('handle', 'sectionHandle' . $x),
+                    array('handle', 'sectionHandle'.$x),
                     array('id', $x),
-                    array('name', 'sectionName' . $x)
+                    array('name', 'sectionName'.$x),
                 ));
 
-            $mockSections[$keyPrefix . $x] = $mockSection;
+            $mockSections[$keyPrefix.$x] = $mockSection;
         }
+
         return $mockSections;
     }
 
     /**
      * @param string $indexBy
+     *
      * @return MockObject|AssetSourcesService
      */
     private function setMockAssetSourcesService($indexBy)
@@ -339,7 +343,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @param int $count
+     * @param int    $count
+     *
      * @return MockObject[]|AssetSourceModel[]
      */
     private function getMockAssetSources($indexBy, $count)
@@ -354,18 +359,20 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             $mockAssetSource->expects($this->any())
                 ->method('__get')
                 ->willReturnMap(array(
-                    array('handle', 'assetSourceHandle' . $x),
+                    array('handle', 'assetSourceHandle'.$x),
                     array('id', $x),
-                    array('name', 'assetSourceName' . $x)
+                    array('name', 'assetSourceName'.$x),
                 ));
 
-            $mockAssetSources[$keyPrefix . $x] = $mockAssetSource;
+            $mockAssetSources[$keyPrefix.$x] = $mockAssetSource;
         }
+
         return $mockAssetSources;
     }
 
     /**
      * @param string $indexBy
+     *
      * @return MockObject|AssetSourcesService
      */
     private function setMockGlobalsService($indexBy)
@@ -386,7 +393,8 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param string $indexBy
-     * @param int $count
+     * @param int    $count
+     *
      * @return MockObject[]|GlobalSetModel[]
      */
     private function getMockGlobalSets($indexBy, $count)
@@ -401,18 +409,20 @@ class Schematic_UserGroupsServiceTest extends BaseTest
             $mockGlobalSet->expects($this->any())
                 ->method('__get')
                 ->willReturnMap(array(
-                    array('handle', 'globalSetHandle' . $x),
+                    array('handle', 'globalSetHandle'.$x),
                     array('id', $x),
-                    array('name', 'globalSetName' . $x)
+                    array('name', 'globalSetName'.$x),
                 ));
 
-            $mockGlobalSets[$keyPrefix . $x] = $mockGlobalSet;
+            $mockGlobalSets[$keyPrefix.$x] = $mockGlobalSet;
         }
+
         return $mockGlobalSets;
     }
 
     /**
      * @param bool $success
+     *
      * @return UserGroupsService|MockObject
      */
     private function setMockUserGroupsService($success = true)
@@ -438,20 +448,23 @@ class Schematic_UserGroupsServiceTest extends BaseTest
 
     /**
      * @param int $count
+     *
      * @return array
      */
     private function getMockUserGroups($count)
     {
         $mockUserGroups = array();
         for ($x = 0; $x <= $count; $x++) {
-            $mockUserGroups['groupHandle' . $x] = $this->getMockUserGroup($x);;
+            $mockUserGroups['groupHandle'.$x] = $this->getMockUserGroup($x);
         }
+
         return $mockUserGroups;
     }
 
     /**
      * @param array $permissions
-     * @param bool $success
+     * @param bool  $success
+     *
      * @return UserPermissionsService|MockObject
      */
     private function setMockUserPermissionsService(array $permissions = array(), $success = true)
@@ -483,29 +496,29 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     private function getAllPermissionsExample()
     {
         return array(
-            "General" => array(
-                "accessSiteWhenSystemIsOff" => array(
-                    "nested" => array(
-                        "accessCpWhenSystemIsOff" => array(),
-                        "performUpdates" => array(),
-                        "accessPlugin-PluginName1" => array(),
-                        "accessPlugin-PluginName2" => array(),
-                    )
-                )
+            'General' => array(
+                'accessSiteWhenSystemIsOff' => array(
+                    'nested' => array(
+                        'accessCpWhenSystemIsOff' => array(),
+                        'performUpdates' => array(),
+                        'accessPlugin-PluginName1' => array(),
+                        'accessPlugin-PluginName2' => array(),
+                    ),
+                ),
             ),
-            "Users" => array(
-                "editUsers" => array(
-                    "nested" => array(
-                        "registerUsers" => array(),
-                        "assignUserPermissions" => array(),
-                        "administrateUsers" => array(
-                            "nested" => array(
-                                "changeUserEmails" => array(),
-                            )
+            'Users' => array(
+                'editUsers' => array(
+                    'nested' => array(
+                        'registerUsers' => array(),
+                        'assignUserPermissions' => array(),
+                        'administrateUsers' => array(
+                            'nested' => array(
+                                'changeUserEmails' => array(),
+                            ),
                         ),
-                        "deleteUsers" => array(),
-                    )
-                )
+                        'deleteUsers' => array(),
+                    ),
+                ),
             ),
             'Section - 1' => array(
                 'editEntries:1' => array(
@@ -515,10 +528,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                             'nested' => array(
                                 'publishPeerEntryDrafts:1' => array(),
                                 'deletePeerEntryDrafts:1' => array(),
-                            )
+                            ),
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             'Section - 2' => array(
                 'editEntries:2' => array(
@@ -528,10 +541,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                             'nested' => array(
                                 'publishPeerEntryDrafts:2' => array(),
                                 'deletePeerEntryDrafts:2' => array(),
-                            )
+                            ),
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             'GlobalSet - 1' => array(
                 'editGlobalSet:1' => array(),
@@ -541,10 +554,10 @@ class Schematic_UserGroupsServiceTest extends BaseTest
                     'nested' => array(
                         'uploadToAssetSource:1' => array(),
                         'createSubfoldersInAssetSource:1' => array(),
-                        'removeFromAssetSource:1' => array()
-                    )
-                )
-            )
+                        'removeFromAssetSource:1' => array(),
+                    ),
+                ),
+            ),
         );
     }
 }

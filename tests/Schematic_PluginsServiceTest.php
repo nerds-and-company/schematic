@@ -7,11 +7,11 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Class Schematic_PluginsServiceTest.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  *
  * @coversDefaultClass Craft\Schematic_PluginsService
  * @covers ::__construct

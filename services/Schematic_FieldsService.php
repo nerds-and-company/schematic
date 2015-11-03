@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_FieldsService extends Schematic_AbstractService
 {
@@ -94,7 +94,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Get field definition.
      *
      * @param FieldModel $field
-     * @param bool $includeContext
+     * @param bool       $includeContext
      *
      * @return array
      */
@@ -145,6 +145,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
 
     /**
      * @param string $source with id
+     *
      * @return string source with handle
      */
     private function getSourceHandle($source)
@@ -163,9 +164,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
                     break;
             }
             if ($sourceObject) {
-                $source = $sourceType . ':' . $sourceObject->handle;
+                $source = $sourceType.':'.$sourceObject->handle;
             }
         }
+
         return $source;
     }
 
@@ -310,7 +312,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Import field group fields.
      *
-     * @param array $fieldDefinitions
+     * @param array           $fieldDefinitions
      * @param FieldGroupModel $group
      *
      * @throws \Exception
@@ -330,7 +332,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Unset group and field data else $force flag will delete it.
      *
      * @param string $name
-     * @param array $definitions
+     * @param array  $definitions
      */
     private function unsetData($name, array $definitions)
     {
@@ -346,7 +348,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Attempt to import fields.
      *
      * @param array $groupDefinitions
-     * @param bool $force if set to true items not in the import will be deleted
+     * @param bool  $force            if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -387,10 +389,10 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Populate blocktype.
      *
-     * @param FieldModel $field
+     * @param FieldModel           $field
      * @param MatrixBlockTypeModel $blockType
-     * @param array $blockTypeDef
-     * @param string $blockTypeHandle
+     * @param array                $blockTypeDef
+     * @param string               $blockTypeHandle
      */
     private function populateBlockType(FieldModel $field, MatrixBlockTypeModel $blockType, array $blockTypeDef, $blockTypeHandle)
     {
@@ -421,9 +423,9 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Populate field.
      *
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     * @param string $fieldHandle
+     * @param array           $fieldDefinition
+     * @param FieldModel      $field
+     * @param string          $fieldHandle
      * @param FieldGroupModel $group
      */
     private function populateField(
@@ -431,8 +433,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
         FieldModel $field,
         $fieldHandle,
         FieldGroupModel $group = null
-    )
-    {
+    ) {
         $field->name = $fieldDefinition['name'];
         $field->handle = $fieldHandle;
         $field->required = $fieldDefinition['required'];
@@ -484,11 +485,13 @@ class Schematic_FieldsService extends Schematic_AbstractService
         foreach ($sourcesWithHandle as $sourceWithHandle) {
             $sourcesWithIds[] = $this->getSourceId($sourceWithHandle);
         }
+
         return $sourcesWithIds;
     }
 
     /**
      * @param $source
+     *
      * @return string
      */
     private function getSourceId($source)
@@ -512,7 +515,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
             $sourceObject = craft()->sections->getSectionByHandle($source);
         }
         if ($sourceObject && isset($sourceType)) {
-            $source = $sourceType . ':' . $sourceObject->id;
+            $source = $sourceType.':'.$sourceObject->id;
         }
 
         return $source;
@@ -521,7 +524,7 @@ class Schematic_FieldsService extends Schematic_AbstractService
     /**
      * Get blocktypes.
      *
-     * @param array $fieldDefinition
+     * @param array      $fieldDefinition
      * @param FieldModel $field
      *
      * @return mixed

@@ -3,27 +3,39 @@
     "description": "Sync Craft setups",
     "authors": [
         {
-            "name": "Bart van Gennepg",
-            "email": "b.vangennep@itmundi.nl",
-            "homepage": "http://www.itmundi.nl",
+            "name": "Bart van Gennep",
+            "email": "b.vangennep@nerds.company",
+            "homepage": "http://www.nerds.company",
             "role": "Developer"
         },
         {
             "name": "Bob Olde Hampsink",
-            "email": "b.oldehampsink@itmundi.nl",
-            "homepage": "http://www.itmundi.nl",
+            "email": "b.oldehampsink@nerds.company",
+            "homepage": "http://www.nerds.company",
             "role": "Developer"
         },
         {
             "name": "Gijs Stegehuis",
-            "email": "g.stegehuis@itmundi.nl",
-            "homepage": "http://www.itmundi.nl",
+            "email": "g.stegehuis@nerds.company",
+            "homepage": "http://www.nerds.company",
             "role": "Developer"
         },
         {
             "name": "Nick Obermeijer",
-            "email": "n.obermeijer@itmundi.nl",
-            "homepage": "http://www.itmundi.nl",
+            "email": "n.obermeijer@nerds.company",
+            "homepage": "http://www.nerds.company",
+            "role": "Developer"
+        },
+        {
+            "name": "Arjan Kleene",
+            "email": "a.kleene@nerds.company",
+            "homepage": "http://www.nerds.company",
+            "role": "Developer"
+        },
+        {
+            "name": "Niek Schmoller",
+            "email": "n.schmoller@nerds.company",
+            "homepage": "http://www.nerds.company",
             "role": "Developer"
         }
     ],

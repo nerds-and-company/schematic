@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Encapsulates the result of an action, including error messages.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_ResultModel extends BaseModel
 {

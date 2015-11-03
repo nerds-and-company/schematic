@@ -7,11 +7,11 @@ namespace Craft;
  *
  * Sync Craft Setups.
  *
- * @author    Itmundi
- * @copyright Copyright (c) 2015, Itmundi
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.itmundi.nl
+ * @link      http://www.nerds.company
  */
 class Schematic_UsersService extends Schematic_AbstractService
 {
@@ -45,7 +45,7 @@ class Schematic_UsersService extends Schematic_AbstractService
      * Attempt to import user settings.
      *
      * @param array $user_settings
-     * @param bool  $force                If set to true user settings not included in the import will be deleted
+     * @param bool  $force         If set to true user settings not included in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
@@ -54,16 +54,16 @@ class Schematic_UsersService extends Schematic_AbstractService
         // always delete existing fieldlayout first
         craft()->fields->deleteLayoutsByType(ElementType::User);
 
-        if(isset($user_settings['fieldLayout'])) {
+        if (isset($user_settings['fieldLayout'])) {
             $fieldLayoutDefinition = (array) $user_settings['fieldLayout'];
         } else {
             $fieldLayoutDefinition = array();
         }
 
         $fieldLayout = craft()->schematic_fields->getFieldLayout($fieldLayoutDefinition);
-		$fieldLayout->type = ElementType::User;
+        $fieldLayout->type = ElementType::User;
 
-		if (!craft()->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
+        if (!craft()->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
 
             $this->addErrors($fieldLayout->getAllErrors());
         }
