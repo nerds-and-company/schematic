@@ -16,6 +16,32 @@ namespace Craft;
 class Schematic_AssetsService extends Schematic_AbstractService
 {
     /**
+     * @return AssetSourcesService
+     */
+    private function getAssetSourcesService()
+    {
+        return craft()->assetSources;
+    }
+
+    /**
+     * @param $sourceTypeId
+     * @return array|mixed|null
+     */
+    public function getSourceTypeById($sourceTypeId)
+    {
+        return AssetSourceRecord::model()->findByAttributes(array('id' => $sourceTypeId));
+    }
+
+    /**
+     * @param $sourceTypeHandle
+     * @return array|mixed|null
+     */
+    public function getSourceTypeByHandle($sourceTypeHandle)
+    {
+        return AssetSourceRecord::model()->findByAttributes(array('handle' => $sourceTypeHandle));
+    }
+
+    /**
      * Import asset source definitions.
      *
      * @param array $assetSourceDefinitions
@@ -69,7 +95,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
      */
     public function export(array $data = array())
     {
-        $assetSources = craft()->assetSources->getAllSources();
+        $assetSources = $this->getAssetSourcesService()->getAllSources();
 
         $assetSourceDefinitions = array();
         foreach ($assetSources as $assetSource) {

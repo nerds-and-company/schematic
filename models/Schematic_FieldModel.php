@@ -32,6 +32,14 @@ class Schematic_FieldModel
     }
 
     /**
+     * @return Schematic_AssetsService
+     */
+    private function getAssetsService()
+    {
+        return craft()->schematic_assets;
+    }
+
+    /**
      * @param FieldModel $field
      * @param $includeContext
      * @return array
@@ -96,13 +104,12 @@ class Schematic_FieldModel
      */
     private function getMappedSources($sources, $indexFrom, $indexTo)
     {
-        if (!is_array($sources)) {
-            return $sources;
-        }
-
-        $mappedSources = array();
-        foreach ($sources as $source) {
-            $mappedSources[] = $this->getSource($source, $indexFrom, $indexTo);
+        $mappedSources = $sources;
+        if (is_array($sources)) {
+            $mappedSources = array();
+            foreach ($sources as $source) {
+                $mappedSources[] = $this->getSource($source, $indexFrom, $indexTo);
+            }
         }
 
         return $mappedSources;
@@ -110,6 +117,8 @@ class Schematic_FieldModel
 
     /**
      * Gets a source by the attribute indexFrom, and returns it with attribute $indexTo
+     * @TODO Break up and simplify this method
+     *
      * @param string $source
      * @param string $indexFrom
      * @param string $indexTo
@@ -130,6 +139,10 @@ class Schematic_FieldModel
                 case 'group':
                     $service = $this->getUserGroupsService();
                     $method = 'getGroupBy';
+                    break;
+                case 'folder':
+                    $service = $this->getAssetsService();
+                    $method = 'getSourceTypeBy';
                     break;
             }
         } elseif ($source !== 'singles') {

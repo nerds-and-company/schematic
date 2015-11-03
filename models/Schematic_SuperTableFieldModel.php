@@ -57,7 +57,7 @@ class Schematic_SuperTableFieldModel extends Schematic_MatrixFieldModel
             $this->populateBlockType($field, $blockType, $blockTypeDef);
             $blockTypes[] = $blockType;
         }
-        
+
         return $blockTypes;
     }
 
