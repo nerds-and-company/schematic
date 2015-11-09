@@ -66,6 +66,7 @@ class Schematic_DataModelTest extends BaseTest
 
     /**
      * @covers ::fromYaml
+     * @covers ::replaceEnvVariables
      */
     public function testEnvironmentOverride()
     {
@@ -75,6 +76,7 @@ class Schematic_DataModelTest extends BaseTest
 
     /**
      * @covers ::fromYaml
+     * @covers ::replaceEnvVariables
      */
     public function testErrorWhenEnvironmentVariableNotSet()
     {
