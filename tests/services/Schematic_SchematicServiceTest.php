@@ -62,6 +62,14 @@ class Schematic_SchematicServiceTest extends BaseTest
     }
 
     /**
+     * @return string
+     */
+    private function getYamlExportFile()
+    {
+        return __DIR__ . '/../data/test_schema_export.yml';
+    }
+
+    /**
      * @param string $handle
      * @param Mock   $mock
      */
@@ -258,7 +266,7 @@ class Schematic_SchematicServiceTest extends BaseTest
     {
         $this->prepExportMockServices();
 
-        $results = $this->schematicService->exportToYaml($this->getYamlTestFile());
+        $results = $this->schematicService->exportToYaml($this->getYamlExportFile());
         $this->assertFalse($results->hasErrors());
     }
 

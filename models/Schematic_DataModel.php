@@ -49,12 +49,44 @@ class Schematic_DataModel extends BaseModel
         $data = Yaml::parse($yaml);
         $overrideData = Yaml::parse($overrideYaml);
         if ($overrideData != null) {
-            $mergedData = array_replace_recursive($data, $overrideData);
-        } else {
-            $mergedData = $data;
+            $data = array_replace_recursive($data, $overrideData);
         }
+        $data = Schematic_DataModel::replaceEnvVariables($data);
 
-        return $mergedData === null ? null : new static($mergedData);
+        return $data === null ? null : new static($data);
+    }
+
+    /**
+     * Replace placeholders with enviroment variables in array.
+     *
+     * Placeholders start with % and end with %. This will be replaced by the
+     * environment variable with the name SCHEMATIC_{PLACEHOLDER}. If the
+     * environment variable is not set an exception will be thrown.
+     *
+     * @param array $yaml
+     *
+     * @return array
+     */
+    public static function replaceEnvVariables($yaml)
+    {
+        $replacer = function($value) {
+            if (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
+                $env_variable = strtoupper(substr($value, 1, -1));
+                $env_variable = 'SCHEMATIC_' . $env_variable;
+                $env_value = getenv($env_variable);
+                if (!$env_value) {
+                    throw new Exception("Schematic environment variable not set: {$env_variable}");
+                }
+                return getenv($env_variable);
+            }
+            return $value;
+        };
+
+        array_walk_recursive($yaml, function(&$v) use ($replacer) {
+            $v = $replacer($v);
+        });
+
+        return $yaml;
     }
 
     /**

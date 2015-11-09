@@ -1,4 +1,8 @@
-assets: null
+assets:
+  uploads:
+    settings:
+      keyId: original_key_id
+      bucket: original_bucket_name
 fields: null
 globals: null
 plugins: null
