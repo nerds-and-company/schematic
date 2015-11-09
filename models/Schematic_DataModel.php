@@ -39,22 +39,53 @@ class Schematic_DataModel extends BaseModel
     /**
      * Populate data model from yaml.
      *
-     * @param string $yaml
-     * @param string $overrideYaml
+     * @param string $yamlFile
+     * @param string $overrideYamlFile
      *
      * @return Schematic_DataModel
      */
-    public static function fromYaml($yaml, $overrideYaml)
+    public static function fromYaml($yamlFile, $overrideYamlFile)
     {
-        $data = Yaml::parse($yaml);
-        $overrideData = Yaml::parse($overrideYaml);
-        if ($overrideData != null) {
-            $mergedData = array_replace_recursive($data, $overrideData);
-        } else {
-            $mergedData = $data;
+        $data = Yaml::parse($yamlFile);
+        if (!empty($overrideYamlFile)) {
+            $overrideYaml = file_get_contents($overrideYamlFile);
+            $overrideYaml = static::replaceEnvVariables($overrideYaml);
+            $overrideData = Yaml::parse($overrideYaml);
+            if ($overrideData != null) {
+                $data = array_replace_recursive($data, $overrideData);
+            }
         }
 
-        return $mergedData === null ? null : new static($mergedData);
+        return $data === null ? null : new static($data);
+    }
+
+    /**
+     * Replace placeholders with enviroment variables.
+     *
+     * Placeholders start with % and end with %. This will be replaced by the
+     * environment variable with the name SCHEMATIC_{PLACEHOLDER}. If the
+     * environment variable is not set an exception will be thrown.
+     *
+     * @param string $yaml
+     *
+     * @return string
+     */
+    public static function replaceEnvVariables($yaml)
+    {
+        $matches = null;
+        preg_match_all('/%\w+%/', $yaml, $matches);
+        $original_values = $matches[0];
+        $replace_values = array();
+        foreach($original_values as $match) {
+            $env_variable = strtoupper(substr($match, 1, -1));
+            $env_variable = 'SCHEMATIC_' . $env_variable;
+            $env_value = getenv($env_variable);
+            if (!$env_value) {
+                throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
+            }
+            $replace_values[] = $env_value;
+        }
+        return str_replace($original_values, $replace_values, $yaml);
     }
 
     /**

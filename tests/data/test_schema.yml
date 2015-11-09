@@ -1,9 +1,14 @@
-assets: null
+assets:
+  uploads:
+    settings:
+      keyId: original_key_id
+      bucket: original_bucket_name
 fields: null
 globals: null
 plugins: null
 sections: null
 userGroups: null
-users: null
+users:
+  - test_user
 pluginData:
   test_service: null

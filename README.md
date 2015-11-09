@@ -23,7 +23,17 @@ You can also generate a schema.yml with
 
 ## Overrides
 
-You can override certain keys by placing them in the file `craft/config/override.yml`. When you place this file in gitignore, you can have different settings for different environments. All the base settings go in `schema.yml` and any specific overrides in `override.yml`.
+You can override certain keys by placing a placeholder in `craft/config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names. The value has to start with a `%` (percentage sign) and end with one too. The correspending environment value will be `SCHEMATIC_{value_without_percentage_signs}`.
+
+For example if you define the following `override.yml`:
+
+```yml
+parent:
+    key_name: %key_value%
+```
+
+You will need to set the environment variable `SCHEMATIC_KEY_VALUE`. The value of this environment variable will override the key `key_name`. If the environment variable is not set Schematic will throw an error.
+
 
 ## Hooks
 
