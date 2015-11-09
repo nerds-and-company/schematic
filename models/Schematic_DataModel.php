@@ -44,57 +44,48 @@ class Schematic_DataModel extends BaseModel
      *
      * @return Schematic_DataModel
      */
-    public static function fromYaml($yaml, $overrideYaml)
+    public static function fromYaml($yamlFile, $overrideYamlFile)
     {
-        $data = Yaml::parse($yaml);
-        $overrideData = Yaml::parse($overrideYaml);
-        if ($overrideData != null) {
-            $data = array_replace_recursive($data, $overrideData);
+        $data = Yaml::parse($yamlFile);
+        if (!empty($overrideYamlFile)) {
+            $overrideYaml = file_get_contents($overrideYamlFile);
+            $overrideYaml = static::replaceEnvVariables($overrideYaml);
+            $overrideData = Yaml::parse($overrideYaml);
+            if ($overrideData != null) {
+                $data = array_replace_recursive($data, $overrideData);
+            }
         }
-        $data = static::replaceEnvVariables($data);
 
         return $data === null ? null : new static($data);
     }
 
     /**
-     * Replace placeholders with enviroment variables in array.
+     * Replace placeholders with enviroment variables.
      *
      * Placeholders start with % and end with %. This will be replaced by the
      * environment variable with the name SCHEMATIC_{PLACEHOLDER}. If the
      * environment variable is not set an exception will be thrown.
      *
-     * @param array $yaml
-     *
-     * @return array
-     */
-    public static function replaceEnvVariables($yaml)
-    {
-        array_walk_recursive($yaml, function(&$v) {
-            $v = static::replaceVariable($v);
-        });
-
-        return $yaml;
-    }
-
-    /**
-     * Replace single value with environment variable.
-     *
-     * @param string $value
+     * @param string $yaml
      *
      * @return string
      */
-    public static function replaceVariable($value)
+    public static function replaceEnvVariables($string)
     {
-        if (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
-            $env_variable = strtoupper(substr($value, 1, -1));
+        $matches = null;
+        preg_match_all('/%\w+%/', $string, $matches);
+        $original_values = $matches[0];
+        $replace_values = array();
+        foreach($original_values as $match) {
+            $env_variable = strtoupper(substr($match, 1, -1));
             $env_variable = 'SCHEMATIC_' . $env_variable;
             $env_value = getenv($env_variable);
             if (!$env_value) {
                 throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
             }
-            return getenv($env_variable);
+            $replace_values[] = $env_value;
         }
-        return $value;
+        return str_replace($original_values, $replace_values, $string);
     }
 
     /**
