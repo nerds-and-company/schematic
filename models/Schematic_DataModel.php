@@ -51,7 +51,7 @@ class Schematic_DataModel extends BaseModel
         if ($overrideData != null) {
             $data = array_replace_recursive($data, $overrideData);
         }
-        $data = Schematic_DataModel::replaceEnvVariables($data);
+        $data = static::replaceEnvVariables($data);
 
         return $data === null ? null : new static($data);
     }
@@ -75,7 +75,7 @@ class Schematic_DataModel extends BaseModel
                 $env_variable = 'SCHEMATIC_' . $env_variable;
                 $env_value = getenv($env_variable);
                 if (!$env_value) {
-                    throw new Exception("Schematic environment variable not set: {$env_variable}");
+                    throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
                 }
                 return getenv($env_variable);
             }
