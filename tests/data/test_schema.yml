@@ -8,6 +8,7 @@ globals: null
 plugins: null
 sections: null
 userGroups: null
-users: null
+users:
+  - test_user
 pluginData:
   test_service: null

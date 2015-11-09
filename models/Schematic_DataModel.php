@@ -76,6 +76,13 @@ class Schematic_DataModel extends BaseModel
         return $yaml;
     }
 
+    /**
+     * Replace single value with environment variable.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
     public static function replaceVariable($value)
     {
         if (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {

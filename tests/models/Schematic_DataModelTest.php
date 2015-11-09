@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Schematic_DataModelTest
@@ -75,6 +75,44 @@ class Schematic_DataModelTest extends BaseTest
         $this->setExpectedException('\Craft\Exception');
         $schema = $this->getSchemaTestFile();
         $override = $this->getOverrideTestFile();
-        $result = Schematic_DataModel::fromYaml($schema, $override);
+        Schematic_DataModel::fromYaml($schema, $override);
+    }
+
+    /**
+     * @covers ::toYaml
+     */
+    public function testToYamlIsValidYaml()
+    {
+        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
+        $schema = $this->getSchemaTestFile();
+        $override = $this->getOverrideTestFile();
+        $data_model = Schematic_DataModel::fromYaml($schema, $override);
+        $yaml = Schematic_DataModel::toYaml($data_model->attributes);
+        $this->assertInternalType('array', Yaml::parse($yaml));
+    }
+
+    /**
+     * @covers ::toYaml
+     */
+    public function testToYamlContainsCorrectText()
+    {
+        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
+        $schema = $this->getSchemaTestFile();
+        $override = $this->getOverrideTestFile();
+        $data_model = Schematic_DataModel::fromYaml($schema, $override);
+        $yaml = Schematic_DataModel::toYaml($data_model->attributes);
+        $this->assertContains('override_bucket_name', $yaml);
+    }
+
+    /**
+     * @covers ::getAttribute
+     */
+    public function testGetAttribute()
+    {
+        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
+        $schema = $this->getSchemaTestFile();
+        $override = $this->getOverrideTestFile();
+        $data_model = Schematic_DataModel::fromYaml($schema, $override);
+        $this->assertEquals(array('test_user'), $data_model->getAttribute('users'));
     }
 }
