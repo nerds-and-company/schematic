@@ -36,9 +36,23 @@ class Schematic_DataModelTest extends BaseTest
         return __DIR__ . '/../data/test_schema.yml';
     }
 
+    /**
+     * @return string
+     */
     private function getOverrideTestFile()
     {
         return __DIR__ . '/../data/test_override.yml';
+    }
+
+    /**
+     * @return Schematic_DataModel
+     */
+    private function generateDataModel()
+    {
+        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
+        $schema = $this->getSchemaTestFile();
+        $override = $this->getOverrideTestFile();
+        return Schematic_DataModel::fromYaml($schema, $override);
     }
 
     /**
@@ -46,10 +60,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     public function testRegularOverride()
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        $result = Schematic_DataModel::fromYaml($schema, $override);
+        $result = $this->generateDataModel();
         $this->assertEquals('override_key', $result->assets['uploads']['settings']['keyId']);
     }
 
@@ -58,10 +69,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     public function testEnvironmentOverride()
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        $result = Schematic_DataModel::fromYaml($schema, $override);
+        $result = $this->generateDataModel();
         $this->assertEquals('override_bucket_name', $result->assets['uploads']['settings']['bucket']);
     }
 
@@ -83,11 +91,8 @@ class Schematic_DataModelTest extends BaseTest
      */
     public function testToYamlIsValidYaml()
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        $data_model = Schematic_DataModel::fromYaml($schema, $override);
-        $yaml = Schematic_DataModel::toYaml($data_model->attributes);
+        $dataModel = $this->generateDataModel();
+        $yaml = Schematic_DataModel::toYaml($dataModel->attributes);
         $this->assertInternalType('array', Yaml::parse($yaml));
     }
 
@@ -96,11 +101,8 @@ class Schematic_DataModelTest extends BaseTest
      */
     public function testToYamlContainsCorrectText()
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        $data_model = Schematic_DataModel::fromYaml($schema, $override);
-        $yaml = Schematic_DataModel::toYaml($data_model->attributes);
+        $dataModel = $this->generateDataModel();
+        $yaml = Schematic_DataModel::toYaml($dataModel->attributes);
         $this->assertContains('override_bucket_name', $yaml);
     }
 
@@ -109,10 +111,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     public function testGetAttribute()
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        $data_model = Schematic_DataModel::fromYaml($schema, $override);
-        $this->assertEquals(array('test_user'), $data_model->getAttribute('users'));
+        $dataModel = $this->generateDataModel();
+        $this->assertEquals(array('test_user'), $dataModel->getAttribute('users'));
     }
 }

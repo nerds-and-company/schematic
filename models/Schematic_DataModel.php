@@ -39,8 +39,8 @@ class Schematic_DataModel extends BaseModel
     /**
      * Populate data model from yaml.
      *
-     * @param string $yaml
-     * @param string $overrideYaml
+     * @param string $yamlFile
+     * @param string $overrideYamlFile
      *
      * @return Schematic_DataModel
      */
@@ -70,10 +70,10 @@ class Schematic_DataModel extends BaseModel
      *
      * @return string
      */
-    public static function replaceEnvVariables($string)
+    public static function replaceEnvVariables($yaml)
     {
         $matches = null;
-        preg_match_all('/%\w+%/', $string, $matches);
+        preg_match_all('/%\w+%/', $yaml, $matches);
         $original_values = $matches[0];
         $replace_values = array();
         foreach($original_values as $match) {
@@ -85,7 +85,7 @@ class Schematic_DataModel extends BaseModel
             }
             $replace_values[] = $env_value;
         }
-        return str_replace($original_values, $replace_values, $string);
+        return str_replace($original_values, $replace_values, $yaml);
     }
 
     /**
