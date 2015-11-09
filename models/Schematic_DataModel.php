@@ -69,24 +69,25 @@ class Schematic_DataModel extends BaseModel
      */
     public static function replaceEnvVariables($yaml)
     {
-        $replacer = function($value) {
-            if (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
-                $env_variable = strtoupper(substr($value, 1, -1));
-                $env_variable = 'SCHEMATIC_' . $env_variable;
-                $env_value = getenv($env_variable);
-                if (!$env_value) {
-                    throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
-                }
-                return getenv($env_variable);
-            }
-            return $value;
-        };
-
-        array_walk_recursive($yaml, function(&$v) use ($replacer) {
-            $v = $replacer($v);
+        array_walk_recursive($yaml, function(&$v) {
+            $v = static::replaceVariable($v);
         });
 
         return $yaml;
+    }
+
+    public static function replaceVariable($value)
+    {
+        if (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
+            $env_variable = strtoupper(substr($value, 1, -1));
+            $env_variable = 'SCHEMATIC_' . $env_variable;
+            $env_value = getenv($env_variable);
+            if (!$env_value) {
+                throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
+            }
+            return getenv($env_variable);
+        }
+        return $value;
     }
 
     /**
