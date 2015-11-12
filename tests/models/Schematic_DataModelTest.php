@@ -33,7 +33,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     private function getSchemaTestFile()
     {
-        return __DIR__ . '/../data/test_schema.yml';
+        return IOHelper::getFileContents(__DIR__ . '/../data/test_schema.yml');
     }
 
     /**
@@ -41,7 +41,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     private function getOverrideTestFile()
     {
-        return __DIR__ . '/../data/test_override.yml';
+        return IOHelper::getFileContents(__DIR__ . '/../data/test_override.yml');
     }
 
     /**

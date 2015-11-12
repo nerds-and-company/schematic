@@ -18,9 +18,10 @@ class SchematicCommand extends BaseCommand
     /**
      * Imports the Craft datamodel.
      *
-     * @param string $file          yml file containing the schema definition
+     * @param string $file yml file containing the schema definition
      * @param string $override_file yml file containing the override values
-     * @param bool   $force         if set to true items not in the import will be deleted
+     * @param bool $force if set to true items not in the import will be deleted
+     * @return int
      */
     public function actionImport($file = 'craft/config/schema.yml', $override_file = 'craft/config/override.yml', $force = false)
     {
@@ -46,6 +47,7 @@ class SchematicCommand extends BaseCommand
      * Exports the Craft datamodel.
      *
      * @param string $file file to write the schema to
+     * @return int
      */
     public function actionExport($file = 'craft/config/schema.yml')
     {

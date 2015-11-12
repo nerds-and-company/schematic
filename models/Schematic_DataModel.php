@@ -39,16 +39,15 @@ class Schematic_DataModel extends BaseModel
     /**
      * Populate data model from yaml.
      *
-     * @param string $yamlFile
-     * @param string $overrideYamlFile
+     * @param string $yaml
+     * @param string $overrideYaml
      *
      * @return Schematic_DataModel
      */
-    public static function fromYaml($yamlFile, $overrideYamlFile)
+    public static function fromYaml($yaml, $overrideYaml)
     {
-        $data = Yaml::parse($yamlFile);
-        if (!empty($overrideYamlFile)) {
-            $overrideYaml = file_get_contents($overrideYamlFile);
+        $data = Yaml::parse($yaml);
+        if (!empty($overrideYaml)) {
             $overrideYaml = static::replaceEnvVariables($overrideYaml);
             $overrideData = Yaml::parse($overrideYaml);
             if ($overrideData != null) {
@@ -67,8 +66,8 @@ class Schematic_DataModel extends BaseModel
      * environment variable is not set an exception will be thrown.
      *
      * @param string $yaml
-     *
      * @return string
+     * @throws Exception
      */
     public static function replaceEnvVariables($yaml)
     {
