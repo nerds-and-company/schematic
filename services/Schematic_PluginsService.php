@@ -99,6 +99,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
      * Run plugin migrations automatically.
      *
      * @param BasePlugin $plugin
+     * @throws Exception
      */
     protected function runMigrations(BasePlugin $plugin)
     {
@@ -137,11 +138,13 @@ class Schematic_PluginsService extends Schematic_AbstractService
                 if ($pluginDefinition['isInstalled']) {
                     if (!$plugin->isInstalled) {
                         $this->installPluginByHandle($handle);
-                    } else {
-                        $this->runMigrations($plugin);
                     }
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
+
+                    if ($plugin->isEnabled) {
+                        $this->runMigrations($plugin);
+                    }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
