@@ -136,13 +136,14 @@ class Schematic_PluginsService extends Schematic_AbstractService
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
-                    if (!$plugin->isInstalled) {
+                    $isNewPlugin = !$plugin->isInstalled;
+                    if ($isNewPlugin) {
                         $this->installPluginByHandle($handle);
                     }
 
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
-                    if ($plugin->isEnabled) {
+                    if (!$isNewPlugin && $plugin->isEnabled) {
                         $this->runMigrations($plugin);
                     }
 
