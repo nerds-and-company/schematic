@@ -86,6 +86,7 @@ class SchematicService extends BaseApplicationComponent
         $assetImportResult = craft()->schematic_assets->import($model->getAttribute('assets'), $force);
         $fieldImportResult = craft()->schematic_fields->import($model->getAttribute('fields'), $force);
         $globalImportResult = craft()->schematic_globals->import($model->getAttribute('globals'), $force);
+        $categoryImportResult = craft()->schematic_categories->import($model->getAttribute('categories'), $force);
         $sectionImportResult = craft()->schematic_sections->import($model->getAttribute('sections'), $force);
         $userGroupImportResult = craft()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = craft()->schematic_users->import($model->getAttribute('users'), true);
@@ -96,6 +97,7 @@ class SchematicService extends BaseApplicationComponent
         $result->consume($assetImportResult);
         $result->consume($fieldImportResult);
         $result->consume($globalImportResult);
+        $result->consume($categoryImportResult);
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
@@ -137,6 +139,7 @@ class SchematicService extends BaseApplicationComponent
         $fieldGroups = craft()->fields->getAllGroups();
         $sections = craft()->sections->getAllSections();
         $globals = craft()->globals->getAllSets();
+        $categories = craft()->categories->getAllGroups();
         $userGroups = craft()->userGroups->getAllGroups();
 
         $export = array(
@@ -145,6 +148,7 @@ class SchematicService extends BaseApplicationComponent
             'plugins' => craft()->schematic_plugins->export(),
             'sections' => craft()->schematic_sections->export($sections),
             'globals' => craft()->schematic_globals->export($globals),
+            'categories' => craft()->schematic_categories->export($categories),
             'userGroups' => craft()->schematic_userGroups->export($userGroups),
             'users' => craft()->schematic_users->export(),
         );
