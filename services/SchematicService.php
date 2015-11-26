@@ -43,6 +43,8 @@ class SchematicService extends BaseApplicationComponent
      */
     public function importFromYaml($file, $override = null, $force = false)
     {
+        craft()->config->maxPowerCaptain();
+
         $yaml = IOHelper::getFileContents($file);
         $yaml_override = IOHelper::getFileContents($override);
         $dataModel = Schematic_DataModel::fromYaml($yaml, $yaml_override);
@@ -60,6 +62,8 @@ class SchematicService extends BaseApplicationComponent
      */
     public function exportToYaml($file, $autoCreate = true)
     {
+        craft()->config->maxPowerCaptain();
+
         $result = new Schematic_ResultModel();
         $dataModel = $this->exportDataModel();
         $yaml = Schematic_DataModel::toYaml($dataModel);
