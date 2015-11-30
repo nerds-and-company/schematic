@@ -28,6 +28,7 @@ class Schematic_DataModel extends BaseModel
             'assets'            => array(AttributeType::Mixed, 'default' => array()),
             'fields'            => array(AttributeType::Mixed, 'default' => array()),
             'globals'           => array(AttributeType::Mixed, 'default' => array()),
+            'categories'        => array(AttributeType::Mixed, 'default' => array()),
             'plugins'           => array(AttributeType::Mixed, 'default' => array()),
             'sections'          => array(AttributeType::Mixed, 'default' => array()),
             'userGroups'        => array(AttributeType::Mixed, 'default' => array()),

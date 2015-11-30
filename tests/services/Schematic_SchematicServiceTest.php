@@ -46,6 +46,7 @@ class Schematic_SchematicServiceTest extends BaseTest
         require_once __DIR__.'/../../services/Schematic_AssetsService.php';
         require_once __DIR__.'/../../services/Schematic_FieldsService.php';
         require_once __DIR__.'/../../services/Schematic_GlobalsService.php';
+        require_once __DIR__.'/../../services/Schematic_CategoriesService.php';
         require_once __DIR__.'/../../services/Schematic_PluginsService.php';
         require_once __DIR__.'/../../services/Schematic_SectionsService.php';
         require_once __DIR__.'/../../services/Schematic_UserGroupsService.php';
@@ -206,6 +207,7 @@ class Schematic_SchematicServiceTest extends BaseTest
         $this->createMockService('Craft\Schematic_AssetsService', 'schematic_assets');
         $this->createMockService('Craft\Schematic_FieldsService', 'schematic_fields');
         $this->createMockService('Craft\Schematic_GlobalsService', 'schematic_globals');
+        $this->createMockService('Craft\Schematic_CategoriesService', 'schematic_categories');
         $this->createMockService('Craft\Schematic_PluginsService', 'schematic_plugins');
         $this->createMockService('Craft\Schematic_SectionsService', 'schematic_sections');
         $this->createMockService('Craft\Schematic_UserGroupsService', 'schematic_userGroups');
@@ -252,6 +254,9 @@ class Schematic_SchematicServiceTest extends BaseTest
 
         $mockGlobalsService = $this->getMockGlobalsService();
         $this->setCraftComponent('globals', $mockGlobalsService);
+
+        $mockCategoriesService = $this->getMockAllGroupsMethodService('Craft\CategoriesService');
+        $this->setCraftComponent('categories', $mockCategoriesService);
 
         $mockUserGroupsService = $this->getMockAllGroupsMethodService('Craft\UserGroupsService');
         $this->setCraftComponent('userGroups', $mockUserGroupsService);

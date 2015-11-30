@@ -61,6 +61,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###1.5.0###
+ - Added category group fields support
+
 ###1.4.0###
  - Reworked importing and exporting of fields
  - Added hook to allow the addition of custom logic for importing and exporting fields
