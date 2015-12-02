@@ -44,5 +44,8 @@
     "require": {
         "composer/installers": "~1.0",
         "symfony/yaml": "~2.8"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.9.*"
     }
 }
