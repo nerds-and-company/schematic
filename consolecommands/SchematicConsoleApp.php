@@ -49,8 +49,11 @@ class SchematicConsoleApp extends \CConsoleApplication
             Craft::import($alias);
         }
 
+        // Require schematic behavior
+        require_once __DIR__.'/../behaviors/SchematicBehavior.php';
+
         // Attach our Craft app behavior.
-        $this->attachBehavior('AppBehavior', new AppBehavior());
+        $this->attachBehavior('SchematicBehavior', new SchematicBehavior());
 
         // Attach our own custom Logger
         Craft::setLogger(new Logger());
@@ -77,36 +80,14 @@ class SchematicConsoleApp extends \CConsoleApplication
             $this->_installCraft();
         }
 
+        // Set the schematic components
+        //$this->setComponent('schematic', new SchematicService());
+
         // Call parent::init() before the plugin console command logic so the command runner gets initialized
         parent::init();
 
         // Add commands
         craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
-    }
-
-    /**
-     * Determines if Craft is installed by checking if the info table exists.
-     *
-     * @return bool
-     */
-    public function isInstalled()
-    {
-        try {
-            // First check to see if DbConnection has even been initialized, yet.
-            if (craft()->getComponent('db')) {
-
-                // If the db config isn't valid, then we'll assume it's not installed.
-                if (!craft()->getIsDbConnectionValid()) {
-                    return false;
-                }
-            }
-
-            return false;
-        } catch (DbConnectException $e) {
-            return false;
-        }
-
-        return craft()->db->tableExists('info', false);
     }
 
     /**
@@ -126,7 +107,7 @@ class SchematicConsoleApp extends \CConsoleApplication
      */
     public function setLanguage($language)
     {
-        $this->asa('AppBehavior')->setLanguage($language);
+        $this->asa('SchematicBehavior')->setLanguage($language);
     }
 
     /**
@@ -137,7 +118,7 @@ class SchematicConsoleApp extends \CConsoleApplication
      */
     public function getTimeZone()
     {
-        return $this->asa('AppBehavior')->getTimezone();
+        return $this->asa('SchematicBehavior')->getTimezone();
     }
 
     /**
@@ -208,7 +189,7 @@ class SchematicConsoleApp extends \CConsoleApplication
 
         if (!$component && $createIfNull) {
             if ($id === 'db') {
-                $dbConnection = $this->asa('AppBehavior')->createDbConnection();
+                $dbConnection = $this->asa('SchematicBehavior')->createDbConnection();
                 $this->setComponent('db', $dbConnection);
             }
 
