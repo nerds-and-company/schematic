@@ -33,11 +33,15 @@ before_script:
   - mkdir craft/config
   - echo "<?php return array('user' => 'test');" > craft/config/db.php
   - mkdir craft/storage
-  - mkdir -p craft/plugins/schematic
-  - for item in *; do if [[ ! "$item" == "craft" ]]; then mv $item craft/plugins/schematic; fi; done
+  - composer install
+  - mkdir -p vendor/nerds-and-company/schematic
+  - for item in *; do if [[ ! "$item" == "vendor" && ! "$item" == "craft" ]]; then mv $item vendor/nerds-and-company/schematic; fi; done
+  - cd craft/app
+  - composer require mockery/mockery
+  - cd ../..
 
 # execute tests
-script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration craft/plugins/schematic/phpunit.xml.dist --coverage-clover coverage.clover craft/plugins/schematic/tests
+script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration vendor/nerds-and-company/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/nerds-and-company/schematic/tests
 
 # upload coverage to scrutinizer
 after_script:
