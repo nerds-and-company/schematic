@@ -289,21 +289,33 @@ class SchematicConsoleApp extends \CConsoleApplication
         }
     }
 
-    /**
-     * Sets the schematic components.
-     */
-    private function _setSchematicComponents()
-    {
-        require_once __DIR__.'/../services/SchematicService.php';
-        require_once __DIR__.'/../services/Schematic_AbstractService.php';
-        require_once __DIR__.'/../services/Schematic_PluginsService.php';
-        require_once __DIR__.'/../services/Schematic_AssetsService.php';
-        require_once __DIR__.'/../models/Schematic_DataModel.php';
-        require_once __DIR__.'/../models/Schematic_ResultModel.php';
-        $this->setComponent('schematic', new SchematicService());
-        $this->setComponent('schematic_plugins', new Schematic_PluginsService());
-        $this->setComponent('schematic_assets', new Schematic_AssetsService());
-    }
+     /**
+      * Sets the schematic components.
+      */
+     private function _setSchematicComponents()
+     {
+         require_once __DIR__.'/../services/SchematicService.php';
+         require_once __DIR__.'/../services/Schematic_AbstractService.php';
+         require_once __DIR__.'/../services/Schematic_PluginsService.php';
+         require_once __DIR__.'/../services/Schematic_AssetsService.php';
+         require_once __DIR__.'/../services/Schematic_FieldsService.php';
+         require_once __DIR__.'/../services/Schematic_SectionsService.php';
+         require_once __DIR__.'/../services/Schematic_GlobalsService.php';
+         require_once __DIR__.'/../services/Schematic_UserGroupsService.php';
+         require_once __DIR__.'/../services/Schematic_UsersService.php';
+         require_once __DIR__.'/../models/Schematic_DataModel.php';
+         require_once __DIR__.'/../models/Schematic_ResultModel.php';
+         require_once __DIR__.'/../models/Schematic_FieldFactoryModel.php';
+         require_once __DIR__.'/../models/Schematic_FieldModel.php';
+         $this->setComponent('schematic', new SchematicService());
+         $this->setComponent('schematic_plugins', new Schematic_PluginsService());
+         $this->setComponent('schematic_assets', new Schematic_AssetsService());
+         $this->setComponent('schematic_fields', new Schematic_FieldsService());
+         $this->setComponent('schematic_sections', new Schematic_SectionsService());
+         $this->setComponent('schematic_globals', new Schematic_GlobalsService());
+         $this->setComponent('schematic_userGroups', new Schematic_UserGroupsService());
+         $this->setComponent('schematic_users', new Schematic_UsersService());
+     }
 
     /**
      * Install Craft.
