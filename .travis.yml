@@ -34,6 +34,7 @@ before_script:
   - echo "<?php return array('user' => 'test');" > craft/config/db.php
   - mkdir craft/storage
   - mkdir -p craft/plugins/schematic
+  - composer require mockery/mockery
   - for item in *; do if [[ ! "$item" == "craft" ]]; then mv $item craft/plugins/schematic; fi; done
 
 # execute tests
