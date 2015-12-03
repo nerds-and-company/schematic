@@ -34,10 +34,9 @@ before_script:
   - echo "<?php return array('user' => 'test');" > craft/config/db.php
   - mkdir craft/storage
   - mkdir -p craft/plugins/schematic
-  - composer require mockery/mockery
-  - mv -v -n vendor/* craft/app/vendor/
-  - rm -rf vendor
   - for item in *; do if [[ ! "$item" == "craft" ]]; then mv $item craft/plugins/schematic; fi; done
+  - cd craft/app
+  - composer require mockery/mockery
 
 # execute tests
 script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration craft/plugins/schematic/phpunit.xml.dist --coverage-clover coverage.clover craft/plugins/schematic/tests
