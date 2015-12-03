@@ -89,6 +89,12 @@ class SchematicConsoleApp extends \CConsoleApplication
         // Add commands
         craft()->commandRunner->commands = array();
         craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
+
+        // Load the plugins
+        craft()->plugins->loadPlugins();
+
+        // Validate some basics on the database configuration file.
+        craft()->validateDbConfigFile();
     }
 
     /**
