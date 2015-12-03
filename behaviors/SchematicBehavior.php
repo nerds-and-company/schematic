@@ -15,6 +15,14 @@ namespace Craft;
  */
 class SchematicBehavior extends AppBehavior
 {
+    // Properties
+    // =========================================================================
+
+    /**
+     * @var
+     */
+    private $_isInstalled;
+
     /**
      * Determines if Craft is installed by checking if the info table exists.
      *
@@ -22,20 +30,33 @@ class SchematicBehavior extends AppBehavior
      */
     public function isInstalled()
     {
-        try {
-            // First check to see if DbConnection has even been initialized, yet.
-            if (craft()->getComponent('db')) {
-                // If the db config isn't valid, then we'll assume it's not installed.
-                if (!craft()->getIsDbConnectionValid()) {
+        if (!isset($this->_isInstalled)) {
+            try {
+                // First check to see if DbConnection has even been initialized, yet.
+                if (craft()->getComponent('db')) {
+                    // If the db config isn't valid, then we'll assume it's not installed.
+                    if (!craft()->getIsDbConnectionValid()) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
-            } else {
+            } catch (DbConnectException $e) {
                 return false;
             }
-        } catch (DbConnectException $e) {
-            return false;
+
+            $this->_isInstalled = craft()->db->tableExists('info', false);
         }
 
-        return craft()->db->tableExists('info', false);
+        return $this->_isInstalled;
+    }
+
+    /**
+     * Tells Craft that it's installed now.
+     */
+    public function setIsInstalled()
+    {
+        // If you say so!
+        $this->_isInstalled = true;
     }
 }

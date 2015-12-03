@@ -97,7 +97,7 @@ class SchematicConsoleApp extends \CConsoleApplication
      */
     public function getLanguage()
     {
-        return craft()->sourceLanguage;
+        return $this->asa('SchematicBehavior')->getLanguage();
     }
 
     /**
@@ -288,21 +288,21 @@ class SchematicConsoleApp extends \CConsoleApplication
         }
     }
 
-     /**
-      * Sets the schematic components.
-      */
-     private function _setSchematicComponents()
-     {
-         require_once __DIR__.'/../services/SchematicService.php';
-         require_once __DIR__.'/../services/Schematic_AbstractService.php';
-         require_once __DIR__.'/../services/Schematic_PluginsService.php';
-         require_once __DIR__.'/../services/Schematic_AssetsService.php';
-         require_once __DIR__.'/../models/Schematic_DataModel.php';
-         require_once __DIR__.'/../models/Schematic_ResultModel.php';
-         $this->setComponent('schematic', new SchematicService());
-         $this->setComponent('schematic_plugins', new Schematic_PluginsService());
-         $this->setComponent('schematic_assets', new Schematic_AssetsService());
-     }
+    /**
+     * Sets the schematic components.
+     */
+    private function _setSchematicComponents()
+    {
+        require_once __DIR__.'/../services/SchematicService.php';
+        require_once __DIR__.'/../services/Schematic_AbstractService.php';
+        require_once __DIR__.'/../services/Schematic_PluginsService.php';
+        require_once __DIR__.'/../services/Schematic_AssetsService.php';
+        require_once __DIR__.'/../models/Schematic_DataModel.php';
+        require_once __DIR__.'/../models/Schematic_ResultModel.php';
+        $this->setComponent('schematic', new SchematicService());
+        $this->setComponent('schematic_plugins', new Schematic_PluginsService());
+        $this->setComponent('schematic_assets', new Schematic_AssetsService());
+    }
 
     /**
      * Install Craft.
