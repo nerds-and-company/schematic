@@ -75,12 +75,8 @@ class SchematicConsoleApp extends \CConsoleApplication
         // Call parent::init() before the plugin console command logic so the command runner gets initialized
         parent::init();
 
-        // Now check if we have a valid Craft installation
-        if (craft()->isInstalled()) {
-            $this->_loadPlugins();
-        } else {
-            $this->_installCraft();
-        }
+        // Add commands
+        craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
     }
 
     /**
@@ -279,42 +275,5 @@ class SchematicConsoleApp extends \CConsoleApplication
 
             unset($this->_editionComponents);
         }
-    }
-
-    /**
-     * Load plugin commands.
-     */
-    private function _loadPlugins()
-    {
-        // Load the plugins
-        craft()->plugins->loadPlugins();
-
-        // Validate some basics on the database configuration file.
-        craft()->validateDbConfigFile();
-
-        foreach (craft()->plugins->getPlugins() as $plugin) {
-            $commandsPath = craft()->path->getPluginsPath().StringHelper::toLowerCase($plugin->getClassHandle()).'/consolecommands/';
-
-            if (IOHelper::folderExists($commandsPath)) {
-                craft()->commandRunner->addCommands(rtrim($commandsPath, '/'));
-            }
-        }
-    }
-
-    /**
-     * Install Craft.
-     */
-    private function _installCraft()
-    {
-        $options = array(
-            'username'  => getenv('CRAFT_USERNAME'),
-            'email'     => getenv('CRAFT_EMAIL'),
-            'password'  => getenv('CRAFT_PASSWORD'),
-            'siteName'  => getenv('CRAFT_SITENAME'),
-            'siteUrl'   => getenv('CRAFT_SITEURL'),
-            'locale'    => getenv('CRAFT_LOCALE'),
-        );
-
-        craft()->install->run($options);
     }
 }
