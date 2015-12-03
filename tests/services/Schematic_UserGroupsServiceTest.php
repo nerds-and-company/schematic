@@ -25,7 +25,6 @@ class Schematic_UserGroupsServiceTest extends BaseTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        require_once __DIR__.'/../../SchematicPlugin.php';
         require_once __DIR__.'/../../models/Schematic_ResultModel.php';
         require_once __DIR__.'/../../services/Schematic_AbstractService.php';
         require_once __DIR__.'/../../services/Schematic_UserGroupsService.php';

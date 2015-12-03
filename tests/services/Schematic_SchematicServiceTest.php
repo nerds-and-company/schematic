@@ -39,7 +39,6 @@ class Schematic_SchematicServiceTest extends BaseTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        require_once __DIR__.'/../../SchematicPlugin.php';
         require_once __DIR__.'/../../models/Schematic_DataModel.php';
         require_once __DIR__.'/../../models/Schematic_ResultModel.php';
         require_once __DIR__.'/../../services/Schematic_AbstractService.php';
@@ -58,7 +57,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function getYamlTestFile()
     {
-        return __DIR__ . '/../data/test_schema.yml';
+        return __DIR__.'/../data/test_schema.yml';
     }
 
     /**
@@ -66,7 +65,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function getYamlExportFile()
     {
-        return __DIR__ . '/../data/test_schema_export.yml';
+        return __DIR__.'/../data/test_schema_export.yml';
     }
 
     /**

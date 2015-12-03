@@ -34,14 +34,14 @@ before_script:
   - echo "<?php return array('user' => 'test');" > craft/config/db.php
   - mkdir craft/storage
   - composer install
-  - mkdir -p vendor/nerds-and-company/schematic
-  - for item in *; do if [[ ! "$item" == "vendor" && ! "$item" == "craft" ]]; then mv $item vendor/nerds-and-company/schematic; fi; done
+  - mkdir -p vendor/itmundi/schematic
+  - for item in *; do if [[ ! "$item" == "vendor" && ! "$item" == "craft" ]]; then mv $item vendor/itmundi/schematic; fi; done
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
 
 # execute tests
-script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration vendor/nerds-and-company/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/nerds-and-company/schematic/tests
+script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration vendor/itmundi/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/itmundi/schematic/tests
 
 # upload coverage to scrutinizer
 after_script:
