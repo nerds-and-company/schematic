@@ -24,6 +24,8 @@ class Schematic_GlobalsService extends Schematic_AbstractService
      */
     public function export(array $globalSets = array())
     {
+        Craft::log(Craft::t('Exporting Global Sets'));
+
         $globalDefinitions = array();
 
         foreach ($globalSets as $globalSet) {
@@ -58,6 +60,8 @@ class Schematic_GlobalsService extends Schematic_AbstractService
      */
     public function import(array $globalSetDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing Global Sets'));
+
         $globalSets = craft()->globals->getAllSets('handle');
 
         foreach ($globalSetDefinitions as $globalSetHandle => $globalSetDefinition) {

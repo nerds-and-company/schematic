@@ -99,6 +99,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
      * Run plugin migrations automatically.
      *
      * @param BasePlugin $plugin
+     *
      * @throws Exception
      */
     protected function runMigrations(BasePlugin $plugin)
@@ -133,6 +134,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     public function import(array $pluginDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing Plugins'));
+
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
@@ -166,6 +169,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     public function export(array $data = array())
     {
+        Craft::log(Craft::t('Exporting Plugins'));
+
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = array();
 

@@ -25,6 +25,8 @@ class Schematic_SectionsService extends Schematic_AbstractService
      */
     public function export(array $sections = array(), array $allowedEntryTypeIds = null)
     {
+        Craft::log(Craft::t('Exporting Sections'));
+
         $sectionDefinitions = array();
 
         foreach ($sections as $section) {
@@ -139,6 +141,8 @@ class Schematic_SectionsService extends Schematic_AbstractService
      */
     public function import(array $sectionDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing Sections'));
+
         $sections = craft()->sections->getAllSections('handle');
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {

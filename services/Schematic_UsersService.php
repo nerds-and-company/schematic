@@ -24,6 +24,8 @@ class Schematic_UsersService extends Schematic_AbstractService
      */
     public function export(array $users = array())
     {
+        Craft::log(Craft::t('Exporting Users'));
+
         return $this->getUsersDefinition(new UserModel());
     }
 
@@ -51,6 +53,8 @@ class Schematic_UsersService extends Schematic_AbstractService
      */
     public function import(array $user_settings, $force = true)
     {
+        Craft::log(Craft::t('Importing Users'));
+
         // always delete existing fieldlayout first
         craft()->fields->deleteLayoutsByType(ElementType::User);
 

@@ -25,6 +25,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
 
     /**
      * @param $sourceTypeId
+     *
      * @return array|mixed|null
      */
     public function getSourceTypeById($sourceTypeId)
@@ -34,6 +35,7 @@ class Schematic_AssetsService extends Schematic_AbstractService
 
     /**
      * @param $sourceTypeHandle
+     *
      * @return array|mixed|null
      */
     public function getSourceTypeByHandle($sourceTypeHandle)
@@ -51,6 +53,8 @@ class Schematic_AssetsService extends Schematic_AbstractService
      */
     public function import(array $assetSourceDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing Asset Sources'));
+
         foreach ($assetSourceDefinitions as $assetHandle => $assetSourceDefinition) {
             $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
 
@@ -95,6 +99,8 @@ class Schematic_AssetsService extends Schematic_AbstractService
      */
     public function export(array $data = array())
     {
+        Craft::log(Craft::t('Exporting Asset Sources'));
+
         $assetSources = $this->getAssetSourcesService()->getAllSources();
 
         $assetSourceDefinitions = array();
