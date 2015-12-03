@@ -289,33 +289,27 @@ class SchematicConsoleApp extends \CConsoleApplication
         }
     }
 
-     /**
-      * Sets the schematic components.
-      */
-     private function _setSchematicComponents()
-     {
-         require_once __DIR__.'/../services/SchematicService.php';
-         require_once __DIR__.'/../services/Schematic_AbstractService.php';
-         require_once __DIR__.'/../services/Schematic_PluginsService.php';
-         require_once __DIR__.'/../services/Schematic_AssetsService.php';
-         require_once __DIR__.'/../services/Schematic_FieldsService.php';
-         require_once __DIR__.'/../services/Schematic_SectionsService.php';
-         require_once __DIR__.'/../services/Schematic_GlobalsService.php';
-         require_once __DIR__.'/../services/Schematic_UserGroupsService.php';
-         require_once __DIR__.'/../services/Schematic_UsersService.php';
-         require_once __DIR__.'/../models/Schematic_DataModel.php';
-         require_once __DIR__.'/../models/Schematic_ResultModel.php';
-         require_once __DIR__.'/../models/Schematic_FieldFactoryModel.php';
-         require_once __DIR__.'/../models/Schematic_FieldModel.php';
-         $this->setComponent('schematic', new SchematicService());
-         $this->setComponent('schematic_plugins', new Schematic_PluginsService());
-         $this->setComponent('schematic_assets', new Schematic_AssetsService());
-         $this->setComponent('schematic_fields', new Schematic_FieldsService());
-         $this->setComponent('schematic_sections', new Schematic_SectionsService());
-         $this->setComponent('schematic_globals', new Schematic_GlobalsService());
-         $this->setComponent('schematic_userGroups', new Schematic_UserGroupsService());
-         $this->setComponent('schematic_users', new Schematic_UsersService());
-     }
+    /**
+     * Sets the schematic components.
+     */
+    private function _setSchematicComponents()
+    {
+        // Get all schematic plugin files
+        $filter = '^((?!behaviors|tests|consolecommands).)*Schematic(.*?)\.php$';
+        $files = IOHelper::getFolderContents(__DIR__.'/../', true, $filter);
+
+        // Loop through these file and require them
+        foreach ($files as $file) {
+            require_once $file;
+
+            // Set services as components
+            if (preg_match('/Schematic(?:((?!\_Abstract).*?))Service/', $file, $matches)) {
+                $component = !empty($matches[1]) ? '_'.lcfirst(substr($matches[1], 1)) : '';
+                $class = 'Craft\\'.$matches[0];
+                $this->setComponent('schematic'.$component, new $class());
+            }
+        }
+    }
 
     /**
      * Install Craft.
