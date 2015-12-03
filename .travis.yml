@@ -35,6 +35,7 @@ before_script:
   - mkdir craft/storage
   - mkdir -p craft/plugins/schematic
   - composer require mockery/mockery
+  - mv -v vendor/* craft/app/vendor/
   - for item in *; do if [[ ! "$item" == "craft" ]]; then mv $item craft/plugins/schematic; fi; done
 
 # execute tests
