@@ -9,7 +9,7 @@ Make sure you have your latest export stored at `./craft/config/schema.yml`.
 Then just run to import...
 
 ```
-./craft/app/etc/console/yiic schematic import
+./vendor/bin/schematic import
 ```
 
 Optionally you can use --force to make the import delete any items which are not in the import file.
@@ -18,8 +18,17 @@ WARNING!! This will also delete any related content.
 You can also generate a schema.yml with
 
 ```
-./craft/app/etc/console/yiic schematic export
+./vendor/bin/schematic export
 ```
+
+If Craft is not installed yet, Schematic will run the installer for you. Make sure you have the following environment variables set:
+
+CRAFT_USERNAME
+CRAFT_EMAIL
+CRAFT_PASSWORD
+CRAFT_SITENAME
+CRAFT_SITEURL
+CRAFT_LOCALE
 
 ## Overrides
 
@@ -60,6 +69,9 @@ public function registerSchematicFieldModels()
 ```
 
 ## Changelog
+
+###2.0.0###
+ - Reworked Schematic to install Craft when it's not installed yet
 
 ###1.4.0###
  - Reworked importing and exporting of fields
