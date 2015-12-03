@@ -59,4 +59,14 @@ class SchematicBehavior extends AppBehavior
         // If you say so!
         $this->_isInstalled = true;
     }
+
+    /**
+     * Schematic requires the pro edition.
+     *
+     * @return string
+     */
+    public function getEdition()
+    {
+        return Craft::Pro;
+    }
 }
