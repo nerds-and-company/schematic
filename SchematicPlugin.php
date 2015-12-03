@@ -54,4 +54,16 @@ class SchematicPlugin extends BasePlugin
     {
         return 'http://www.nerds.company';
     }
+
+    /**
+     * Initialize the autoloader
+     */
+    public function init()
+    {
+        $autoloadPath = CRAFT_BASE_PATH.'../vendor/autoload.php';
+        if(!class_exists('Symfony\Component\Yaml\Yaml') && file_exists($autoloadPath)){
+            require_once $autoloadPath;
+        }
+
+    }
 }

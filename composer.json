@@ -42,6 +42,7 @@
     "license": "MIT",
     "type": "craft-plugin",
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "symfony/yaml": "~2.8"
     }
 }

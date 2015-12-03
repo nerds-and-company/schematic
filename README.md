@@ -2,6 +2,14 @@
 
 Schematic allows you to synchronize your Craft setup over multiple environments
 
+## Installation
+
+Schematic can be installed with composer.
+The plugin is located on [packagist](https://packagist.org/packages/itmundi/schematic).
+
+The plugin can also be placed manually in the craft plugins folder.
+When installing manually the [symfony yaml component](https://packagist.org/packages/symfony/yaml) must also be placed in the plugin vendor folder.
+
 ## Usage
 
 Make sure you have your latest export stored at `./craft/config/schema.yml`.
