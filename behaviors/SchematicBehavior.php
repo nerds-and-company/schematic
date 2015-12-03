@@ -41,7 +41,7 @@ class SchematicBehavior extends AppBehavior
                 } else {
                     return false;
                 }
-            } catch (DbConnectException $e) {
+            } catch (Exception $e) {
                 return false;
             }
 

@@ -139,20 +139,11 @@ class SchematicConsoleApp extends \CConsoleApplication
      * By default, event handlers will not get attached if Craft is current in the middle of updating itself or a
      * plugin. If you want the event to fire even in that condition, pass `true` to the $evenDuringUpdates argument.
      *
-     * @param string $event             The event to listen for.
-     * @param mixed  $handler           The event handler.
-     * @param bool   $evenDuringUpdates Whether the event handler should be attached when Craft’s updater is running.
-     *                                  Default is `false`.
+     * @param string $event   The event to listen for.
+     * @param mixed  $handler The event handler.
      */
-    public function on($event, $handler, $evenDuringUpdates = false)
+    public function on($event, $handler)
     {
-        if (
-            !$evenDuringUpdates &&
-            ($this->getCommandRunner()->getCommand() instanceof \MigrateCommand)
-        ) {
-            return;
-        }
-
         list($componentId, $eventName) = explode('.', $event, 2);
 
         $component = $this->getComponent($componentId);
