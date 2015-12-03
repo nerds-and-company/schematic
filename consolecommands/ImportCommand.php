@@ -26,10 +26,6 @@ class ImportCommand extends BaseCommand
      */
     public function actionIndex($file = 'craft/config/schema.yml', $override_file = 'craft/config/override.yml', $force = false)
     {
-        if (!craft()->isInstalled()) {
-            $this->installCraft();
-        }
-
         if (!IOHelper::fileExists($file)) {
             $this->usageError(Craft::t('File not found.'));
         }
@@ -46,22 +42,5 @@ class ImportCommand extends BaseCommand
         print_r($result->getErrors());
 
         return 1;
-    }
-
-    /**
-     * Install Craft.
-     */
-    private function installCraft()
-    {
-        $options = array(
-            'username'  => getenv('CRAFT_USERNAME'),
-            'email'     => getenv('CRAFT_EMAIL'),
-            'password'  => getenv('CRAFT_PASSWORD'),
-            'siteName'  => getenv('CRAFT_SITENAME'),
-            'siteUrl'   => getenv('CRAFT_SITEURL'),
-            'locale'    => getenv('CRAFT_LOCALE'),
-        );
-
-        craft()->install->run($options);
     }
 }

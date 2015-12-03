@@ -72,11 +72,41 @@ class SchematicConsoleApp extends \CConsoleApplication
         // Set the edition components
         $this->_setEditionComponents();
 
+        // Install Craft if needed
+        if (!$this->isInstalled()) {
+            $this->_installCraft();
+        }
+
         // Call parent::init() before the plugin console command logic so the command runner gets initialized
         parent::init();
 
         // Add commands
         craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
+    }
+
+    /**
+     * Determines if Craft is installed by checking if the info table exists.
+     *
+     * @return bool
+     */
+    public function isInstalled()
+    {
+        try {
+            // First check to see if DbConnection has even been initialized, yet.
+            if (craft()->getComponent('db')) {
+
+                // If the db config isn't valid, then we'll assume it's not installed.
+                if (!craft()->getIsDbConnectionValid()) {
+                    return false;
+                }
+            }
+
+            return false;
+        } catch (DbConnectException $e) {
+            return false;
+        }
+
+        return craft()->db->tableExists('info', false);
     }
 
     /**
@@ -86,7 +116,7 @@ class SchematicConsoleApp extends \CConsoleApplication
      */
     public function getLanguage()
     {
-        return $this->asa('AppBehavior')->getLanguage();
+        return craft()->sourceLanguage;
     }
 
     /**
@@ -275,5 +305,22 @@ class SchematicConsoleApp extends \CConsoleApplication
 
             unset($this->_editionComponents);
         }
+    }
+
+    /**
+     * Install Craft.
+     */
+    private function _installCraft()
+    {
+        $options = array(
+            'username'  => getenv('CRAFT_USERNAME'),
+            'email'     => getenv('CRAFT_EMAIL'),
+            'password'  => getenv('CRAFT_PASSWORD'),
+            'siteName'  => getenv('CRAFT_SITENAME'),
+            'siteUrl'   => getenv('CRAFT_SITEURL'),
+            'locale'    => getenv('CRAFT_LOCALE'),
+        );
+
+        craft()->install->run($options);
     }
 }

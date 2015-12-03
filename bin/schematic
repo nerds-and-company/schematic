@@ -41,7 +41,6 @@ require __DIR__.'/../../../autoload.php';
 // Disable the PHP include path
 Yii::$enableIncludePath = false;
 
-require_once CRAFT_APP_PATH.'etc/console/ConsoleApp.php';
 require_once __DIR__.'/../consolecommands/SchematicConsoleApp.php';
 
 // Because CHttpRequest is one of those stupid Yii files that has multiple classes defined in it.
@@ -51,6 +50,4 @@ Yii::setPathOfAlias('app', CRAFT_APP_PATH);
 Yii::setPathOfAlias('plugins', CRAFT_PLUGINS_PATH);
 
 $app = Yii::createApplication('Craft\SchematicConsoleApp', CRAFT_APP_PATH.'etc/config/console.php');
-$app->commandRunner->addCommands(Craft\Craft::getPathOfAlias('application.consolecommands.*'));
-
 $app->run();
