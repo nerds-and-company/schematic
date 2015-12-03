@@ -23,12 +23,12 @@ You can also generate a schema.yml with
 
 If Craft is not installed yet, Schematic will run the installer for you. Make sure you have the following environment variables set:
 
-CRAFT_USERNAME
-CRAFT_EMAIL
-CRAFT_PASSWORD
-CRAFT_SITENAME
-CRAFT_SITEURL
-CRAFT_LOCALE
+- CRAFT_USERNAME
+- CRAFT_EMAIL
+- CRAFT_PASSWORD
+- CRAFT_SITENAME
+- CRAFT_SITEURL
+- CRAFT_LOCALE
 
 ## Overrides
 
