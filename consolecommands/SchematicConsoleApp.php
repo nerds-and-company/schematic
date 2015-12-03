@@ -87,6 +87,7 @@ class SchematicConsoleApp extends \CConsoleApplication
         parent::init();
 
         // Add commands
+        craft()->commandRunner->commands = array();
         craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
     }
 
