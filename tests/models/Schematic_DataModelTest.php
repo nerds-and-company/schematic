@@ -5,7 +5,7 @@ namespace Craft;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class Schematic_DataModelTest
+ * Class Schematic_DataModelTest.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -18,7 +18,6 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Schematic_DataModelTest extends BaseTest
 {
-
     /**
      * {@inheritdoc}
      */
@@ -33,7 +32,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     private function getSchemaTestFile()
     {
-        return IOHelper::getFileContents(__DIR__ . '/../data/test_schema.yml');
+        return IOHelper::getFileContents(__DIR__.'/../data/test_schema.yml');
     }
 
     /**
@@ -41,7 +40,7 @@ class Schematic_DataModelTest extends BaseTest
      */
     private function getOverrideTestFile()
     {
-        return IOHelper::getFileContents(__DIR__ . '/../data/test_override.yml');
+        return IOHelper::getFileContents(__DIR__.'/../data/test_override.yml');
     }
 
     /**
@@ -52,6 +51,7 @@ class Schematic_DataModelTest extends BaseTest
         putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
         $schema = $this->getSchemaTestFile();
         $override = $this->getOverrideTestFile();
+
         return Schematic_DataModel::fromYaml($schema, $override);
     }
 

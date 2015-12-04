@@ -2,10 +2,8 @@
 
 namespace Craft;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
-
 /**
- * Class Schematic_FieldFactoryModelTest
+ * Class Schematic_FieldFactoryModelTest.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -18,7 +16,6 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  */
 class Schematic_FieldFactoryModelTest extends BaseTest
 {
-
     /**
      * {@inheritdoc}
      */
@@ -53,7 +50,7 @@ class Schematic_FieldFactoryModelTest extends BaseTest
      *
      * @param string $fieldType
      * @param string $expectedClassName
-     * @param array $hookCallResults
+     * @param array  $hookCallResults
      */
     public function testBuildWithFieldHook($fieldType, $expectedClassName, array $hookCallResults)
     {
@@ -106,35 +103,35 @@ class Schematic_FieldFactoryModelTest extends BaseTest
                 'expectedClassName' => 'Craft\Schematic_MatrixFieldModel',
                 'hookCallResults' => array(
                     'plugin1' => array(
-                        'Color' => 'Craft\Schematic_MatrixFieldModel'
-                    )
-                )
+                        'Color' => 'Craft\Schematic_MatrixFieldModel',
+                    ),
+                ),
             ),
             'color mapped to wrong class type' => array(
                 'fieldType' => 'Color',
                 'expectedClassName' => 'Craft\Schematic_FieldModel',
                 'hookCallResults' => array(
                     'plugin1' => array(
-                        'Color' => 'Craft\ColorFieldType'
-                    )
-                )
+                        'Color' => 'Craft\ColorFieldType',
+                    ),
+                ),
             ),
             'something mapped to matrix field model' => array(
                 'fieldType' => 'PlainText',
                 'expectedClassName' => 'Craft\Schematic_FieldModel',
                 'hookCallResults' => array(
                     'plugin1' => array(
-                        'Color' => 'Craft\Schematic_MatrixFieldModel'
-                    )
-                )
-            )
+                        'Color' => 'Craft\Schematic_MatrixFieldModel',
+                    ),
+                ),
+            ),
         );
     }
 
     /**
      * @param array $schematicFieldModels
      */
-    private function setMockPluginsService( array $schematicFieldModels )
+    private function setMockPluginsService(array $schematicFieldModels)
     {
         $mockPluginsService = $this->getMockBuilder('Craft\PluginsService')
             ->disableOriginalConstructor()

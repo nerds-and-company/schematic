@@ -16,9 +16,9 @@ namespace Craft;
 class Schematic_PositionSelectFieldModel extends Schematic_FieldModel
 {
     /**
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     * @param string $fieldHandle
+     * @param array                $fieldDefinition
+     * @param FieldModel           $field
+     * @param string               $fieldHandle
      * @param FieldGroupModel|null $group
      */
     public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
