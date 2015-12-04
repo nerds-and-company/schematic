@@ -42,6 +42,7 @@ class Schematic_SchematicServiceTest extends BaseTest
         require_once __DIR__.'/../../models/Schematic_DataModel.php';
         require_once __DIR__.'/../../models/Schematic_ResultModel.php';
         require_once __DIR__.'/../../services/Schematic_AbstractService.php';
+        require_once __DIR__.'/../../services/Schematic_LocalesService.php';
         require_once __DIR__.'/../../services/Schematic_AssetsService.php';
         require_once __DIR__.'/../../services/Schematic_FieldsService.php';
         require_once __DIR__.'/../../services/Schematic_GlobalsService.php';
@@ -202,6 +203,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function mockServices()
     {
+        $this->createMockService('Craft\Schematic_LocalesService', 'schematic_locales');
         $this->createMockService('Craft\Schematic_AssetsService', 'schematic_assets');
         $this->createMockService('Craft\Schematic_FieldsService', 'schematic_fields');
         $this->createMockService('Craft\Schematic_GlobalsService', 'schematic_globals');

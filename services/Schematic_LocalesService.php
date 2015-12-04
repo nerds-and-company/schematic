@@ -33,10 +33,11 @@ class Schematic_LocalesService extends Schematic_AbstractService
     {
         Craft::log(Craft::t('Importing Locales'));
 
-        foreach ($localeDefinitions as $locale) {
-            $localeExists = $this->localeExists($locale);
+        // Get existing locales
+        $locales = $this->getLocalizationService()->getSiteLocaleIds();
 
-            if (!$localeExists) {
+        foreach ($localeDefinitions as $locale) {
+            if (!in_array($locale, $locales)) {
                 if (!$this->getLocalizationService()->addSiteLocale($locale)) {
                     $this->addError(Craft::t('Locale {locale} could not be installed', array('locale' => $locale)));
                 }
@@ -47,22 +48,6 @@ class Schematic_LocalesService extends Schematic_AbstractService
         $this->getLocalizationService()->reorderSiteLocales($localeDefinitions);
 
         return $this->getResultModel();
-    }
-
-    /**
-     * Check if a locale exists.
-     *
-     * @param string $locale
-     *
-     * @return bool
-     */
-    private function localeExists($locale)
-    {
-        return craft()->db->createCommand()
-            ->select('locale')
-            ->from('locales')
-            ->where('locale = :locale', array('locale' => $locale))
-            ->queryScalar();
     }
 
     /**
