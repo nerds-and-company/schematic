@@ -180,7 +180,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = array();
 
-        foreach ($plugins as $handle => $plugin) {
+        foreach ($plugins as $plugin) {
+            $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));
             $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
         }
         ksort($pluginDefinitions);
