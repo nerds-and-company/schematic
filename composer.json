@@ -1,6 +1,6 @@
 {
     "name": "itmundi/schematic",
-    "description": "Sync Craft setups",
+    "description": "Craft setup and sync tool",
     "authors": [
         {
             "name": "Bart van Gennep",
@@ -40,8 +40,8 @@
         }
     ],
     "license": "MIT",
-    "type": "craft-plugin",
     "require": {
-        "composer/installers": "~1.0"
-    }
+        "symfony/yaml": "~2.8"
+    },
+    "bin": ["bin/schematic"]
 }

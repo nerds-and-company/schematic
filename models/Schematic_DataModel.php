@@ -25,6 +25,7 @@ class Schematic_DataModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
+            'locales'           => array(AttributeType::Mixed, 'default' => array()),
             'assets'            => array(AttributeType::Mixed, 'default' => array()),
             'fields'            => array(AttributeType::Mixed, 'default' => array()),
             'globals'           => array(AttributeType::Mixed, 'default' => array()),
@@ -66,7 +67,9 @@ class Schematic_DataModel extends BaseModel
      * environment variable is not set an exception will be thrown.
      *
      * @param string $yaml
+     *
      * @return string
+     *
      * @throws Exception
      */
     public static function replaceEnvVariables($yaml)
@@ -75,15 +78,16 @@ class Schematic_DataModel extends BaseModel
         preg_match_all('/%\w+%/', $yaml, $matches);
         $original_values = $matches[0];
         $replace_values = array();
-        foreach($original_values as $match) {
+        foreach ($original_values as $match) {
             $env_variable = strtoupper(substr($match, 1, -1));
-            $env_variable = 'SCHEMATIC_' . $env_variable;
+            $env_variable = 'SCHEMATIC_'.$env_variable;
             $env_value = getenv($env_variable);
             if (!$env_value) {
                 throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
             }
             $replace_values[] = $env_value;
         }
+
         return str_replace($original_values, $replace_values, $yaml);
     }
 

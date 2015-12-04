@@ -87,6 +87,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     public function export(array $groups = array())
     {
+        Craft::log(Craft::t('Exporting User Groups'));
+
         $groupDefinitions = array();
 
         $this->sectionsById = $this->getSectionsService()->getAllSections('id');
@@ -208,6 +210,8 @@ class Schematic_UserGroupsService extends Schematic_AbstractService
      */
     public function import(array $groupDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing User Groups'));
+
         $this->sectionsByHandle = $this->getSectionsService()->getAllSections('handle');
         $this->assetSourceByHandle = $this->getAssetSourcesService()->getAllSources('handle');
         $this->globalSetsByHandle = $this->getGlobalsService()->getAllSets('handle');

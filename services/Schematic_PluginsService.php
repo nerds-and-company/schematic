@@ -46,6 +46,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     protected function installPluginByHandle($handle)
     {
+        Craft::log(Craft::t('Installing plugin {handle}', array('handle' => $handle)));
+
         try {
             $this->getPluginService()->installPlugin($handle);
         } catch (\Exception $e) {
@@ -74,7 +76,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
     {
         $plugin = $this->getPluginService()->getPlugin($handle, false);
         if (!$plugin) {
-            $this->addError("Plugin $handle could not be found, make sure it's files are located in the plugins folder");
+            $this->addError(Craft::t("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", array('handle' => $handle)));
         }
 
         return $plugin;
@@ -99,6 +101,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
      * Run plugin migrations automatically.
      *
      * @param BasePlugin $plugin
+     *
      * @throws Exception
      */
     protected function runMigrations(BasePlugin $plugin)
@@ -133,7 +136,11 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     public function import(array $pluginDefinitions, $force = false)
     {
+        Craft::log(Craft::t('Importing Plugins'));
+
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
+            Craft::log(Craft::t('Applying definitions for {handle}', array('handle' => $handle)));
+
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
                     $isNewPlugin = !$plugin->isInstalled;
@@ -148,6 +155,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
+                        Craft::log(Craft::t('Saving plugin settings for {handle}', array('handle' => $handle)));
+
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
                 } else {
@@ -166,10 +175,13 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     public function export(array $data = array())
     {
+        Craft::log(Craft::t('Exporting Plugins'));
+
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = array();
 
-        foreach ($plugins as $handle => $plugin) {
+        foreach ($plugins as $plugin) {
+            $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));
             $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
         }
         ksort($pluginDefinitions);

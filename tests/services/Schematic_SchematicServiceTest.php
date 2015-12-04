@@ -39,10 +39,10 @@ class Schematic_SchematicServiceTest extends BaseTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        require_once __DIR__.'/../../SchematicPlugin.php';
         require_once __DIR__.'/../../models/Schematic_DataModel.php';
         require_once __DIR__.'/../../models/Schematic_ResultModel.php';
         require_once __DIR__.'/../../services/Schematic_AbstractService.php';
+        require_once __DIR__.'/../../services/Schematic_LocalesService.php';
         require_once __DIR__.'/../../services/Schematic_AssetsService.php';
         require_once __DIR__.'/../../services/Schematic_FieldsService.php';
         require_once __DIR__.'/../../services/Schematic_GlobalsService.php';
@@ -58,7 +58,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function getYamlTestFile()
     {
-        return __DIR__ . '/../data/test_schema.yml';
+        return __DIR__.'/../data/test_schema.yml';
     }
 
     /**
@@ -66,7 +66,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function getYamlExportFile()
     {
-        return __DIR__ . '/../data/test_schema_export.yml';
+        return __DIR__.'/../data/test_schema_export.yml';
     }
 
     /**
@@ -203,6 +203,7 @@ class Schematic_SchematicServiceTest extends BaseTest
      */
     private function mockServices()
     {
+        $this->createMockService('Craft\Schematic_LocalesService', 'schematic_locales');
         $this->createMockService('Craft\Schematic_AssetsService', 'schematic_assets');
         $this->createMockService('Craft\Schematic_FieldsService', 'schematic_fields');
         $this->createMockService('Craft\Schematic_GlobalsService', 'schematic_globals');

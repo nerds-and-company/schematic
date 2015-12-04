@@ -50,6 +50,7 @@ class Schematic_FieldModel
     /**
      * @param FieldModel $field
      * @param $includeContext
+     *
      * @return array
      */
     public function getDefinition(FieldModel $field, $includeContext)
@@ -75,9 +76,9 @@ class Schematic_FieldModel
     }
 
     /**
-     * @param array $fieldDefinition
-     * @param FieldModel $field
-     * @param string $fieldHandle
+     * @param array                $fieldDefinition
+     * @param FieldModel           $field
+     * @param string               $fieldHandle
      * @param FieldGroupModel|null $group
      */
     public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
@@ -102,12 +103,12 @@ class Schematic_FieldModel
     }
 
     /**
-     * Get sources based on the indexFrom attribute and return them with the indexTo attribute
+     * Get sources based on the indexFrom attribute and return them with the indexTo attribute.
      *
      * @param string|array $sources
+     * @param string       $indexFrom
+     * @param string       $indexTo
      *
-     * @param string $indexFrom
-     * @param string $indexTo
      * @return array|string
      */
     private function getMappedSources($sources, $indexFrom, $indexTo)
@@ -124,12 +125,14 @@ class Schematic_FieldModel
     }
 
     /**
-     * Gets a source by the attribute indexFrom, and returns it with attribute $indexTo
+     * Gets a source by the attribute indexFrom, and returns it with attribute $indexTo.
+     *
      * @TODO Break up and simplify this method
      *
      * @param string $source
      * @param string $indexFrom
      * @param string $indexTo
+     *
      * @return string
      */
     private function getSource($source, $indexFrom, $indexTo)
@@ -162,12 +165,12 @@ class Schematic_FieldModel
         }
 
         if (isset($service) && isset($method) && isset($sourceFrom)) {
-            $method = $method . $indexFrom;
+            $method = $method.$indexFrom;
             $sourceObject = $service->$method($sourceFrom);
         }
 
         if ($sourceObject && isset($sourceType)) {
-            $source = $sourceType . ':' . $sourceObject->$indexTo;
+            $source = $sourceType.':'.$sourceObject->$indexTo;
         }
 
         return $source;

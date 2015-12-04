@@ -25,6 +25,7 @@ class Schematic_FieldFactoryModel
 
     /**
      * @param $fieldType
+     *
      * @return Schematic_FieldModel
      */
     public function build($fieldType)
@@ -39,12 +40,12 @@ class Schematic_FieldFactoryModel
             }
         }
 
-        $classNames[] = 'Craft\Schematic_' . ucfirst($fieldType) . 'FieldModel';
+        $classNames[] = 'Craft\Schematic_'.ucfirst($fieldType).'FieldModel';
 
-        foreach($classNames as $className){
+        foreach ($classNames as $className) {
             if (class_exists($className)) {
-                $tmpFieldModel = new $className;
-                if($tmpFieldModel instanceof Schematic_FieldModel){
+                $tmpFieldModel = new $className();
+                if ($tmpFieldModel instanceof Schematic_FieldModel) {
                     $fieldModel = $tmpFieldModel;
                     break;
                 }

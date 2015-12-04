@@ -30,7 +30,6 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     private $fieldFactory;
 
-
     /**
      * @return Schematic_FieldFactoryModel
      */
@@ -76,6 +75,8 @@ class Schematic_FieldsService extends Schematic_AbstractService
      */
     public function export(array $groups = array())
     {
+        Craft::log(Craft::t('Exporting Fields'));
+
         $groupDefinitions = array();
 
         foreach ($groups as $group) {
@@ -115,20 +116,22 @@ class Schematic_FieldsService extends Schematic_AbstractService
      * Attempt to import fields.
      *
      * @param array $groupDefinitions
-     * @param bool $force if set to true items not in the import will be deleted
+     * @param bool  $force            if set to true items not in the import will be deleted
      *
      * @return Schematic_ResultModel
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        if (!empty($groupDefinitions)) {
-            $this->groups = $this->getFieldsService()->getAllGroups('name');
-            $this->fields = $this->getFieldsService()->getAllFields('handle');
+        Craft::log(Craft::t('Importing Fields'));
 
+        if (!empty($groupDefinitions)) {
             $contentService = $this->getContentService();
 
             $contentService->fieldContext = 'global';
             $contentService->contentTable = 'content';
+
+            $this->groups = $this->getFieldsService()->getAllGroups('name');
+            $this->fields = $this->getFieldsService()->getAllFields('handle');
 
             foreach ($groupDefinitions as $name => $fieldDefinitions) {
                 try {
