@@ -62,7 +62,10 @@ class Schematic_GlobalsService extends Schematic_AbstractService
     {
         Craft::log(Craft::t('Importing Global Sets'));
 
-        $globalSets = craft()->globals->getAllSets('handle');
+        $criteria = craft()->elements->getCriteria(ElementType::GlobalSet);
+        $criteria->locale = null;
+        $criteria->indexBy = 'handle';
+        $globalSets = $criteria->find();
 
         foreach ($globalSetDefinitions as $globalSetHandle => $globalSetDefinition) {
             $global = array_key_exists($globalSetHandle, $globalSets)
