@@ -102,6 +102,24 @@ class Schematic_LocalesServiceTest extends BaseTest
     }
 
     /**
+     * Test default import functionality.
+     *
+     * @covers ::import
+     */
+    public function testImportWithFailedInstalledLocales()
+    {
+        $mockLocalizationService = $this->getMockLocalizationService(array(), array(), false);
+        $this->setComponent(craft(), 'i18n', $mockLocalizationService);
+
+        $data = $this->getLocaleData();
+
+        $import = $this->schematicLocalesService->import($data);
+
+        $this->assertTrue($import instanceof Schematic_ResultModel);
+        $this->assertTrue($import->hasErrors());
+    }
+
+    /**
      * Test export functionality.
      *
      * @covers ::export
