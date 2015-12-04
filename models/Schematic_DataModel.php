@@ -25,6 +25,7 @@ class Schematic_DataModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
+            'locales'           => array(AttributeType::Mixed, 'default' => array()),
             'assets'            => array(AttributeType::Mixed, 'default' => array()),
             'fields'            => array(AttributeType::Mixed, 'default' => array()),
             'globals'           => array(AttributeType::Mixed, 'default' => array()),

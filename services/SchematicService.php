@@ -86,6 +86,7 @@ class SchematicService extends BaseApplicationComponent
     private function importDataModel(Schematic_DataModel $model, $force)
     {
         // Import schema
+        $localeImportResult = craft()->schematic_locales->import($model->getAttribute('locales', $force));
         $pluginImportResult = craft()->schematic_plugins->import($model->getAttribute('plugins', $force));
         $assetImportResult = craft()->schematic_assets->import($model->getAttribute('assets'), $force);
         $fieldImportResult = craft()->schematic_fields->import($model->getAttribute('fields'), $force);
@@ -96,6 +97,7 @@ class SchematicService extends BaseApplicationComponent
 
         // Verify results
         $result = new Schematic_ResultModel();
+        $result->consume($localeImportResult);
         $result->consume($pluginImportResult);
         $result->consume($assetImportResult);
         $result->consume($fieldImportResult);
@@ -144,6 +146,7 @@ class SchematicService extends BaseApplicationComponent
         $userGroups = craft()->userGroups->getAllGroups();
 
         $export = array(
+            'locales' => craft()->schematic_locales->export(),
             'assets' => craft()->schematic_assets->export(),
             'fields' => craft()->schematic_fields->export($fieldGroups),
             'plugins' => craft()->schematic_plugins->export(),
