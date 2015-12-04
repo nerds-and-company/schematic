@@ -125,13 +125,13 @@ class Schematic_FieldsService extends Schematic_AbstractService
         Craft::log(Craft::t('Importing Fields'));
 
         if (!empty($groupDefinitions)) {
-            $this->groups = $this->getFieldsService()->getAllGroups('name');
-            $this->fields = $this->getFieldsService()->getAllFields('handle');
-
             $contentService = $this->getContentService();
 
             $contentService->fieldContext = 'global';
             $contentService->contentTable = 'content';
+
+            $this->groups = $this->getFieldsService()->getAllGroups('name');
+            $this->fields = $this->getFieldsService()->getAllFields('handle');
 
             foreach ($groupDefinitions as $name => $fieldDefinitions) {
                 try {
