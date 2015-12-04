@@ -46,6 +46,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
      */
     protected function installPluginByHandle($handle)
     {
+        Craft::t(Craft::t('Installing plugin {handle}', array('handle' => $handle)));
+
         try {
             $this->getPluginService()->installPlugin($handle);
         } catch (\Exception $e) {
@@ -137,6 +139,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
         Craft::log(Craft::t('Importing Plugins'));
 
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
+            Craft::t(Craft::t('Applying definitions for {handle}', array('handle' => $handle)));
+
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
                     $isNewPlugin = !$plugin->isInstalled;
@@ -151,6 +155,8 @@ class Schematic_PluginsService extends Schematic_AbstractService
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
+                        Craft::t(Craft::t('Saving plugin settings for {handle}', array('handle' => $handle)));
+
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
                 } else {
