@@ -157,7 +157,7 @@ class Schematic_PluginsServiceTest extends BaseTest
      */
     public function testImportWithInstalledDisabledPlugins()
     {
-        $mockBasePlugin = $this->getMockBasePlugin();
+        $this->getMockBasePlugin();
 
         $data = $this->getPluginsData();
         $data[$this->pluginHandle]['isEnabled'] = false;
@@ -215,7 +215,7 @@ class Schematic_PluginsServiceTest extends BaseTest
         $mockPluginsService = $this->getMockPluginsService();
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
 
-        $mockBasePlugin = $this->getMockBasePlugin();
+        $this->getMockBasePlugin();
 
         $data = $this->getPluginsData();
         $data[$this->pluginHandle]['isInstalled'] = false;
