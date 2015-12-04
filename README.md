@@ -72,6 +72,10 @@ public function registerSchematicFieldModels()
 
 ###2.0.0###
  - Reworked Schematic to install Craft when it's not installed yet
+ - Added support for site locales
+ - Fixed plugin installing on case-sensitive operating systems
+ - Fixed field context setting too late
+ - More verbose logging without backtrace
 
 ###1.4.0###
  - Reworked importing and exporting of fields
