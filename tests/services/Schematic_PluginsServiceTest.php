@@ -25,6 +25,11 @@ class Schematic_PluginsServiceTest extends BaseTest
     private $schematicPluginsService;
 
     /**
+     * @var string
+     */
+    private $pluginHandle;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp()
@@ -123,6 +128,8 @@ class Schematic_PluginsServiceTest extends BaseTest
     {
         $mock = $this->getMockBuilder('Craft\BasePlugin')->getMock();
 
+        $this->pluginHandle = get_class($mock);
+
         return $mock;
     }
 
@@ -150,8 +157,10 @@ class Schematic_PluginsServiceTest extends BaseTest
      */
     public function testImportWithInstalledDisabledPlugins()
     {
+        $mockBasePlugin = $this->getMockBasePlugin();
+
         $data = $this->getPluginsData();
-        $data['itmundiplugin']['isEnabled'] = false;
+        $data[$this->pluginHandle]['isEnabled'] = false;
 
         $this->mockMultipleServices();
 
@@ -206,8 +215,10 @@ class Schematic_PluginsServiceTest extends BaseTest
         $mockPluginsService = $this->getMockPluginsService();
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
 
+        $mockBasePlugin = $this->getMockBasePlugin();
+
         $data = $this->getPluginsData();
-        $data['itmundiplugin']['isInstalled'] = false;
+        $data[$this->pluginHandle]['isInstalled'] = false;
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -222,20 +233,21 @@ class Schematic_PluginsServiceTest extends BaseTest
      */
     public function testExport()
     {
-        $data = $this->getPluginsData();
-
         $mockBasePlugin = $this->getMockBasePlugin();
         $mockBasePlugin->isInstalled = true;
         $mockBasePlugin->isEnabled = true;
+
+        $data = $this->getPluginsData();
+
         $mockBasePlugin
             ->expects($this->any())
             ->method('getSettings')
-            ->willReturn((Object) array('attributes' => $data['itmundiplugin']['settings']));
+            ->willReturn((Object) array('attributes' => $data[$this->pluginHandle]['settings']));
 
         $mockPluginsService = $this->getMockPluginsService();
         $mockPluginsService->expects($this->any())
             ->method('getPlugins')
-            ->willReturn(array('itmundiplugin' => $mockBasePlugin));
+            ->willReturn(array($this->pluginHandle => $mockBasePlugin));
 
         $this->setComponent(craft(), 'plugins', $mockPluginsService);
 
@@ -251,7 +263,7 @@ class Schematic_PluginsServiceTest extends BaseTest
     public function getPluginsData()
     {
         return array(
-            'itmundiplugin'         => array(
+            $this->pluginHandle => array(
                 'isInstalled'       => true,
                 'isEnabled'         => true,
                 'settings'          => array(
