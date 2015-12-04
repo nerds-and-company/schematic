@@ -22,7 +22,7 @@ ini_set('error_log', CRAFT_STORAGE_PATH.'runtime/logs/phperrors.log');
 
 error_reporting(E_ALL & ~E_STRICT);
 ini_set('display_errors', 1);
-defined('YII_DEBUG') || define('YII_DEBUG', true);
+defined('YII_DEBUG') || define('YII_DEBUG', false);
 defined('YII_TRACE_LEVEL') || define('YII_TRACE_LEVEL', 3);
 
 require_once CRAFT_APP_PATH.'framework/yii.php';
