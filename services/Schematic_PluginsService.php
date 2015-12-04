@@ -74,7 +74,7 @@ class Schematic_PluginsService extends Schematic_AbstractService
     {
         $plugin = $this->getPluginService()->getPlugin($handle, false);
         if (!$plugin) {
-            $this->addError("Plugin $handle could not be found, make sure it's files are located in the plugins folder");
+            $this->addError(Craft::t("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", array('handle' => $handle)));
         }
 
         return $plugin;
