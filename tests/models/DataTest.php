@@ -1,11 +1,10 @@
 <?php
 
-namespace NerdsAndCompany\SchematicTests\Models;
+namespace NerdsAndCompany\Schematic\Models;
 
 use Craft\BaseTest;
 use Craft\IOHelper;
 use Symfony\Component\Yaml\Yaml;
-use NerdsAndCompany\Schematic\Models\Data;
 
 /**
  * Class DataTest.

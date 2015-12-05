@@ -1,13 +1,12 @@
 <?php
 
-namespace NerdsAndCompany\SchematicTests\Services;
+namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseTest;
 use Craft\LocaleModel;
 use Craft\LocalizationService;
 use NerdsAndCompany\Schematic\Models\Result;
-use NerdsAndCompany\Schematic\Services\Locales;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -49,8 +48,8 @@ class LocalesTest extends BaseTest
     protected function getMockLocalizationService(
         $getSiteLocaleIdsResponse = array(),
         $getSiteLocalesResponse = array(),
-        $addSiteLocaleResponse = true)
-    {
+        $addSiteLocaleResponse = true
+    ) {
         $mock = $this->getMockBuilder(LocalizationService::class)->getMock();
         $mock->expects($this->any())->method('getSiteLocaleIds')->willReturn($getSiteLocaleIdsResponse);
         $mock->expects($this->any())->method('getSiteLocales')->willReturn($getSiteLocalesResponse);

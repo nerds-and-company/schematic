@@ -1,6 +1,6 @@
 <?php
 
-namespace NerdsAndCompany\SchematicTests\Services;
+namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseTest;
@@ -10,7 +10,6 @@ use Craft\MigrationsService;
 use Craft\UpdatesService;
 use Craft\BasePlugin;
 use NerdsAndCompany\Schematic\Models\Result;
-use NerdsAndCompany\Schematic\Services\Plugins;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

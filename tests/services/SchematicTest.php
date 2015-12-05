@@ -1,6 +1,6 @@
 <?php
 
-namespace NerdsAndCompany\SchematicTests\Services;
+namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseTest;
@@ -10,8 +10,6 @@ use Craft\SectionsService;
 use Craft\PluginsService;
 use Craft\UserGroupsService;
 use NerdsAndCompany\Schematic\Models\Result;
-use NerdsAndCompany\Schematic\Services as Service;
-use NerdsAndCompany\Schematic\Services\Base;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
 
@@ -39,7 +37,7 @@ class SchematicTest extends BaseTest
      */
     public function setUp()
     {
-        $this->schematicService = new Service\Schematic();
+        $this->schematicService = new Schematic();
         $this->mockServices();
     }
 
@@ -193,14 +191,14 @@ class SchematicTest extends BaseTest
      */
     private function mockServices()
     {
-        $this->createMockService(Service\Locales::class, 'schematic_locales');
-        $this->createMockService(Service\AssetSources::class, 'schematic_assetSources');
-        $this->createMockService(Service\Fields::class, 'schematic_fields');
-        $this->createMockService(Service\GlobalSets::class, 'schematic_globalSets');
-        $this->createMockService(Service\Plugins::class, 'schematic_plugins');
-        $this->createMockService(Service\Sections::class, 'schematic_sections');
-        $this->createMockService(Service\UserGroups::class, 'schematic_userGroups');
-        $this->createMockService(Service\Users::class, 'schematic_users');
+        $this->createMockService(Locales::class, 'schematic_locales');
+        $this->createMockService(AssetSources::class, 'schematic_assetSources');
+        $this->createMockService(Fields::class, 'schematic_fields');
+        $this->createMockService(GlobalSets::class, 'schematic_globalSets');
+        $this->createMockService(Plugins::class, 'schematic_plugins');
+        $this->createMockService(Sections::class, 'schematic_sections');
+        $this->createMockService(UserGroups::class, 'schematic_userGroups');
+        $this->createMockService(Users::class, 'schematic_users');
 
         $mockPluginsService = $this->getMockPluginsService();
         $this->setCraftComponent('plugins', $mockPluginsService);

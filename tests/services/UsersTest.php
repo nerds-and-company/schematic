@@ -1,6 +1,6 @@
 <?php
 
-namespace NerdsAndCompany\SchematicTests\Services;
+namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseTest;
@@ -8,8 +8,6 @@ use Craft\FieldLayoutModel;
 use Craft\LocalizationService;
 use Craft\FieldsService;
 use NerdsAndCompany\Schematic\Models\Result;
-use NerdsAndCompany\Schematic\Services\Users;
-use NerdsAndCompany\Schematic\Services\Fields;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
