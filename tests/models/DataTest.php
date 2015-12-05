@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 use NerdsAndCompany\Schematic\Models\Data;
 
 /**
- * Class Schematic_DataModelTest.
+ * Class DataTest.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -16,20 +16,11 @@ use NerdsAndCompany\Schematic\Models\Data;
  *
  * @link      http://www.itmundi.nl
  *
- * @coversDefaultClass Craft\Schematic_DataModel
+ * @coversDefaultClass NerdsAndCompany\Schematic\Models\Data
  * @covers ::<!public>
  */
 class DataTest extends BaseTest
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-        require_once __DIR__.'/../../models/Schematic_DataModel.php';
-    }
-
     /**
      * @return string
      */
@@ -47,7 +38,7 @@ class DataTest extends BaseTest
     }
 
     /**
-     * @return Schematic_DataModel
+     * @return Data
      */
     private function generateDataModel()
     {

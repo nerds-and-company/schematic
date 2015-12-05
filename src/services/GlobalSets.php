@@ -59,7 +59,7 @@ class GlobalSets extends Base
      * @param array $globalSetDefinitions
      * @param bool  $force                If set to true globals not included in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $globalSetDefinitions, $force = false)
     {

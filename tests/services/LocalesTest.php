@@ -4,12 +4,13 @@ namespace NerdsAndCompany\SchematicTests\Services;
 
 use Craft\BaseTest;
 use Craft\LocaleModel;
+use Craft\LocalizationService;
 use NerdsAndCompany\Schematic\Models\Result;
 use NerdsAndCompany\Schematic\Services\Locales;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class Schematic_LocalesServiceTest.
+ * Class LocalesTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015, Nerds & Company
@@ -17,14 +18,14 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass Craft\Schematic_LocalesService
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\Locales
  * @covers ::__construct
  * @covers ::<!public>
  */
 class LocalesTest extends BaseTest
 {
     /**
-     * @var Schematic_LocalesService
+     * @var Locales
      */
     private $schematicLocalesService;
 
@@ -49,7 +50,7 @@ class LocalesTest extends BaseTest
         $getSiteLocalesResponse = array(),
         $addSiteLocaleResponse = true)
     {
-        $mock = $this->getMockBuilder('Craft\LocalizationService')->getMock();
+        $mock = $this->getMockBuilder(LocalizationService::class)->getMock();
         $mock->expects($this->any())->method('getSiteLocaleIds')->willReturn($getSiteLocaleIdsResponse);
         $mock->expects($this->any())->method('getSiteLocales')->willReturn($getSiteLocalesResponse);
         $mock->expects($this->any())->method('addSiteLocale')->willReturn($addSiteLocaleResponse);

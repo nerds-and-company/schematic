@@ -136,7 +136,7 @@ class Plugins extends Base
      * @param array $pluginDefinitions
      * @param bool  $force
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $pluginDefinitions, $force = false)
     {

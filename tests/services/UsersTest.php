@@ -12,7 +12,7 @@ use NerdsAndCompany\Schematic\Services\Fields;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class Schematic_UsersServiceTest.
+ * Class UsersTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015, Nerds & Company
@@ -20,14 +20,14 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass Craft\Schematic_UsersService
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\Users
  * @covers ::__construct
  * @covers ::<!public>
  */
 class UsersTest extends BaseTest
 {
     /**
-     * @var Schematic_UsersService
+     * @var Users
      */
     private $schematicUsersService;
 
@@ -66,7 +66,7 @@ class UsersTest extends BaseTest
     }
 
     /**
-     * @return Mock|Schematic_FieldsService
+     * @return Mock|Fields
      */
     public function getMockSchematicFieldsService()
     {
@@ -131,7 +131,7 @@ class UsersTest extends BaseTest
     /**
      * @param bool $errors
      *
-     * @return Schematic_FieldsService|Mock
+     * @return Fields|Mock
      */
     private function getMockSchematicFieldServiceForImport($errors = false)
     {

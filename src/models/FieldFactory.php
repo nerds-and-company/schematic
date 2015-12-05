@@ -26,7 +26,7 @@ class FieldFactory
     /**
      * @param $fieldType
      *
-     * @return Schematic_FieldModel
+     * @return Field
      */
     public function build($fieldType)
     {

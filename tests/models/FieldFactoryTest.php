@@ -7,7 +7,7 @@ use Craft\ColorFieldType;
 use Craft\PluginsService;
 
 /**
- * Class Schematic_FieldFactoryModelTest.
+ * Class FieldFactoryTest.
  *
  * @author    Itmundi
  * @copyright Copyright (c) 2015, Itmundi
@@ -15,7 +15,7 @@ use Craft\PluginsService;
  *
  * @link      http://www.itmundi.nl
  *
- * @coversDefaultClass Craft\Schematic_FieldFactoryModel
+ * @coversDefaultClass NerdsAndCompany\Schematic\Models\FieldFactory
  * @covers ::<!public>
  */
 class FieldFactoryTest extends BaseTest

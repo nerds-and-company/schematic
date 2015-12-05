@@ -143,7 +143,7 @@ class Sections extends Base
      * @param array $sectionDefinitions
      * @param bool  $force              If set to true sections not included in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $sectionDefinitions, $force = false)
     {

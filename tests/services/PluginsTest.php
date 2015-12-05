@@ -13,7 +13,7 @@ use NerdsAndCompany\Schematic\Services\Plugins;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class Schematic_PluginsServiceTest.
+ * Class PluginsTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015, Nerds & Company
@@ -21,14 +21,14 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass Craft\Schematic_PluginsService
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\Plugins
  * @covers ::__construct
  * @covers ::<!public>
  */
 class PluginsTest extends BaseTest
 {
     /**
-     * @var Schematic_PluginsService
+     * @var Plugins
      */
     private $schematicPluginsService;
 

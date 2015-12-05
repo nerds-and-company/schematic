@@ -44,7 +44,7 @@ class Schematic extends BaseApplication
      * @param string $override
      * @param bool   $force    if set to true items not included in import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function importFromYaml($file, $override = null, $force = false)
     {
@@ -63,7 +63,7 @@ class Schematic extends BaseApplication
      * @param string $file
      * @param bool   $autoCreate
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function exportToYaml($file, $autoCreate = true)
     {
@@ -83,10 +83,10 @@ class Schematic extends BaseApplication
     /**
      * Import data model.
      *
-     * @param Schematic_DataModel $model
-     * @param bool                $force if set to true items not in the import will be deleted
+     * @param Data $model
+     * @param bool $force if set to true items not in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     private function importDataModel(Data $model, $force)
     {
@@ -120,9 +120,9 @@ class Schematic extends BaseApplication
     /**
      * Handles importing.
      *
-     * @param Schematic_ResultModel             $result
-     * @param array                             $data
-     * @param array|Schematic_AbstractService[] $services
+     * @param Result       $result
+     * @param array        $data
+     * @param array|Base[] $services
      * @param $force
      */
     private function doImport(Result $result, array $data, $services, $force)

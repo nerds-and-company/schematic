@@ -209,7 +209,7 @@ class UserGroups extends Base
      * @param array $groupDefinitions
      * @param bool  $force            if set to true items not in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $groupDefinitions, $force = false)
     {

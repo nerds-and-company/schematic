@@ -17,7 +17,7 @@ use NerdsAndCompany\Schematic\Models\Result;
 abstract class Base extends BaseApplication
 {
     /**
-     * @var Schematic_ResultModel
+     * @var Result
      */
     protected $resultModel;
 
@@ -27,7 +27,7 @@ abstract class Base extends BaseApplication
      * @param array $data
      * @param bool  $force
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     abstract public function import(array $data, $force);
 
@@ -140,7 +140,7 @@ abstract class Base extends BaseApplication
     /**
      * Returns current result model.
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function getResultModel()
     {

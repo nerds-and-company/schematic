@@ -19,7 +19,7 @@ use Craft\FieldGroupModel;
 class Field
 {
     /**
-     * @return Schematic_FieldFactoryModel
+     * @return FieldFactory
      */
     protected function getFieldFactory()
     {
@@ -43,11 +43,11 @@ class Field
     }
 
     /**
-     * @return Schematic_AssetsService
+     * @return AssetSources
      */
-    private function getAssetsService()
+    private function getAssetSourcesService()
     {
-        return craft()->schematic_assets;
+        return craft()->schematic_assetSources;
     }
 
     /**
@@ -155,7 +155,7 @@ class Field
                     $method = 'getGroupBy';
                     break;
                 case 'folder':
-                    $service = $this->getAssetsService();
+                    $service = $this->getAssetSourcesService();
                     $method = 'getSourceTypeBy';
                     break;
             }

@@ -53,7 +53,7 @@ class AssetSources extends Base
      * @param array $assetSourceDefinitions
      * @param bool  $force
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $assetSourceDefinitions, $force = false)
     {

@@ -34,12 +34,12 @@ class Fields extends Base
     private $groups = array();
 
     /**
-     * @var Schematic_FieldFactoryModel
+     * @var FieldFactory
      */
     private $fieldFactory;
 
     /**
-     * @return Schematic_FieldFactoryModel
+     * @return FieldFactory
      */
     public function getFieldFactory()
     {
@@ -126,7 +126,7 @@ class Fields extends Base
      * @param array $groupDefinitions
      * @param bool  $force            if set to true items not in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $groupDefinitions, $force = false)
     {

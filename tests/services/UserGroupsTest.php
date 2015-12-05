@@ -16,7 +16,7 @@ use NerdsAndCompany\Schematic\Services\UserGroups;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class Schematic_PluginsServiceTest.
+ * Class UserGroupsTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015, Nerds & Company
@@ -24,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass Craft\Schematic_UserGroupsService
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\UserGroups
  * @covers ::__construct
  * @covers ::<!public>
  */

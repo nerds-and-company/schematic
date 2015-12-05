@@ -47,7 +47,7 @@ class Data extends Base
      * @param string $yaml
      * @param string $overrideYaml
      *
-     * @return Schematic_DataModel
+     * @return Data
      */
     public static function fromYaml($yaml, $overrideYaml)
     {
@@ -100,7 +100,7 @@ class Data extends Base
      *
      * @param array $data
      *
-     * @return Schematic_DataModel
+     * @return Data
      */
     public static function toYaml(array $data)
     {

@@ -23,13 +23,13 @@ use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass Craft\SchematicService
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\Schematic
  * @covers ::<!public>
  */
 class SchematicTest extends BaseTest
 {
     /**
-     * @var SchematicService
+     * @var Schematic
      */
     private $schematicService;
 
@@ -68,7 +68,7 @@ class SchematicTest extends BaseTest
     }
 
     /**
-     * @return Mock|\Craft\FieldsService
+     * @return Mock|FieldsService
      */
     public function getMockFieldsService()
     {
@@ -99,7 +99,7 @@ class SchematicTest extends BaseTest
     }
 
     /**
-     * @return Mock|\Craft\GlobalsService
+     * @return Mock|GlobalsService
      */
     public function getMockGlobalsService()
     {
@@ -113,7 +113,7 @@ class SchematicTest extends BaseTest
     }
 
     /**
-     * @return Mock|\Craft\SectionsService
+     * @return Mock|SectionsService
      */
     public function getMockSectionsService()
     {
@@ -127,7 +127,7 @@ class SchematicTest extends BaseTest
     }
 
     /**
-     * @return Mock|\Craft\Schematic_ResultModel
+     * @return Mock|Result
      */
     public function getMockResultModel()
     {
@@ -157,7 +157,7 @@ class SchematicTest extends BaseTest
     }
 
     /**
-     * @return Schematic_AbstractService|Mock
+     * @return Base|Mock
      */
     public function getMockAbstractService()
     {

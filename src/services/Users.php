@@ -53,7 +53,7 @@ class Users extends Base
      * @param array $user_settings
      * @param bool  $force         If set to true user settings not included in the import will be deleted
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $user_settings, $force = true)
     {

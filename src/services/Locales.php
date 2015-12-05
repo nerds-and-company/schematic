@@ -29,7 +29,7 @@ class Locales extends Base
      * @param array $localeDefinitions
      * @param bool  $force
      *
-     * @return Schematic_ResultModel
+     * @return Result
      */
     public function import(array $localeDefinitions, $force = false)
     {
