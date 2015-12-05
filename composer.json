@@ -43,5 +43,11 @@
     "require": {
         "symfony/yaml": "~2.8"
     },
-    "bin": ["bin/schematic"]
+    "bin": ["bin/schematic"],
+    "autoload" : {
+        "psr-4": {
+            "NerdsAndCompany\\Schematic\\": "src/",
+            "NerdsAndCompany\\SchematicTests\\": "tests/"
+        }
+    }
 }
