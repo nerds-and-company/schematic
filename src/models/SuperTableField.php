@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Craft\Craft;
 use Craft\FieldModel;
 use Craft\SuperTable_BlockTypeModel;
 
@@ -23,7 +24,7 @@ class SuperTableField extends MatrixField
      */
     private function getSuperTableService()
     {
-        return craft()->superTable;
+        return Craft::app()->superTable;
     }
 
     /**

@@ -133,7 +133,7 @@ class Sections extends Base
             'hasTitleField' => $entryType->hasTitleField,
             'titleLabel' => $entryType->titleLabel,
             'titleFormat' => $entryType->titleFormat,
-            'fieldLayout' => craft()->schematic_fields->getFieldLayoutDefinition($entryType->getFieldLayout()),
+            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($entryType->getFieldLayout()),
         );
     }
 
@@ -149,7 +149,7 @@ class Sections extends Base
     {
         Craft::log(Craft::t('Importing Sections'));
 
-        $sections = craft()->sections->getAllSections('handle');
+        $sections = Craft::app()->sections->getAllSections('handle');
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {
             $section = array_key_exists($sectionHandle, $sections)
@@ -188,7 +188,7 @@ class Sections extends Base
 
                 $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
 
-                if (!craft()->sections->saveEntryType($entryType)) {
+                if (!Craft::app()->sections->saveEntryType($entryType)) {
                     $this->addError($entryType->getAllErrors());
 
                     continue;
@@ -196,14 +196,14 @@ class Sections extends Base
             }
 
             // Save section via craft after entrytypes have been created
-            if (!craft()->sections->saveSection($section)) {
+            if (!Craft::app()->sections->saveSection($section)) {
                 $this->addErrors($section->getAllErrors());
             }
         }
 
         if ($force) {
             foreach ($sections as $section) {
-                craft()->sections->deleteSectionById($section->id);
+                Craft::app()->sections->deleteSectionById($section->id);
             }
         }
 
@@ -240,7 +240,7 @@ class Sections extends Base
             return true;
         }
 
-        return craft()->sections->saveSection($section);
+        return Craft::app()->sections->saveSection($section);
     }
 
     /**
@@ -287,7 +287,7 @@ class Sections extends Base
 
             // Todo: Is this a hack? I don't see another way.
             // Todo: Might need a sorting order as well? It's NULL at the moment.
-            craft()->db->createCommand()->insertOrUpdate('locales', array(
+            Craft::app()->db->createCommand()->insertOrUpdate('locales', array(
                 'locale' => $locale->locale,
             ), array());
 
@@ -316,7 +316,7 @@ class Sections extends Base
             'titleFormat' => $entryTypeDefinition['titleFormat'],
         ));
 
-        $fieldLayout = craft()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
+        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
         $entryType->setFieldLayout($fieldLayout);
     }
 }

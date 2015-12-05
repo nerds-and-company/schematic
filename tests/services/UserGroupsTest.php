@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Services;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\UserGroupModel;
 use Craft\SectionModel;
@@ -285,7 +286,7 @@ class UserGroupsTest extends BaseTest
             ->with($indexBy)
             ->willReturn($this->getMockSections($indexBy, 2));
 
-        $this->setComponent(craft(), 'sections', $mockSectionService);
+        $this->setComponent(Craft::app(), 'sections', $mockSectionService);
 
         return $mockSectionService;
     }
@@ -335,7 +336,7 @@ class UserGroupsTest extends BaseTest
             ->with($indexBy)
             ->willReturn($this->getMockAssetSources($indexBy, 1));
 
-        $this->setComponent(craft(), 'assetSources', $mockAssetSourcesService);
+        $this->setComponent(Craft::app(), 'assetSources', $mockAssetSourcesService);
 
         return $mockAssetSourcesService;
     }
@@ -385,7 +386,7 @@ class UserGroupsTest extends BaseTest
             ->with($indexBy)
             ->willReturn($this->getMockGlobalSets($indexBy, 1));
 
-        $this->setComponent(craft(), 'globals', $mockAssetSourcesService);
+        $this->setComponent(Craft::app(), 'globals', $mockAssetSourcesService);
 
         return $mockAssetSourcesService;
     }
@@ -440,7 +441,7 @@ class UserGroupsTest extends BaseTest
             ->with($this->isInstanceOf(UserGroupModel::class))
             ->willReturn($success);
 
-        $this->setComponent(craft(), 'userGroups', $mockUserGroupsService);
+        $this->setComponent(Craft::app(), 'userGroups', $mockUserGroupsService);
 
         return $mockUserGroupsService;
     }
@@ -484,7 +485,7 @@ class UserGroupsTest extends BaseTest
             ->method('saveGroupPermissions')
             ->willReturn($success);
 
-        $this->setComponent(craft(), 'userPermissions', $mockUserPermissionsService);
+        $this->setComponent(Craft::app(), 'userPermissions', $mockUserPermissionsService);
 
         return $mockUserPermissionsService;
     }

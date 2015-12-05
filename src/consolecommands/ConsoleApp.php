@@ -72,11 +72,11 @@ class ConsoleApp extends Base
         $this->coreMessages->attachEventHandler('onMissingTranslation', array('Craft\LocalizationHelper', 'findMissingTranslation'));
 
         // Set our own custom runtime path.
-        $this->setRuntimePath(craft()->path->getRuntimePath());
+        $this->setRuntimePath(Craft::app()->path->getRuntimePath());
 
         // No need for these.
-        craft()->log->removeRoute('WebLogRoute');
-        craft()->log->removeRoute('ProfileLogRoute');
+        Craft::app()->log->removeRoute('WebLogRoute');
+        Craft::app()->log->removeRoute('ProfileLogRoute');
 
         // Set the edition components
         $this->_setEditionComponents();
@@ -93,14 +93,14 @@ class ConsoleApp extends Base
         parent::init();
 
         // Load the plugins
-        craft()->plugins->loadPlugins();
+        Craft::app()->plugins->loadPlugins();
 
         // Validate some basics on the database configuration file.
-        craft()->validateDbConfigFile();
+        Craft::app()->validateDbConfigFile();
 
         // Add commands
-        craft()->commandRunner->commands = array();
-        craft()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
+        Craft::app()->commandRunner->commands = array();
+        Craft::app()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
     }
 
     /**
@@ -141,7 +141,7 @@ class ConsoleApp extends Base
      * handler for {@link EntriesService::onSaveEntry()}, you would do this:
      *
      * ```php
-     * craft()->on('entries.saveEntry', function(Event $event) {
+     * Craft::app()->on('entries.saveEntry', function(Event $event) {
      *     // ...
      * });
      * ```
@@ -180,7 +180,7 @@ class ConsoleApp extends Base
 
     /**
      * Override getComponent() so we can attach any pending events if the component is getting initialized as well as
-     * do some special logic around creating the `craft()->db` application component.
+     * do some special logic around creating the `Craft::app()->db` application component.
      *
      * @param string $id
      * @param bool   $createIfNull
@@ -321,6 +321,6 @@ class ConsoleApp extends Base
             'locale'    => getenv('CRAFT_LOCALE'),
         );
 
-        craft()->install->run($options);
+        Craft::app()->install->run($options);
     }
 }

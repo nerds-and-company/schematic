@@ -2,6 +2,8 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Craft\Craft;
+
 /**
  * Schematic Field Factory Model.
  *
@@ -20,7 +22,7 @@ class FieldFactory
      */
     private function getPluginsService()
     {
-        return craft()->plugins;
+        return Craft::app()->plugins;
     }
 
     /**

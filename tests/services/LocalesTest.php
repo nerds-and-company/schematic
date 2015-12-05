@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Services;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\LocaleModel;
 use Craft\LocalizationService;
@@ -69,7 +70,7 @@ class LocalesTest extends BaseTest
         $data = $this->getLocaleData();
 
         $mockLocalizationService = $this->getMockLocalizationService($data);
-        $this->setComponent(craft(), 'i18n', $mockLocalizationService);
+        $this->setComponent(Craft::app(), 'i18n', $mockLocalizationService);
 
         $import = $this->schematicLocalesService->import($data);
 
@@ -85,7 +86,7 @@ class LocalesTest extends BaseTest
     public function testImportWithNotInstalledLocales()
     {
         $mockLocalizationService = $this->getMockLocalizationService();
-        $this->setComponent(craft(), 'i18n', $mockLocalizationService);
+        $this->setComponent(Craft::app(), 'i18n', $mockLocalizationService);
 
         $data = $this->getLocaleData();
 
@@ -103,7 +104,7 @@ class LocalesTest extends BaseTest
     public function testImportWithFailedInstalledLocales()
     {
         $mockLocalizationService = $this->getMockLocalizationService(array(), array(), false);
-        $this->setComponent(craft(), 'i18n', $mockLocalizationService);
+        $this->setComponent(Craft::app(), 'i18n', $mockLocalizationService);
 
         $data = $this->getLocaleData();
 
@@ -129,7 +130,7 @@ class LocalesTest extends BaseTest
 
         $mockLocalizationService = $this->getMockLocalizationService($data, $locales);
 
-        $this->setComponent(craft(), 'i18n', $mockLocalizationService);
+        $this->setComponent(Craft::app(), 'i18n', $mockLocalizationService);
 
         $export = $this->schematicLocalesService->export();
         $this->assertEquals($data, $export);

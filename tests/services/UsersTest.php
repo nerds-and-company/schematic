@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Services;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\FieldLayoutModel;
 use Craft\LocalizationService;
@@ -104,9 +105,9 @@ class UsersTest extends BaseTest
         $mockSchematicFieldsService = $this->getMockSchematicFieldsService();
         $mockSchematicFieldsService->expects($this->exactly(1))->method('getFieldLayoutDefinition')->willReturn(array());
 
-        $this->setComponent(craft(), 'i18n', $mockI18n);
-        $this->setComponent(craft(), 'fields', $mockFieldsService);
-        $this->setComponent(craft(), 'schematic_fields', $mockSchematicFieldsService);
+        $this->setComponent(Craft::app(), 'i18n', $mockI18n);
+        $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
+        $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
         $export = $this->schematicUsersService->export();
 
@@ -158,8 +159,8 @@ class UsersTest extends BaseTest
         $mockFieldsService = $this->getMockFieldServiceForImport();
         $mockSchematicFieldsService = $this->getMockSchematicFieldServiceForImport();
 
-        $this->setComponent(craft(), 'fields', $mockFieldsService);
-        $this->setComponent(craft(), 'schematic_fields', $mockSchematicFieldsService);
+        $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
+        $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
         $import = $this->schematicUsersService->import(array('fieldLayout' => array()));
 
@@ -176,8 +177,8 @@ class UsersTest extends BaseTest
         $mockFieldsService = $this->getMockFieldServiceForImport();
         $mockSchematicFieldsService = $this->getMockSchematicFieldServiceForImport();
 
-        $this->setComponent(craft(), 'fields', $mockFieldsService);
-        $this->setComponent(craft(), 'schematic_fields', $mockSchematicFieldsService);
+        $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
+        $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
         $import = $this->schematicUsersService->import(array());
 
@@ -194,8 +195,8 @@ class UsersTest extends BaseTest
         $mockFieldsService = $this->getMockFieldServiceForImport(false);
         $mockSchematicFieldsService = $this->getMockSchematicFieldServiceForImport(true);
 
-        $this->setComponent(craft(), 'fields', $mockFieldsService);
-        $this->setComponent(craft(), 'schematic_fields', $mockSchematicFieldsService);
+        $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
+        $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
         $import = $this->schematicUsersService->import(array());
 

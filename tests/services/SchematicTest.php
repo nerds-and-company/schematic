@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Services;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\FieldsService;
 use Craft\GlobalsService;
@@ -64,7 +65,7 @@ class SchematicTest extends BaseTest
      */
     private function setCraftComponent($handle, Mock $mock)
     {
-        $this->setComponent(craft(), $handle, $mock);
+        $this->setComponent(Craft::app(), $handle, $mock);
     }
 
     /**

@@ -24,7 +24,7 @@ class Plugins extends Base
      */
     protected function getPluginService()
     {
-        return craft()->plugins;
+        return Craft::app()->plugins;
     }
 
     /**
@@ -32,7 +32,7 @@ class Plugins extends Base
      */
     protected function getMigrationsService()
     {
-        return craft()->migrations;
+        return Craft::app()->migrations;
     }
 
     /**
@@ -40,7 +40,7 @@ class Plugins extends Base
      */
     protected function getUpdatesService()
     {
-        return craft()->updates;
+        return Craft::app()->updates;
     }
 
     /**

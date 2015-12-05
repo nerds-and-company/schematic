@@ -57,7 +57,7 @@ class Fields extends Base
      */
     private function getFieldsService()
     {
-        return craft()->fields;
+        return Craft::app()->fields;
     }
 
     /**
@@ -67,7 +67,7 @@ class Fields extends Base
      */
     private function getContentService()
     {
-        return craft()->content;
+        return Craft::app()->content;
     }
 
     //==============================================================================================================
@@ -381,7 +381,7 @@ class Fields extends Base
             $layoutFields = $layoutTabFields['fields'];
         }
 
-        $fieldLayout = craft()->fields->assembleLayout($layoutFields, $requiredFields);
+        $fieldLayout = Craft::app()->fields->assembleLayout($layoutFields, $requiredFields);
         $fieldLayout->type = ElementType::Entry;
 
         return $fieldLayout;
@@ -400,7 +400,7 @@ class Fields extends Base
         $requiredFields = array();
 
         foreach ($fieldLayoutDef as $fieldHandle => $required) {
-            $field = craft()->fields->getFieldByHandle($fieldHandle);
+            $field = Craft::app()->fields->getFieldByHandle($fieldHandle);
 
             if ($field instanceof FieldModel) {
                 $layoutFields[] = $field->id;

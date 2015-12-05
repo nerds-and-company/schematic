@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Craft\Craft;
 use Craft\BaseModel;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
@@ -27,7 +28,7 @@ class MatrixField extends Field
      */
     private function getMatrixService()
     {
-        return craft()->matrix;
+        return Craft::app()->matrix;
     }
 
     //==============================================================================================================

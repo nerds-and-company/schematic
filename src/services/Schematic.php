@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
+use Craft\Craft;
 use Craft\BaseApplicationComponent as BaseApplication;
 use Craft\IOHelper;
 use NerdsAndCompany\Schematic\Models\Data;
@@ -48,7 +49,7 @@ class Schematic extends BaseApplication
      */
     public function importFromYaml($file, $override = null, $force = false)
     {
-        craft()->config->maxPowerCaptain();
+        Craft::app()->config->maxPowerCaptain();
 
         $yaml = IOHelper::getFileContents($file);
         $yaml_override = IOHelper::getFileContents($override);
@@ -67,7 +68,7 @@ class Schematic extends BaseApplication
      */
     public function exportToYaml($file, $autoCreate = true)
     {
-        craft()->config->maxPowerCaptain();
+        Craft::app()->config->maxPowerCaptain();
 
         $result = new Result();
         $dataModel = $this->exportDataModel();
@@ -91,14 +92,14 @@ class Schematic extends BaseApplication
     private function importDataModel(Data $model, $force)
     {
         // Import schema
-        $localesImportResult = craft()->schematic_locales->import($model->getAttribute('locales', $force));
-        $pluginImportResult = craft()->schematic_plugins->import($model->getAttribute('plugins', $force));
-        $assetSourcesImportResult = craft()->schematic_assetSources->import($model->getAttribute('assetSources'), $force);
-        $fieldImportResult = craft()->schematic_fields->import($model->getAttribute('fields'), $force);
-        $globalSetsImportResult = craft()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
-        $sectionImportResult = craft()->schematic_sections->import($model->getAttribute('sections'), $force);
-        $userGroupImportResult = craft()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
-        $userImportResult = craft()->schematic_users->import($model->getAttribute('users'), true);
+        $localesImportResult = Craft::app()->schematic_locales->import($model->getAttribute('locales', $force));
+        $pluginImportResult = Craft::app()->schematic_plugins->import($model->getAttribute('plugins', $force));
+        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($model->getAttribute('assetSources'), $force);
+        $fieldImportResult = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
+        $globalSetsImportResult = Craft::app()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
+        $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
+        $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
+        $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
 
         // Verify results
         $result = new Result();
@@ -111,7 +112,7 @@ class Schematic extends BaseApplication
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
 
-        $services = craft()->plugins->call('registerMigrationService');
+        $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doImport($result, $model->pluginData, $services, $force);
 
         return $result;
@@ -145,24 +146,24 @@ class Schematic extends BaseApplication
      */
     private function exportDataModel()
     {
-        $fieldGroups = craft()->fields->getAllGroups();
-        $sections = craft()->sections->getAllSections();
-        $globals = craft()->globals->getAllSets();
-        $userGroups = craft()->userGroups->getAllGroups();
+        $fieldGroups = Craft::app()->fields->getAllGroups();
+        $sections = Craft::app()->sections->getAllSections();
+        $globals = Craft::app()->globals->getAllSets();
+        $userGroups = Craft::app()->userGroups->getAllGroups();
 
         $export = array(
-            'locales' => craft()->schematic_locales->export(),
-            'assetSources' => craft()->schematic_assetSources->export(),
-            'fields' => craft()->schematic_fields->export($fieldGroups),
-            'plugins' => craft()->schematic_plugins->export(),
-            'sections' => craft()->schematic_sections->export($sections),
-            'globalSets' => craft()->schematic_globalSets->export($globals),
-            'userGroups' => craft()->schematic_userGroups->export($userGroups),
-            'users' => craft()->schematic_users->export(),
+            'locales' => Craft::app()->schematic_locales->export(),
+            'assetSources' => Craft::app()->schematic_assetSources->export(),
+            'fields' => Craft::app()->schematic_fields->export($fieldGroups),
+            'plugins' => Craft::app()->schematic_plugins->export(),
+            'sections' => Craft::app()->schematic_sections->export($sections),
+            'globalSets' => Craft::app()->schematic_globalSets->export($globals),
+            'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
+            'users' => Craft::app()->schematic_users->export(),
         );
 
         $export['pluginData'] = array();
-        $services = craft()->plugins->call('registerMigrationService');
+        $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doExport($services, $export['pluginData']);
 
         return $export;

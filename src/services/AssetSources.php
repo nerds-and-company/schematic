@@ -24,7 +24,7 @@ class AssetSources extends Base
      */
     private function getAssetSourcesService()
     {
-        return craft()->assetSources;
+        return Craft::app()->assetSources;
     }
 
     /**
@@ -62,7 +62,7 @@ class AssetSources extends Base
         foreach ($assetSourceDefinitions as $assetHandle => $assetSourceDefinition) {
             $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
 
-            if (!craft()->assetSources->saveSource($assetSource)) {
+            if (!Craft::app()->assetSources->saveSource($assetSource)) {
                 $this->addErrors($assetSource->getAllErrors());
             }
         }

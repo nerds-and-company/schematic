@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Services;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\Exception;
 use Craft\PluginsService;
@@ -56,11 +57,11 @@ class PluginsTest extends BaseTest
         $installPluginResponse = true
     ) {
         $mockPluginsService = $this->getMockPluginsService($returnPlugin, $installPluginResponse);
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
         $mockMigrationsService = $this->getMockMigrationsService();
-        $this->setComponent(craft(), 'migrations', $mockMigrationsService);
+        $this->setComponent(Craft::app(), 'migrations', $mockMigrationsService);
         $mockUpdatesService = $this->getMockUpdatesService();
-        $this->setComponent(craft(), 'updates', $mockUpdatesService);
+        $this->setComponent(Craft::app(), 'updates', $mockUpdatesService);
     }
 
     /**
@@ -177,7 +178,7 @@ class PluginsTest extends BaseTest
         $data = $this->getPluginsData();
 
         $mockPluginsService = $this->getMockPluginsService(false);
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -210,7 +211,7 @@ class PluginsTest extends BaseTest
     public function testImportWithNotInstalledPlugin()
     {
         $mockPluginsService = $this->getMockPluginsService();
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
 
         $this->getMockBasePlugin();
 
@@ -246,7 +247,7 @@ class PluginsTest extends BaseTest
             ->method('getPlugins')
             ->willReturn(array($this->pluginHandle => $mockBasePlugin));
 
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
 
         $export = $this->schematicPluginsService->export();
         $this->assertEquals($data, $export);

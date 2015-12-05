@@ -34,7 +34,7 @@ class ImportCommand extends Base
             $this->usageError(Craft::t('File not found.'));
         }
 
-        $result = craft()->schematic->importFromYaml($file, $override_file, $force);
+        $result = Craft::app()->schematic->importFromYaml($file, $override_file, $force);
 
         if (!$result->hasErrors()) {
             Craft::log(Craft::t('Loaded schema from {file}', array('file' => $file)));

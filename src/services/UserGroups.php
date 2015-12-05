@@ -42,7 +42,7 @@ class UserGroups extends Base
      */
     private function getSectionsService()
     {
-        return craft()->sections;
+        return Craft::app()->sections;
     }
 
     /**
@@ -50,7 +50,7 @@ class UserGroups extends Base
      */
     private function getAssetSourcesService()
     {
-        return craft()->assetSources;
+        return Craft::app()->assetSources;
     }
 
     /**
@@ -58,7 +58,7 @@ class UserGroups extends Base
      */
     private function getGlobalsService()
     {
-        return craft()->globals;
+        return Craft::app()->globals;
     }
 
     /**
@@ -66,7 +66,7 @@ class UserGroups extends Base
      */
     private function getUserPermissionsService()
     {
-        return craft()->userPermissions;
+        return Craft::app()->userPermissions;
     }
 
     /**
@@ -74,7 +74,7 @@ class UserGroups extends Base
      */
     private function getUserGroupsService()
     {
-        return craft()->userGroups;
+        return Craft::app()->userGroups;
     }
 
     //==============================================================================================================

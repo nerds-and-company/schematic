@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
+use Craft\Craft;
 use Craft\BaseApplicationComponent as BaseApplication;
 use NerdsAndCompany\Schematic\Models\Result;
 
@@ -53,7 +54,7 @@ abstract class Base extends BaseApplication
      */
     protected function getDbService()
     {
-        return craft()->db;
+        return Craft::app()->db;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Craft\Craft;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
 
@@ -23,7 +24,7 @@ class Field
      */
     protected function getFieldFactory()
     {
-        return craft()->schematic_fields->getFieldFactory();
+        return Craft::app()->schematic_fields->getFieldFactory();
     }
 
     /**
@@ -31,7 +32,7 @@ class Field
      */
     private function getSectionsService()
     {
-        return craft()->sections;
+        return Craft::app()->sections;
     }
 
     /**
@@ -39,7 +40,7 @@ class Field
      */
     private function getUserGroupsService()
     {
-        return craft()->userGroups;
+        return Craft::app()->userGroups;
     }
 
     /**
@@ -47,7 +48,7 @@ class Field
      */
     private function getAssetSourcesService()
     {
-        return craft()->schematic_assetSources;
+        return Craft::app()->schematic_assetSources;
     }
 
     /**

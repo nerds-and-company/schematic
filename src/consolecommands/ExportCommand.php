@@ -27,7 +27,7 @@ class ExportCommand extends Base
      */
     public function actionIndex($file = 'craft/config/schema.yml')
     {
-        craft()->schematic->exportToYaml($file);
+        Craft::app()->schematic->exportToYaml($file);
 
         Craft::log(Craft::t('Exported schema to {file}', array('file' => $file)));
 

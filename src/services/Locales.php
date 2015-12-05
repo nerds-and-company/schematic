@@ -22,7 +22,7 @@ class Locales extends Base
      */
     protected function getLocalizationService()
     {
-        return craft()->i18n;
+        return Craft::app()->i18n;
     }
 
     /**

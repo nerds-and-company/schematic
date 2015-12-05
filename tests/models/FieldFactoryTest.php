@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\SchematicTests\Models;
 
+use Craft\Craft;
 use Craft\BaseTest;
 use Craft\ColorFieldType;
 use Craft\PluginsService;
@@ -133,6 +134,6 @@ class FieldFactoryTest extends BaseTest
             ->with('registerSchematicFieldModels')
             ->willReturn($schematicFieldModels);
 
-        $this->setComponent(craft(), 'plugins', $mockPluginsService);
+        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
     }
 }
