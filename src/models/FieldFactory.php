@@ -42,7 +42,7 @@ class FieldFactory
             }
         }
 
-        $classNames[] = ucfirst($fieldType).'Field';
+        $classNames[] = 'NerdsAndCompany\Schematic\Models\\'.ucfirst($fieldType).'Field';
 
         foreach ($classNames as $className) {
             if (class_exists($className)) {
