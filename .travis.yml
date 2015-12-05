@@ -21,7 +21,7 @@ matrix:
     - php: hhvm
 
  # execute any number of scripts before the test run, custom env's are available as variables
-before_script:
+install:
   - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
   - unzip craft.zip
   - rm craft.zip
@@ -32,6 +32,7 @@ before_script:
   - composer install
   - mkdir -p vendor/itmundi/schematic
   - for item in *; do if [[ ! "$item" == "vendor" && ! "$item" == "craft" ]]; then mv $item vendor/itmundi/schematic; fi; done
+  - cp vendor/itmundi/schematic/composer.json .
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
