@@ -35,6 +35,7 @@ before_script:
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
+  - composer dump-autoload
 
 # execute tests
 script: phpunit --bootstrap vendor/itmundi/schematic/tests/bootstrap.php --configuration vendor/itmundi/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/itmundi/schematic/tests
