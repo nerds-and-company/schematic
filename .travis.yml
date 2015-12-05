@@ -37,7 +37,7 @@ before_script:
   - cd ../..
 
 # execute tests
-script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration vendor/itmundi/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/itmundi/schematic/tests
+script: phpunit --bootstrap vendor/itmundi/schematic/tests/bootstrap.php --configuration vendor/itmundi/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/itmundi/schematic/tests
 
 # upload coverage to scrutinizer
 after_script:

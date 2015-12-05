@@ -6,6 +6,7 @@ use Craft\Craft;
 use Craft\BaseTest;
 use Craft\ColorFieldType;
 use Craft\PluginsService;
+use NerdsAndCompany\Schematic\Models\FieldFactory;
 
 /**
  * Class FieldFactoryTest.
