@@ -5,7 +5,6 @@ namespace NerdsAndCompany\ConsoleCommands;
 use Craft\Craft;
 use Craft\Logger;
 use Craft\ConsoleCommandRunner;
-use Craft\IOHelper;
 use CConsoleApplication as Base;
 use NerdsAndCompany\Behaviors\Schematic;
 
@@ -298,20 +297,13 @@ class ConsoleApp extends Base
      */
     private function _setSchematicComponents()
     {
-        // Get all schematic plugin files
-        $filter = '^((?!behaviors|tests|consolecommands).)*Schematic(.*?)\.php$';
-        $files = IOHelper::getFolderContents(__DIR__.'/../', true, $filter);
+        $data = new Data();
+        $components = $data->getAttributes();
+        unset($components['pluginData']);
 
-        // Loop through these file and require them
-        foreach ($files as $file) {
-            require_once $file;
-
-            // Set services as components
-            if (preg_match('/Schematic(?:((?!\_Abstract).*?))Service/', $file, $matches)) {
-                $component = !empty($matches[1]) ? '_'.lcfirst(substr($matches[1], 1)) : '';
-                $class = 'Craft\\'.$matches[0];
-                $this->setComponent('schematic'.$component, new $class());
-            }
+        foreach ($components as $component => $value) {
+            $class = ucfirst($component);
+            $this->setComponent('schematic_'.$component, new $class());
         }
     }
 
