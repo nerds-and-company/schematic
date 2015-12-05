@@ -1,10 +1,10 @@
-assets:
+assetSources:
   uploads:
     settings:
       keyId: original_key_id
       bucket: original_bucket_name
 fields: null
-globals: null
+globalSets: null
 plugins: null
 sections: null
 userGroups: null

@@ -8,6 +8,7 @@ use Craft\UserGroupModel;
 use Craft\SectionModel;
 use Craft\AssetSourceModel;
 use Craft\GlobalSetModel;
+use Craft\UserGroupsService;
 use Craft\SectionsService;
 use Craft\AssetSourcesService;
 use Craft\GlobalsService;
@@ -352,7 +353,7 @@ class UserGroupsTest extends BaseTest
         $keyPrefix = $indexBy == 'id' ? '' : 'assetSourceHandle';
         $mockAssetSources = array();
         for ($x = 0; $x <= $count; $x++) {
-            $mockAssetSource = $this->getMockBuilder(AssetSourceModel::handle)
+            $mockAssetSource = $this->getMockBuilder(AssetSourceModel::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 

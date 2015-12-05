@@ -6,7 +6,7 @@ use Craft\Craft;
 use Craft\BaseTest;
 use Craft\ColorFieldType;
 use Craft\PluginsService;
-use NerdsAndCompany\Schematic\Models\FieldFactory;
+use NerdsAndCompany\Schematic\Models as Model;
 
 /**
  * Class FieldFactoryTest.
@@ -31,7 +31,7 @@ class FieldFactoryTest extends BaseTest
      */
     public function testBuildWithDefaultFieldTypesReturnsCorrectClass($fieldType, $expectedClassName)
     {
-        $fieldFactory = new FieldFactory();
+        $fieldFactory = new Model\FieldFactory();
         $schematicFieldModel = $fieldFactory->build($fieldType);
 
         $this->assertEquals($expectedClassName, get_class($schematicFieldModel));
@@ -49,7 +49,7 @@ class FieldFactoryTest extends BaseTest
     {
         $this->setMockPluginsService($hookCallResults);
 
-        $fieldFactory = new FieldFactory();
+        $fieldFactory = new Model\FieldFactory();
         $schematicFieldModel = $fieldFactory->build($fieldType);
 
         $this->assertInstanceOf($expectedClassName, $schematicFieldModel);
@@ -62,26 +62,26 @@ class FieldFactoryTest extends BaseTest
     {
         return array(
             // Base fields
-            'Assets' => array('Assets', Field::class),
-            'Categories' => array('Category', Field::class),
-            'Checkboxes' => array('Checkboxes', Field::class),
-            'Color' => array('Color', Field::class),
-            'Date' => array('Date', Field::class),
-            'Dropdown' => array('Dropdown', Field::class),
-            'Entries' => array('Entries', Field::class),
-            'Lightswitch' => array('Lightswitch', Field::class),
-            'Matrix' => array('Matrix', MatrixField::class),
-            'MultiSelect' => array('Multiselect', Field::class),
-            'Number' => array('Number', Field::class),
-            'PlainText' => array('PlainText', Field::class),
-            'PositionSelect' => array('PositionSelect', PositionSelectField::class),
-            'RadioButtons' => array('RadioButtons', Field::class),
-            'RichText' => array('RichText', Field::class),
-            'Table' => array('Table', Field::class),
-            'Tags' => array('Tags', Field::class),
-            'Users' => array('Users', Field::class),
+            'Assets' => array('Assets', Model\Field::class),
+            'Categories' => array('Category', Model\Field::class),
+            'Checkboxes' => array('Checkboxes', Model\Field::class),
+            'Color' => array('Color', Model\Field::class),
+            'Date' => array('Date', Model\Field::class),
+            'Dropdown' => array('Dropdown', Model\Field::class),
+            'Entries' => array('Entries', Model\Field::class),
+            'Lightswitch' => array('Lightswitch', Model\Field::class),
+            'Matrix' => array('Matrix', Model\MatrixField::class),
+            'MultiSelect' => array('Multiselect', Model\Field::class),
+            'Number' => array('Number', Model\Field::class),
+            'PlainText' => array('PlainText', Model\Field::class),
+            'PositionSelect' => array('PositionSelect', Model\PositionSelectField::class),
+            'RadioButtons' => array('RadioButtons', Model\Field::class),
+            'RichText' => array('RichText', Model\Field::class),
+            'Table' => array('Table', Model\Field::class),
+            'Tags' => array('Tags', Model\Field::class),
+            'Users' => array('Users', Model\Field::class),
             // Plugin fields
-            'SuperTable' => array('SuperTable', SuperTableField::class),
+            'SuperTable' => array('SuperTable', Model\SuperTableField::class),
         );
     }
 
@@ -93,16 +93,16 @@ class FieldFactoryTest extends BaseTest
         return array(
             'color mapped to matrix field model' => array(
                 'fieldType' => 'Color',
-                'expectedClassName' => MatrixField::class,
+                'expectedClassName' => Model\MatrixField::class,
                 'hookCallResults' => array(
                     'plugin1' => array(
-                        'Color' => MatrixField::class,
+                        'Color' => Model\MatrixField::class,
                     ),
                 ),
             ),
             'color mapped to wrong class type' => array(
                 'fieldType' => 'Color',
-                'expectedClassName' => Field::class,
+                'expectedClassName' => Model\Field::class,
                 'hookCallResults' => array(
                     'plugin1' => array(
                         'Color' => ColorFieldType::class,
@@ -111,10 +111,10 @@ class FieldFactoryTest extends BaseTest
             ),
             'something mapped to matrix field model' => array(
                 'fieldType' => 'PlainText',
-                'expectedClassName' => Field::class,
+                'expectedClassName' => Model\Field::class,
                 'hookCallResults' => array(
                     'plugin1' => array(
-                        'Color' => MatrixField::class,
+                        'Color' => Model\MatrixField::class,
                     ),
                 ),
             ),

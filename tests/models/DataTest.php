@@ -55,7 +55,7 @@ class DataTest extends BaseTest
     public function testRegularOverride()
     {
         $result = $this->generateDataModel();
-        $this->assertEquals('override_key', $result->assets['uploads']['settings']['keyId']);
+        $this->assertEquals('override_key', $result->assetSources['uploads']['settings']['keyId']);
     }
 
     /**
@@ -65,7 +65,7 @@ class DataTest extends BaseTest
     public function testEnvironmentOverride()
     {
         $result = $this->generateDataModel();
-        $this->assertEquals('override_bucket_name', $result->assets['uploads']['settings']['bucket']);
+        $this->assertEquals('override_bucket_name', $result->assetSources['uploads']['settings']['bucket']);
     }
 
     /**
