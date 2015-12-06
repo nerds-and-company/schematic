@@ -8,14 +8,15 @@ use Craft\StringHelper;
 use Craft\IOHelper;
 
 /**
- * Class ConsoleCommandRunner.
+ * Schematic Console Command Runner.
  *
- * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
+ * Sync Craft Setups.
  *
- * @see       http://buildwithcraft.com
- * @since     1.0
+ * @author    Nerds & Company
+ * @copyright Copyright (c) 2015, Nerds & Company
+ * @license   MIT
+ *
+ * @link      http://www.nerds.company
  */
 class CommandRunner extends ConsoleCommandRunner
 {
@@ -45,24 +46,7 @@ class CommandRunner extends ConsoleCommandRunner
 
         if ($command !== null) {
             if (is_string($command)) {
-                // class file path or alias
-
-                if (strpos($command, '/') !== false || strpos($command, '\\') !== false) {
-                    $className = IOHelper::getFileName($command, false);
-
-                    // If it's a default framework command, don't namespace it.
-                    if (strpos($command, 'framework') === false) {
-                        $className = __NAMESPACE__.'\\'.$className;
-                    }
-
-                    if (!class_exists($className, false)) {
-                        require_once $command;
-                    }
-                } else {
-                    // an alias
-
-                    $className = Craft::import($command);
-                }
+                $className = 'NerdsAndCompany\Schematic\ConsoleCommands\\'.IOHelper::getFileName($command, false);
 
                 return new $className($name, $this);
             } else {
@@ -74,20 +58,6 @@ class CommandRunner extends ConsoleCommandRunner
             return new \CHelpCommand('help', $this);
         } else {
             return;
-        }
-    }
-
-    /**
-     * Adds commands from the specified command path. If a command already exists, the new one will overwrite it.
-     *
-     * @param string $path The alias of the folder containing the command class files.
-     */
-    public function addCommands($path)
-    {
-        if (($commands = $this->findCommands($path)) !== array()) {
-            foreach ($commands as $name => $file) {
-                $this->commands[$name] = $file;
-            }
         }
     }
 }
