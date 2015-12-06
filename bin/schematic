@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use NerdsAndCompany\Schematic\ConsoleCommands\ConsoleApp;
+use NerdsAndCompany\Schematic\Console\App;
 
 /*
  * Schematic Console App.
@@ -64,5 +64,5 @@ $_SERVER['SERVER_NAME'] = getenv('CRAFT_SITENAME');
 Yii::setPathOfAlias('app', CRAFT_APP_PATH);
 Yii::setPathOfAlias('plugins', CRAFT_PLUGINS_PATH);
 
-$app = Yii::createApplication(ConsoleApp::class, CRAFT_APP_PATH.'etc/config/console.php');
+$app = Yii::createApplication(App::class, CRAFT_APP_PATH.'etc/config/console.php');
 $app->run();

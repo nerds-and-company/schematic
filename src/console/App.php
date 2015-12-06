@@ -1,12 +1,12 @@
 <?php
 
-namespace NerdsAndCompany\ConsoleCommands;
+namespace NerdsAndCompany\Schematic\Console;
 
 use Craft\Craft;
 use Craft\Logger;
-use Craft\ConsoleCommandRunner;
 use CConsoleApplication as Base;
-use NerdsAndCompany\Behaviors\Schematic;
+use NerdsAndCompany\Schematic\Behaviors\Schematic;
+use NerdsAndCompany\Schematic\Services as Service;
 
 /**
  * Schematic Console App.
@@ -19,7 +19,7 @@ use NerdsAndCompany\Behaviors\Schematic;
  *
  * @link      http://www.nerds.company
  */
-class ConsoleApp extends Base
+class App extends Base
 {
     // Properties
     // =========================================================================
@@ -54,9 +54,6 @@ class ConsoleApp extends Base
         foreach ($this->componentAliases as $alias) {
             Craft::import($alias);
         }
-
-        // Require schematic behavior
-        require_once __DIR__.'/../behaviors/SchematicBehavior.php';
 
         // Attach our Craft app behavior.
         $this->attachBehavior('SchematicBehavior', new Schematic());
@@ -249,7 +246,7 @@ class ConsoleApp extends Base
      */
     protected function createCommandRunner()
     {
-        return new ConsoleCommandRunner();
+        return new CommandRunner();
     }
 
     // Private Methods
@@ -297,14 +294,34 @@ class ConsoleApp extends Base
      */
     private function _setSchematicComponents()
     {
-        $data = new Data();
-        $components = $data->getAttributes();
-        unset($components['pluginData']);
+        $components = array(
+            'schematic_locales' => array(
+                'class' => Service\Locales::class,
+            ),
+            'schematic_assetSources' => array(
+                'class' => Service\AssetSources::class,
+            ),
+            'schematic_fields' => array(
+                'class' => Service\Fields::class,
+            ),
+            'schematic_globalSets' => array(
+                'class' => Service\GlobalSets::class,
+            ),
+            'schematic_plugins' => array(
+                'class' => Service\Plugins::class,
+            ),
+            'schematic_sections' => array(
+                'class' => Service\Sections::class,
+            ),
+            'schematic_userGroups' => array(
+                'class' => Service\UserGroups::class,
+            ),
+            'schematic_users' => array(
+                'class' => Service\Users::class,
+            ),
+        );
 
-        foreach ($components as $component => $value) {
-            $class = ucfirst($component);
-            $this->setComponent('schematic_'.$component, new $class());
-        }
+        $this->setComponents($components);
     }
 
     /**
