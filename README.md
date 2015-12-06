@@ -70,6 +70,11 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.0.0###
+ - Schematic is now PSR-4 compatible and uses proper autoloading
+ - Renamed assets to assetSources
+ - Renamed globals to globalSets
+
 ###2.0.0###
  - Reworked Schematic to install Craft when it's not installed yet
  - Added support for site locales
