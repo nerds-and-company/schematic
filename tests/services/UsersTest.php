@@ -101,7 +101,7 @@ class UsersTest extends BaseTest
         $mockFieldsService->expects($this->exactly(1))->method('getLayoutByType')->willReturn($mockFieldLayout);
 
         $mockSchematicFieldsService = $this->getMockSchematicFieldsService();
-        $mockSchematicFieldsService->expects($this->exactly(1))->method('getFieldLayoutDefinition')->willReturn(array());
+        $mockSchematicFieldsService->expects($this->exactly(1))->method('getFieldLayoutDefinition')->willReturn([]);
 
         $this->setComponent(Craft::app(), 'i18n', $mockI18n);
         $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
@@ -136,9 +136,9 @@ class UsersTest extends BaseTest
     {
         $mockFieldLayout = $this->getMockFieldLayout();
         if ($errors) {
-            $mockFieldLayout->expects($this->exactly(1))->method('getAllErrors')->willReturn(array(
-                'errors' => array('error 1', 'error 2', 'error 3'),
-            ));
+            $mockFieldLayout->expects($this->exactly(1))->method('getAllErrors')->willReturn([
+                'errors' => ['error 1', 'error 2', 'error 3'],
+            ]);
         }
 
         $mockSchematicFieldsService = $this->getMockSchematicFieldsService();
@@ -160,7 +160,7 @@ class UsersTest extends BaseTest
         $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
         $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
-        $import = $this->schematicUsersService->import(array('fieldLayout' => array()));
+        $import = $this->schematicUsersService->import(['fieldLayout' => []]);
 
         $this->assertTrue($import instanceof Result);
     }
@@ -178,7 +178,7 @@ class UsersTest extends BaseTest
         $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
         $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
-        $import = $this->schematicUsersService->import(array());
+        $import = $this->schematicUsersService->import([]);
 
         $this->assertTrue($import instanceof Result);
     }
@@ -196,7 +196,7 @@ class UsersTest extends BaseTest
         $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
         $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFieldsService);
 
-        $import = $this->schematicUsersService->import(array());
+        $import = $this->schematicUsersService->import([]);
 
         $this->assertTrue($import instanceof Result);
         $this->assertTrue($import->hasErrors('errors'));

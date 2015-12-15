@@ -239,12 +239,12 @@ class PluginsTest extends BaseTest
         $mockBasePlugin
             ->expects($this->any())
             ->method('getSettings')
-            ->willReturn((Object) array('attributes' => $data[$this->pluginHandle]['settings']));
+            ->willReturn((Object) ['attributes' => $data[$this->pluginHandle]['settings']]);
 
         $mockPluginsService = $this->getMockPluginsService();
         $mockPluginsService->expects($this->any())
             ->method('getPlugins')
-            ->willReturn(array($this->pluginHandle => $mockBasePlugin));
+            ->willReturn([$this->pluginHandle => $mockBasePlugin]);
 
         $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
 
@@ -259,16 +259,16 @@ class PluginsTest extends BaseTest
      */
     public function getPluginsData()
     {
-        return array(
-            $this->pluginHandle => array(
+        return [
+            $this->pluginHandle => [
                 'isInstalled'       => true,
                 'isEnabled'         => true,
-                'settings'          => array(
+                'settings'          => [
                     'pluginName'    => 'Menu',
                     'canDoActions'  => '',
                     'quietErrors'   => '',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

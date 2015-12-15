@@ -41,7 +41,7 @@ class Locales extends Base
         foreach ($localeDefinitions as $locale) {
             if (!in_array($locale, $locales)) {
                 if (!$this->getLocalizationService()->addSiteLocale($locale)) {
-                    $this->addError(Craft::t('Locale {locale} could not be installed', array('locale' => $locale)));
+                    $this->addError(Craft::t('Locale {locale} could not be installed', ['locale' => $locale]));
                 }
             }
         }
@@ -57,12 +57,12 @@ class Locales extends Base
      *
      * @return array
      */
-    public function export(array $data = array())
+    public function export(array $data = [])
     {
         Craft::log(Craft::t('Exporting Locales'));
 
         $locales = $this->getLocalizationService()->getSiteLocales();
-        $localeDefinitions = array();
+        $localeDefinitions = [];
 
         foreach ($locales as $locale) {
             $localeDefinitions[] = $locale->getId();

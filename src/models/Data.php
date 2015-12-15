@@ -18,6 +18,16 @@ use Symfony\Component\Yaml\Yaml;
  * @license   MIT
  *
  * @link      http://www.nerds.company
+ *
+ * @property array $Locales
+ * @property array $assetSources
+ * @property array $fields
+ * @property array $globalSets
+ * @property array $plugins
+ * @property array $sections
+ * @property array $userGroups
+ * @property array $users
+ * @property array $pluginData
  */
 class Data extends Base
 {
@@ -28,17 +38,17 @@ class Data extends Base
      */
     protected function defineAttributes()
     {
-        return array(
-            'locales'           => array(AttributeType::Mixed, 'default' => array()),
-            'assetSources'      => array(AttributeType::Mixed, 'default' => array()),
-            'fields'            => array(AttributeType::Mixed, 'default' => array()),
-            'globalSets'        => array(AttributeType::Mixed, 'default' => array()),
-            'plugins'           => array(AttributeType::Mixed, 'default' => array()),
-            'sections'          => array(AttributeType::Mixed, 'default' => array()),
-            'userGroups'        => array(AttributeType::Mixed, 'default' => array()),
-            'users'             => array(AttributeType::Mixed, 'default' => array()),
-            'pluginData'        => array(AttributeType::Mixed, 'default' => array()),
-        );
+        return [
+            'locales'           => [AttributeType::Mixed, 'default' => []],
+            'assetSources'      => [AttributeType::Mixed, 'default' => []],
+            'fields'            => [AttributeType::Mixed, 'default' => []],
+            'globalSets'        => [AttributeType::Mixed, 'default' => []],
+            'plugins'           => [AttributeType::Mixed, 'default' => []],
+            'sections'          => [AttributeType::Mixed, 'default' => []],
+            'userGroups'        => [AttributeType::Mixed, 'default' => []],
+            'users'             => [AttributeType::Mixed, 'default' => []],
+            'pluginData'        => [AttributeType::Mixed, 'default' => []],
+        ];
     }
 
     /**
@@ -81,7 +91,7 @@ class Data extends Base
         $matches = null;
         preg_match_all('/%\w+%/', $yaml, $matches);
         $original_values = $matches[0];
-        $replace_values = array();
+        $replace_values = [);
         foreach ($original_values as $match) {
             $env_variable = strtoupper(substr($match, 1, -1));
             $env_variable = 'SCHEMATIC_'.$env_variable;
@@ -116,7 +126,7 @@ class Data extends Base
      *
      * @return array
      */
-    public function getAttribute($attribute, $flattenValue = false, $default = array())
+    public function getAttribute($attribute, $flattenValue = false, $default = [))
     {
         $attribute = parent::getAttribute($attribute, $flattenValue);
 

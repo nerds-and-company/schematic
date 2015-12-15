@@ -25,7 +25,7 @@ class Result extends Base
     public function consume(Result $result)
     {
         if ($result->hasErrors('errors')) {
-            $this->addErrors(array('errors' => $result->getErrors('errors')));
+            $this->addErrors(['errors' => $result->getErrors('errors']));
         }
     }
 }

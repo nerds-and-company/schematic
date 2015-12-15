@@ -43,7 +43,7 @@ class UserGroupsTest extends BaseTest
      * @param string[]         $groupPermissions
      * @param array            $expectedResult
      */
-    public function testSuccessfulExport(array $groups, array $groupPermissions, array $expectedResult = array())
+    public function testSuccessfulExport(array $groups, array $groupPermissions, array $expectedResult = [])
     {
         $this->setMockUserGroupsService();
         $this->setMockUserPermissionsService($groupPermissions);
@@ -134,74 +134,74 @@ class UserGroupsTest extends BaseTest
      */
     public function provideValidUserGroups()
     {
-        return array(
-            'emptyArray' => array(
-                'userGroups' => array(),
-                'groupPermissions' => array(),
-                'expectedResult' => array(),
-            ),
-            'single group without permissions' => array(
-                'userGroups' => array(
+        return [
+            'emptyArray' => [
+                'userGroups' => [],
+                'groupPermissions' => [],
+                'expectedResult' => [],
+            ],
+            'single group without permissions' => [
+                'userGroups' => [
                     'group1' => $this->getMockUserGroup(1),
-                ),
-                'groupPermissions' => array(
-                    array(1, array()),
-                ),
-                'expectedResult' => array(
-                    'groupHandle1' => array(
+                ],
+                'groupPermissions' => [
+                    [1, []],
+                ],
+                'expectedResult' => [
+                    'groupHandle1' => [
                         'name' => 'groupName1',
-                        'permissions' => array(),
-                    ),
-                ),
-            ),
-            'multiple groups without permissions' => array(
-                'userGroups' => array(
+                        'permissions' => [],
+                    ],
+                ],
+            ],
+            'multiple groups without permissions' => [
+                'userGroups' => [
                     'group1' => $this->getMockUserGroup(1),
                     'group2' => $this->getMockUserGroup(2),
-                ),
-                'groupPermissions' => array(
-                    array(1, array()),
-                    array(2, array()),
-                ),
-                'expectedResult' => array(
-                    'groupHandle1' => array(
+                ],
+                'groupPermissions' => [
+                    [1, []],
+                    [2, []],
+                ],
+                'expectedResult' => [
+                    'groupHandle1' => [
                         'name' => 'groupName1',
-                        'permissions' => array(),
-                    ),
-                    'groupHandle2' => array(
+                        'permissions' => [],
+                    ],
+                    'groupHandle2' => [
                         'name' => 'groupName2',
-                        'permissions' => array(),
-                    ),
-                ),
-            ),
-            'single group with permissions' => array(
-                'userGroups' => array(
+                        'permissions' => [],
+                    ],
+                ],
+            ],
+            'single group with permissions' => [
+                'userGroups' => [
                     'group1' => $this->getMockUserGroup(1),
-                ),
-                'groupPermissions' => array(
-                    array(1, array(
+                ],
+                'groupPermissions' => [
+                    [1, [
                         'accesssitewhensystemisoff',
                         'performupdates',
                         'editentries:1',
                         'editglobalset:1',
                         'viewassetsource:1',
 
-                    )),
-                ),
-                'expectedResult' => array(
-                    'groupHandle1' => array(
+                    ]],
+                ],
+                'expectedResult' => [
+                    'groupHandle1' => [
                         'name' => 'groupName1',
-                        'permissions' => array(
+                        'permissions' => [
                             'accessSiteWhenSystemIsOff',
                             'editEntries:sectionHandle1',
                             'editGlobalSet:globalSetHandle1',
                             'performUpdates',
                             'viewAssetSource:assetSourceHandle1',
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -209,33 +209,33 @@ class UserGroupsTest extends BaseTest
      */
     public function provideValidUserGroupDefinitions()
     {
-        return array(
-            'emptyArray' => array(
-                'groupDefinitions' => array(),
-            ),
-            'single group without permissions' => array(
-                'groupDefinitions' => array(
-                    'groupHandle1' => array(
+        return [
+            'emptyArray' => [
+                'groupDefinitions' => [],
+            ],
+            'single group without permissions' => [
+                'groupDefinitions' => [
+                    'groupHandle1' => [
                         'name' => 'groupName1',
-                        'permissions' => array(),
-                    ),
-                ),
-            ),
-            'single group with permissions' => array(
-                'groupDefinitions' => array(
-                    'groupHandle1' => array(
+                        'permissions' => [],
+                    ],
+                ],
+            ],
+            'single group with permissions' => [
+                'groupDefinitions' => [
+                    'groupHandle1' => [
                         'name' => 'groupName1',
-                        'permissions' => array(
+                        'permissions' => [
                             'accessSiteWhenSystemIsOff',
                             'performUpdates',
                             'editEntries:sectionHandle1',
                             'editGlobalSet:globalSetHandle1',
                             'viewAssetSource:assetSourceHandle1',
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     //==============================================================================================================
@@ -255,17 +255,17 @@ class UserGroupsTest extends BaseTest
 
         $mockUserGroup->expects($this->any())
             ->method('__get')
-            ->willReturnMap(array(
-                array('id', $groupId),
-                array('handle', 'groupHandle'.$groupId),
-                array('name', 'groupName'.$groupId),
-            ));
+            ->willReturnMap([
+                ['id', $groupId],
+                ['handle', 'groupHandle'.$groupId],
+                ['name', 'groupName'.$groupId],
+            ]);
 
         $mockUserGroup->expects($this->any())
             ->method('getAllErrors')
-            ->willReturn(array(
+            ->willReturn([
                 'ohnoes' => 'horrible error',
-            ));
+            ]);
 
         return $mockUserGroup;
     }
@@ -300,7 +300,7 @@ class UserGroupsTest extends BaseTest
     private function getMockSections($indexBy, $count)
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'sectionHandle';
-        $mockSections = array();
+        $mockSections = [];
         for ($x = 0; $x <= $count; $x++) {
             $mockSection = $this->getMockBuilder(SectionModel::class)
                 ->disableOriginalConstructor()
@@ -308,11 +308,11 @@ class UserGroupsTest extends BaseTest
 
             $mockSection->expects($this->any())
                 ->method('__get')
-                ->willReturnMap(array(
-                    array('handle', 'sectionHandle'.$x),
-                    array('id', $x),
-                    array('name', 'sectionName'.$x),
-                ));
+                ->willReturnMap([
+                    ['handle', 'sectionHandle'.$x],
+                    ['id', $x],
+                    ['name', 'sectionName'.$x],
+                ]);
 
             $mockSections[$keyPrefix.$x] = $mockSection;
         }
@@ -350,7 +350,7 @@ class UserGroupsTest extends BaseTest
     private function getMockAssetSources($indexBy, $count)
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'assetSourceHandle';
-        $mockAssetSources = array();
+        $mockAssetSources = [];
         for ($x = 0; $x <= $count; $x++) {
             $mockAssetSource = $this->getMockBuilder(AssetSourceModel::class)
                 ->disableOriginalConstructor()
@@ -358,11 +358,11 @@ class UserGroupsTest extends BaseTest
 
             $mockAssetSource->expects($this->any())
                 ->method('__get')
-                ->willReturnMap(array(
-                    array('handle', 'assetSourceHandle'.$x),
-                    array('id', $x),
-                    array('name', 'assetSourceName'.$x),
-                ));
+                ->willReturnMap([
+                    ['handle', 'assetSourceHandle'.$x],
+                    ['id', $x],
+                    ['name', 'assetSourceName'.$x],
+                ]);
 
             $mockAssetSources[$keyPrefix.$x] = $mockAssetSource;
         }
@@ -400,7 +400,7 @@ class UserGroupsTest extends BaseTest
     private function getMockGlobalSets($indexBy, $count)
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'globalSetHandle';
-        $mockGlobalSets = array();
+        $mockGlobalSets = [];
         for ($x = 0; $x <= $count; $x++) {
             $mockGlobalSet = $this->getMockBuilder(GlobalSetModel::class)
                 ->disableOriginalConstructor()
@@ -408,11 +408,11 @@ class UserGroupsTest extends BaseTest
 
             $mockGlobalSet->expects($this->any())
                 ->method('__get')
-                ->willReturnMap(array(
-                    array('handle', 'globalSetHandle'.$x),
-                    array('id', $x),
-                    array('name', 'globalSetName'.$x),
-                ));
+                ->willReturnMap([
+                    ['handle', 'globalSetHandle'.$x],
+                    ['id', $x],
+                    ['name', 'globalSetName'.$x],
+                ]);
 
             $mockGlobalSets[$keyPrefix.$x] = $mockGlobalSet;
         }
@@ -453,7 +453,7 @@ class UserGroupsTest extends BaseTest
      */
     private function getMockUserGroups($count)
     {
-        $mockUserGroups = array();
+        $mockUserGroups = [];
         for ($x = 0; $x <= $count; $x++) {
             $mockUserGroups['groupHandle'.$x] = $this->getMockUserGroup($x);
         }
@@ -467,7 +467,7 @@ class UserGroupsTest extends BaseTest
      *
      * @return UserPermissionsService|Mock
      */
-    private function setMockUserPermissionsService(array $permissions = array(), $success = true)
+    private function setMockUserPermissionsService(array $permissions = [], $success = true)
     {
         $mockUserPermissionsService = $this->getMockBuilder(UserPermissionsService::class)
             ->disableOriginalConstructor()
@@ -495,69 +495,69 @@ class UserGroupsTest extends BaseTest
      */
     private function getAllPermissionsExample()
     {
-        return array(
-            'General' => array(
-                'accessSiteWhenSystemIsOff' => array(
-                    'nested' => array(
-                        'accessCpWhenSystemIsOff' => array(),
-                        'performUpdates' => array(),
-                        'accessPlugin-PluginName1' => array(),
-                        'accessPlugin-PluginName2' => array(),
-                    ),
-                ),
-            ),
-            'Users' => array(
-                'editUsers' => array(
-                    'nested' => array(
-                        'registerUsers' => array(),
-                        'assignUserPermissions' => array(),
-                        'administrateUsers' => array(
-                            'nested' => array(
-                                'changeUserEmails' => array(),
-                            ),
-                        ),
-                        'deleteUsers' => array(),
-                    ),
-                ),
-            ),
-            'Section - 1' => array(
-                'editEntries:1' => array(
-                    'nested' => array(
-                        'publishEntries:1' => array(),
-                        'editPeerEntryDrafts:1' => array(
-                            'nested' => array(
-                                'publishPeerEntryDrafts:1' => array(),
-                                'deletePeerEntryDrafts:1' => array(),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'Section - 2' => array(
-                'editEntries:2' => array(
-                    'nested' => array(
-                        'publishEntries:2' => array(),
-                        'editPeerEntryDrafts:2' => array(
-                            'nested' => array(
-                                'publishPeerEntryDrafts:2' => array(),
-                                'deletePeerEntryDrafts:2' => array(),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'GlobalSet - 1' => array(
-                'editGlobalSet:1' => array(),
-            ),
-            'AssetSources - 1' => array(
-                'viewAssetSource:1' => array(
-                    'nested' => array(
-                        'uploadToAssetSource:1' => array(),
-                        'createSubfoldersInAssetSource:1' => array(),
-                        'removeFromAssetSource:1' => array(),
-                    ),
-                ),
-            ),
-        );
+        return [
+            'General' => [
+                'accessSiteWhenSystemIsOff' => [
+                    'nested' => [
+                        'accessCpWhenSystemIsOff' => [],
+                        'performUpdates' => [],
+                        'accessPlugin-PluginName1' => [],
+                        'accessPlugin-PluginName2' => [],
+                    ],
+                ],
+            ],
+            'Users' => [
+                'editUsers' => [
+                    'nested' => [
+                        'registerUsers' => [],
+                        'assignUserPermissions' => [],
+                        'administrateUsers' => [
+                            'nested' => [
+                                'changeUserEmails' => [],
+                            ],
+                        ],
+                        'deleteUsers' => [],
+                    ],
+                ],
+            ],
+            'Section - 1' => [
+                'editEntries:1' => [
+                    'nested' => [
+                        'publishEntries:1' => [],
+                        'editPeerEntryDrafts:1' => [
+                            'nested' => [
+                                'publishPeerEntryDrafts:1' => [],
+                                'deletePeerEntryDrafts:1' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'Section - 2' => [
+                'editEntries:2' => [
+                    'nested' => [
+                        'publishEntries:2' => [],
+                        'editPeerEntryDrafts:2' => [
+                            'nested' => [
+                                'publishPeerEntryDrafts:2' => [],
+                                'deletePeerEntryDrafts:2' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'GlobalSet - 1' => [
+                'editGlobalSet:1' => [],
+            ],
+            'AssetSources - 1' => [
+                'viewAssetSource:1' => [
+                    'nested' => [
+                        'uploadToAssetSource:1' => [],
+                        'createSubfoldersInAssetSource:1' => [],
+                        'removeFromAssetSource:1' => [],
+                    ],
+                ],
+            ],
+        ];
     }
 }

@@ -25,11 +25,11 @@ class GlobalSets extends Base
      *
      * @return array
      */
-    public function export(array $globalSets = array())
+    public function export(array $globalSets = [])
     {
         Craft::log(Craft::t('Exporting Global Sets'));
 
-        $globalDefinitions = array();
+        $globalDefinitions = [];
 
         foreach ($globalSets as $globalSet) {
             $globalDefinitions[$globalSet->handle] = $this->getGlobalDefinition($globalSet);
@@ -47,10 +47,10 @@ class GlobalSets extends Base
      */
     private function getGlobalDefinition(GlobalSetModel $globalSet)
     {
-        return array(
+        return [
             'name' => $globalSet->name,
             'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($globalSet->getFieldLayout()),
-        );
+        ];
     }
 
     /**
@@ -101,10 +101,10 @@ class GlobalSets extends Base
      */
     private function populateGlobalSet(GlobalSetModel $globalSet, array $globalSetDefinition, $globalSetHandle)
     {
-        $globalSet->setAttributes(array(
+        $globalSet->setAttributes([
             'handle' => $globalSetHandle,
             'name' => $globalSetDefinition['name'],
-        ));
+        ]);
 
         $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($globalSetDefinition['fieldLayout']);
         $globalSet->setFieldLayout($fieldLayout);

@@ -75,7 +75,7 @@ class SchematicTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->exactly(1))->method('getAllGroups')->willReturn(array());
+        $mock->expects($this->exactly(1))->method('getAllGroups')->willReturn([]);
 
         return $mock;
     }
@@ -106,7 +106,7 @@ class SchematicTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->exactly(1))->method('getAllSets')->willReturn(array());
+        $mock->expects($this->exactly(1))->method('getAllSets')->willReturn([]);
 
         return $mock;
     }
@@ -120,7 +120,7 @@ class SchematicTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->exactly(1))->method('getAllSections')->willReturn(array());
+        $mock->expects($this->exactly(1))->method('getAllSections')->willReturn([]);
 
         return $mock;
     }
@@ -177,11 +177,11 @@ class SchematicTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->any())->method('call')->willReturn(array(
-            'TestPlugin' => array(
+        $mock->expects($this->any())->method('call')->willReturn([
+            'TestPlugin' => [
                 'test_service' => $this->getMockAbstractService(),
-            ),
-        ));
+            ],
+        ]);
 
         return $mock;
     }
@@ -222,7 +222,7 @@ class SchematicTest extends BaseTest
      */
     private function getMockAllGroupsMethodService($service)
     {
-        return $this->getDynamicallyMockedService($service, 'getAllGroups', $this->exactly(1), array());
+        return $this->getDynamicallyMockedService($service, 'getAllGroups', $this->exactly(1), []);
     }
 
     /**

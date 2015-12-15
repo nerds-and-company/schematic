@@ -29,7 +29,7 @@ class ExportCommand extends Base
     {
         Craft::app()->schematic->exportToYaml($file);
 
-        Craft::log(Craft::t('Exported schema to {file}', array('file' => $file)));
+        Craft::log(Craft::t('Exported schema to {file}', ['file' => $file]));
 
         return 0;
     }

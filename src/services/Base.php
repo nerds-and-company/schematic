@@ -39,7 +39,7 @@ abstract class Base extends BaseApplication
      *
      * @return mixed
      */
-    abstract public function export(array $data = array());
+    abstract public function export(array $data = []);
 
     /**
      * Constructor to setup result model.
@@ -123,7 +123,7 @@ abstract class Base extends BaseApplication
      */
     protected function addErrors(array $messages, $attribute = 'errors')
     {
-        $this->resultModel->addErrors(array($attribute => $messages));
+        $this->resultModel->addErrors([$attribute => $messages]);
     }
 
     /**

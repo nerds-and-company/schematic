@@ -29,11 +29,11 @@ class Sections extends Base
      *
      * @return array
      */
-    public function export(array $sections = array(), array $allowedEntryTypeIds = null)
+    public function export(array $sections = [], array $allowedEntryTypeIds = null)
     {
         Craft::log(Craft::t('Exporting Sections'));
 
-        $sectionDefinitions = array();
+        $sectionDefinitions = [];
 
         foreach ($sections as $section) {
             $sectionDefinitions[$section->handle] = $this->getSectionDefinition($section, $allowedEntryTypeIds);
@@ -52,7 +52,7 @@ class Sections extends Base
      */
     private function getSectionDefinition(SectionModel $section, $allowedEntryTypeIds)
     {
-        return array(
+        return [
             'name' => $section->name,
             'type' => $section->type,
             'hasUrls' => $section->hasUrls,
@@ -61,7 +61,7 @@ class Sections extends Base
             'enableVersioning' => $section->enableVersioning,
             'locales' => $this->getLocaleDefinitions($section->getLocales()),
             'entryTypes' => $this->getEntryTypeDefinitions($section->getEntryTypes(), $allowedEntryTypeIds),
-        );
+        ];
     }
 
     /**
@@ -73,7 +73,7 @@ class Sections extends Base
      */
     private function getLocaleDefinitions(array $locales)
     {
-        $localeDefinitions = array();
+        $localeDefinitions = [];
 
         foreach ($locales as $locale) {
             $localeDefinitions[$locale->locale] = $this->getLocaleDefinition($locale);
@@ -91,11 +91,11 @@ class Sections extends Base
      */
     private function getLocaleDefinition(SectionLocaleModel $locale)
     {
-        return array(
+        return [
             'enabledByDefault' => $locale->enabledByDefault,
             'urlFormat' => $locale->urlFormat,
             'nestedUrlFormat' => $locale->nestedUrlFormat,
-        );
+        ];
     }
 
     /**
@@ -108,7 +108,7 @@ class Sections extends Base
      */
     private function getEntryTypeDefinitions(array $entryTypes, $allowedEntryTypeIds)
     {
-        $entryTypeDefinitions = array();
+        $entryTypeDefinitions = [];
 
         foreach ($entryTypes as $entryType) {
             if ($allowedEntryTypeIds === null || in_array($entryType->id, $allowedEntryTypeIds)) {
@@ -128,13 +128,13 @@ class Sections extends Base
      */
     private function getEntryTypeDefinition(EntryTypeModel $entryType)
     {
-        return array(
+        return [
             'name' => $entryType->name,
             'hasTitleField' => $entryType->hasTitleField,
             'titleLabel' => $entryType->titleLabel,
             'titleFormat' => $entryType->titleFormat,
             'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($entryType->getFieldLayout()),
-        );
+        ];
     }
 
     /**
@@ -231,7 +231,7 @@ class Sections extends Base
             $sectionRecord->enableVersioning = $section->enableVersioning;
 
             if (!$sectionRecord->save()) {
-                $section->addErrors(array('errors' => $sectionRecord->getErrors()));
+                $section->addErrors(['errors' => $sectionRecord->getErrors(]));
 
                 return false;
             };
@@ -252,7 +252,7 @@ class Sections extends Base
      */
     private function populateSection(SectionModel $section, array $sectionDefinition, $sectionHandle)
     {
-        $section->setAttributes(array(
+        $section->setAttributes([
             'handle' => $sectionHandle,
             'name' => $sectionDefinition['name'],
             'type' => $sectionDefinition['type'],
@@ -260,7 +260,7 @@ class Sections extends Base
             'template' => $sectionDefinition['template'],
             'maxLevels' => $sectionDefinition['maxLevels'],
             'enableVersioning' => $sectionDefinition['enableVersioning'],
-        ));
+        ]);
 
         $this->populateSectionLocales($section, $sectionDefinition['locales']);
     }
@@ -278,18 +278,18 @@ class Sections extends Base
         foreach ($localeDefinitions as $localeId => $localeDef) {
             $locale = array_key_exists($localeId, $locales) ? $locales[$localeId] : new SectionLocaleModel();
 
-            $locale->setAttributes(array(
+            $locale->setAttributes([
                 'locale' => $localeId,
                 'enabledByDefault' => $localeDef['enabledByDefault'],
                 'urlFormat' => $localeDef['urlFormat'],
                 'nestedUrlFormat' => $localeDef['nestedUrlFormat'],
-            ));
+            ]);
 
             // Todo: Is this a hack? I don't see another way.
             // Todo: Might need a sorting order as well? It's NULL at the moment.
-            Craft::app()->db->createCommand()->insertOrUpdate('locales', array(
+            Craft::app()->db->createCommand()->insertOrUpdate('locales', [
                 'locale' => $locale->locale,
-            ), array());
+            ], []);
 
             $locales[$localeId] = $locale;
         }
@@ -307,14 +307,14 @@ class Sections extends Base
      */
     private function populateEntryType(EntryTypeModel $entryType, array $entryTypeDefinition, $entryTypeHandle, $sectionId)
     {
-        $entryType->setAttributes(array(
+        $entryType->setAttributes([
             'handle' => $entryTypeHandle,
             'sectionId' => $sectionId,
             'name' => $entryTypeDefinition['name'],
             'hasTitleField' => $entryTypeDefinition['hasTitleField'],
             'titleLabel' => $entryTypeDefinition['titleLabel'],
             'titleFormat' => $entryTypeDefinition['titleFormat'],
-        ));
+        ]);
 
         $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
         $entryType->setFieldLayout($fieldLayout);

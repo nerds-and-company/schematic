@@ -59,29 +59,29 @@ class FieldFactoryTest extends BaseTest
      */
     public function provideFieldTypes()
     {
-        return array(
+        return [
             // Base fields
-            'Assets' => array('Assets', Field::class),
-            'Categories' => array('Category', Field::class),
-            'Checkboxes' => array('Checkboxes', Field::class),
-            'Color' => array('Color', Field::class),
-            'Date' => array('Date', Field::class),
-            'Dropdown' => array('Dropdown', Field::class),
-            'Entries' => array('Entries', Field::class),
-            'Lightswitch' => array('Lightswitch', Field::class),
-            'Matrix' => array('Matrix', MatrixField::class),
-            'MultiSelect' => array('Multiselect', Field::class),
-            'Number' => array('Number', Field::class),
-            'PlainText' => array('PlainText', Field::class),
-            'PositionSelect' => array('PositionSelect', PositionSelectField::class),
-            'RadioButtons' => array('RadioButtons', Field::class),
-            'RichText' => array('RichText', Field::class),
-            'Table' => array('Table', Field::class),
-            'Tags' => array('Tags', Field::class),
-            'Users' => array('Users', Field::class),
+            'Assets' => ['Assets', Field::class],
+            'Categories' => ['Category', Field::class],
+            'Checkboxes' => ['Checkboxes', Field::class],
+            'Color' => ['Color', Field::class],
+            'Date' => ['Date', Field::class],
+            'Dropdown' => ['Dropdown', Field::class],
+            'Entries' => ['Entries', Field::class],
+            'Lightswitch' => ['Lightswitch', Field::class],
+            'Matrix' => ['Matrix', MatrixField::class],
+            'MultiSelect' => ['Multiselect', Field::class],
+            'Number' => ['Number', Field::class],
+            'PlainText' => ['PlainText', Field::class],
+            'PositionSelect' => ['PositionSelect', PositionSelectField::class],
+            'RadioButtons' => ['RadioButtons', Field::class],
+            'RichText' => ['RichText', Field::class],
+            'Table' => ['Table', Field::class],
+            'Tags' => ['Tags', Field::class],
+            'Users' => ['Users', Field::class],
             // Plugin fields
-            'SuperTable' => array('SuperTable', SuperTableField::class),
-        );
+            'SuperTable' => ['SuperTable', SuperTableField::class],
+        ];
     }
 
     /**
@@ -89,35 +89,35 @@ class FieldFactoryTest extends BaseTest
      */
     public function provideHookedFieldTypes()
     {
-        return array(
-            'color mapped to matrix field model' => array(
+        return [
+            'color mapped to matrix field model' => [
                 'fieldType' => 'Color',
                 'expectedClassName' => MatrixField::class,
-                'hookCallResults' => array(
-                    'plugin1' => array(
+                'hookCallResults' => [
+                    'plugin1' => [
                         'Color' => MatrixField::class,
-                    ),
-                ),
-            ),
-            'color mapped to wrong class type' => array(
+                    ],
+                ],
+            ],
+            'color mapped to wrong class type' => [
                 'fieldType' => 'Color',
                 'expectedClassName' => Field::class,
-                'hookCallResults' => array(
-                    'plugin1' => array(
+                'hookCallResults' => [
+                    'plugin1' => [
                         'Color' => ColorFieldType::class,
-                    ),
-                ),
-            ),
-            'something mapped to matrix field model' => array(
+                    ],
+                ],
+            ],
+            'something mapped to matrix field model' => [
                 'fieldType' => 'PlainText',
                 'expectedClassName' => Field::class,
-                'hookCallResults' => array(
-                    'plugin1' => array(
+                'hookCallResults' => [
+                    'plugin1' => [
                         'Color' => MatrixField::class,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

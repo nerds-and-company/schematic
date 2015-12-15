@@ -107,6 +107,6 @@ class DataTest extends BaseTest
     public function testGetAttribute()
     {
         $dataModel = $this->generateDataModel();
-        $this->assertEquals(array('test_user'), $dataModel->getAttribute('users'));
+        $this->assertEquals(['test_user'], $dataModel->getAttribute('users'));
     }
 }

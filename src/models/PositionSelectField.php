@@ -28,7 +28,7 @@ class PositionSelectField extends Field
     {
         parent::populate($fieldDefinition, $field, $fieldHandle, $group);
 
-        $options = array();
+        $options = [];
         $settings = $fieldDefinition['settings'];
         foreach ($settings['options'] as $option) {
             $options[$option] = $option;

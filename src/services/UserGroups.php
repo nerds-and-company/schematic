@@ -19,19 +19,19 @@ use Craft\UserGroupModel;
 class UserGroups extends Base
 {
     /** @var SectionModel[] */
-    private $sectionsByHandle = array();
+    private $sectionsByHandle = [];
     /** @var SectionModel[] */
-    private $sectionsById = array();
+    private $sectionsById = [];
     /** @var AssetSourceModel[] */
-    private $assetSourceByHandle = array();
+    private $assetSourceByHandle = [];
     /** @var AssetSourceModel[] */
-    private $assetSourceById = array();
+    private $assetSourceById = [];
     /** @var GlobalSetModel[] */
-    private $globalSetsByHandle = array();
+    private $globalSetsByHandle = [];
     /** @var GlobalSetModel[] */
-    private $globalSetsById = array();
+    private $globalSetsById = [];
     /** @var string[] */
-    private $mappedPermissions = array();
+    private $mappedPermissions = [];
 
     //==============================================================================================================
     //===============================================  SERVICES  ===================================================
@@ -88,11 +88,11 @@ class UserGroups extends Base
      *
      * @return array
      */
-    public function export(array $groups = array())
+    public function export(array $groups = [])
     {
         Craft::log(Craft::t('Exporting User Groups'));
 
-        $groupDefinitions = array();
+        $groupDefinitions = [];
 
         $this->sectionsById = $this->getSectionsService()->getAllSections('id');
         $this->assetSourceById = $this->getAssetSourcesService()->getAllSources('id');
@@ -115,10 +115,10 @@ class UserGroups extends Base
      */
     private function getGroupDefinition(UserGroupModel $group)
     {
-        return array(
+        return [
             'name' => $group->name,
             'permissions' => $this->getGroupPermissionDefinitions($group),
-        );
+        ];
     }
 
     /**
@@ -130,7 +130,7 @@ class UserGroups extends Base
      */
     private function getGroupPermissionDefinitions($group)
     {
-        $permissionDefinitions = array();
+        $permissionDefinitions = [];
         $groupPermissions = $this->getUserPermissionsService()->getPermissionsByGroupId($group->id);
 
         foreach ($groupPermissions as $permission) {
@@ -152,7 +152,7 @@ class UserGroups extends Base
      */
     private function getAllMappedPermissions()
     {
-        $mappedPermissions = array();
+        $mappedPermissions = [];
         foreach ($this->getUserPermissionsService()->getAllPermissions() as $permissions) {
             $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
         }
@@ -167,7 +167,7 @@ class UserGroups extends Base
      */
     private function getMappedPermissions(array $permissions)
     {
-        $mappedPermissions = array();
+        $mappedPermissions = [];
         foreach ($permissions as $permission => $options) {
             $mappedPermissions[strtolower($permission)] = $permission;
             if (array_key_exists('nested', $options)) {
@@ -258,7 +258,7 @@ class UserGroups extends Base
      */
     private function getPermissions(array $permissionDefinitions)
     {
-        $permissions = array();
+        $permissions = [];
         foreach ($permissionDefinitions as $permissionDefinition) {
             $permissions[] = $this->getPermission($permissionDefinition);
         }

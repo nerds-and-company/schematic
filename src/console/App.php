@@ -66,7 +66,7 @@ class App extends Base
         $this->getComponent('log');
 
         // So we can try to translate Yii framework strings
-        $this->coreMessages->attachEventHandler('onMissingTranslation', array('Craft\LocalizationHelper', 'findMissingTranslation'));
+        $this->coreMessages->attachEventHandler('onMissingTranslation', ['Craft\LocalizationHelper', 'findMissingTranslation']);
 
         // Set our own custom runtime path.
         $this->setRuntimePath(Craft::app()->path->getRuntimePath());
@@ -96,7 +96,7 @@ class App extends Base
         Craft::app()->validateDbConfigFile();
 
         // Add commands
-        Craft::app()->commandRunner->commands = array();
+        Craft::app()->commandRunner->commands = [];
         Craft::app()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
     }
 
@@ -294,32 +294,32 @@ class App extends Base
      */
     private function _setSchematicComponents()
     {
-        $components = array(
-            'schematic_locales' => array(
+        $components = [
+            'schematic_locales' => [
                 'class' => Service\Locales::class,
-            ),
-            'schematic_assetSources' => array(
+            ],
+            'schematic_assetSources' => [
                 'class' => Service\AssetSources::class,
-            ),
-            'schematic_fields' => array(
+            ],
+            'schematic_fields' => [
                 'class' => Service\Fields::class,
-            ),
-            'schematic_globalSets' => array(
+            ],
+            'schematic_globalSets' => [
                 'class' => Service\GlobalSets::class,
-            ),
-            'schematic_plugins' => array(
+            ],
+            'schematic_plugins' => [
                 'class' => Service\Plugins::class,
-            ),
-            'schematic_sections' => array(
+            ],
+            'schematic_sections' => [
                 'class' => Service\Sections::class,
-            ),
-            'schematic_userGroups' => array(
+            ],
+            'schematic_userGroups' => [
                 'class' => Service\UserGroups::class,
-            ),
-            'schematic_users' => array(
+            ],
+            'schematic_users' => [
                 'class' => Service\Users::class,
-            ),
-        );
+            ],
+        ];
 
         $this->setComponents($components);
     }
@@ -329,14 +329,14 @@ class App extends Base
      */
     private function _installCraft()
     {
-        $options = array(
+        $options = [
             'username'  => getenv('CRAFT_USERNAME'),
             'email'     => getenv('CRAFT_EMAIL'),
             'password'  => getenv('CRAFT_PASSWORD'),
             'siteName'  => getenv('CRAFT_SITENAME'),
             'siteUrl'   => getenv('CRAFT_SITEURL'),
             'locale'    => getenv('CRAFT_LOCALE'),
-        );
+        ];
 
         Craft::app()->install->run($options);
     }

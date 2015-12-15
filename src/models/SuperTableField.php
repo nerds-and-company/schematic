@@ -37,21 +37,21 @@ class SuperTableField extends MatrixField
     protected function getBlockTypeDefinitions(FieldModel $field)
     {
         $fieldFactory = $this->getFieldFactory();
-        $blockTypeDefinitions = array();
+        $blockTypeDefinitions = [];
 
         /** @var SuperTable_BlockTypeModel[] $blockTypes */
         $blockTypes = $this->getSuperTableService()->getBlockTypesByFieldId($field->id);
         foreach ($blockTypes as $blockType) {
-            $blockTypeFieldDefinitions = array();
+            $blockTypeFieldDefinitions = [];
 
             foreach ($blockType->getFields() as $blockTypeField) {
                 $schematicFieldModel = $fieldFactory->build($blockTypeField->type);
                 $blockTypeFieldDefinitions[$blockTypeField->handle] = $schematicFieldModel->getDefinition($blockTypeField, false);
             }
 
-            $blockTypeDefinitions[] = array(
+            $blockTypeDefinitions[] = [
                 'fields' => $blockTypeFieldDefinitions,
-            );
+            ];
         }
 
         return $blockTypeDefinitions;

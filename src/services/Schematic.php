@@ -33,7 +33,7 @@ class Schematic extends BaseApplication
      *
      * @return array
      */
-    private function getPluginData(array $data, $handle, array $default = array())
+    private function getPluginData(array $data, $handle, array $default = [])
     {
         return (array_key_exists($handle, $data) && !is_null($data[$handle])) ? $data[$handle] : $default;
     }
@@ -151,7 +151,7 @@ class Schematic extends BaseApplication
         $globals = Craft::app()->globals->getAllSets();
         $userGroups = Craft::app()->userGroups->getAllGroups();
 
-        $export = array(
+        $export = [
             'locales' => Craft::app()->schematic_locales->export(),
             'assetSources' => Craft::app()->schematic_assetSources->export(),
             'fields' => Craft::app()->schematic_fields->export($fieldGroups),
@@ -160,9 +160,9 @@ class Schematic extends BaseApplication
             'globalSets' => Craft::app()->schematic_globalSets->export($globals),
             'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
             'users' => Craft::app()->schematic_users->export(),
-        );
+        ];
 
-        $export['pluginData'] = array();
+        $export['pluginData'] = [];
         $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doExport($services, $export['pluginData']);
 

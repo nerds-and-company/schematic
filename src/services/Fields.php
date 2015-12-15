@@ -26,12 +26,12 @@ class Fields extends Base
     /**
      * @var FieldModel[]
      */
-    private $fields = array();
+    private $fields = [];
 
     /**
      * @var FieldGroupModel[]
      */
-    private $groups = array();
+    private $groups = [];
 
     /**
      * @var FieldFactory
@@ -81,14 +81,14 @@ class Fields extends Base
      *
      * @return array
      */
-    public function export(array $groups = array())
+    public function export(array $groups = [])
     {
         Craft::log(Craft::t('Exporting Fields'));
 
-        $groupDefinitions = array();
+        $groupDefinitions = [];
 
         foreach ($groups as $group) {
-            $fieldDefinitions = array();
+            $fieldDefinitions = [];
 
             foreach ($group->getFields() as $field) {
                 $fieldDefinitions[$field->handle] = $this->getFieldDefinition($field);
@@ -327,16 +327,16 @@ class Fields extends Base
     public function getFieldLayoutDefinition(FieldLayoutModel $fieldLayout)
     {
         if ($fieldLayout->getTabs()) {
-            $tabDefinitions = array();
+            $tabDefinitions = [];
 
             foreach ($fieldLayout->getTabs() as $tab) {
                 $tabDefinitions[$tab->name] = $this->getFieldLayoutFieldsDefinition($tab->getFields());
             }
 
-            return array('tabs' => $tabDefinitions);
+            return ['tabs' => $tabDefinitions];
         }
 
-        return array('fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields()));
+        return ['fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields(]));
     }
 
     /**
@@ -348,7 +348,7 @@ class Fields extends Base
      */
     private function getFieldLayoutFieldsDefinition(array $fields)
     {
-        $fieldDefinitions = array();
+        $fieldDefinitions = [];
 
         foreach ($fields as $field) {
             $fieldDefinitions[$field->getField()->handle] = $field->required;
@@ -366,8 +366,8 @@ class Fields extends Base
      */
     public function getFieldLayout(array $fieldLayoutDef)
     {
-        $layoutFields = array();
-        $requiredFields = array();
+        $layoutFields = [];
+        $requiredFields = [];
 
         if (array_key_exists('tabs', $fieldLayoutDef)) {
             foreach ($fieldLayoutDef['tabs'] as $tabName => $tabDef) {
@@ -396,8 +396,8 @@ class Fields extends Base
      */
     private function getPrepareFieldLayout(array $fieldLayoutDef)
     {
-        $layoutFields = array();
-        $requiredFields = array();
+        $layoutFields = [];
+        $requiredFields = [];
 
         foreach ($fieldLayoutDef as $fieldHandle => $required) {
             $field = Craft::app()->fields->getFieldByHandle($fieldHandle);
@@ -411,9 +411,9 @@ class Fields extends Base
             }
         }
 
-        return array(
+        return [
             'fields' => $layoutFields,
             'required' => $requiredFields,
-        );
+        ];
     }
 }

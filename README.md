@@ -51,9 +51,9 @@ You will need to set the environment variable `SCHEMATIC_KEY_VALUE`. The value o
 ```php
 public function registerMigrationService()
 {
-    return array(
+    return [
 		'amnav' => craft()->schematic_amNav
-	);
+	];
 }
 ```
 
@@ -62,9 +62,9 @@ public function registerMigrationService()
 ```php
 public function registerSchematicFieldModels()
 {
-    return array(
+    return [
 		'fieldType' => Plugin_CustomSchematicFieldModel
-	);
+	];
 }
 ```
 

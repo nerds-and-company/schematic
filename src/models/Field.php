@@ -59,14 +59,14 @@ class Field
      */
     public function getDefinition(FieldModel $field, $includeContext)
     {
-        $definition = array(
+        $definition = [
             'name' => $field->name,
             'required' => $field->required,
             'instructions' => $field->instructions,
             'translatable' => $field->translatable,
             'type' => $field->type,
             'settings' => $field->settings,
-        );
+        ];
 
         if ($includeContext) {
             $definition['context'] = $field->context;
@@ -119,7 +119,7 @@ class Field
     {
         $mappedSources = $sources;
         if (is_array($sources)) {
-            $mappedSources = array();
+            $mappedSources = [];
             foreach ($sources as $source) {
                 $mappedSources[] = $this->getSource($source, $indexFrom, $indexTo);
             }

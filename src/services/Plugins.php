@@ -50,7 +50,7 @@ class Plugins extends Base
      */
     protected function installPluginByHandle($handle)
     {
-        Craft::log(Craft::t('Installing plugin {handle}', array('handle' => $handle)));
+        Craft::log(Craft::t('Installing plugin {handle}', ['handle' => $handle]));
 
         try {
             $this->getPluginService()->installPlugin($handle);
@@ -80,7 +80,7 @@ class Plugins extends Base
     {
         $plugin = $this->getPluginService()->getPlugin($handle, false);
         if (!$plugin) {
-            $this->addError(Craft::t("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", array('handle' => $handle)));
+            $this->addError(Craft::t("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", ['handle' => $handle]));
         }
 
         return $plugin;
@@ -125,11 +125,11 @@ class Plugins extends Base
      */
     private function getPluginDefinition(BasePlugin $plugin)
     {
-        return array(
+        return [
             'isInstalled'       => $plugin->isInstalled,
             'isEnabled'         => $plugin->isEnabled,
             'settings'          => $plugin->getSettings()->attributes,
-        );
+        ];
     }
 
     /**
@@ -143,7 +143,7 @@ class Plugins extends Base
         Craft::log(Craft::t('Importing Plugins'));
 
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            Craft::log(Craft::t('Applying definitions for {handle}', array('handle' => $handle)));
+            Craft::log(Craft::t('Applying definitions for {handle}', ['handle' => $handle]));
 
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
@@ -159,7 +159,7 @@ class Plugins extends Base
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
-                        Craft::log(Craft::t('Saving plugin settings for {handle}', array('handle' => $handle)));
+                        Craft::log(Craft::t('Saving plugin settings for {handle}', ['handle' => $handle]));
 
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
@@ -177,12 +177,12 @@ class Plugins extends Base
      *
      * @return array
      */
-    public function export(array $data = array())
+    public function export(array $data = [])
     {
         Craft::log(Craft::t('Exporting Plugins'));
 
         $plugins = $this->getPluginService()->getPlugins(false);
-        $pluginDefinitions = array();
+        $pluginDefinitions = [];
 
         foreach ($plugins as $plugin) {
             $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));

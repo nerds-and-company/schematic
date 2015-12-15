@@ -26,7 +26,7 @@ class Users extends Base
      *
      * @return array
      */
-    public function export(array $users = array())
+    public function export(array $users = [])
     {
         Craft::log(Craft::t('Exporting Users'));
 
@@ -42,9 +42,9 @@ class Users extends Base
      */
     private function getUsersDefinition(UserModel $user)
     {
-        return array(
+        return [
             'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($user->getFieldLayout()),
-        );
+        ];
     }
 
     /**
@@ -65,7 +65,7 @@ class Users extends Base
         if (isset($user_settings['fieldLayout'])) {
             $fieldLayoutDefinition = (array) $user_settings['fieldLayout'];
         } else {
-            $fieldLayoutDefinition = array();
+            $fieldLayoutDefinition = [];
         }
 
         $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($fieldLayoutDefinition);

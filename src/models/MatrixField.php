@@ -59,21 +59,21 @@ class MatrixField extends Field
     protected function getBlockTypeDefinitions(FieldModel $field)
     {
         $fieldFactory = $this->getFieldFactory();
-        $blockTypeDefinitions = array();
+        $blockTypeDefinitions = [];
 
         $blockTypes = $this->getMatrixService()->getBlockTypesByFieldId($field->id);
         foreach ($blockTypes as $blockType) {
-            $blockTypeFieldDefinitions = array();
+            $blockTypeFieldDefinitions = [];
 
             foreach ($blockType->getFields() as $blockTypeField) {
                 $schematicFieldModel = $fieldFactory->build($blockTypeField->type);
                 $blockTypeFieldDefinitions[$blockTypeField->handle] = $schematicFieldModel->getDefinition($blockTypeField, false);
             }
 
-            $blockTypeDefinitions[$blockType->handle] = array(
+            $blockTypeDefinitions[$blockType->handle] = [
                 'name' => $blockType->name,
                 'fields' => $blockTypeFieldDefinitions,
-            );
+            ];
         }
 
         return $blockTypeDefinitions;
@@ -139,12 +139,12 @@ class MatrixField extends Field
     {
         $fieldFactory = $this->getFieldFactory();
 
-        $blockTypeFields = array();
+        $blockTypeFields = [];
         foreach ($blockType->getFields() as $blockTypeField) {
             $blockTypeFields[$blockTypeField->handle] = $blockTypeField;
         }
 
-        $newBlockTypeFields = array();
+        $newBlockTypeFields = [];
 
         foreach ($blockTypeDef['fields'] as $blockTypeFieldHandle => $blockTypeFieldDef) {
             $blockTypeField = array_key_exists($blockTypeFieldHandle, $blockTypeFields)

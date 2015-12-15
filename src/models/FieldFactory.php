@@ -33,7 +33,7 @@ class FieldFactory
     public function build($fieldType)
     {
         $fieldModel = new Field();
-        $classNames = array();
+        $classNames = [];
         $customFieldMappings = $this->getPluginsService()->call('registerSchematicFieldModels');
 
         foreach ($customFieldMappings as $mappings) {

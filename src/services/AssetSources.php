@@ -34,7 +34,7 @@ class AssetSources extends Base
      */
     public function getSourceTypeById($sourceTypeId)
     {
-        return AssetSourceRecord::model()->findByAttributes(array('id' => $sourceTypeId));
+        return AssetSourceRecord::model()->findByAttributes(['id' => $sourceTypeId]);
     }
 
     /**
@@ -44,7 +44,7 @@ class AssetSources extends Base
      */
     public function getSourceTypeByHandle($sourceTypeHandle)
     {
-        return AssetSourceRecord::model()->findByAttributes(array('handle' => $sourceTypeHandle));
+        return AssetSourceRecord::model()->findByAttributes(['handle' => $sourceTypeHandle]);
     }
 
     /**
@@ -80,16 +80,16 @@ class AssetSources extends Base
      */
     private function populateAssetSource($assetHandle, array $assetSourceDefinition)
     {
-        $assetSource = AssetSourceRecord::model()->findByAttributes(array('handle' => $assetHandle));
+        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
         $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
 
-        $assetSource->setAttributes(array(
+        $assetSource->setAttributes([
             'handle'       => $assetHandle,
             'type'         => $assetSourceDefinition['type'],
             'name'         => $assetSourceDefinition['name'],
             'sortOrder'    => $assetSourceDefinition['sortOrder'],
             'settings'     => $assetSourceDefinition['settings'],
-        ));
+        ]);
 
         return $assetSource;
     }
@@ -101,13 +101,13 @@ class AssetSources extends Base
      *
      * @return array
      */
-    public function export(array $data = array())
+    public function export(array $data = [])
     {
         Craft::log(Craft::t('Exporting Asset Sources'));
 
         $assetSources = $this->getAssetSourcesService()->getAllSources();
 
-        $assetSourceDefinitions = array();
+        $assetSourceDefinitions = [];
         foreach ($assetSources as $assetSource) {
             $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
         }
@@ -122,11 +122,11 @@ class AssetSources extends Base
      */
     private function getAssetSourceDefinition(AssetSourceModel $assetSource)
     {
-        return array(
+        return [
             'type' => $assetSource->type,
             'name' => $assetSource->name,
             'sortOrder' => $assetSource->sortOrder,
             'settings' => $assetSource->settings,
-        );
+        ];
     }
 }

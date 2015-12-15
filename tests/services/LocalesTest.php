@@ -46,8 +46,8 @@ class LocalesTest extends BaseTest
      * @return Mock
      */
     protected function getMockLocalizationService(
-        $getSiteLocaleIdsResponse = array(),
-        $getSiteLocalesResponse = array(),
+        $getSiteLocaleIdsResponse = [],
+        $getSiteLocalesResponse = [],
         $addSiteLocaleResponse = true
     ) {
         $mock = $this->getMockBuilder(LocalizationService::class)->getMock();
@@ -102,7 +102,7 @@ class LocalesTest extends BaseTest
      */
     public function testImportWithFailedInstalledLocales()
     {
-        $mockLocalizationService = $this->getMockLocalizationService(array(), array(), false);
+        $mockLocalizationService = $this->getMockLocalizationService([], [], false);
         $this->setComponent(Craft::app(), 'i18n', $mockLocalizationService);
 
         $data = $this->getLocaleData();
@@ -122,7 +122,7 @@ class LocalesTest extends BaseTest
     {
         $data = $this->getLocaleData();
 
-        $locales = array();
+        $locales = [];
         foreach ($data as $id) {
             $locales[] = new LocaleModel($id);
         }
@@ -142,6 +142,6 @@ class LocalesTest extends BaseTest
      */
     public function getLocaleData()
     {
-        return array('nl', 'en', 'de');
+        return ['nl', 'en', 'de'];
     }
 }
