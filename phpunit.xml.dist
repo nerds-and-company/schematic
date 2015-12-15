@@ -10,7 +10,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Craft Plugin Test Suite">
-            <directory>tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -20,7 +20,7 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-text" target="build/coverage.txt"/>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-text" target="./build/coverage.txt"/>
+        <log type="coverage-clover" target="./build/logs/clover.xml"/>
     </logging>
 </phpunit>
