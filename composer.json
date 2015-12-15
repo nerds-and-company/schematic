@@ -49,10 +49,5 @@
         "psr-4": {
             "NerdsAndCompany\\Schematic\\": "src/"
         }
-    },
-    "autoload-dev" : {
-        "psr-4": {
-            "NerdsAndCompany\\Schematic\\": "tests/"
-        }
     }
 }
