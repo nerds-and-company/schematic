@@ -13,6 +13,7 @@ coding_style:
 build:
     environment:
         php: '5.6.13'
+        postgres: false
         variables:
             REDIS_URL: redis://localhost:6379
     project_setup:
@@ -24,7 +25,6 @@ build:
             - mkdir craft/config
             - echo "<?php return ['user' => 'test'];" > craft/config/db.php
             - mkdir craft/storage
-            - composer install
             - cd craft/app
             - composer require mockery/mockery
             - cd ../..

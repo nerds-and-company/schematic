@@ -1,6 +1,6 @@
 <?php
 
-$rootPath = getenv('SCRUTINIZER') ? __DIR__.'/../' : __DIR__.'/../../../../';
+$rootPath = getenv('SCRUTINIZER') ? __DIR__.'/../../' : __DIR__.'/../../../../';
 
 // Require Craft unit test bootstrap
 require_once $rootPath.'/craft/app/tests/bootstrap.php';
