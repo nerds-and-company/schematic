@@ -13,7 +13,7 @@ coding_style:
 build:
     environment:
         php: '5.6.13'
-        postgres: false
+        postgresql: false
         variables:
             REDIS_URL: redis://localhost:6379
     project_setup:
