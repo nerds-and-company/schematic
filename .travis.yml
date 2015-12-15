@@ -20,9 +20,6 @@ matrix:
     - php: 7.0
     - php: hhvm
 
-env:
-  - IS_TRAVIS=true
-
  # execute any number of scripts before the test run, custom env's are available as variables
 install:
   - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
