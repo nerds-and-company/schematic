@@ -2,55 +2,5 @@ checks:
     php:
         code_rating: true
         duplication: true
-coding_style:
-    php:
-        indentation:
-            general:
-                use_tabs: false
-        spaces:
-            around_operators:
-                concatenation: false
-build:
-    environment:
-        php: '5.6.13'
-        postgresql: false
-        variables:
-            REDIS_URL: redis://localhost:6379
-    project_setup:
-        before:
-            - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
-            - unzip craft.zip
-            - rm craft.zip
-            - mv Craft-Release-master craft
-            - mkdir craft/config
-            - echo "<?php return ['user' => 'test'];" > craft/config/db.php
-            - mkdir craft/storage
-            - cd craft/app
-            - composer require mockery/mockery
-            - cd ../..
-    tests:
-        override:
-            -
-                command: 'phpunit'
-                coverage:
-                    file: 'build/logs/clover.xml'
-                    format: 'php-clover'
-build_failure_conditions:
-    - 'elements.rating(<= D).exists'               # No classes/methods with a rating of D or worse
-    - 'elements.rating(<= D).new.exists'           # No new classes/methods with a rating of D or worse
-                                                   # allowed (useful for legacy code)
-
-    - 'issues.label("coding-style").exists'        # No coding style issues allowed
-    - 'issues.label("coding-style").new.exists'    # No new coding style issues allowed
-
-    - 'issues.label("coding-style").new.count > 5' # More than 5 new coding style issues.
-    - 'issues.severity(>= MAJOR).new.exists'       # New issues of major or higher severity
-
-    - 'project.metric("scrutinizer.quality", < 6)' # Code Quality Rating drops below 6
-    - 'project.metric("scrutinizer.test_coverage", < 0.60)' # Code Coverage drops below 60%
-
-    # Code Coverage decreased from previous inspection
-    - 'project.metric_change("scrutinizer.test_coverage", < 0)'
-
-    # Code Coverage decreased from previous inspection by more than 10%
-    - 'project.metric_change("scrutinizer.test_coverage", < -0.10)'
+tools:
+    external_code_coverage: true
