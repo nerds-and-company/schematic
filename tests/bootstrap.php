@@ -1,9 +1,9 @@
 <?php
 
-$rootPath = getenv('SCRUTINIZER') ? __DIR__.'/../../' : __DIR__.'/../../../../';
+$rootPath = getenv('SCRUTINIZER') || getenv('TRAVIS') ? __DIR__.'/../../' : __DIR__.'/../../../../';
 
 // Require Craft unit test bootstrap
-require_once $rootPath.'/craft/app/tests/bootstrap.php';
+require_once $rootPath.'craft/app/tests/bootstrap.php';
 
 // Require autoloader
-require_once $rootPath.'/vendor/autoload.php';
+require_once $rootPath.'vendor/autoload.php';
