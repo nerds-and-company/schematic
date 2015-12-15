@@ -91,7 +91,7 @@ class Data extends Base
         $matches = null;
         preg_match_all('/%\w+%/', $yaml, $matches);
         $original_values = $matches[0];
-        $replace_values = [);
+        $replace_values = [];
         foreach ($original_values as $match) {
             $env_variable = strtoupper(substr($match, 1, -1));
             $env_variable = 'SCHEMATIC_'.$env_variable;
@@ -126,7 +126,7 @@ class Data extends Base
      *
      * @return array
      */
-    public function getAttribute($attribute, $flattenValue = false, $default = [))
+    public function getAttribute($attribute, $flattenValue = false, $default = [])
     {
         $attribute = parent::getAttribute($attribute, $flattenValue);
 

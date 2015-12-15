@@ -336,7 +336,7 @@ class Fields extends Base
             return ['tabs' => $tabDefinitions];
         }
 
-        return ['fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields(]));
+        return ['fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields())];
     }
 
     /**

@@ -231,7 +231,7 @@ class Sections extends Base
             $sectionRecord->enableVersioning = $section->enableVersioning;
 
             if (!$sectionRecord->save()) {
-                $section->addErrors(['errors' => $sectionRecord->getErrors(]));
+                $section->addErrors(['errors' => $sectionRecord->getErrors()]);
 
                 return false;
             };
