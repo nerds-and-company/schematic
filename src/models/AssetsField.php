@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Craft\Craft;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
 
@@ -30,11 +31,11 @@ class AssetsField extends Field
         $settings = $definition['settings'];
 
         $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-        $defaultUploadLocationSource = craft()->schematic_assets->getSourceTypeById($defaultUploadLocationSourceId);
+        $defaultUploadLocationSource = Craft::app()->schematic_assets->getSourceTypeById($defaultUploadLocationSourceId);
         $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ?  $defaultUploadLocationSource->handle : '';
 
         $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-        $singleUploadLocationSource = craft()->schematic_assets->getSourceTypeById($singleUploadLocationSourceId);
+        $singleUploadLocationSource = Craft::app()->schematic_assets->getSourceTypeById($singleUploadLocationSourceId);
         $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->handle : '';
 
         $definition['settings'] = $settings;
@@ -54,11 +55,11 @@ class AssetsField extends Field
 
         $settings = $fieldDefinition['settings'];
         $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-        $defaultUploadLocationSource = craft()->schematic_assets->getSourceTypeByHandle($defaultUploadLocationSourceId);
+        $defaultUploadLocationSource = Craft::app()->schematic_assets->getSourceTypeByHandle($defaultUploadLocationSourceId);
         $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ?  $defaultUploadLocationSource->id : '';
 
         $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-        $singleUploadLocationSource = craft()->schematic_assets->getSourceTypeByHandle($singleUploadLocationSourceId);
+        $singleUploadLocationSource = Craft::app()->schematic_assets->getSourceTypeByHandle($singleUploadLocationSourceId);
         $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->id : '';
 
         $field->settings = $settings;
