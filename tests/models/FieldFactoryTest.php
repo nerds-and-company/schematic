@@ -61,7 +61,7 @@ class FieldFactoryTest extends BaseTest
     {
         return [
             // Base fields
-            'Assets' => ['Assets', Field::class],
+            'Assets' => ['Assets', AssetsField::class],
             'Categories' => ['Category', Field::class],
             'Checkboxes' => ['Checkboxes', Field::class],
             'Color' => ['Color', Field::class],
