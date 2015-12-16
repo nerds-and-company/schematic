@@ -295,6 +295,9 @@ class App extends Base
     private function _setSchematicComponents()
     {
         $components = [
+            'schematic' => [
+                'class' => Service\Schematic::class,
+            ],
             'schematic_locales' => [
                 'class' => Service\Locales::class,
             ],
