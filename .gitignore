@@ -1,2 +1,4 @@
 build/
+vendor/
+composer.lock
 tests/data/test_schema_export.yml
