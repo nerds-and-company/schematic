@@ -41,7 +41,13 @@
     ],
     "license": "MIT",
     "require": {
+        "php": "^5.5|^7.0",
         "symfony/yaml": "~2.8"
     },
-    "bin": ["bin/schematic"]
+    "bin": ["bin/schematic"],
+    "autoload" : {
+        "psr-4": {
+            "NerdsAndCompany\\Schematic\\": "src/"
+        }
+    }
 }

@@ -5,10 +5,6 @@ language: php
 php:
   # using major version aliases
 
-  # aliased to 5.3.29
-  - 5.3
-  # aliased to a recent 5.4.x version
-  - 5.4
   # aliased to a recent 5.5.x version
   - 5.5
   # aliased to a recent 5.6.x version
@@ -25,23 +21,22 @@ matrix:
     - php: hhvm
 
  # execute any number of scripts before the test run, custom env's are available as variables
-before_script:
+install:
   - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
   - unzip craft.zip
   - rm craft.zip
   - mv Craft-Release-master craft
   - mkdir craft/config
-  - echo "<?php return array('user' => 'test');" > craft/config/db.php
+  - echo "<?php return ['user' => 'test'];" > craft/config/db.php
   - mkdir craft/storage
   - composer install
-  - mkdir -p vendor/itmundi/schematic
-  - for item in *; do if [[ ! "$item" == "vendor" && ! "$item" == "craft" ]]; then mv $item vendor/itmundi/schematic; fi; done
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
+  - composer dump-autoload --optimize
 
 # execute tests
-script: phpunit --bootstrap craft/app/tests/bootstrap.php --configuration vendor/itmundi/schematic/phpunit.xml.dist --coverage-clover coverage.clover vendor/itmundi/schematic/tests
+script: phpunit --bootstrap tests/bootstrap.php --configuration phpunit.xml.dist --coverage-clover coverage.clover tests
 
 # upload coverage to scrutinizer
 after_script:
