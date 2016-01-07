@@ -140,8 +140,12 @@ class Plugins extends Base
      */
     public function import(array $pluginDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Plugins'));
+        Craft::log(Craft::t('Updating Craft'));
+        if (!$this->getMigrationsService()->runToTop()) {
+            throw new Exception(Craft::t('There was a problem updating your database.'));
+        }
 
+        Craft::log(Craft::t('Importing Plugins'));
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
             Craft::log(Craft::t('Applying definitions for {handle}', ['handle' => $handle]));
 
