@@ -70,6 +70,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.0.1###
+ - Schematic now also runs Craft migrations
+
 ###3.0.0###
  - Schematic is now PSR-4 compatible and uses proper autoloading
  - Renamed assets to assetSources
