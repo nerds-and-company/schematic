@@ -101,6 +101,11 @@ class Schematic extends BaseApplication
         $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
 
+        // Element index settings are supported from Craft 2.5
+        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+            $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import($model->getAttribute('elementIndexSettings'), $force);
+        }
+
         // Verify results
         $result = new Result();
         $result->consume($localesImportResult);
@@ -111,6 +116,11 @@ class Schematic extends BaseApplication
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
+
+        // Element index settings are supported from Craft 2.5
+        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+            $result->consume($elementIndexSettingsImportResult);
+        }
 
         $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doImport($result, $model->pluginData, $services, $force);
@@ -161,6 +171,11 @@ class Schematic extends BaseApplication
             'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
             'users' => Craft::app()->schematic_users->export(),
         ];
+
+        // Element index settings are supported from Craft 2.5
+        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+            $export['elementIndexSettings'] = Craft::app()->schematic_elementIndexSettings->export();
+        }
 
         $export['pluginData'] = [];
         $services = Craft::app()->plugins->call('registerMigrationService');

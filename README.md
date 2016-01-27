@@ -70,6 +70,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.1.0###
+ - Added support for element index settings (Craft 2.5 only)
+
 ###3.0.1###
  - Schematic now also runs Craft migrations
 

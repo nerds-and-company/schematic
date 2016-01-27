@@ -324,6 +324,13 @@ class App extends Base
             ],
         ];
 
+        // Element index settings are supported from Craft 2.5
+        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+            $components['schematic_elementIndexSettings'] = [
+                'class' => Service\ElementIndexSettings::class,
+            ];
+        }
+
         $this->setComponents($components);
     }
 
