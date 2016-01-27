@@ -69,11 +69,18 @@ class ElementIndexSettings extends Base
         // Loop through element types
         foreach ($elementTypes as $elementType) {
 
-            // Get existing settings for element type
-            $settings = $this->getElementIndexesService()->getSettings($elementType);
+            // Get element type name
+            $elementTypeName = preg_replace('/^Craft\\\(.*?)ElementType$/', '$1', get_class($elementType));
 
-            // Group by element type and add to definitions
-            $settingDefinitions[$elementType] = $settings;
+            // Get existing settings for element type
+            $settings = $this->getElementIndexesService()->getSettings($elementTypeName);
+
+            // If there are settings, export
+            if (is_array($settings)) {
+
+                // Group by element type and add to definitions
+                $settingDefinitions[$elementTypeName] = $settings;
+            }
         }
 
         return $settingDefinitions;
