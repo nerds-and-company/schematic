@@ -170,8 +170,12 @@ class Schematic extends BaseApplication
             'globalSets' => Craft::app()->schematic_globalSets->export($globals),
             'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
             'users' => Craft::app()->schematic_users->export(),
-            'elementIndexSettings' => Craft::app()->schematic_elementIndexSettings->export(),
         ];
+
+        // Element index settings are supported from Craft 2.5
+        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+            $export['elementIndexSettings'] = Craft::app()->schematic_elementIndexSettings->export();
+        }
 
         $export['pluginData'] = [];
         $services = Craft::app()->plugins->call('registerMigrationService');
