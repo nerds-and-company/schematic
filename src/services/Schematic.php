@@ -100,6 +100,7 @@ class Schematic extends BaseApplication
         $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
         $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
+        $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import($model->getAttribute('elementIndexSettings'), $force);
 
         // Verify results
         $result = new Result();
@@ -111,6 +112,7 @@ class Schematic extends BaseApplication
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
+        $result->consume($elementIndexSettingsImportResult);
 
         $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doImport($result, $model->pluginData, $services, $force);
@@ -160,6 +162,7 @@ class Schematic extends BaseApplication
             'globalSets' => Craft::app()->schematic_globalSets->export($globals),
             'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
             'users' => Craft::app()->schematic_users->export(),
+            'elementIndexSettings' => Craft::app()->schematic_elementIndexSettings->export(),
         ];
 
         $export['pluginData'] = [];

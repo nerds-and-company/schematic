@@ -27,6 +27,7 @@ use Symfony\Component\Yaml\Yaml;
  * @property array $sections
  * @property array $userGroups
  * @property array $users
+ * @property array $elementIndexSettings
  * @property array $pluginData
  */
 class Data extends Base
@@ -39,15 +40,16 @@ class Data extends Base
     protected function defineAttributes()
     {
         return [
-            'locales'           => [AttributeType::Mixed, 'default' => []],
-            'assetSources'      => [AttributeType::Mixed, 'default' => []],
-            'fields'            => [AttributeType::Mixed, 'default' => []],
-            'globalSets'        => [AttributeType::Mixed, 'default' => []],
-            'plugins'           => [AttributeType::Mixed, 'default' => []],
-            'sections'          => [AttributeType::Mixed, 'default' => []],
-            'userGroups'        => [AttributeType::Mixed, 'default' => []],
-            'users'             => [AttributeType::Mixed, 'default' => []],
-            'pluginData'        => [AttributeType::Mixed, 'default' => []],
+            'locales'               => [AttributeType::Mixed, 'default' => []],
+            'assetSources'          => [AttributeType::Mixed, 'default' => []],
+            'fields'                => [AttributeType::Mixed, 'default' => []],
+            'globalSets'            => [AttributeType::Mixed, 'default' => []],
+            'plugins'               => [AttributeType::Mixed, 'default' => []],
+            'sections'              => [AttributeType::Mixed, 'default' => []],
+            'userGroups'            => [AttributeType::Mixed, 'default' => []],
+            'users'                 => [AttributeType::Mixed, 'default' => []],
+            'elementIndexSettings'  => [AttributeType::Mixed, 'default' => []],
+            'pluginData'            => [AttributeType::Mixed, 'default' => []],
         ];
     }
 

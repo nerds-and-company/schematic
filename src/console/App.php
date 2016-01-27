@@ -322,6 +322,9 @@ class App extends Base
             'schematic_users' => [
                 'class' => Service\Users::class,
             ],
+            'schematic_elementIndexSettings' => [
+                'class' => Service\ElementIndexSettings::class,
+            ],
         ];
 
         $this->setComponents($components);
