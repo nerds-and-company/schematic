@@ -124,7 +124,7 @@ class Schematic extends BaseApplication
      * @param Result       $result
      * @param array        $data
      * @param array|Base[] $services
-     * @param $force
+     * @param bool         $force
      */
     private function doImport(Result $result, array $data, $services, $force)
     {
