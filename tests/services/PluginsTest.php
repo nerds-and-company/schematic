@@ -176,8 +176,7 @@ class PluginsTest extends BaseTest
     {
         $data = $this->getPluginsData();
 
-        $mockPluginsService = $this->getMockPluginsService(false);
-        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
+        $this->mockMultipleServices(false);
 
         $import = $this->schematicPluginsService->import($data);
 
@@ -209,8 +208,7 @@ class PluginsTest extends BaseTest
      */
     public function testImportWithNotInstalledPlugin()
     {
-        $mockPluginsService = $this->getMockPluginsService();
-        $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
+        $this->mockMultipleServices();
 
         $this->getMockBasePlugin();
 
