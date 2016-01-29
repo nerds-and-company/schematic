@@ -70,7 +70,7 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
-###3.1.1###
+###3.1.2###
  - Sections are not imported when nothing has changed
  - Fields are not imported when nothing has changed
  - Field import is repeated after everything else has been imported to make sure sources are set correctly
