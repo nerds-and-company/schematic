@@ -21,7 +21,7 @@ matrix:
     - php: hhvm
 
  # execute any number of scripts before the test run, custom env's are available as variables
-before_script:
+install:
   - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
   - unzip craft.zip
   - rm craft.zip
@@ -29,6 +29,7 @@ before_script:
   - mkdir craft/config
   - echo "<?php return ['user' => 'test'];" > craft/config/db.php
   - mkdir craft/storage
+  - composer install
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
