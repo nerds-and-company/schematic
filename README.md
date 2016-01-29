@@ -70,6 +70,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.1.1###
+ - Folders are now CamelCased to add support for case-sensitive systems and PSR-4 (thanks to @ostark and @ukautz)
+
 ###3.1.0###
  - Added support for element index settings (Craft 2.5 only)
 
