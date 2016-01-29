@@ -97,7 +97,7 @@ class App extends Base
 
         // Add commands
         Craft::app()->commandRunner->commands = [];
-        Craft::app()->commandRunner->addCommands(__DIR__.'/../consolecommands/');
+        Craft::app()->commandRunner->addCommands(__DIR__.'/../ConsoleCommands/');
     }
 
     /**
