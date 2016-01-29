@@ -33,7 +33,6 @@ install:
   - cd craft/app
   - composer require mockery/mockery
   - cd ../..
-  - composer dump-autoload --optimize
 
 # execute tests
 script: phpunit --bootstrap tests/bootstrap.php --configuration phpunit.xml.dist --coverage-clover coverage.clover tests
