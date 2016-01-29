@@ -71,6 +71,11 @@ public function registerSchematicFieldModels()
 ## Changelog
 
 ###3.1.1###
+ - Sections are not imported when nothing has changed
+ - Fields are not imported when nothing has changed
+ - Field import is repeated after everything else has been imported to make sure sources are set correctly
+
+###3.1.1###
  - Folders are now CamelCased to add support for case-sensitive systems and PSR-4 (thanks to @ostark and @ukautz)
 
 ###3.1.0###
