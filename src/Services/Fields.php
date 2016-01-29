@@ -292,6 +292,14 @@ class Fields extends Base
         foreach ($fieldDefinitions as $fieldHandle => $fieldDef) {
             $field = $this->getFieldModel($fieldHandle);
             $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
+
+            if ($schematicFieldModel->getDefinition($field, true) === $fieldDef ) {
+                Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]));
+                continue;
+            }
+
+            Craft::log(Craft::t('Importing `{name}`', ['name' => $fieldDef['name']]));
+
             $schematicFieldModel->populate($fieldDef, $field, $fieldHandle, $group);
             $this->saveFieldModel($field);
         }
