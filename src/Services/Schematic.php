@@ -100,6 +100,7 @@ class Schematic extends BaseApplication
         $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
         $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
+        $fieldImportResultFinal = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
 
         // Element index settings are supported from Craft 2.5
         if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
@@ -116,6 +117,7 @@ class Schematic extends BaseApplication
         $result->consume($sectionImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
+        $result->consume($fieldImportResultFinal);
 
         // Element index settings are supported from Craft 2.5
         if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
