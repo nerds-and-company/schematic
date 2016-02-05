@@ -158,6 +158,11 @@ class Sections extends Base
 
             unset($sections[$sectionHandle]);
 
+            if($sectionDefinition === $this->getSectionDefinition($section, null)){
+                Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name]));
+                continue;
+            }
+
             if (!array_key_exists('locales', $sectionDefinition)) {
                 $this->addError('`sections[handle].locales` must be defined');
 
@@ -169,6 +174,8 @@ class Sections extends Base
 
                 continue;
             }
+
+            Craft::log(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]));
 
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
 
