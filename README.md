@@ -70,6 +70,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.1.3###
+ - Added array_key_exists checks for AssetField settings
+
 ###3.1.2###
  - Sections are not imported when nothing has changed
  - Fields are not imported when nothing has changed

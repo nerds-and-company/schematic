@@ -30,13 +30,17 @@ class AssetsField extends Field
         $definition = parent::getDefinition($field, $includeContext);
         $settings = $definition['settings'];
 
-        $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-        $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($defaultUploadLocationSourceId);
-        $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ?  $defaultUploadLocationSource->handle : '';
+        if (array_key_exists($settings, 'defaultUploadLocationSource')) {
+            $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
+            $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($defaultUploadLocationSourceId);
+            $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ? $defaultUploadLocationSource->handle : '';
+        }
 
-        $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-        $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($singleUploadLocationSourceId);
-        $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->handle : '';
+        if (array_key_exists($settings, 'singleUploadLocationSource')) {
+            $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
+            $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($singleUploadLocationSourceId);
+            $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->handle : '';
+        }
 
         $definition['settings'] = $settings;
 
@@ -54,13 +58,18 @@ class AssetsField extends Field
         parent::populate($fieldDefinition, $field, $fieldHandle, $group);
 
         $settings = $fieldDefinition['settings'];
-        $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-        $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($defaultUploadLocationSourceId);
-        $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ?  $defaultUploadLocationSource->id : '';
 
-        $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-        $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($singleUploadLocationSourceId);
-        $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->id : '';
+        if (array_key_exists($settings, 'defaultUploadLocationSource')) {
+            $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
+            $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($defaultUploadLocationSourceId);
+            $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ? $defaultUploadLocationSource->id : '';
+        }
+
+        if (array_key_exists($settings, 'singleUploadLocationSource')) {
+            $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
+            $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($singleUploadLocationSourceId);
+            $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->id : '';
+        }
 
         $field->settings = $settings;
     }
