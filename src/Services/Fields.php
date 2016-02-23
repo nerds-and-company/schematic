@@ -138,6 +138,7 @@ class Fields extends Base
             $contentService->fieldContext = 'global';
             $contentService->contentTable = 'content';
 
+            $this->resetCraftFieldsServiceCache();
             $this->groups = $this->getFieldsService()->getAllGroups('name');
             $this->fields = $this->getFieldsService()->getAllFields('handle');
 
@@ -423,5 +424,17 @@ class Fields extends Base
             'fields' => $layoutFields,
             'required' => $requiredFields,
         ];
+    }
+
+    /**
+     * Reset craft fields service cache using reflection
+     */
+    private function resetCraftFieldsServiceCache()
+    {
+        $obj         = $this->getFieldsService();
+        $refObject   = new \ReflectionObject( $obj );
+        $refProperty = $refObject->getProperty( '_fetchedAllGroups' );
+        $refProperty->setAccessible( true );
+        $refProperty->setValue($obj, false);
     }
 }

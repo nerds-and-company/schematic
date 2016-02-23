@@ -186,7 +186,7 @@ class Sections extends Base
                 continue;
             }
 
-            $entryTypes = $section->getEntryTypes('handle');
+            $entryTypes = Craft::app()->sections->getEntryTypesBySectionId($section->id, 'handle');
 
             foreach ($sectionDefinition['entryTypes'] as $entryTypeHandle => $entryTypeDefinition) {
                 $entryType = array_key_exists($entryTypeHandle, $entryTypes)

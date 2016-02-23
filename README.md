@@ -70,6 +70,10 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.1.4###
+ - Reset craft field service cache before each import
+ - Get section entry types by section id in stead of from section
+
 ###3.1.3###
  - Added array_key_exists checks for AssetField settings
 
