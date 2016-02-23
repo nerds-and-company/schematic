@@ -178,6 +178,7 @@ class Sections extends Base
             Craft::log(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]));
 
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
+            $this->resetCraftFieldsSectionModelCache($section);
 
             // Create initial section record
             if (!$this->preSaveSection($section)) {
@@ -325,5 +326,18 @@ class Sections extends Base
 
         $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
         $entryType->setFieldLayout($fieldLayout);
+    }
+
+    /**
+     * Reset craft section model cache using reflection
+     * @param SectionModel $section
+     */
+    private function resetCraftFieldsSectionModelCache(SectionModel $section)
+    {
+        $obj         = $section;
+        $refObject   = new \ReflectionObject( $obj );
+        $refProperty = $refObject->getProperty( '_entryTypes' );
+        $refProperty->setAccessible( true );
+        $refProperty->setValue($obj, null);
     }
 }
