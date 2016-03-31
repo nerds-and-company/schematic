@@ -91,6 +91,9 @@ class AssetSources extends Base
             'settings'     => $assetSourceDefinition['settings'],
         ]);
 
+        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
+        $assetSource->setFieldLayout($fieldLayout);
+
         return $assetSource;
     }
 
@@ -127,6 +130,7 @@ class AssetSources extends Base
             'name' => $assetSource->name,
             'sortOrder' => $assetSource->sortOrder,
             'settings' => $assetSource->settings,
+            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
         ];
     }
 }
