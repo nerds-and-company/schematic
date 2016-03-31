@@ -70,6 +70,9 @@ public function registerSchematicFieldModels()
 
 ## Changelog
 
+###3.1.5###
+ - Added support for Asset fieldlayouts (thanks to @roelvanhintum)
+
 ###3.1.4###
  - Reset craft field service cache before each import
  - Get section entry types by section id in stead of from section
