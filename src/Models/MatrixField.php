@@ -14,7 +14,7 @@ use Craft\MatrixBlockTypeModel;
  * A schematic field model for mapping matrix data
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015, Nerds & Company
+ * @copyright Copyright (c) 2015-2016, Nerds & Company
  * @license   MIT
  *
  * @link      http://www.nerds.company
