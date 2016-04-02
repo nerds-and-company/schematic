@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * Class PluginsTest.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015, Nerds & Company
+ * @copyright Copyright (c) 2015-2016, Nerds & Company
  * @license   MIT
  *
  * @link      http://www.nerds.company
