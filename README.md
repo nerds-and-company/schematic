@@ -2,7 +2,7 @@
 
 Schematic allows you to synchronize your Craft setup over multiple environments. It does this by exporting information about assets,  database (fields, sections, users), locales and plugins to a YAML file that can be imported in other environments.
 
-## Installation 
+## Installation
 
 This tool can be installed manually or [using Composer](https://getcomposer.org/doc/00-intro.md).
 
@@ -16,7 +16,7 @@ composer require itmundi/schematic
 
 This will add `itmundi/schematic` as a requirement to your  project's `composer.json` file and install the source-code into the `vendor/itmundi/schematic` directory. Composer will also create the executable `vendor/bin/schematic`.
 
-### Manual 
+### Manual
 
 If installation through Composer is not an option, the package can also be installed manually. Download [the latest release](https://github.com/itmundi/schematic/releases/latest) or clone the contents of this repository into your project.
 The executable is located in at `bin/schematic`.
@@ -49,6 +49,12 @@ An export can be created by running:
 ./vendor/bin/schematic export
 ```
 
+When craft is in a different directory than `./craft/app`, set the path with an environment variable.
+For example:
+```
+export CRAFT_APP_PATH=./vendor/craft/app; ./bin/schematic export
+```
+
 This will generate a schema file at `craft/config/schema.yml`. The file path can be changed using the `--file` flag, for instance `schematic export --file=path/to/my-schema.yml`
 
 If Craft is not installed yet, Schematic will run the installer for you. Make sure the following environment variables have been set:
@@ -59,6 +65,16 @@ If Craft is not installed yet, Schematic will run the installer for you. Make su
 - CRAFT_SITENAME
 - CRAFT_SITEURL
 - CRAFT_LOCALE
+
+Optional environment variables (similar to the [PHP constants](https://craftcms.com/docs/php-constants)):
+- CRAFT_BASE_PATH
+- CRAFT_APP_PATH
+- CRAFT_CONFIG_PATH
+- CRAFT_PLUGINS_PATH
+- CRAFT_STORAGE_PATH
+- CRAFT_TEMPLATES_PATH
+- CRAFT_TRANSLATIONS_PATH
+- CRAFT_ENVIRONMENT
 
 
 ### Importing
@@ -81,7 +97,7 @@ Keys in the schema file can be overridden by passing an override file to schemat
 
 Specific keys can be overriden by adding a key in `craft/config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names. The value has to start and end with a `%` (percentage sign). The correspending environment value will be `SCHEMATIC_{value_without_percentage_signs}`.
 
-#### Example 
+#### Example
 
 If the following `override.yml` is defined:
 
@@ -123,7 +139,7 @@ public function registerMigrationService()
 </td></tr>
 </table>
 
-Gives plugins a chance to add custom mappings to Schematic for custom field types. 
+Gives plugins a chance to add custom mappings to Schematic for custom field types.
 
 ```php
 public function registerSchematicFieldModels()
