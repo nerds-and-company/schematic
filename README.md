@@ -1,27 +1,57 @@
 # Schematic [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/itmundi/schematic/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/itmundi/schematic/?branch=master) [![Build Status](https://travis-ci.org/itmundi/schematic.svg?branch=master)](https://travis-ci.org/itmundi/schematic) [![Code Coverage](https://scrutinizer-ci.com/g/itmundi/schematic/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/itmundi/schematic/?branch=master) [![Latest Stable Version](https://poser.pugx.org/itmundi/schematic/v/stable)](https://packagist.org/packages/itmundi/schematic) [![Total Downloads](https://poser.pugx.org/itmundi/schematic/downloads)](https://packagist.org/packages/itmundi/schematic) [![Latest Unstable Version](https://poser.pugx.org/itmundi/schematic/v/unstable)](https://packagist.org/packages/itmundi/schematic) [![License](https://poser.pugx.org/itmundi/schematic/license)](https://packagist.org/packages/itmundi/schematic)
 
-Schematic allows you to synchronize your Craft setup over multiple environments
+Schematic allows you to synchronize your Craft setup over multiple environments. It does this by exporting information about assets,  database (fields, sections, users), locales and plugins to a YAML file that can be imported in other environments.
+
+## Installation 
+
+This tool can be installed manually or [using Composer](https://getcomposer.org/doc/00-intro.md).
+
+### Composer
+
+The preferred means of installation is through Composer. Run the following command from the root of your project:
+
+```
+composer require itmundi/schematic
+```
+
+This will add `itmundi/schematic` as a requirement to your  project's `composer.json` file and install the source-code into the `vendor/itmundi/schematic` directory. Composer will also create the executable `vendor/bin/schematic`.
+
+### Manual 
+
+If installation through Composer is not an option, the package can also be installed manually. Download [the latest release](https://github.com/itmundi/schematic/releases/latest) or clone the contents of this repository into your project.
+The executable is located in at `bin/schematic`.
 
 ## Usage
 
-Make sure you have your latest export stored at `./craft/config/schema.yml`.
+### Basic usage
 
-Then just run to import...
+The most common usage pattern of this tool, to synchronize from a development to a production environment, would be:
 
-```
-./vendor/bin/schematic import
-```
+1. Create a Craft project locally
+2. Set up all of the desired plugins, sections, templates, etc.
+3. Run a Schematic export locally
+4. Optionally, if a revision control system is used, commit the schema file to the local repository
+5. Deploy the Craft application to a prodcution environment
+6. Run a Schematic import remotely
 
-Optionally you can use --force to make the import delete any items which are not in the import file.
-WARNING!! This will also delete any related content.
+Or, to synchronize from a production to a development environment:
 
-You can also generate a schema.yml with
+1. Run a Schematic export remotely
+2. Pull the schema file locally
+3. Optionally, if a revision control system is used, commit the schema file to the local repository
+4. Run a Schematic import locally
+
+### Exporting
+
+An export can be created by running:
 
 ```
 ./vendor/bin/schematic export
 ```
 
-If Craft is not installed yet, Schematic will run the installer for you. Make sure you have the following environment variables set:
+This will generate a schema file at `craft/config/schema.yml`. The file path can be changed using the `--file` flag, for instance `schematic export --file=path/to/my-schema.yml`
+
+If Craft is not installed yet, Schematic will run the installer for you. Make sure the following environment variables have been set:
 
 - CRAFT_USERNAME
 - CRAFT_EMAIL
@@ -30,23 +60,51 @@ If Craft is not installed yet, Schematic will run the installer for you. Make su
 - CRAFT_SITEURL
 - CRAFT_LOCALE
 
-## Overrides
 
-You can override certain keys by placing a placeholder in `craft/config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names. The value has to start with a `%` (percentage sign) and end with one too. The correspending environment value will be `SCHEMATIC_{value_without_percentage_signs}`.
+### Importing
 
-For example if you define the following `override.yml`:
+To run an import with schematic, a schema file needs to be present. An import can be created by running:
+
+```
+./vendor/bin/schematic import
+```
+
+By default schematic will look at `./craft/config/schema.yml`. To change the path where schematic will look for the schema file, use the `--file` flag.
+
+Optionally the `--force` flag can be used to make the import delete any items which are not mentioned in the import file.
+
+**WARNING!!** This will also delete any _related_ content.
+
+Keys in the schema file can be overridden by passing an override file to schematic using the `--override_file` flag, for instance: `vendor/bin/schematic import --override_file=craft/config/override.yml`.
+
+### Overrides
+
+Specific keys can be overriden by adding a key in `craft/config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names. The value has to start and end with a `%` (percentage sign). The correspending environment value will be `SCHEMATIC_{value_without_percentage_signs}`.
+
+#### Example 
+
+If the following `override.yml` is defined:
 
 ```yml
 parent:
     key_name: %key_value%
 ```
 
-You will need to set the environment variable `SCHEMATIC_KEY_VALUE`. The value of this environment variable will override the key `key_name`. If the environment variable is not set Schematic will throw an error.
+Then the environment variable `SCHEMATIC_KEY_VALUE` needs to be set. The value of this environment variable will override the key `key_name`. If the environment variable is not set Schematic will throw an error.
+
+### Hooks
+
+This tool has two hooks that extending code can plug in to. An example of a project using these hooks is the [Schematic plugin for AmNav](https://github.com/nerds-and-company/schematic-amnav).
 
 
-## Hooks
+#### registerMigrationService
 
-* Has a hook "registerMigrationService" to add exports with your own data.
+<table>
+<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Services\Schematic::importFromYaml()</code>,  <code>NerdsAndCompany\Schematic\Services\Schematic::exportToYaml()</code></td></tr>
+<tr><td>Return</td><td>An array where the keys are a name and the values are a Migration Service.</td></tr>
+</table>
+
+Gives plugins a chance to register their own Migration Services to Schematic in order to import or exports their own data.
 
 ```php
 public function registerMigrationService()
@@ -57,7 +115,15 @@ public function registerMigrationService()
 }
 ```
 
-* Has a hook to add mappings for custom field types, the `Plugin_CustomSchematicFieldModel` must extend `NerdsAndCompany\Schematic\Models\Field`
+#### registerSchematicFieldModels
+
+<table>
+<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Models\FieldFactory::build()</code></td></tr>
+<tr><td>Return</td><td>An array where the keys are a the name of the fieldtype the mapping is for and the values are the <a href="http://php.net/manual/en/language.namespaces.rules.php">fully qualified name</a> of the custom field model class.
+</td></tr>
+</table>
+
+Gives plugins a chance to add custom mappings to Schematic for custom field types. 
 
 ```php
 public function registerSchematicFieldModels()
@@ -68,7 +134,31 @@ public function registerSchematicFieldModels()
 }
 ```
 
+A plugin that want to make use of this functionality needs to extend `NerdsAndCompany\Schematic\Models\Field`, for example
+
+```php
+<?php
+
+namespace Craft;
+
+class Plugin_CustomSchematicFieldModel extends \NerdsAndCompany\Schematic\Models\Field
+{
+    //…
+}
+
+```
+
+## License
+
+This project has been licensed under the MIT License (MIT). Please see [License File](LICENSE) for more information.
+
 ## Changelog
+
+###3.1.6###
+- Adds install and more detailed usage documentation
+
+###3.1.5###
+ - Added support for Asset fieldlayouts (thanks to @roelvanhintum)
 
 ###3.1.4###
  - Reset craft field service cache before each import
@@ -125,4 +215,4 @@ public function registerSchematicFieldModels()
  - Initial release
 
 ## Credits
-Inspired and based on the awesome [ArtVandelay Plugin](https://github.com/xodigital/ArtVandelay)
+Inspired and based on the awesome [ArtVandelay Plugin](https://github.com/xodigital/ArtVandelay) and build by [these awesome individuals](https://github.com/itmundi/schematic/graphs/contributors)

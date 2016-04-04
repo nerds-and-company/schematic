@@ -10,7 +10,7 @@ use NerdsAndCompany\Schematic\Models\Result;
  * Schematic Base Service for some easy access methods.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015, Nerds & Company
+ * @copyright Copyright (c) 2015-2016, Nerds & Company
  * @license   MIT
  *
  * @link      http://www.nerds.company
