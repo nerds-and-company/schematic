@@ -74,6 +74,7 @@ Optional environment variables (similar to the [PHP constants](https://craftcms.
 - CRAFT_STORAGE_PATH
 - CRAFT_TEMPLATES_PATH
 - CRAFT_TRANSLATIONS_PATH
+- CRAFT_ENVIRONMENT
 
 
 ### Importing
