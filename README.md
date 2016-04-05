@@ -74,7 +74,6 @@ Optional environment variables (similar to the [PHP constants](https://craftcms.
 - CRAFT_STORAGE_PATH
 - CRAFT_TEMPLATES_PATH
 - CRAFT_TRANSLATIONS_PATH
-- CRAFT_ENVIRONMENT
 
 
 ### Importing
@@ -169,6 +168,10 @@ class Plugin_CustomSchematicFieldModel extends \NerdsAndCompany\Schematic\Models
 This project has been licensed under the MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 ## Changelog
+
+###3.2.0###
+- Added ability to set craft constants through env variables (thanks to @roelvanhintum)
+- Fixed assetsource fieldlayout backwards compatibility
 
 ###3.1.6###
 - Adds install and more detailed usage documentation

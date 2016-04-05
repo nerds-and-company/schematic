@@ -91,8 +91,10 @@ class AssetSources extends Base
             'settings'     => $assetSourceDefinition['settings'],
         ]);
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
-        $assetSource->setFieldLayout($fieldLayout);
+        if (array_key_exists('fieldLayout', $assetSourceDefinition)) {
+            $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
+            $assetSource->setFieldLayout($fieldLayout);
+        }
 
         return $assetSource;
     }
