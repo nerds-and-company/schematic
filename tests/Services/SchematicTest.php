@@ -188,6 +188,20 @@ class SchematicTest extends BaseTest
     }
 
     /**
+     * @return Mock|CategoriesService
+     */
+    public function getMockCategoriesService()
+    {
+        $mock = $this->getMockBuilder(CategoriesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->expects($this->exactly(1))->method('getAllGroups')->willReturn([]);
+
+        return $mock;
+    }
+
+    /**
      * Mock all required services.
      */
     private function mockServices()
@@ -247,6 +261,9 @@ class SchematicTest extends BaseTest
 
         $mockUserGroupsService = $this->getMockAllGroupsMethodService(UserGroupsService::class);
         $this->setCraftComponent('userGroups', $mockUserGroupsService);
+
+        $mockCategoriesService = $this->getMockCategoriesService();
+        $this->setCraftComponent('categories', $mockCategoriesService);
     }
 
     /**
