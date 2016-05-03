@@ -7,6 +7,7 @@ fields: null
 globalSets: null
 plugins: null
 sections: null
+categoryGroups: null
 userGroups: null
 users:
   - test_user

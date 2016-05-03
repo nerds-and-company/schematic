@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
+use Craft\CategoriesService;
 use Craft\Craft;
 use Craft\BaseTest;
 use Craft\FieldsService;
@@ -199,6 +200,7 @@ class SchematicTest extends BaseTest
         $this->createMockService(Sections::class, 'schematic_sections');
         $this->createMockService(UserGroups::class, 'schematic_userGroups');
         $this->createMockService(Users::class, 'schematic_users');
+        $this->createMockService(CategoryGroups::class, 'schematic_categoryGroups');
         $this->createMockService(ElementIndexSettings::class, 'schematic_elementIndexSettings');
 
         $mockPluginsService = $this->getMockPluginsService();
