@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.2.1###
+- Also delete entrytypes which are not in the schema when using force
+
 ###3.2.0###
 - Added ability to set craft constants through env variables (thanks to @roelvanhintum)
 - Fixed assetsource fieldlayout backwards compatibility
