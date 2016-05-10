@@ -187,21 +187,7 @@ class Sections extends Base
                 continue;
             }
 
-            $entryTypes = Craft::app()->sections->getEntryTypesBySectionId($section->id, 'handle');
-
-            foreach ($sectionDefinition['entryTypes'] as $entryTypeHandle => $entryTypeDefinition) {
-                $entryType = array_key_exists($entryTypeHandle, $entryTypes)
-                    ? $entryTypes[$entryTypeHandle]
-                    : new EntryTypeModel();
-
-                $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
-
-                if (!Craft::app()->sections->saveEntryType($entryType)) {
-                    $this->addError($entryType->getAllErrors());
-
-                    continue;
-                }
-            }
+            $this->importEntryTypes($section, $sectionDefinition['entryTypes'], $force);
 
             // Save section via craft after entrytypes have been created
             if (!Craft::app()->sections->saveSection($section)) {
@@ -216,6 +202,38 @@ class Sections extends Base
         }
 
         return $this->getResultModel();
+    }
+
+    /**
+     * @param SectionModel $section
+     * @param array $entryTypeDefinitions
+     * @param bool $force
+     */
+    private function importEntryTypes(SectionModel $section, array $entryTypeDefinitions, $force)
+    {
+        $entryTypes = Craft::app()->sections->getEntryTypesBySectionId($section->id, 'handle');
+
+        foreach ($entryTypeDefinitions as $entryTypeHandle => $entryTypeDefinition) {
+            $entryType = array_key_exists($entryTypeHandle, $entryTypes)
+                ? $entryTypes[$entryTypeHandle]
+                : new EntryTypeModel();
+
+            unset($entryTypes[$entryTypeHandle]);
+
+            $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
+
+            if (!Craft::app()->sections->saveEntryType($entryType)) {
+                $this->addError($entryType->getAllErrors());
+
+                continue;
+            }
+        }
+
+        if ($force) {
+            foreach ($entryTypes as $entryType) {
+                Craft::app()->sections->deleteEntryTypeById($entryType->id);
+            }
+        }
     }
 
     /**
