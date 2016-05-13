@@ -96,13 +96,13 @@ class Plugins extends Base
     /**
      * Run plugin migrations automatically.
      *
-     * @param BasePlugin $plugin
+     * @param string $handle
      *
      * @throws Exception
      */
-    protected function runMigrations(BasePlugin $plugin)
+    protected function runMigrations($handle)
     {
-        $result = $this->getUpdatesService()->updateDatabase($plugin);
+        $result = $this->getUpdatesService()->updateDatabase($handle);
         if (!$result['success']) {
             throw new Exception($result['message']);
         }
@@ -150,7 +150,7 @@ class Plugins extends Base
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
                     if (!$isNewPlugin && $plugin->isEnabled) {
-                        $this->runMigrations($plugin);
+                        $this->runMigrations($handle);
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {

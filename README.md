@@ -170,7 +170,7 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
-##3.2.2###
+###3.2.2###
 - Improved the Craft and plugin updating/migrating mechanism
 - Fixed a bug where element index settings wheren't imported (closes #49)
 
