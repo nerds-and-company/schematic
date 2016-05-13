@@ -50,6 +50,7 @@ class Schematic extends BaseApplication
     public function importFromYaml($file, $override = null, $force = false)
     {
         Craft::app()->config->maxPowerCaptain();
+        Craft::app()->setComponent('userSession', $this);
 
         $yaml = IOHelper::getFileContents($file);
         $yaml_override = IOHelper::getFileContents($override);
@@ -69,6 +70,7 @@ class Schematic extends BaseApplication
     public function exportToYaml($file, $autoCreate = true)
     {
         Craft::app()->config->maxPowerCaptain();
+        Craft::app()->setComponent('userSession', $this);
 
         $result = new Result();
         $dataModel = $this->exportDataModel();
@@ -203,5 +205,15 @@ class Schematic extends BaseApplication
                 }
             }
         }
+    }
+
+    /**
+     * Assume schematic can do anything.
+     *
+     * @return bool
+     */
+    public function checkPermission()
+    {
+        return true;
     }
 }
