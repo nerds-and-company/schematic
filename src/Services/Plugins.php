@@ -28,14 +28,6 @@ class Plugins extends Base
     }
 
     /**
-     * @return MigrationsService
-     */
-    protected function getMigrationsService()
-    {
-        return Craft::app()->migrations;
-    }
-
-    /**
      * @return UpdatesService
      */
     protected function getUpdatesService()
@@ -110,11 +102,9 @@ class Plugins extends Base
      */
     protected function runMigrations(BasePlugin $plugin)
     {
-        if (!$this->getMigrationsService()->runToTop($plugin)) {
-            throw new Exception(Craft::t('There was a problem updating your database.'));
-        }
-        if (!$this->getUpdatesService()->setNewPluginInfo($plugin)) {
-            throw new Exception(Craft::t('The update was performed successfully, but there was a problem setting the new info in the plugins table.'));
+        $result = $this->getUpdatesService()->updateDatabase($plugin);
+        if (!$result['success']) {
+            throw new Exception($result['message']);
         }
     }
 
@@ -141,8 +131,9 @@ class Plugins extends Base
     public function import(array $pluginDefinitions, $force = false)
     {
         Craft::log(Craft::t('Updating Craft'));
-        if (!$this->getMigrationsService()->runToTop()) {
-            throw new Exception(Craft::t('There was a problem updating your database.'));
+        $result = $this->getUpdatesService()->updateDatabase('craft');
+        if (!$result['success']) {
+            throw new Exception($result['message']);
         }
 
         Craft::log(Craft::t('Importing Plugins'));

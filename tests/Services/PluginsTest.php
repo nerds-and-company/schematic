@@ -6,7 +6,6 @@ use Craft\Craft;
 use Craft\BaseTest;
 use Craft\Exception;
 use Craft\PluginsService;
-use Craft\MigrationsService;
 use Craft\UpdatesService;
 use Craft\BasePlugin;
 use NerdsAndCompany\Schematic\Models\Result;
@@ -57,8 +56,6 @@ class PluginsTest extends BaseTest
     ) {
         $mockPluginsService = $this->getMockPluginsService($returnPlugin, $installPluginResponse);
         $this->setComponent(Craft::app(), 'plugins', $mockPluginsService);
-        $mockMigrationsService = $this->getMockMigrationsService();
-        $this->setComponent(Craft::app(), 'migrations', $mockMigrationsService);
         $mockUpdatesService = $this->getMockUpdatesService();
         $this->setComponent(Craft::app(), 'updates', $mockUpdatesService);
     }
@@ -97,23 +94,12 @@ class PluginsTest extends BaseTest
     }
 
     /**
-     * @return MigrationsService|Mock
-     */
-    public function getMockMigrationsService()
-    {
-        $mock = $this->getMockBuilder(MigrationsService::class)->getMock();
-        $mock->expects($this->any())->method('runToTop')->willReturn(true);
-
-        return $mock;
-    }
-
-    /**
      * @return UpdatesService|Mock
      */
     public function getMockUpdatesService()
     {
         $mock = $this->getMockBuilder(UpdatesService::class)->getMock();
-        $mock->expects($this->any())->method('setNewPluginInfo')->willReturn(true);
+        $mock->expects($this->any())->method('updateDatabase')->willReturn(array('success' => true));
 
         return $mock;
     }
