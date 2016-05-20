@@ -104,6 +104,7 @@ class CategoryGroups extends Base
     {
         Craft::log(Craft::t('Importing Category Groups'));
 
+        $this->resetCraftCategoriesServiceCache();
         $categoryGroups = Craft::app()->categories->getAllGroups('handle');
 
         foreach ($categoryGroupDefinitions as $categoryGroupHandle => $categoryGroupDefinition) {
@@ -183,5 +184,20 @@ class CategoryGroups extends Base
         }
 
         $categoryGroup->setLocales($locales);
+    }
+
+    /**
+     * Reset craft fields service cache using reflection
+     */
+    private function resetCraftCategoriesServiceCache()
+    {
+        $obj         = Craft::app()->categories;
+        $refObject   = new \ReflectionObject($obj);
+        $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($obj, false);
+        $refProperty = $refObject->getProperty('_categoryGroupsById');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($obj, array());
     }
 }

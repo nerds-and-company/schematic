@@ -294,7 +294,7 @@ class Fields extends Base
             $field = $this->getFieldModel($fieldHandle);
             $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
 
-            if ($schematicFieldModel->getDefinition($field, true) === $fieldDef ) {
+            if ($schematicFieldModel->getDefinition($field, true) === $fieldDef) {
                 Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]));
                 continue;
             }
@@ -432,9 +432,9 @@ class Fields extends Base
     private function resetCraftFieldsServiceCache()
     {
         $obj         = $this->getFieldsService();
-        $refObject   = new \ReflectionObject( $obj );
-        $refProperty = $refObject->getProperty( '_fetchedAllGroups' );
-        $refProperty->setAccessible( true );
+        $refObject   = new \ReflectionObject($obj);
+        $refProperty = $refObject->getProperty('_fetchedAllGroups');
+        $refProperty->setAccessible(true);
         $refProperty->setValue($obj, false);
     }
 }

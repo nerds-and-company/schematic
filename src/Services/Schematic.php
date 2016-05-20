@@ -100,10 +100,10 @@ class Schematic extends BaseApplication
         $fieldImportResult = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
         $globalSetsImportResult = Craft::app()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
         $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
+        $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($model->getAttribute('categoryGroups'), $force);
         $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
         $fieldImportResultFinal = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
-        $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($model->getAttribute('categoryGroups'), $force);
 
         // Element index settings are supported from Craft 2.5
         if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
@@ -118,10 +118,10 @@ class Schematic extends BaseApplication
         $result->consume($fieldImportResult);
         $result->consume($globalSetsImportResult);
         $result->consume($sectionImportResult);
+        $result->consume($categoryGroupImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
         $result->consume($fieldImportResultFinal);
-        $result->consume($categoryGroupImportResult);
 
         // Element index settings are supported from Craft 2.5
         if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
