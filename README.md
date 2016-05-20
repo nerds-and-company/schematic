@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.3.0###
+- Schematic now also exports and imports category groups (thanks to @smcyr, closes #31)
+
 ###3.2.2###
 - Improved the Craft and plugin updating/migrating mechanism
 - Fixed a bug where element index settings wheren't imported (closes #49)
