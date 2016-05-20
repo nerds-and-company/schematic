@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.3.1###
+- Export handle for category field source
+
 ###3.3.0###
 - Schematic now also exports and imports category groups (thanks to @smcyr, closes #31)
 

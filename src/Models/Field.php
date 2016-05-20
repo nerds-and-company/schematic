@@ -52,11 +52,11 @@ class Field
     }
 
     /**
-     * @return CategoryGroupsService
+     * @return CategoriesService
      */
-    private function getCategoryGroupsService()
+    private function getCategoriesService()
     {
-        return Craft::app()->categoryGroups;
+        return Craft::app()->categories;
     }
 
     /**
@@ -81,7 +81,11 @@ class Field
         }
 
         if (isset($definition['settings']['sources'])) {
-            $definition['settings']['sources'] = $this->getMappedSources($definition['settings']['sources'], 'id', 'handle');
+            $definition['settings']['sources'] = $this->getMappedSources($field->type, $definition['settings']['sources'], 'id', 'handle');
+        }
+
+        if (isset($definition['settings']['source'])) {
+            $definition['settings']['source'] = $this->getSource($field->type, $definition['settings']['source'], 'id', 'handle');
         }
 
         return $definition;
@@ -109,7 +113,13 @@ class Field
 
         if (isset($fieldDefinition['settings']['sources'])) {
             $settings = $fieldDefinition['settings'];
-            $settings['sources'] = $this->getMappedSources($settings['sources'], 'handle', 'id');
+            $settings['sources'] = $this->getMappedSources($field->type, $settings['sources'], 'handle', 'id');
+            $field->settings = $settings;
+        }
+
+        if (isset($fieldDefinition['settings']['source'])) {
+            $settings = $fieldDefinition['settings'];
+            $settings['source'] = $this->getSource($field->type, $settings['source'], 'handle', 'id');
             $field->settings = $settings;
         }
     }
@@ -117,19 +127,20 @@ class Field
     /**
      * Get sources based on the indexFrom attribute and return them with the indexTo attribute.
      *
+     * @param string       $fieldType
      * @param string|array $sources
      * @param string       $indexFrom
      * @param string       $indexTo
      *
      * @return array|string
      */
-    private function getMappedSources($sources, $indexFrom, $indexTo)
+    private function getMappedSources($fieldType, $sources, $indexFrom, $indexTo)
     {
         $mappedSources = $sources;
         if (is_array($sources)) {
             $mappedSources = [];
             foreach ($sources as $source) {
-                $mappedSources[] = $this->getSource($source, $indexFrom, $indexTo);
+                $mappedSources[] = $this->getSource($fieldType, $source, $indexFrom, $indexTo);
             }
         }
 
@@ -141,13 +152,14 @@ class Field
      *
      * @TODO Break up and simplify this method
      *
+     * @param string $fieldType
      * @param string $source
      * @param string $indexFrom
      * @param string $indexTo
      *
      * @return string
      */
-    private function getSource($source, $indexFrom, $indexTo)
+    private function getSource($fieldType, $source, $indexFrom, $indexTo)
     {
         /** @var BaseElementModel $sourceObject */
         $sourceObject = null;
@@ -160,7 +172,7 @@ class Field
                     $method = 'getSectionBy';
                     break;
                 case 'group':
-                    $service = $this->getUserGroupsService();
+                    $service = $fieldType == 'Users' ? $this->getUserGroupsService() : $this->getCategoriesService();
                     $method = 'getGroupBy';
                     break;
                 case 'folder':
