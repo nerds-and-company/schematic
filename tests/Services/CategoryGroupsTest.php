@@ -3,11 +3,15 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\BaseTest;
+use Craft\CategoriesService;
 use Craft\CategoryGroupLocaleModel;
 use Craft\CategoryGroupModel;
 use Craft\Craft;
+use Craft\DbCommand;
+use Craft\DbConnection;
 use Craft\FieldLayoutModel;
 use Craft\FieldsService;
+use NerdsAndCompany\Schematic\Models\Result;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -49,6 +53,26 @@ class CategoryGroupsTest extends BaseTest
         $this->assertSame($expectedResult, $actualResult);
     }
 
+    /**
+     * @covers ::import
+     * @dataProvider provideValidCategoryGroupDefinitions
+     *
+     * @param array $groupDefinitions
+     */
+    public function testSuccessfulImport(array $groupDefinitions)
+    {
+        $this->setMockCategoriesService();
+        $this->setMockDbConnection();
+        $this->setMockSchematicFields();
+
+        $schematicUserGroupsService = new CategoryGroups();
+
+        $import = $schematicUserGroupsService->import($groupDefinitions);
+
+        $this->assertInstanceOf(Result::class, $import);
+        $this->assertFalse($import->hasErrors());
+    }
+
     //==============================================================================================================
     //==============================================  PROVIDERS  ===================================================
     //==============================================================================================================
@@ -80,7 +104,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                          'fields' => []
+                            'fields' => []
                         ],
                     ],
                 ],
@@ -103,7 +127,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                          'fields' => []
+                            'fields' => []
                         ],
                     ],
                     'groupHandle2' => [
@@ -118,7 +142,38 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                          'fields' => []
+                            'fields' => []
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function provideValidCategoryGroupDefinitions()
+    {
+        return [
+            'emptyArray' => [
+                'groupDefinitions' => [],
+            ],
+            'single group' => [
+                'groupDefinitions' => [
+                    'groupHandle1' => [
+                        'name' => 'groupName1',
+                        'hasUrls' => false,
+                        'template' => '',
+                        'maxLevels' => 3,
+                        'locales' => [
+                            'en' => [
+                                'urlFormat' => '',
+                                'nestedUrlFormat' => '',
+                            ],
+                        ],
+                        'fieldLayout' => [
+                            'fields' => []
                         ],
                     ],
                 ],
@@ -196,10 +251,35 @@ class CategoryGroupsTest extends BaseTest
             ->with($this->isInstanceOf(FieldLayoutModel::class))
             ->willReturn(['fields' => []]);
 
+        $mockSchematicFields->expects($this->any())
+            ->method('getFieldLayout')
+            ->with($this->isType('array'))
+            ->willReturn($this->getMockFieldLayout());
+
         $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFields);
 
         return $mockSchematicFields;
     }
+
+    /**
+     * @return Mock|CategoriesService
+     */
+    private function setMockCategoriesService()
+    {
+        $mockCategoriesService = $this->getMockBuilder(CategoriesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockCategoriesService->expects($this->any())
+            ->method('getAllGroups')
+            ->with('handle')
+            ->willReturn([]);
+
+        $this->setComponent(Craft::app(), 'categories', $mockCategoriesService);
+
+        return $mockCategoriesService;
+    }
+
 
     /**
      * @return Mock|FieldLayoutModel
@@ -219,8 +299,8 @@ class CategoryGroupsTest extends BaseTest
     private function getMockCategoryGroupLocale()
     {
         $mockCategoryGroupLocale = $this->getMockBuilder(CategoryGroupLocaleModel::class)
-          ->disableOriginalConstructor()
-          ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockCategoryGroupLocale->expects($this->any())
             ->method('__get')
@@ -229,5 +309,37 @@ class CategoryGroupsTest extends BaseTest
             ]);
 
         return $mockCategoryGroupLocale;
+    }
+
+    /**
+     * @return Mock|DbConnection
+     */
+    private function setMockDbConnection()
+    {
+        $mockDbConnection = $this->getMockBuilder(DbConnection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('createCommand', 'getSchema'))
+            ->getMock();
+        $mockDbConnection->autoConnect = false; // Do not auto connect
+
+        $mockDbCommand = $this->getMockDbCommand();
+        $mockDbConnection->expects($this->any())->method('createCommand')->willReturn($mockDbCommand);
+
+        Craft::app()->setComponent('db', $mockDbConnection);
+
+
+        return $mockDbConnection;
+    }
+
+    /**
+     * @return Mock|DbCommand
+     */
+    private function getMockDbCommand()
+    {
+        $mockDbCommand = $this->getMockBuilder(DbCommand::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $mockDbCommand;
     }
 }
