@@ -318,7 +318,7 @@ class CategoryGroupsTest extends BaseTest
     {
         $mockDbConnection = $this->getMockBuilder(DbConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('createCommand', 'getSchema'))
+            ->setMethods(['createCommand'])
             ->getMock();
         $mockDbConnection->autoConnect = false; // Do not auto connect
 
@@ -338,6 +338,7 @@ class CategoryGroupsTest extends BaseTest
     {
         $mockDbCommand = $this->getMockBuilder(DbCommand::class)
             ->disableOriginalConstructor()
+            ->setMethods(['insertOrUpdate'])
             ->getMock();
 
         return $mockDbCommand;
