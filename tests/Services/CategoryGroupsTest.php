@@ -73,6 +73,26 @@ class CategoryGroupsTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
+    /**
+       * @covers ::import
+       * @dataProvider provideValidCategoryGroupDefinitions
+       *
+       * @param array $groupDefinitions
+       */
+      public function testImportWithForceOption(array $groupDefinitions)
+      {
+          $this->setMockCategoriesService();
+          $this->setMockDbConnection();
+          $this->setMockSchematicFields();
+
+          $schematicUserGroupsService = new CategoryGroups();
+
+          $import = $schematicUserGroupsService->import($groupDefinitions, true);
+
+          $this->assertInstanceOf(Result::class, $import);
+          $this->assertFalse($import->hasErrors());
+      }
+
     //==============================================================================================================
     //==============================================  PROVIDERS  ===================================================
     //==============================================================================================================
