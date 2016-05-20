@@ -173,6 +173,7 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 ###3.3.2###
 - Clear craft category groups cache before importing them
 - Perform category groups import before importing user permissions
+- Only run updateDatabase for craft when craft db migrations are needed
 
 ###3.3.1###
 - Export handle for category field source
