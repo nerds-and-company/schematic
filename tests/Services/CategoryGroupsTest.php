@@ -38,7 +38,6 @@ class CategoryGroupsTest extends BaseTest
      * @dataProvider provideValidCategoryGroups
      *
      * @param CategoryGroupModel[] $groups
-     * @param string[] $groupPermissions
      * @param array $expectedResult
      */
     public function testSuccessfulExport(array $groups, array $expectedResult = [])
