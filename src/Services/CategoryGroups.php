@@ -193,11 +193,15 @@ class CategoryGroups extends Base
     {
         $obj         = Craft::app()->categories;
         $refObject   = new \ReflectionObject($obj);
-        $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, false);
-        $refProperty = $refObject->getProperty('_categoryGroupsById');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, array());
+        if ($refObject->hasProperty('_fetchedAllCategoryGroups')) {
+            $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
+        }
+        if ($refObject->hasProperty('_categoryGroupsById')) {
+            $refProperty = $refObject->getProperty('_categoryGroupsById');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, array());
+        }
     }
 }
