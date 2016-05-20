@@ -131,9 +131,11 @@ class Plugins extends Base
     public function import(array $pluginDefinitions, $force = false)
     {
         Craft::log(Craft::t('Updating Craft'));
-        $result = $this->getUpdatesService()->updateDatabase('craft');
-        if (!$result['success']) {
-            throw new Exception($result['message']);
+        if ($this->getUpdatesService()->isCraftDbMigrationNeeded()) {
+            $result = $this->getUpdatesService()->updateDatabase('craft');
+            if (!$result['success']) {
+                throw new Exception($result['message']);
+            }
         }
 
         Craft::log(Craft::t('Importing Plugins'));
