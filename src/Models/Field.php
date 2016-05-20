@@ -52,6 +52,14 @@ class Field
     }
 
     /**
+     * @return CategoryGroupsService
+     */
+    private function getCategoryGroupsService()
+    {
+        return Craft::app()->categoryGroups;
+    }
+
+    /**
      * @param FieldModel $field
      * @param $includeContext
      *

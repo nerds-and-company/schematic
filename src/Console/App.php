@@ -322,6 +322,9 @@ class App extends Base
             'schematic_users' => [
                 'class' => Service\Users::class,
             ],
+            'schematic_categoryGroups' => [
+                'class' => Service\CategoryGroups::class,
+            ],
         ];
 
         // Element index settings are supported from Craft 2.5
