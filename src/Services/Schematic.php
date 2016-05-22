@@ -96,8 +96,8 @@ class Schematic extends BaseApplication
         // Import schema
         $localesImportResult = Craft::app()->schematic_locales->import($model->getAttribute('locales', $force));
         $pluginImportResult = Craft::app()->schematic_plugins->import($model->getAttribute('plugins', $force));
-        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($model->getAttribute('assetSources'), $force);
         $fieldImportResult = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
+        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($model->getAttribute('assetSources'), $force);
         $globalSetsImportResult = Craft::app()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
         $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
         $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($model->getAttribute('categoryGroups'), $force);
@@ -114,8 +114,8 @@ class Schematic extends BaseApplication
         $result = new Result();
         $result->consume($localesImportResult);
         $result->consume($pluginImportResult);
-        $result->consume($assetSourcesImportResult);
         $result->consume($fieldImportResult);
+        $result->consume($assetSourcesImportResult);
         $result->consume($globalSetsImportResult);
         $result->consume($sectionImportResult);
         $result->consume($categoryGroupImportResult);
