@@ -138,7 +138,7 @@ class Fields extends Base
             $contentService->fieldContext = 'global';
             $contentService->contentTable = 'content';
 
-            $this->resetCraftFieldsServiceCache();
+            $this->resetCraftFieldsServiceGroupsCache();
             $this->groups = $this->getFieldsService()->getAllGroups('name');
             $this->fields = $this->getFieldsService()->getAllFields('handle');
 
@@ -163,6 +163,7 @@ class Fields extends Base
             if ($force) { // Remove not imported data
                 $this->deleteFieldsAndGroups();
             }
+            $this->resetCraftFieldsServiceFieldsCache();
         }
 
         return $this->getResultModel();
@@ -294,7 +295,7 @@ class Fields extends Base
             $field = $this->getFieldModel($fieldHandle);
             $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
 
-            if ($schematicFieldModel->getDefinition($field, true) === $fieldDef ) {
+            if ($schematicFieldModel->getDefinition($field, true) === $fieldDef) {
                 Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]));
                 continue;
             }
@@ -410,7 +411,6 @@ class Fields extends Base
 
         foreach ($fieldLayoutDef as $fieldHandle => $required) {
             $field = Craft::app()->fields->getFieldByHandle($fieldHandle);
-
             if ($field instanceof FieldModel) {
                 $layoutFields[] = $field->id;
 
@@ -427,14 +427,26 @@ class Fields extends Base
     }
 
     /**
-     * Reset craft fields service cache using reflection
+     * Reset craft fields service groups cache using reflection
      */
-    private function resetCraftFieldsServiceCache()
+    private function resetCraftFieldsServiceGroupsCache()
     {
         $obj         = $this->getFieldsService();
-        $refObject   = new \ReflectionObject( $obj );
-        $refProperty = $refObject->getProperty( '_fetchedAllGroups' );
-        $refProperty->setAccessible( true );
+        $refObject   = new \ReflectionObject($obj);
+        $refProperty = $refObject->getProperty('_fetchedAllGroups');
+        $refProperty->setAccessible(true);
         $refProperty->setValue($obj, false);
+    }
+
+    /**
+     * Reset craft fields service fields cache using reflection
+     */
+    private function resetCraftFieldsServiceFieldsCache()
+    {
+        $obj         = $this->getFieldsService();
+        $refObject   = new \ReflectionObject($obj);
+        $refProperty = $refObject->getProperty('_fieldsByContextAndHandle');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($obj, array());
     }
 }

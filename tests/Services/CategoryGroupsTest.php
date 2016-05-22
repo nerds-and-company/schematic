@@ -287,6 +287,7 @@ class CategoryGroupsTest extends BaseTest
     {
         $mockCategoriesService = $this->getMockBuilder(CategoriesService::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getAllGroups', 'saveGroup', 'deleteGroupById'])
             ->getMock();
 
         $mockCategoriesService->expects($this->any())
