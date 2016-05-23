@@ -194,9 +194,8 @@ class Field
         }
 
         if ($sourceObject && isset($sourceType)) {
-            $source = $sourceType.':'.$sourceObject->$indexTo;
+            return $sourceType.':'.$sourceObject->$indexTo;
         }
-
-        return $source;
+        return '';
     }
 }
