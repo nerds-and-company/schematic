@@ -170,16 +170,12 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
-###3.3.2###
-- Clear craft category groups cache before importing them
-- Perform category groups import before importing user permissions
-- Only run updateDatabase for craft when craft db migrations are needed
-
 ###3.3.1###
-- Export handle for category field source
+- Return empty string when field source not found at import 
 
 ###3.3.0###
 - Schematic now also exports and imports category groups (thanks to @smcyr, closes #31)
+- Only run updateDatabase for craft when craft db migrations are needed
 
 ###3.2.2###
 - Improved the Craft and plugin updating/migrating mechanism
