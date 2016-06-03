@@ -161,6 +161,10 @@ class Field
      */
     private function getSource($fieldType, $source, $indexFrom, $indexTo)
     {
+        if ($source == 'singles') {
+            return $source;
+        }
+
         /** @var BaseElementModel $sourceObject */
         $sourceObject = null;
 

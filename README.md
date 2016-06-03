@@ -170,8 +170,11 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.3.2###
+- Allow 'singles' as a source
+
 ###3.3.1###
-- Return empty string when field source not found at import 
+- Return empty string when field source not found at import
 
 ###3.3.0###
 - Schematic now also exports and imports category groups (thanks to @smcyr, closes #31)
