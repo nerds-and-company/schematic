@@ -325,6 +325,9 @@ class App extends Base
             'schematic_categoryGroups' => [
                 'class' => Service\CategoryGroups::class,
             ],
+            'schematic_tagGroups' => [
+                'class' => Service\TagGroups::class,
+            ],
         ];
 
         // Element index settings are supported from Craft 2.5

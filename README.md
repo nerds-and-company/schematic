@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.4.0###
+- Schematic now also exports and imports tag groups
+
 ###3.3.2###
 - Allow 'singles' as a source
 

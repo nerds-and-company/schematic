@@ -30,6 +30,7 @@ use Symfony\Component\Yaml\Yaml;
  * @property array $elementIndexSettings
  * @property array $pluginData
  * @property array $categoryGroups
+ * @property array $tagGroups
  */
 class Data extends Base
 {
@@ -52,6 +53,7 @@ class Data extends Base
             'elementIndexSettings'  => [AttributeType::Mixed, 'default' => []],
             'pluginData'            => [AttributeType::Mixed, 'default' => []],
             'categoryGroups'        => [AttributeType::Mixed, 'default' => []],
+            'tagGroups'        => [AttributeType::Mixed, 'default' => []],
         ];
     }
 

@@ -101,6 +101,7 @@ class Schematic extends BaseApplication
         $globalSetsImportResult = Craft::app()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
         $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
         $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($model->getAttribute('categoryGroups'), $force);
+        $tagGroupImportResult = Craft::app()->schematic_tagGroups->import($model->getAttribute('tagGroups'), $force);
         $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
         $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
         $fieldImportResultFinal = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
@@ -119,6 +120,7 @@ class Schematic extends BaseApplication
         $result->consume($globalSetsImportResult);
         $result->consume($sectionImportResult);
         $result->consume($categoryGroupImportResult);
+        $result->consume($tagGroupImportResult);
         $result->consume($userGroupImportResult);
         $result->consume($userImportResult);
         $result->consume($fieldImportResultFinal);
@@ -167,6 +169,7 @@ class Schematic extends BaseApplication
         $globals = Craft::app()->globals->getAllSets();
         $userGroups = Craft::app()->userGroups->getAllGroups();
         $categoryGroups = Craft::app()->categories->getAllGroups();
+        $tagGroups = Craft::app()->tags->getAllTagGroups();
 
         $export = [
             'locales' => Craft::app()->schematic_locales->export(),
@@ -178,6 +181,7 @@ class Schematic extends BaseApplication
             'userGroups' => Craft::app()->schematic_userGroups->export($userGroups),
             'users' => Craft::app()->schematic_users->export(),
             'categoryGroups' => Craft::app()->schematic_categoryGroups->export($categoryGroups),
+            'tagGroups' => Craft::app()->schematic_tagGroups->export($tagGroups),
         ];
 
         // Element index settings are supported from Craft 2.5
