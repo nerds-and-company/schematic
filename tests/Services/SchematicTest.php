@@ -2,13 +2,14 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
+use Craft\BaseTest;
 use Craft\CategoriesService;
 use Craft\Craft;
-use Craft\BaseTest;
 use Craft\FieldsService;
 use Craft\GlobalsService;
-use Craft\SectionsService;
 use Craft\PluginsService;
+use Craft\SectionsService;
+use Craft\TagsService;
 use Craft\UserGroupsService;
 use NerdsAndCompany\Schematic\Models\Result;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -202,6 +203,20 @@ class SchematicTest extends BaseTest
     }
 
     /**
+     * @return Mock|TagsService
+     */
+    public function getMockTagsService()
+    {
+        $mock = $this->getMockBuilder(TagsService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->expects($this->exactly(1))->method('getAllTagGroups')->willReturn([]);
+
+        return $mock;
+    }
+
+    /**
      * Mock all required services.
      */
     private function mockServices()
@@ -265,6 +280,9 @@ class SchematicTest extends BaseTest
 
         $mockCategoriesService = $this->getMockCategoriesService();
         $this->setCraftComponent('categories', $mockCategoriesService);
+
+        $mockTagsService = $this->getMockTagsService();
+        $this->setCraftComponent('tags', $mockTagsService);
     }
 
     /**
