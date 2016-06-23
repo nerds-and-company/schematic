@@ -28,38 +28,6 @@ class Field
     }
 
     /**
-     * @return SectionsService
-     */
-    private function getSectionsService()
-    {
-        return Craft::app()->sections;
-    }
-
-    /**
-     * @return UserGroupsService
-     */
-    private function getUserGroupsService()
-    {
-        return Craft::app()->userGroups;
-    }
-
-    /**
-     * @return AssetSources
-     */
-    private function getAssetSourcesService()
-    {
-        return Craft::app()->schematic_assetSources;
-    }
-
-    /**
-     * @return CategoriesService
-     */
-    private function getCategoriesService()
-    {
-        return Craft::app()->categories;
-    }
-
-    /**
      * @param FieldModel $field
      * @param $includeContext
      *
@@ -161,6 +129,10 @@ class Field
      */
     private function getSource($fieldType, $source, $indexFrom, $indexTo)
     {
+        if ($source == 'singles' || $source == '*') {
+            return $source;
+        }
+
         /** @var BaseElementModel $sourceObject */
         $sourceObject = null;
 
@@ -168,23 +140,27 @@ class Field
             list($sourceType, $sourceFrom) = explode(':', $source);
             switch ($sourceType) {
                 case 'section':
-                    $service = $this->getSectionsService();
+                    $service = Craft::app()->sections;
                     $method = 'getSectionBy';
                     break;
                 case 'group':
-                    $service = $fieldType == 'Users' ? $this->getUserGroupsService() : $this->getCategoriesService();
+                    $service = $fieldType == 'Users' ? Craft::app()->userGroups : Craft::app()->categories;
                     $method = 'getGroupBy';
                     break;
                 case 'folder':
-                    $service = $this->getAssetSourcesService();
+                    $service = Craft::app()->assetSources;
                     $method = 'getSourceTypeBy';
+                    break;
+                case 'taggroup':
+                    $service = Craft::app()->tags;
+                    $method = 'getTagGroupBy';
                     break;
             }
         } elseif ($source !== 'singles') {
             //Backwards compatibility
             $sourceType = 'section';
             $sourceFrom = $source;
-            $service = $this->getSectionsService();
+            $service = Craft::app()->sections;
             $method = 'getSectionBy';
         }
 
