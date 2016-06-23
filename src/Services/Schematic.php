@@ -216,6 +216,16 @@ class Schematic extends BaseApplication
     }
 
     /**
+     * Always return the super user
+     *
+     * @return Craft\UserModel
+     */
+    public function getUser()
+    {
+        return Craft::app()->users->getUserById(1);
+    }
+
+    /**
      * Assume schematic can do anything.
      *
      * @return bool
