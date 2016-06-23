@@ -172,6 +172,7 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ###3.4.1###
 - Fix elevated user sessions (closes #59)
+- Bugfix in field asset sources
 
 ###3.4.0###
 - Schematic now also exports and imports tag groups
