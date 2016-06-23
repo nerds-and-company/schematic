@@ -148,7 +148,7 @@ class Field
                     $method = 'getGroupBy';
                     break;
                 case 'folder':
-                    $service = Craft::app()->assetSources;
+                    $service = Craft::app()->schematic_assetSources;
                     $method = 'getSourceTypeBy';
                     break;
                 case 'taggroup':
