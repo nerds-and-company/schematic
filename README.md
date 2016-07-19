@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.4.2###
+- Fixed asset import bug where the source was never set. (thanks to @roelvanhintum)
+
 ###3.4.1###
 - Fix elevated user sessions (closes #59)
 - Bugfix in field asset sources
