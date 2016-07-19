@@ -82,13 +82,16 @@ class AssetSources extends Base
     {
         $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
         $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
+        $defaultAssetSourceSettings = array(
+            'publicURLs' => true,
+        );
 
         $assetSource->setAttributes([
             'handle'       => $assetHandle,
             'type'         => $assetSourceDefinition['type'],
             'name'         => $assetSourceDefinition['name'],
             'sortOrder'    => $assetSourceDefinition['sortOrder'],
-            'settings'     => $assetSourceDefinition['settings'],
+            'settings'     => array_merge($defaultAssetSourceSettings, $assetSourceDefinition['settings']),
         ]);
 
         if (array_key_exists('fieldLayout', $assetSourceDefinition)) {
