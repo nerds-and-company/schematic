@@ -170,6 +170,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.4.3###
+- Set publicURLs to true by default for asset sources to be compatible with craft 2.6.2794
+
 ###3.4.2###
 - Fixed asset import bug where the source was never set. (thanks to @roelvanhintum)
 
