@@ -57,7 +57,7 @@ class AssetsField extends Field
     {
         parent::populate($fieldDefinition, $field, $fieldHandle, $group);
 
-        $settings = $fieldDefinition['settings'];
+        $settings = $field->settings;
 
         if ($settings && array_key_exists('defaultUploadLocationSource', $settings)) {
             $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
