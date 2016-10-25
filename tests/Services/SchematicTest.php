@@ -307,7 +307,7 @@ class SchematicTest extends BaseTest
     {
         $this->prepExportMockServices();
 
-        $results = $this->schematicService->exportToYaml('non-existing-folder/not-a-file', false);
+        $results = $this->schematicService->exportToYaml('non-existing-folder/not-a-file', 'all', false);
         $this->assertTrue($results->hasErrors());
     }
 }
