@@ -4,7 +4,8 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseApplicationComponent as BaseApplication;
-use Craft\Exception;use Craft\IOHelper;
+use Craft\Exception;
+use Craft\IOHelper;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Models\Result;
 
@@ -114,21 +115,45 @@ class Schematic extends BaseApplication
     private function importDataModel(Data $model, $force)
     {
         // Import schema
-        $localesImportResult = Craft::app()->schematic_locales->import($model->getAttribute('locales', $force));
-        $pluginImportResult = Craft::app()->schematic_plugins->import($model->getAttribute('plugins', $force));
-        $fieldImportResult = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
-        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($model->getAttribute('assetSources'), $force);
-        $globalSetsImportResult = Craft::app()->schematic_globalSets->import($model->getAttribute('globalSets'), $force);
-        $sectionImportResult = Craft::app()->schematic_sections->import($model->getAttribute('sections'), $force);
-        $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($model->getAttribute('categoryGroups'), $force);
-        $tagGroupImportResult = Craft::app()->schematic_tagGroups->import($model->getAttribute('tagGroups'), $force);
-        $userGroupImportResult = Craft::app()->schematic_userGroups->import($model->getAttribute('userGroups'), $force);
-        $userImportResult = Craft::app()->schematic_users->import($model->getAttribute('users'), true);
-        $fieldImportResultFinal = Craft::app()->schematic_fields->import($model->getAttribute('fields'), $force);
+        $locales = $model->getAttribute('locales', $force);
+        $localesImportResult = Craft::app()->schematic_locales->import($locales);
+
+        $plugins = $model->getAttribute('plugins', $force);
+        $pluginImportResult = Craft::app()->schematic_plugins->import($plugins);
+
+        $fields = $model->getAttribute('fields');
+        $fieldImportResult = Craft::app()->schematic_fields->import($fields, $force);
+
+        $assetSources = $model->getAttribute('assetSources');
+        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($assetSources, $force);
+
+        $globalSets = $model->getAttribute('globalSets');
+        $globalSetsImportResult = Craft::app()->schematic_globalSets->import($globalSets, $force);
+
+        $sections = $model->getAttribute('sections');
+        $sectionImportResult = Craft::app()->schematic_sections->import($sections, $force);
+
+        $categoryGroups = $model->getAttribute('categoryGroups');
+        $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($categoryGroups, $force);
+
+        $tagGroups = $model->getAttribute('tagGroups');
+        $tagGroupImportResult = Craft::app()->schematic_tagGroups->import($tagGroups, $force);
+
+        $userGroups = $model->getAttribute('userGroups');
+        $userGroupImportResult = Craft::app()->schematic_userGroups->import($userGroups, $force);
+
+        $users = $model->getAttribute('users');
+        $userImportResult = Craft::app()->schematic_users->import($users, true);
+
+        $fields = $model->getAttribute('fields');
+        $fieldImportResultFinal = Craft::app()->schematic_fields->import($fields, $force);
 
         // Element index settings are supported from Craft 2.5
         if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
-            $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import($model->getAttribute('elementIndexSettings'), $force);
+            $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import(
+                $model->getAttribute('elementIndexSettings'),
+                $force
+            );
         }
 
         // Verify results
@@ -184,7 +209,7 @@ class Schematic extends BaseApplication
      * @return array
      * @throws Exception
      */
-    private function exportDataModel($dataTypes='all')
+    private function exportDataModel($dataTypes = 'all')
     {
         // If all data types should be exported, get all the available data types that can be exported.
         if ($dataTypes == 'all') {
@@ -193,7 +218,9 @@ class Schematic extends BaseApplication
             // Validate that each data type specified to be exported is reconized.
             foreach ($dataTypes as $dataType) {
                 if (!in_array($dataType, $this->exportableDataTypes)) {
-                    throw new Exception('Invalid export type "' . $dataType .'". Accepted types are ' .  implode(', ', $this->exportableDataTypes));
+                    $errorMessage = 'Invalid export type "' . $dataType .'". Accepted types are '
+                        .  implode(', ', $this->exportableDataTypes);
+                    throw new Exception($errorMessage);
                 }
             }
         }

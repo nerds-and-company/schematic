@@ -3,7 +3,8 @@
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
 use Craft\Craft;
-use Craft\BaseCommand as Base;use NerdsAndCompany\Schematic\Services\Schematic;
+use Craft\BaseCommand as Base;
+use NerdsAndCompany\Schematic\Services\Schematic;
 
 /**
  * Schematic Export Command.
@@ -26,7 +27,7 @@ class ExportCommand extends Base
      *
      * @return int
      */
-    public function actionIndex($file='craft/config/schema.yml', array $exclude=null)
+    public function actionIndex($file = 'craft/config/schema.yml', array $exclude = null)
     {
         $dataTypes = Schematic::getExportableDataTypes();
 
@@ -43,7 +44,8 @@ class ExportCommand extends Base
                     $errorMessage .= 's';
                 }
 
-                $errorMessage .= ': ' . implode(', ', $invalidExcludes) . '. Valid exclusions are ' . implode(', ', $dataTypes);
+                $errorMessage .= ': ' . implode(', ', $invalidExcludes) . '.';
+                $errorMessage .= ' Valid exclusions are ' . implode(', ', $dataTypes);
 
                 // Output an error message outlining what invalid exclusions were specified.
                 echo "\n" . $errorMessage . "\n\n";
