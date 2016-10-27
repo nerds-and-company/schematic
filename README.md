@@ -55,7 +55,7 @@ To skip exporting a specific of data type, exclusions can be specified in the fo
 ./vendor/bin/schematic export --exclude=assetSources
 ```
 
-Multitple exclusions can also be specified:
+Multiple exclusions can also be specified:
 
 ```
 ./vendor/bin/schematic export --exclude=assetSources --exclude=categoryGroups
