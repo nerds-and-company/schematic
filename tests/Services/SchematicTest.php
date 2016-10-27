@@ -7,11 +7,13 @@ use Craft\CategoriesService;
 use Craft\Craft;
 use Craft\FieldsService;
 use Craft\GlobalsService;
+use Craft\IOHelper;
 use Craft\PluginsService;
 use Craft\SectionsService;
 use Craft\TagsService;
 use Craft\UserGroupsService;
 use NerdsAndCompany\Schematic\Models\Result;
+use NerdsAndCompany\Schematic\Models\Data;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
 
@@ -296,6 +298,30 @@ class SchematicTest extends BaseTest
 
         $results = $this->schematicService->exportToYaml($this->getYamlExportFile());
         $this->assertFalse($results->hasErrors());
+    }
+
+    /**
+     * Test export to yml excluding data types.
+     *
+     * @covers ::exportToYaml
+     */
+    public function testExportToYamlExcludingDataTypes()
+    {
+        $this->prepExportMockServices();
+
+        $exportableDataTypes = Schematic::getExportableDataTypes();
+
+        $dataTypesToExport = array_diff($exportableDataTypes, ['pluginData']);
+
+        $results = $this->schematicService->exportToYaml($this->getYamlExportFile(), $dataTypesToExport);
+        $this->assertFalse($results->hasErrors());
+
+        // Read and process the recently created export YAML file.
+        $yaml = IOHelper::getFileContents($this->getYamlExportFile());
+        $dataModel = Data::fromYaml($yaml, []);
+
+        // Make sure the excluded data type was not exported.
+        $this->assertEmpty($dataModel->pluginData);
     }
 
     /**
