@@ -199,6 +199,9 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.5.0###
+- Added ability to exclude datatypes from export. (thanks to @spoik)
+
 ###3.4.3###
 - Set publicURLs to true by default for asset sources to be compatible with craft 2.6.2794
 
