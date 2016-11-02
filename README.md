@@ -49,6 +49,35 @@ An export can be created by running:
 ./vendor/bin/schematic export
 ```
 
+To skip exporting a specific of data type, exclusions can be specified in the following form:
+
+```
+./vendor/bin/schematic export --exclude=assetSources
+```
+
+Multiple exclusions can also be specified:
+
+```
+./vendor/bin/schematic export --exclude=assetSources --exclude=categoryGroups
+```
+
+Here is a list of all of the data types and their corresponding exclude parameter values:
+
+| Data Type | Exlude Parameter |
+| ------------- |-------------|
+| Asset Sources | assetSources |
+| Category Groups | categoryGroups |
+| Element Indexes | elementIndexSettings |
+| Fields | fields |
+| Global Sets | globalSets |
+| Locales | locales |
+| Plugins | plugins |
+| Plugin Data | pluginData |
+| Sections | sections |
+| Tag Groups | tagGroups |
+| Users | users |
+| User Groups | userGroups |
+
 When craft is in a different directory than `./craft/app`, set the path with an environment variable.
 For example:
 ```
