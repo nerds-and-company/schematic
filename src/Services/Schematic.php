@@ -205,7 +205,7 @@ class Schematic extends BaseApplication
     /**
      * Export data model.
      *
-     * @param string $dataTypes The data types to export
+     * @param string|array $dataTypes The data types to export
      *
      * @return array
      *
@@ -214,9 +214,7 @@ class Schematic extends BaseApplication
     private function exportDataModel($dataTypes = 'all')
     {
         // If all data types should be exported, get all the available data types that can be exported.
-        if ($dataTypes == 'all') {
-            $dataTypes = $this->exportableDataTypes;
-        } else {
+        if (is_array($dataTypes)) {
             // Validate that each data type specified to be exported is reconized.
             foreach ($dataTypes as $dataType) {
                 if (!in_array($dataType, $this->exportableDataTypes)) {
@@ -225,6 +223,8 @@ class Schematic extends BaseApplication
                     throw new Exception($errorMessage);
                 }
             }
+        } else {
+            $dataTypes = $this->exportableDataTypes;
         }
 
         $categoryGroups = Craft::app()->categories->getAllGroups();
