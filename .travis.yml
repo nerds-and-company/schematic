@@ -22,13 +22,10 @@ matrix:
 
  # execute any number of scripts before the test run, custom env's are available as variables
 install:
-  - curl -sS https://codeload.github.com/pixelandtonic/Craft-Release/zip/master > craft.zip
+  - curl -sS https://download.craftcdn.com/craft/2.6/2.6.2950/Craft-2.6.2950.zip > craft.zip
   - unzip craft.zip
   - rm craft.zip
-  - mv Craft-Release-master craft
-  - mkdir craft/config
   - echo "<?php return ['user' => 'test'];" > craft/config/db.php
-  - mkdir craft/storage
   - composer install
   - cd craft/app
   - composer require mockery/mockery
