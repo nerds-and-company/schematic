@@ -64,7 +64,7 @@ defined('CURLOPT_TIMEOUT_MS') || define('CURLOPT_TIMEOUT_MS',        155);
 defined('CURLOPT_CONNECTTIMEOUT_MS') || define('CURLOPT_CONNECTTIMEOUT_MS', 156);
 
 // Load up Composer's files
-require CRAFT_FRAMEWORK_PATH.'autoload.php';
+require CRAFT_VENDOR_PATH.'autoload.php';
 require __DIR__.'/../../../autoload.php';
 
 // Disable the PHP include path
