@@ -98,6 +98,8 @@ If Craft is not installed yet, Schematic will run the installer for you. Make su
 Optional environment variables (similar to the [PHP constants](https://craftcms.com/docs/php-constants)):
 - CRAFT_BASE_PATH
 - CRAFT_APP_PATH
+- CRAFT_VENDOR_PATH
+- CRAFT_FRAMEWORK_PATH
 - CRAFT_CONFIG_PATH
 - CRAFT_PLUGINS_PATH
 - CRAFT_STORAGE_PATH
@@ -198,6 +200,10 @@ class Plugin_CustomSchematicFieldModel extends \NerdsAndCompany\Schematic\Models
 This project has been licensed under the MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 ## Changelog
+
+###3.5.1###
+- Log error in stead of throwing exception when failing to save new plugin info
+- Added support for >= Craft 2.6.2951's new constants, CRAFT_VENDOR_PATH and CRAFT_FRAMEWORK_PATH
 
 ###3.5.0###
 - Added ability to exclude datatypes from export. (thanks to @spoik)
