@@ -98,6 +98,8 @@ If Craft is not installed yet, Schematic will run the installer for you. Make su
 Optional environment variables (similar to the [PHP constants](https://craftcms.com/docs/php-constants)):
 - CRAFT_BASE_PATH
 - CRAFT_APP_PATH
+- CRAFT_VENDOR_PATH
+- CRAFT_FRAMEWORK_PATH
 - CRAFT_CONFIG_PATH
 - CRAFT_PLUGINS_PATH
 - CRAFT_STORAGE_PATH
