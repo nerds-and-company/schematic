@@ -104,7 +104,7 @@ class Plugins extends Base
     {
         $result = $this->getUpdatesService()->updateDatabase($handle);
         if (!$result['success']) {
-            throw new Exception($result['message']);
+            $this->addError($result['message']);
         }
     }
 
