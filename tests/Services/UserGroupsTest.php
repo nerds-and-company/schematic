@@ -301,7 +301,7 @@ class UserGroupsTest extends BaseTest
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'sectionHandle';
         $mockSections = [];
-        for ($x = 0; $x <= $count; $x++) {
+        for ($x = 0; $x <= $count; ++$x) {
             $mockSection = $this->getMockBuilder(SectionModel::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -351,7 +351,7 @@ class UserGroupsTest extends BaseTest
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'assetSourceHandle';
         $mockAssetSources = [];
-        for ($x = 0; $x <= $count; $x++) {
+        for ($x = 0; $x <= $count; ++$x) {
             $mockAssetSource = $this->getMockBuilder(AssetSourceModel::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -401,7 +401,7 @@ class UserGroupsTest extends BaseTest
     {
         $keyPrefix = $indexBy == 'id' ? '' : 'globalSetHandle';
         $mockGlobalSets = [];
-        for ($x = 0; $x <= $count; $x++) {
+        for ($x = 0; $x <= $count; ++$x) {
             $mockGlobalSet = $this->getMockBuilder(GlobalSetModel::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -454,7 +454,7 @@ class UserGroupsTest extends BaseTest
     private function getMockUserGroups($count)
     {
         $mockUserGroups = [];
-        for ($x = 0; $x <= $count; $x++) {
+        for ($x = 0; $x <= $count; ++$x) {
             $mockUserGroups['groupHandle'.$x] = $this->getMockUserGroup($x);
         }
 

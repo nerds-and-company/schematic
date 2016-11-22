@@ -37,23 +37,23 @@ class Data extends Base
     /**
      * Define attributes.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function defineAttributes()
     {
         return [
-            'locales'               => [AttributeType::Mixed, 'default' => []],
-            'assetSources'          => [AttributeType::Mixed, 'default' => []],
-            'fields'                => [AttributeType::Mixed, 'default' => []],
-            'globalSets'            => [AttributeType::Mixed, 'default' => []],
-            'plugins'               => [AttributeType::Mixed, 'default' => []],
-            'sections'              => [AttributeType::Mixed, 'default' => []],
-            'userGroups'            => [AttributeType::Mixed, 'default' => []],
-            'users'                 => [AttributeType::Mixed, 'default' => []],
-            'elementIndexSettings'  => [AttributeType::Mixed, 'default' => []],
-            'pluginData'            => [AttributeType::Mixed, 'default' => []],
-            'categoryGroups'        => [AttributeType::Mixed, 'default' => []],
-            'tagGroups'        => [AttributeType::Mixed, 'default' => []],
+            'locales' => [AttributeType::Mixed, 'default' => []],
+            'assetSources' => [AttributeType::Mixed, 'default' => []],
+            'fields' => [AttributeType::Mixed, 'default' => []],
+            'globalSets' => [AttributeType::Mixed, 'default' => []],
+            'plugins' => [AttributeType::Mixed, 'default' => []],
+            'sections' => [AttributeType::Mixed, 'default' => []],
+            'userGroups' => [AttributeType::Mixed, 'default' => []],
+            'users' => [AttributeType::Mixed, 'default' => []],
+            'elementIndexSettings' => [AttributeType::Mixed, 'default' => []],
+            'pluginData' => [AttributeType::Mixed, 'default' => []],
+            'categoryGroups' => [AttributeType::Mixed, 'default' => []],
+            'tagGroups' => [AttributeType::Mixed, 'default' => []],
         ];
     }
 
@@ -136,6 +136,6 @@ class Data extends Base
     {
         $attribute = parent::getAttribute($attribute, $flattenValue);
 
-        return (!is_null($attribute) ? $attribute : $default);
+        return !is_null($attribute) ? $attribute : $default;
     }
 }

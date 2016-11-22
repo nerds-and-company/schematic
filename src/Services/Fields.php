@@ -257,7 +257,7 @@ class Fields extends Base
      */
     private function getFieldModel($field)
     {
-        return (array_key_exists($field, $this->fields) ? $this->fields[$field] : new FieldModel());
+        return array_key_exists($field, $this->fields) ? $this->fields[$field] : new FieldModel();
     }
 
     /**
@@ -427,24 +427,24 @@ class Fields extends Base
     }
 
     /**
-     * Reset craft fields service groups cache using reflection
+     * Reset craft fields service groups cache using reflection.
      */
     private function resetCraftFieldsServiceGroupsCache()
     {
-        $obj         = $this->getFieldsService();
-        $refObject   = new \ReflectionObject($obj);
+        $obj = $this->getFieldsService();
+        $refObject = new \ReflectionObject($obj);
         $refProperty = $refObject->getProperty('_fetchedAllGroups');
         $refProperty->setAccessible(true);
         $refProperty->setValue($obj, false);
     }
 
     /**
-     * Reset craft fields service fields cache using reflection
+     * Reset craft fields service fields cache using reflection.
      */
     private function resetCraftFieldsServiceFieldsCache()
     {
-        $obj         = $this->getFieldsService();
-        $refObject   = new \ReflectionObject($obj);
+        $obj = $this->getFieldsService();
+        $refObject = new \ReflectionObject($obj);
         $refProperty = $refObject->getProperty('_fieldsByContextAndHandle');
         $refProperty->setAccessible(true);
         $refProperty->setValue($obj, array());

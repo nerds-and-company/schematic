@@ -148,8 +148,8 @@ class App extends Base
      * By default, event handlers will not get attached if Craft is current in the middle of updating itself or a
      * plugin. If you want the event to fire even in that condition, pass `true` to the $evenDuringUpdates argument.
      *
-     * @param string $event   The event to listen for.
-     * @param mixed  $handler The event handler.
+     * @param string $event   The event to listen for
+     * @param mixed  $handler The event handler
      */
     public function on($event, $handler)
     {
@@ -218,12 +218,12 @@ class App extends Base
     }
 
     /**
-     * @todo Remove for Craft 3.
+     * @todo Remove for Craft 3
      *
-     * @param int    $code    The level of the error raised.
-     * @param string $message The error message.
-     * @param string $file    The filename that the error was raised in.
-     * @param int    $line    The line number the error was raised at.
+     * @param int    $code    The level of the error raised
+     * @param string $message The error message
+     * @param string $file    The filename that the error was raised in
+     * @param int    $line    The line number the error was raised at
      */
     public function handleError($code, $message, $file, $line)
     {
@@ -346,12 +346,12 @@ class App extends Base
     private function _installCraft()
     {
         $options = [
-            'username'  => getenv('CRAFT_USERNAME'),
-            'email'     => getenv('CRAFT_EMAIL'),
-            'password'  => getenv('CRAFT_PASSWORD'),
-            'siteName'  => getenv('CRAFT_SITENAME'),
-            'siteUrl'   => getenv('CRAFT_SITEURL'),
-            'locale'    => getenv('CRAFT_LOCALE'),
+            'username' => getenv('CRAFT_USERNAME'),
+            'email' => getenv('CRAFT_EMAIL'),
+            'password' => getenv('CRAFT_PASSWORD'),
+            'siteName' => getenv('CRAFT_SITENAME'),
+            'siteUrl' => getenv('CRAFT_SITEURL'),
+            'locale' => getenv('CRAFT_LOCALE'),
         ];
 
         Craft::app()->install->run($options);

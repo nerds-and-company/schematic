@@ -78,7 +78,7 @@ class SuperTableField extends MatrixField
             $this->populateBlockType($blockType, $blockTypeDef);
 
             $blockTypes[$index] = $blockType;
-            $index++;
+            ++$index;
         }
 
         return $blockTypes;

@@ -57,7 +57,7 @@ class TagGroups extends Base
      * Attempt to import tagGroups.
      *
      * @param array $tagGroupDefinitions
-     * @param bool  $force                If set to true tagGroups not included in the import will be deleted
+     * @param bool  $force               If set to true tagGroups not included in the import will be deleted
      *
      * @return Result
      */
@@ -96,8 +96,8 @@ class TagGroups extends Base
      * Populate taggroup.
      *
      * @param TagGroupModel $tagGroup
-     * @param array          $tagGroupDefinition
-     * @param string         $tagGroupHandle
+     * @param array         $tagGroupDefinition
+     * @param string        $tagGroupHandle
      */
     private function populateTagGroup(TagGroupModel $tagGroup, array $tagGroupDefinition, $tagGroupHandle)
     {
