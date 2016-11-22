@@ -87,11 +87,11 @@ class AssetSources extends Base
         );
 
         $assetSource->setAttributes([
-            'handle'       => $assetHandle,
-            'type'         => $assetSourceDefinition['type'],
-            'name'         => $assetSourceDefinition['name'],
-            'sortOrder'    => $assetSourceDefinition['sortOrder'],
-            'settings'     => array_merge($defaultAssetSourceSettings, $assetSourceDefinition['settings']),
+            'handle' => $assetHandle,
+            'type' => $assetSourceDefinition['type'],
+            'name' => $assetSourceDefinition['name'],
+            'sortOrder' => $assetSourceDefinition['sortOrder'],
+            'settings' => array_merge($defaultAssetSourceSettings, $assetSourceDefinition['settings']),
         ]);
 
         if (array_key_exists('fieldLayout', $assetSourceDefinition)) {

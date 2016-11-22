@@ -49,6 +49,7 @@ class CategoryGroups extends Base
     private function getCategoryGroupDefinition(CategoryGroupModel $categoryGroup)
     {
         $fieldLayout = Craft::app()->fields->getLayoutById($categoryGroup->fieldLayoutId);
+
         return [
             'name' => $categoryGroup->name,
             'hasUrls' => $categoryGroup->hasUrls,
@@ -96,7 +97,7 @@ class CategoryGroups extends Base
      * Attempt to import category groups.
      *
      * @param array $categoryGroupDefinitions
-     * @param bool  $force                If set to true category groups not included in the import will be deleted
+     * @param bool  $force                    If set to true category groups not included in the import will be deleted
      *
      * @return Result
      */
@@ -136,8 +137,8 @@ class CategoryGroups extends Base
      * Populate categorygroup.
      *
      * @param CategoryGroupModel $categoryGroup
-     * @param array          $categoryGroupDefinition
-     * @param string         $categoryGroupHandle
+     * @param array              $categoryGroupDefinition
+     * @param string             $categoryGroupHandle
      */
     private function populateCategoryGroup(CategoryGroupModel $categoryGroup, array $categoryGroupDefinition, $categoryGroupHandle)
     {
@@ -187,12 +188,12 @@ class CategoryGroups extends Base
     }
 
     /**
-     * Reset craft fields service cache using reflection
+     * Reset craft fields service cache using reflection.
      */
     private function resetCraftCategoriesServiceCache()
     {
-        $obj         = Craft::app()->categories;
-        $refObject   = new \ReflectionObject($obj);
+        $obj = Craft::app()->categories;
+        $refObject = new \ReflectionObject($obj);
         if ($refObject->hasProperty('_fetchedAllCategoryGroups')) {
             $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');
             $refProperty->setAccessible(true);

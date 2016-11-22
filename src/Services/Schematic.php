@@ -25,7 +25,7 @@ class Schematic extends BaseApplication
     const SCHEMATIC_METHOD_IMPORT = 'import';
     const SCHEMATIC_METHOD_EXPORT = 'export';
 
-    static protected $exportableDataTypes = [
+    protected static $exportableDataTypes = [
         'locales',
         'assetSources',
         'fields',
@@ -205,8 +205,10 @@ class Schematic extends BaseApplication
     /**
      * Export data model.
      *
-     * @param string $dataTypes The data types to export.
+     * @param string $dataTypes The data types to export
+     *
      * @return array
+     *
      * @throws Exception
      */
     private function exportDataModel($dataTypes = 'all')
@@ -218,8 +220,8 @@ class Schematic extends BaseApplication
             // Validate that each data type specified to be exported is reconized.
             foreach ($dataTypes as $dataType) {
                 if (!in_array($dataType, $this->exportableDataTypes)) {
-                    $errorMessage = 'Invalid export type "' . $dataType .'". Accepted types are '
-                        .  implode(', ', $this->exportableDataTypes);
+                    $errorMessage = 'Invalid export type "'.$dataType.'". Accepted types are '
+                        .implode(', ', $this->exportableDataTypes);
                     throw new Exception($errorMessage);
                 }
             }
@@ -275,7 +277,7 @@ class Schematic extends BaseApplication
         }
 
         // Element index settings are supported from Craft 2.5
-        if (in_array('elementIndexSettings', $dataTypes) and version_compare(CRAFT_VERSION, '2.5', '>=')) {
+        if (in_array('elementIndexSettings', $dataTypes) && version_compare(CRAFT_VERSION, '2.5', '>=')) {
             $export['elementIndexSettings'] = Craft::app()->schematic_elementIndexSettings->export();
         }
 
@@ -308,7 +310,7 @@ class Schematic extends BaseApplication
     }
 
     /**
-     * Always return the super user
+     * Always return the super user.
      *
      * @return Craft\UserModel
      */

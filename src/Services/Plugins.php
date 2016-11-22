@@ -116,9 +116,9 @@ class Plugins extends Base
     private function getPluginDefinition(BasePlugin $plugin)
     {
         return [
-            'isInstalled'       => $plugin->isInstalled,
-            'isEnabled'         => $plugin->isEnabled,
-            'settings'          => $plugin->getSettings()->attributes,
+            'isInstalled' => $plugin->isInstalled,
+            'isEnabled' => $plugin->isEnabled,
+            'settings' => $plugin->getSettings()->attributes,
         ];
     }
 

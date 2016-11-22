@@ -38,7 +38,7 @@ class CategoryGroupsTest extends BaseTest
      * @dataProvider provideValidCategoryGroups
      *
      * @param CategoryGroupModel[] $groups
-     * @param array $expectedResult
+     * @param array                $expectedResult
      */
     public function testSuccessfulExport(array $groups, array $expectedResult = [])
     {
@@ -72,7 +72,7 @@ class CategoryGroupsTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
-    /**
+      /**
        * @covers ::import
        * @dataProvider provideValidCategoryGroupDefinitions
        *
@@ -123,7 +123,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -146,7 +146,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                     'groupHandle2' => [
@@ -161,7 +161,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -192,7 +192,7 @@ class CategoryGroupsTest extends BaseTest
                             ],
                         ],
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -220,8 +220,8 @@ class CategoryGroupsTest extends BaseTest
             ->willReturnMap([
                 ['id', $groupId],
                 ['fieldLayoutId', $groupId],
-                ['handle', 'groupHandle' . $groupId],
-                ['name', 'groupName' . $groupId],
+                ['handle', 'groupHandle'.$groupId],
+                ['name', 'groupName'.$groupId],
             ]);
 
         $mockCategoryGroup->expects($this->any())
@@ -300,7 +300,6 @@ class CategoryGroupsTest extends BaseTest
         return $mockCategoriesService;
     }
 
-
     /**
      * @return Mock|FieldLayoutModel
      */
@@ -346,7 +345,6 @@ class CategoryGroupsTest extends BaseTest
         $mockDbConnection->expects($this->any())->method('createCommand')->willReturn($mockDbCommand);
 
         Craft::app()->setComponent('db', $mockDbConnection);
-
 
         return $mockDbConnection;
     }
