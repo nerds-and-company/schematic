@@ -223,7 +223,7 @@ class PluginsTest extends BaseTest
         $mockBasePlugin
             ->expects($this->any())
             ->method('getSettings')
-            ->willReturn((Object) ['attributes' => $data[$this->pluginHandle]['settings']]);
+            ->willReturn((object) ['attributes' => $data[$this->pluginHandle]['settings']]);
 
         $mockPluginsService = $this->getMockPluginsService();
         $mockPluginsService->expects($this->any())
@@ -245,12 +245,12 @@ class PluginsTest extends BaseTest
     {
         return [
             $this->pluginHandle => [
-                'isInstalled'       => true,
-                'isEnabled'         => true,
-                'settings'          => [
-                    'pluginName'    => 'Menu',
-                    'canDoActions'  => '',
-                    'quietErrors'   => '',
+                'isInstalled' => true,
+                'isEnabled' => true,
+                'settings' => [
+                    'pluginName' => 'Menu',
+                    'canDoActions' => '',
+                    'quietErrors' => '',
                 ],
             ],
         ];

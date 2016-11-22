@@ -22,8 +22,8 @@ class ExportCommand extends Base
     /**
      * Exports the Craft datamodel.
      *
-     * @param string $file file to write the schema to
-     * @param array $exclude Data to not export.
+     * @param string $file    file to write the schema to
+     * @param array  $exclude Data to not export
      *
      * @return int
      */
@@ -44,11 +44,11 @@ class ExportCommand extends Base
                     $errorMessage .= 's';
                 }
 
-                $errorMessage .= ': ' . implode(', ', $invalidExcludes) . '.';
-                $errorMessage .= ' Valid exclusions are ' . implode(', ', $dataTypes);
+                $errorMessage .= ': '.implode(', ', $invalidExcludes).'.';
+                $errorMessage .= ' Valid exclusions are '.implode(', ', $dataTypes);
 
                 // Output an error message outlining what invalid exclusions were specified.
-                echo "\n" . $errorMessage . "\n\n";
+                echo "\n".$errorMessage."\n\n";
 
                 return 1;
             }

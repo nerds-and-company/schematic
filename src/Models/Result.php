@@ -20,7 +20,7 @@ class Result extends Base
     /**
      * Consumes the errors listed in an existing result and appends them to this result.
      *
-     * @param Result $result The result to consume.
+     * @param Result $result The result to consume
      */
     public function consume(Result $result)
     {

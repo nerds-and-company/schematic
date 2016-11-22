@@ -172,6 +172,7 @@ class Field
         if ($sourceObject && isset($sourceType)) {
             return $sourceType.':'.$sourceObject->$indexTo;
         }
+
         return '';
     }
 }

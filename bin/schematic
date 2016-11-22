@@ -20,7 +20,6 @@ $craftBasePath = getenv('CRAFT_BASE_PATH') ? getenv('CRAFT_BASE_PATH') : __DIR__
 $craftAppPath = getenv('CRAFT_APP_PATH') ? getenv('CRAFT_APP_PATH') : $craftBasePath.'app/';
 $craftVendorPath = getenv('CRAFT_VENDOR_PATH') ? getenv('CRAFT_VENDOR_PATH') : $craftAppPath.'vendor/';
 $craftFrameworkPath = getenv('CRAFT_FRAMEWORK_PATH') ? getenv('CRAFT_FRAMEWORK_PATH') : $craftAppPath.'framework/';
-$craftAppPath = getenv('CRAFT_APP_PATH') ? getenv('CRAFT_APP_PATH') : $craftBasePath.'app/';
 $craftConfigPath = getenv('CRAFT_CONFIG_PATH') ? getenv('CRAFT_CONFIG_PATH') : $craftBasePath.'config/';
 $craftPluginsPath = getenv('CRAFT_PLUGINS_PATH') ? getenv('CRAFT_PLUGINS_PATH') : $craftBasePath.'plugins/';
 $craftStoragePath = getenv('CRAFT_STORAGE_PATH') ? getenv('CRAFT_STORAGE_PATH') : $craftBasePath.'storage/';

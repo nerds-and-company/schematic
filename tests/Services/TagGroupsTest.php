@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\BaseTest;
 use Craft\TagsService;
-use Craft\TagGroupLocaleModel;
 use Craft\TagGroupModel;
 use Craft\Craft;
 use Craft\DbCommand;
@@ -38,7 +37,7 @@ class TagGroupsTest extends BaseTest
      * @dataProvider provideValidTagGroups
      *
      * @param TagGroupModel[] $groups
-     * @param array $expectedResult
+     * @param array           $expectedResult
      */
     public function testSuccessfulExport(array $groups, array $expectedResult = [])
     {
@@ -72,7 +71,7 @@ class TagGroupsTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
-    /**
+      /**
        * @covers ::import
        * @dataProvider provideValidTagGroupDefinitions
        *
@@ -114,7 +113,7 @@ class TagGroupsTest extends BaseTest
                     'groupHandle1' => [
                         'name' => 'groupName1',
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -128,13 +127,13 @@ class TagGroupsTest extends BaseTest
                     'groupHandle1' => [
                         'name' => 'groupName1',
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                     'groupHandle2' => [
                         'name' => 'groupName2',
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -156,7 +155,7 @@ class TagGroupsTest extends BaseTest
                     'groupHandle1' => [
                         'name' => 'groupName1',
                         'fieldLayout' => [
-                            'fields' => []
+                            'fields' => [],
                         ],
                     ],
                 ],
@@ -185,8 +184,8 @@ class TagGroupsTest extends BaseTest
             ->willReturnMap([
                 ['id', $groupId],
                 ['fieldLayoutId', $groupId],
-                ['handle', 'groupHandle' . $groupId],
-                ['name', 'groupName' . $groupId],
+                ['handle', 'groupHandle'.$groupId],
+                ['name', 'groupName'.$groupId],
             ]);
 
         $mockTagGroup->expects($this->any())
@@ -265,7 +264,6 @@ class TagGroupsTest extends BaseTest
         return $mockTagsService;
     }
 
-
     /**
      * @return Mock|FieldLayoutModel
      */
@@ -293,7 +291,6 @@ class TagGroupsTest extends BaseTest
         $mockDbConnection->expects($this->any())->method('createCommand')->willReturn($mockDbCommand);
 
         Craft::app()->setComponent('db', $mockDbConnection);
-
 
         return $mockDbConnection;
     }

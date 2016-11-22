@@ -158,7 +158,7 @@ class Sections extends Base
 
             unset($sections[$sectionHandle]);
 
-            if($sectionDefinition === $this->getSectionDefinition($section, null)){
+            if ($sectionDefinition === $this->getSectionDefinition($section, null)) {
                 Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name]));
                 continue;
             }
@@ -206,8 +206,8 @@ class Sections extends Base
 
     /**
      * @param SectionModel $section
-     * @param array $entryTypeDefinitions
-     * @param bool $force
+     * @param array        $entryTypeDefinitions
+     * @param bool         $force
      */
     private function importEntryTypes(SectionModel $section, array $entryTypeDefinitions, $force)
     {
@@ -260,7 +260,7 @@ class Sections extends Base
                 $section->addErrors(['errors' => $sectionRecord->getErrors()]);
 
                 return false;
-            };
+            }
             $section->id = $sectionRecord->id;
 
             return true;
@@ -347,15 +347,16 @@ class Sections extends Base
     }
 
     /**
-     * Reset craft section model cache using reflection
+     * Reset craft section model cache using reflection.
+     *
      * @param SectionModel $section
      */
     private function resetCraftFieldsSectionModelCache(SectionModel $section)
     {
-        $obj         = $section;
-        $refObject   = new \ReflectionObject( $obj );
-        $refProperty = $refObject->getProperty( '_entryTypes' );
-        $refProperty->setAccessible( true );
+        $obj = $section;
+        $refObject = new \ReflectionObject($obj);
+        $refProperty = $refObject->getProperty('_entryTypes');
+        $refProperty->setAccessible(true);
         $refProperty->setValue($obj, null);
     }
 }
