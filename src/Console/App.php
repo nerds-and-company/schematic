@@ -162,7 +162,9 @@ class App extends Base
             $eventName = 'on'.ucfirst($eventName);
         }
 
-        $component->$eventName = $handler;
+        if ($component !== null) {
+            $component->$eventName = $handler;
+        }
     }
 
     /**
