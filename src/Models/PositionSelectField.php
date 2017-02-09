@@ -23,10 +23,11 @@ class PositionSelectField extends Field
      * @param FieldModel           $field
      * @param string               $fieldHandle
      * @param FieldGroupModel|null $group
+     * @param bool                 $force
      */
-    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null, $force = false)
     {
-        parent::populate($fieldDefinition, $field, $fieldHandle, $group);
+        parent::populate($fieldDefinition, $field, $fieldHandle, $group, $force);
 
         $options = [];
         $settings = $fieldDefinition['settings'];
