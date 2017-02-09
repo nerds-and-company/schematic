@@ -445,8 +445,11 @@ class Fields extends Base
     {
         $obj = $this->getFieldsService();
         $refObject = new \ReflectionObject($obj);
-        $refProperty = $refObject->getProperty('_fieldsByContextAndHandle');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, array());
+        $refProperty1 = $refObject->getProperty('_allFieldsInContext');
+        $refProperty1->setAccessible(true);
+        $refProperty1->setValue($obj, array());
+        $refProperty2 = $refObject->getProperty('_fieldsByContextAndHandle');
+        $refProperty2->setAccessible(true);
+        $refProperty2->setValue($obj, array());
     }
 }

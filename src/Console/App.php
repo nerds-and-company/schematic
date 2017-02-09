@@ -61,6 +61,11 @@ class App extends Base
         // Attach our own custom Logger
         Craft::setLogger(new Logger());
 
+        // If there is a custom appId set, apply it here.
+        if ($appId = $this->config->get('appId')) {
+            $this->setId($appId);
+        }
+        
         // Initialize Cache and LogRouter right away (order is important)
         $this->getComponent('cache');
         $this->getComponent('log');
@@ -155,14 +160,18 @@ class App extends Base
     {
         list($componentId, $eventName) = explode('.', $event, 2);
 
-        $component = $this->getComponent($componentId);
+        $component = $this->getComponent($componentId, false);
 
         // Normalize the event name
         if (strncmp($eventName, 'on', 2) !== 0) {
             $eventName = 'on'.ucfirst($eventName);
         }
 
-        $component->$eventName = $handler;
+        if ($component) {
+            $component->$eventName = $handler;
+        } else {
+            $this->_pendingEvents[$componentId][$eventName][] = $handler;
+        }
     }
 
     /**
