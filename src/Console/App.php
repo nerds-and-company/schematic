@@ -61,6 +61,11 @@ class App extends Base
         // Attach our own custom Logger
         Craft::setLogger(new Logger());
 
+        // If there is a custom appId set, apply it here.
+        if ($appId = $this->config->get('appId')) {
+            $this->setId($appId);
+        }
+        
         // Initialize Cache and LogRouter right away (order is important)
         $this->getComponent('cache');
         $this->getComponent('log');
@@ -148,21 +153,36 @@ class App extends Base
      * By default, event handlers will not get attached if Craft is current in the middle of updating itself or a
      * plugin. If you want the event to fire even in that condition, pass `true` to the $evenDuringUpdates argument.
      *
-     * @param string $event   The event to listen for
-     * @param mixed  $handler The event handler
+     * @param string $event             The event to listen for.
+     * @param mixed  $handler           The event handler.
+     * @param bool   $evenDuringUpdates Whether the event handler should be attached when Craft’s updater is running.
+     *                                  Default is `false`.
+     *
+     * @return null
      */
-    public function on($event, $handler)
+    public function on($event, $handler, $evenDuringUpdates = false)
     {
+        if (
+            !$evenDuringUpdates &&
+            ($this->getCommandRunner()->getCommand() instanceof \MigrateCommand)
+        ) {
+            return;
+        }
+
         list($componentId, $eventName) = explode('.', $event, 2);
 
-        $component = $this->getComponent($componentId);
+        $component = $this->getComponent($componentId, false);
 
         // Normalize the event name
         if (strncmp($eventName, 'on', 2) !== 0) {
             $eventName = 'on'.ucfirst($eventName);
         }
 
-        $component->$eventName = $handler;
+        if ($component) {
+            $component->$eventName = $handler;
+        } else {
+            $this->_pendingEvents[$componentId][$eventName][] = $handler;
+        }
     }
 
     /**

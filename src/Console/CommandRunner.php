@@ -26,7 +26,7 @@ class CommandRunner extends ConsoleCommandRunner
     /**
      * @param string $name command name (case-insensitive)
      *
-     * @return \CConsoleCommand The command object. Null if the name is invalid
+     * @return \CConsoleCommand The command object. Null if the name is invalid.
      */
     public function createCommand($name)
     {
