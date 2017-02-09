@@ -201,6 +201,10 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 
 ## Changelog
 
+###3.5.2###
+- Updated Console component with latest Craft updates and fixes
+- Updated YAML component
+
 ###3.5.1###
 - Log error in stead of throwing exception when failing to save new plugin info
 - Added support for >= Craft 2.6.2951's new constants, CRAFT_VENDOR_PATH and CRAFT_FRAMEWORK_PATH

@@ -41,8 +41,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^5.5|^7.0",
-        "symfony/yaml": "~2.8"
+        "php": ">=5.5",
+        "symfony/yaml": "~3.2"
     },
     "bin": ["bin/schematic"],
     "autoload" : {
