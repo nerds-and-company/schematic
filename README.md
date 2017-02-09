@@ -202,6 +202,7 @@ This project has been licensed under the MIT License (MIT). Please see [License 
 ## Changelog
 
 ###3.5.2###
+- Fixed a bug where removed fields were not flushed properly from the in-memory cache
 - Updated Console component with latest Craft updates and fixes
 - Updated YAML component
 
