@@ -64,8 +64,9 @@ class Field
      * @param FieldModel           $field
      * @param string               $fieldHandle
      * @param FieldGroupModel|null $group
+     * @param bool                 $force
      */
-    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null, $force = false)
     {
         $field->name = $fieldDefinition['name'];
         $field->handle = $fieldHandle;

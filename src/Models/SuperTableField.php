@@ -60,10 +60,11 @@ class SuperTableField extends MatrixField
     /**
      * @param array      $fieldDefinition
      * @param FieldModel $field
+     * @param bool       $force
      *
      * @return SuperTable_BlockTypeModel[]
      */
-    protected function getBlockTypes(array $fieldDefinition, FieldModel $field)
+    protected function getBlockTypes(array $fieldDefinition, FieldModel $field, $force = false)
     {
         $blockTypes = $this->getSuperTableService()->getBlockTypesByFieldId($field->id);
 
