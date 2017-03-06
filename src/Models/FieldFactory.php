@@ -10,7 +10,7 @@ use Craft\Craft;
  * Provides a schematic field model for mapping data
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2016, Nerds & Company
+ * @copyright Copyright (c) 2015-2017, Nerds & Company
  * @license   MIT
  *
  * @link      http://www.nerds.company
