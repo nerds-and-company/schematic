@@ -1,3 +1,6 @@
+###3.6.1###
+- Don't care about instable plugin database update outcome
+
 ###3.6.0###
 - Delete old blocktypes from matrixfields on force. (thanks to @Zae)
 - Beware backwards compatibility for the custom Field Models. There is now a $force parameter on the populate method.
