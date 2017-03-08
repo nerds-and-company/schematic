@@ -94,21 +94,6 @@ class Plugins extends Base
     }
 
     /**
-     * Run plugin migrations automatically.
-     *
-     * @param string $handle
-     *
-     * @throws Exception
-     */
-    protected function runMigrations($handle)
-    {
-        $result = $this->getUpdatesService()->updateDatabase($handle);
-        if (!$result['success']) {
-            $this->addError($result['message']);
-        }
-    }
-
-    /**
      * @param BasePlugin $plugin
      *
      * @return array
@@ -152,7 +137,7 @@ class Plugins extends Base
                     $this->togglePluginByHandle($handle, $pluginDefinition['isEnabled']);
 
                     if (!$isNewPlugin && $plugin->isEnabled) {
-                        $this->runMigrations($handle);
+                        $this->getUpdatesService()->updateDatabase($handle);
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
