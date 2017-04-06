@@ -28,6 +28,7 @@ class Schematic extends BaseApplication
     protected static $exportableDataTypes = [
         'locales',
         'assetSources',
+        'assetTransformations',
         'fields',
         'plugins',
         'sections',
@@ -127,6 +128,9 @@ class Schematic extends BaseApplication
         $assetSources = $model->getAttribute('assetSources');
         $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($assetSources, $force);
 
+        $assetTransformations = $model->getAttribute('assetTransformations');
+        $assetTransformationImportResult = Craft::app()->schematic_assetTransformations->import($assetTransformations, $force);
+
         $globalSets = $model->getAttribute('globalSets');
         $globalSetsImportResult = Craft::app()->schematic_globalSets->import($globalSets, $force);
 
@@ -162,6 +166,7 @@ class Schematic extends BaseApplication
         $result->consume($pluginImportResult);
         $result->consume($fieldImportResult);
         $result->consume($assetSourcesImportResult);
+        $result->consume($assetTransformationImportResult);
         $result->consume($globalSetsImportResult);
         $result->consume($sectionImportResult);
         $result->consume($categoryGroupImportResult);
@@ -238,6 +243,10 @@ class Schematic extends BaseApplication
 
         if (in_array('assetSources', $dataTypes)) {
             $export['assetSources'] = Craft::app()->schematic_assetSources->export();
+        }
+
+        if (in_array('assetTransformations', $dataTypes)) {
+            $export['assetTransformations'] = Craft::app()->schematic_assetTransformations->export();
         }
 
         if (in_array('fields', $dataTypes)) {

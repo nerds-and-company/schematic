@@ -21,6 +21,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @property array $Locales
  * @property array $assetSources
+ * @property array $assetTransformations
  * @property array $fields
  * @property array $globalSets
  * @property array $plugins
@@ -44,6 +45,7 @@ class Data extends Base
         return [
             'locales' => [AttributeType::Mixed, 'default' => []],
             'assetSources' => [AttributeType::Mixed, 'default' => []],
+            'assetTransformations' => [AttributeType::Mixed, 'default' => []],
             'fields' => [AttributeType::Mixed, 'default' => []],
             'globalSets' => [AttributeType::Mixed, 'default' => []],
             'plugins' => [AttributeType::Mixed, 'default' => []],
