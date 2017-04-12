@@ -1,3 +1,6 @@
+###3.7.0###
+- Added support for importing/exporting asset transforms
+
 ###3.6.1###
 - Don't care about instable plugin database update outcome
 
