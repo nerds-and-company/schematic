@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\BaseTest;
 use Craft\AssetSourcesService;
+use Craft\AssetTransformsService;
 use Craft\CategoriesService;
 use Craft\Craft;
 use Craft\FieldsService;
@@ -206,6 +207,20 @@ class SchematicTest extends BaseTest
     }
 
     /**
+     * @return Mock|AssetTransformsService
+     */
+    public function getMockAssetTransformsService()
+    {
+        $mock = $this->getMockBuilder(AssetTransformsService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->expects($this->exactly(1))->method('getAllTransforms')->willReturn([]);
+
+        return $mock;
+    }
+
+    /**
      * @return Mock|CategoriesService
      */
     public function getMockCategoriesService()
@@ -298,6 +313,9 @@ class SchematicTest extends BaseTest
 
         $mockAssetSourcesService = $this->getMockAssetSourcesService();
         $this->setCraftComponent('assetSources', $mockAssetSourcesService);
+
+        $mockAssetTransformsService = $this->getMockAssetTransformsService();
+        $this->setCraftComponent('assetTransforms', $mockAssetTransformsService);
 
         $mockCategoriesService = $this->getMockCategoriesService();
         $this->setCraftComponent('categories', $mockCategoriesService);

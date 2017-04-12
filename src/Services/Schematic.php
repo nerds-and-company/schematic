@@ -233,6 +233,7 @@ class Schematic extends BaseApplication
         }
 
         $assetSources = Craft::app()->assetSources->getAllSources();
+        $assetTransforms = Craft::app()->assetTransforms->getAllTransforms();
         $categoryGroups = Craft::app()->categories->getAllGroups();
         $tagGroups = Craft::app()->tags->getAllTagGroups();
 
@@ -247,7 +248,7 @@ class Schematic extends BaseApplication
         }
 
         if (in_array('assetTransforms', $dataTypes)) {
-            $export['assetTransforms'] = Craft::app()->schematic_assetTransforms->export();
+            $export['assetTransforms'] = Craft::app()->schematic_assetTransforms->export($assetTransforms);
         }
 
         if (in_array('fields', $dataTypes)) {
