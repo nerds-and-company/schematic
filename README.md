@@ -66,6 +66,7 @@ Here is a list of all of the data types and their corresponding exclude paramete
 | Data Type | Exlude Parameter |
 | ------------- |-------------|
 | Asset Sources | assetSources |
+| Asset Transforms | assetTransforms |
 | Category Groups | categoryGroups |
 | Element Indexes | elementIndexSettings |
 | Fields | fields |
