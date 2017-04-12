@@ -225,6 +225,7 @@ class SchematicTest extends BaseTest
     {
         $this->createMockService(Locales::class, 'schematic_locales');
         $this->createMockService(AssetSources::class, 'schematic_assetSources');
+        $this->createMockService(AssetTransforms::class, 'schematic_assetTransforms');
         $this->createMockService(Fields::class, 'schematic_fields');
         $this->createMockService(GlobalSets::class, 'schematic_globalSets');
         $this->createMockService(Plugins::class, 'schematic_plugins');
