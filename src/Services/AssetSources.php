@@ -53,12 +53,14 @@ class AssetSources extends Base
      */
     private function getAssetSourceDefinition(AssetSourceModel $assetSource)
     {
+        $fieldLayout = Craft::app()->fields->getLayoutById($assetSource->fieldLayoutId);
+
         return [
             'type' => $assetSource->type,
             'name' => $assetSource->name,
             'sortOrder' => $assetSource->sortOrder,
             'settings' => $assetSource->settings,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
+            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($fieldLayout),
         ];
     }
 
