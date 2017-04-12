@@ -1,4 +1,5 @@
 ###3.7.0###
+- Added support for importing/exporting Asset Transforms
 - Asset Sources now respect the force option
 
 ###3.6.1###

@@ -28,6 +28,7 @@ class Schematic extends BaseApplication
     protected static $exportableDataTypes = [
         'locales',
         'assetSources',
+        'assetTransforms',
         'fields',
         'plugins',
         'sections',
@@ -127,6 +128,9 @@ class Schematic extends BaseApplication
         $assetSources = $model->getAttribute('assetSources');
         $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($assetSources, $force);
 
+        $assetTransforms = $model->getAttribute('assetTransforms');
+        $assetTransformsImportResult = Craft::app()->schematic_assetTransforms->import($assetTransforms, $force);
+
         $globalSets = $model->getAttribute('globalSets');
         $globalSetsImportResult = Craft::app()->schematic_globalSets->import($globalSets, $force);
 
@@ -162,6 +166,7 @@ class Schematic extends BaseApplication
         $result->consume($pluginImportResult);
         $result->consume($fieldImportResult);
         $result->consume($assetSourcesImportResult);
+        $result->consume($assetTransformsImportResult);
         $result->consume($globalSetsImportResult);
         $result->consume($sectionImportResult);
         $result->consume($categoryGroupImportResult);
@@ -228,6 +233,7 @@ class Schematic extends BaseApplication
         }
 
         $assetSources = Craft::app()->assetSources->getAllSources();
+        $assetTransforms = Craft::app()->assetTransforms->getAllTransforms();
         $categoryGroups = Craft::app()->categories->getAllGroups();
         $tagGroups = Craft::app()->tags->getAllTagGroups();
 
@@ -239,6 +245,10 @@ class Schematic extends BaseApplication
 
         if (in_array('assetSources', $dataTypes)) {
             $export['assetSources'] = Craft::app()->schematic_assetSources->export($assetSources);
+        }
+
+        if (in_array('assetTransforms', $dataTypes)) {
+            $export['assetTransforms'] = Craft::app()->schematic_assetTransforms->export($assetTransforms);
         }
 
         if (in_array('fields', $dataTypes)) {

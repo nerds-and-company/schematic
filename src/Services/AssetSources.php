@@ -7,7 +7,7 @@ use Craft\AssetSourceRecord;
 use Craft\AssetSourceModel;
 
 /**
- * Schematic Assets Service.
+ * Schematic Asset Sources Service.
  *
  * Sync Craft Setups.
  *
