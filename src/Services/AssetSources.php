@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
-use Craft\AssetSourceRecord;
 use Craft\AssetSourceModel;
 
 /**
@@ -28,23 +27,39 @@ class AssetSources extends Base
     }
 
     /**
-     * @param $sourceTypeId
+     * Export all asset sources.
      *
-     * @return array|mixed|null
+     * @param AssetSourceModel[] $assetSources
+     *
+     * @return array
      */
-    public function getSourceTypeById($sourceTypeId)
+    public function export(array $assetSources = [])
     {
-        return AssetSourceRecord::model()->findByAttributes(['id' => $sourceTypeId]);
+        Craft::log(Craft::t('Exporting Asset Sources'));
+
+        $assetSourceDefinitions = [];
+
+        foreach ($assetSources as $assetSource) {
+            $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
+        }
+
+        return $assetSourceDefinitions;
     }
 
     /**
-     * @param $sourceTypeHandle
+     * @param AssetSourceModel $assetSource
      *
-     * @return array|mixed|null
+     * @return array
      */
-    public function getSourceTypeByHandle($sourceTypeHandle)
+    private function getAssetSourceDefinition(AssetSourceModel $assetSource)
     {
-        return AssetSourceRecord::model()->findByAttributes(['handle' => $sourceTypeHandle]);
+        return [
+            'type' => $assetSource->type,
+            'name' => $assetSource->name,
+            'sortOrder' => $assetSource->sortOrder,
+            'settings' => $assetSource->settings,
+            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
+        ];
     }
 
     /**
@@ -60,7 +75,7 @@ class AssetSources extends Base
         Craft::log(Craft::t('Importing Asset Sources'));
 
         $this->resetCraftAssetSourcesServiceCache();
-        $assetSources = Craft::app()->assetSources->getAllSources('handle');
+        $assetSources = $this->getAssetSourcesService()->getAllSources('handle');
 
         foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
             $assetSource = array_key_exists($assetSourceHandle, $assetSources)
@@ -71,7 +86,7 @@ class AssetSources extends Base
 
             $this->populateAssetSource($assetSource, $assetSourceDefinition, $assetSourceHandle);
 
-            if (!Craft::app()->assetSources->saveSource($assetSource)) { // Save assetsource via craft
+            if (!$this->getAssetSourcesService()->saveSource($assetSource)) { // Save assetsource via craft
                 $this->addErrors($assetSource->getAllErrors());
 
                 continue;
@@ -80,7 +95,7 @@ class AssetSources extends Base
 
         if ($force) {
             foreach ($assetSources as $assetSource) {
-                Craft::app()->assetSources->deleteSourceById($assetSource->id);
+                $this->getAssetSourcesService()->deleteSourceById($assetSource->id);
             }
         }
 
@@ -119,48 +134,11 @@ class AssetSources extends Base
     }
 
     /**
-     * Export all asset sources.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public function export(array $data = [])
-    {
-        Craft::log(Craft::t('Exporting Asset Sources'));
-
-        $assetSources = $this->getAssetSourcesService()->getAllSources();
-
-        $assetSourceDefinitions = [];
-        foreach ($assetSources as $assetSource) {
-            $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
-        }
-
-        return $assetSourceDefinitions;
-    }
-
-    /**
-     * @param AssetSourceModel $assetSource
-     *
-     * @return array
-     */
-    private function getAssetSourceDefinition(AssetSourceModel $assetSource)
-    {
-        return [
-            'type' => $assetSource->type,
-            'name' => $assetSource->name,
-            'sortOrder' => $assetSource->sortOrder,
-            'settings' => $assetSource->settings,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
-        ];
-    }
-
-    /**
      * Reset craft fields service cache using reflection.
      */
     private function resetCraftAssetSourcesServiceCache()
     {
-        $obj = Craft::app()->categories;
+        $obj = $this->getAssetSourcesService();
         $refObject = new \ReflectionObject($obj);
         if ($refObject->hasProperty('_fetchedAllSources')) {
             $refProperty = $refObject->getProperty('_fetchedAllSources');
