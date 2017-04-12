@@ -59,11 +59,28 @@ class AssetSources extends Base
     {
         Craft::log(Craft::t('Importing Asset Sources'));
 
-        foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
-            $assetSource = $this->populateAssetSource($assetSourceHandle, $assetSourceDefinition);
+        $this->resetCraftAssetSourcesServiceCache();
+        $assetSources = Craft::app()->assetSources->getAllSources('handle');
 
-            if (!Craft::app()->assetSources->saveSource($assetSource)) {
+        foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
+            $assetSource = array_key_exists($assetSourceHandle, $assetSources)
+                ? $assetSources[$assetSourceHandle]
+                : new AssetSourceModel();
+
+            unset($assetSources[$assetSourceHandle]);
+
+            $this->populateAssetSource($assetSource, $assetSourceDefinition, $assetSourceHandle);
+
+            if (!Craft::app()->assetSources->saveSource($assetSource)) { // Save assetsource via craft
                 $this->addErrors($assetSource->getAllErrors());
+
+                continue;
+            }
+        }
+
+        if ($force) {
+            foreach ($assetSources as $assetSource) {
+                Craft::app()->assetSources->deleteSourceById($assetSource->id);
             }
         }
 
@@ -73,15 +90,14 @@ class AssetSources extends Base
     /**
      * Populate asset source.
      *
-     * @param string $assetSourceHandle
-     * @param array  $assetSourceDefinition
+     * @param AssetSourceModel $assetSource
+     * @param string           $assetSourceHandle
+     * @param array            $assetSourceDefinition
      *
      * @return AssetSourceModel
      */
-    private function populateAssetSource($assetSourceHandle, array $assetSourceDefinition)
+    private function populateAssetSource(AssetSourceModel $assetSource, $assetSourceHandle, array $assetSourceDefinition)
     {
-        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetSourceHandle]);
-        $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
         $defaultAssetSourceSettings = array(
             'publicURLs' => true,
         );
@@ -137,5 +153,24 @@ class AssetSources extends Base
             'settings' => $assetSource->settings,
             'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
         ];
+    }
+
+    /**
+     * Reset craft fields service cache using reflection.
+     */
+    private function resetCraftAssetSourcesServiceCache()
+    {
+        $obj = Craft::app()->categories;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_fetchedAllSources')) {
+            $refProperty = $refObject->getProperty('_fetchedAllSources');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
+        }
+        if ($refObject->hasProperty('_sourcesById')) {
+            $refProperty = $refObject->getProperty('_sourcesById');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, array());
+        }
     }
 }

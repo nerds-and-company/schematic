@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\BaseTest;
+use Craft\AssetSourcesService;
 use Craft\AssetSourceModel;
 use Craft\Craft;
 use Craft\DbCommand;
@@ -58,6 +59,7 @@ class AssetSourcesTest extends BaseTest
      */
     public function testSuccessfulImport(array $assetSourceDefinitions)
     {
+        $this->setMockAssetSourcesService();
         $this->setMockDbConnection();
         $this->setMockSchematicFields();
 
@@ -77,6 +79,7 @@ class AssetSourcesTest extends BaseTest
        */
       public function testImportWithForceOption(array $assetSourceDefinitions)
       {
+          $this->setMockAssetSourcesService();
           $this->setMockDbConnection();
           $this->setMockSchematicFields();
 
@@ -234,6 +237,26 @@ class AssetSourcesTest extends BaseTest
         $this->setComponent(Craft::app(), 'schematic_fields', $mockSchematicFields);
 
         return $mockSchematicFields;
+    }
+
+    /**
+     * @return Mock|AssetSourcesService
+     */
+    private function setMockAssetSourcesService()
+    {
+        $mockAssetSourcesService = $this->getMockBuilder(AssetSourcesService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllSources', 'saveSource', 'deleteSourceById'])
+            ->getMock();
+
+        $mockAssetSourcesService->expects($this->any())
+            ->method('getAllSources')
+            ->with('handle')
+            ->willReturn([]);
+
+        $this->setComponent(Craft::app(), 'assetSources', $mockAssetSourcesService);
+
+        return $mockAssetSourcesService;
     }
 
     /**
