@@ -106,12 +106,12 @@ class AssetSources extends Base
      * Populate asset source.
      *
      * @param AssetSourceModel $assetSource
-     * @param string           $assetSourceHandle
      * @param array            $assetSourceDefinition
+     * @param string           $assetSourceHandle
      *
      * @return AssetSourceModel
      */
-    private function populateAssetSource(AssetSourceModel $assetSource, $assetSourceHandle, array $assetSourceDefinition)
+    private function populateAssetSource(AssetSourceModel $assetSource, array $assetSourceDefinition, $assetSourceHandle)
     {
         $defaultAssetSourceSettings = array(
             'publicURLs' => true,

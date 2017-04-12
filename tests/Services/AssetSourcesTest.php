@@ -105,7 +105,7 @@ class AssetSourcesTest extends BaseTest
                 'AssetSources' => [],
                 'expectedResult' => [],
             ],
-            'single asset sources' => [
+            'single asset source' => [
                 'AssetSources' => [
                     'assetSource1' => $this->getMockAssetSource(1),
                 ],
