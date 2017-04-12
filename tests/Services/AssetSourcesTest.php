@@ -111,10 +111,10 @@ class AssetSourcesTest extends BaseTest
                 ],
                 'expectedResult' => [
                     'assetSourceHandle1' => [
+                        'type' => null,
                         'name' => 'assetSourceName1',
-                        'type' => 'Local',
-                        'sortOrder' => 1,
-                        'settings' => array(),
+                        'sortOrder' => null,
+                        'settings' => null,
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -128,19 +128,19 @@ class AssetSourcesTest extends BaseTest
                 ],
                 'expectedResult' => [
                     'assetSourceHandle1' => [
+                        'type' => null,
                         'name' => 'assetSourceName1',
-                        'type' => 'Local',
-                        'sortOrder' => 1,
-                        'settings' => array(),
+                        'sortOrder' => null,
+                        'settings' => null,
                         'fieldLayout' => [
                             'fields' => [],
                         ],
                     ],
                     'assetSourceHandle2' => [
+                        'type' => null,
                         'name' => 'assetSourceName2',
-                        'type' => 'Local',
-                        'sortOrder' => 2,
-                        'settings' => array(),
+                        'sortOrder' => null,
+                        'settings' => null,
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -162,10 +162,10 @@ class AssetSourcesTest extends BaseTest
             'single group' => [
                 'assetSourceDefinitions' => [
                     'assetSourceHandle1' => [
+                        'type' => null,
                         'name' => 'assetSourceName1',
-                        'type' => 'Local',
-                        'sortOrder' => 1,
-                        'settings' => array(),
+                        'sortOrder' => null,
+                        'settings' => null,
                         'fieldLayout' => [
                             'fields' => [],
                         ],
