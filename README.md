@@ -4,22 +4,13 @@ Schematic allows you to synchronize your Craft setup over multiple environments.
 
 ## Installation
 
-This tool can be installed manually or [using Composer](https://getcomposer.org/doc/00-intro.md).
-
-### Composer
-
-The preferred means of installation is through Composer. Run the following command from the root of your project:
+This tool can be installed [using Composer](https://getcomposer.org/doc/00-intro.md). Run the following command from the root of your project:
 
 ```
 composer require itmundi/schematic
 ```
 
 This will add `itmundi/schematic` as a requirement to your  project's `composer.json` file and install the source-code into the `vendor/itmundi/schematic` directory. Composer will also create the executable `vendor/bin/schematic`.
-
-### Manual
-
-If installation through Composer is not an option, the package can also be installed manually. Download [the latest release](https://github.com/itmundi/schematic/releases/latest) or clone the contents of this repository into your project.
-The executable is located in at `bin/schematic`.
 
 ## Usage
 
