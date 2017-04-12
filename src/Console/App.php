@@ -313,6 +313,9 @@ class App extends Base
             'schematic_assetSources' => [
                 'class' => Service\AssetSources::class,
             ],
+            'schematic_assetTransformations' => [
+                'class' => Service\AssetTransformations::class,
+            ],
             'schematic_fields' => [
                 'class' => Service\Fields::class,
             ],
