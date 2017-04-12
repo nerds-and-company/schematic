@@ -162,10 +162,10 @@ class AssetSourcesTest extends BaseTest
             'single group' => [
                 'assetSourceDefinitions' => [
                     'assetSourceHandle1' => [
-                        'type' => null,
+                        'type' => 'Local',
                         'name' => 'assetSourceName1',
-                        'sortOrder' => null,
-                        'settings' => null,
+                        'sortOrder' => 1,
+                        'settings' => array(),
                         'fieldLayout' => [
                             'fields' => [],
                         ],
