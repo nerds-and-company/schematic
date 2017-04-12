@@ -112,6 +112,9 @@ class AssetSourcesTest extends BaseTest
                 'expectedResult' => [
                     'assetSourceHandle1' => [
                         'name' => 'assetSourceName1',
+                        'type' => 'Local',
+                        'sortOrder' => 1,
+                        'settings' => array(),
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -126,12 +129,18 @@ class AssetSourcesTest extends BaseTest
                 'expectedResult' => [
                     'assetSourceHandle1' => [
                         'name' => 'assetSourceName1',
+                        'type' => 'Local',
+                        'sortOrder' => 1,
+                        'settings' => array(),
                         'fieldLayout' => [
                             'fields' => [],
                         ],
                     ],
                     'assetSourceHandle2' => [
                         'name' => 'assetSourceName2',
+                        'type' => 'Local',
+                        'sortOrder' => 2,
+                        'settings' => array(),
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -154,6 +163,9 @@ class AssetSourcesTest extends BaseTest
                 'assetSourceDefinitions' => [
                     'assetSourceHandle1' => [
                         'name' => 'assetSourceName1',
+                        'type' => 'Local',
+                        'sortOrder' => 1,
+                        'settings' => array(),
                         'fieldLayout' => [
                             'fields' => [],
                         ],
