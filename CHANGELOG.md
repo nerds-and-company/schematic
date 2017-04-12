@@ -1,5 +1,6 @@
 ###3.7.0###
-- Added support for importing/exporting asset transforms
+- Added support for importing/exporting Asset Transforms
+- Asset Sources now respect the force option
 
 ###3.6.1###
 - Don't care about instable plugin database update outcome

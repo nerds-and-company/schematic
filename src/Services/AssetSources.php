@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
-use Craft\AssetSourceRecord;
 use Craft\AssetSourceModel;
 
 /**
@@ -28,23 +27,41 @@ class AssetSources extends Base
     }
 
     /**
-     * @param $sourceTypeId
+     * Export all asset sources.
      *
-     * @return array|mixed|null
+     * @param AssetSourceModel[] $assetSources
+     *
+     * @return array
      */
-    public function getSourceTypeById($sourceTypeId)
+    public function export(array $assetSources = [])
     {
-        return AssetSourceRecord::model()->findByAttributes(['id' => $sourceTypeId]);
+        Craft::log(Craft::t('Exporting Asset Sources'));
+
+        $assetSourceDefinitions = [];
+
+        foreach ($assetSources as $assetSource) {
+            $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
+        }
+
+        return $assetSourceDefinitions;
     }
 
     /**
-     * @param $sourceTypeHandle
+     * @param AssetSourceModel $assetSource
      *
-     * @return array|mixed|null
+     * @return array
      */
-    public function getSourceTypeByHandle($sourceTypeHandle)
+    private function getAssetSourceDefinition(AssetSourceModel $assetSource)
     {
-        return AssetSourceRecord::model()->findByAttributes(['handle' => $sourceTypeHandle]);
+        $fieldLayout = Craft::app()->fields->getLayoutById($assetSource->fieldLayoutId);
+
+        return [
+            'type' => $assetSource->type,
+            'name' => $assetSource->name,
+            'sortOrder' => $assetSource->sortOrder,
+            'settings' => $assetSource->settings,
+            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($fieldLayout),
+        ];
     }
 
     /**
@@ -59,11 +76,28 @@ class AssetSources extends Base
     {
         Craft::log(Craft::t('Importing Asset Sources'));
 
-        foreach ($assetSourceDefinitions as $assetHandle => $assetSourceDefinition) {
-            $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
+        $this->resetCraftAssetSourcesServiceCache();
+        $assetSources = $this->getAssetSourcesService()->getAllSources('handle');
 
-            if (!Craft::app()->assetSources->saveSource($assetSource)) {
+        foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
+            $assetSource = array_key_exists($assetSourceHandle, $assetSources)
+                ? $assetSources[$assetSourceHandle]
+                : new AssetSourceModel();
+
+            unset($assetSources[$assetSourceHandle]);
+
+            $this->populateAssetSource($assetSource, $assetSourceDefinition, $assetSourceHandle);
+
+            if (!$this->getAssetSourcesService()->saveSource($assetSource)) { // Save assetsource via craft
                 $this->addErrors($assetSource->getAllErrors());
+
+                continue;
+            }
+        }
+
+        if ($force) {
+            foreach ($assetSources as $assetSource) {
+                $this->getAssetSourcesService()->deleteSourceById($assetSource->id);
             }
         }
 
@@ -73,21 +107,20 @@ class AssetSources extends Base
     /**
      * Populate asset source.
      *
-     * @param string $assetHandle
-     * @param array  $assetSourceDefinition
+     * @param AssetSourceModel $assetSource
+     * @param array            $assetSourceDefinition
+     * @param string           $assetSourceHandle
      *
      * @return AssetSourceModel
      */
-    private function populateAssetSource($assetHandle, array $assetSourceDefinition)
+    private function populateAssetSource(AssetSourceModel $assetSource, array $assetSourceDefinition, $assetSourceHandle)
     {
-        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
-        $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
         $defaultAssetSourceSettings = array(
             'publicURLs' => true,
         );
 
         $assetSource->setAttributes([
-            'handle' => $assetHandle,
+            'handle' => $assetSourceHandle,
             'type' => $assetSourceDefinition['type'],
             'name' => $assetSourceDefinition['name'],
             'sortOrder' => $assetSourceDefinition['sortOrder'],
@@ -103,39 +136,21 @@ class AssetSources extends Base
     }
 
     /**
-     * Export all asset sources.
-     *
-     * @param array $data
-     *
-     * @return array
+     * Reset craft fields service cache using reflection.
      */
-    public function export(array $data = [])
+    private function resetCraftAssetSourcesServiceCache()
     {
-        Craft::log(Craft::t('Exporting Asset Sources'));
-
-        $assetSources = $this->getAssetSourcesService()->getAllSources();
-
-        $assetSourceDefinitions = [];
-        foreach ($assetSources as $assetSource) {
-            $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
+        $obj = $this->getAssetSourcesService();
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_fetchedAllSources')) {
+            $refProperty = $refObject->getProperty('_fetchedAllSources');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
         }
-
-        return $assetSourceDefinitions;
-    }
-
-    /**
-     * @param AssetSourceModel $assetSource
-     *
-     * @return array
-     */
-    private function getAssetSourceDefinition(AssetSourceModel $assetSource)
-    {
-        return [
-            'type' => $assetSource->type,
-            'name' => $assetSource->name,
-            'sortOrder' => $assetSource->sortOrder,
-            'settings' => $assetSource->settings,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($assetSource->getFieldLayout()),
-        ];
+        if ($refObject->hasProperty('_sourcesById')) {
+            $refProperty = $refObject->getProperty('_sourcesById');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, array());
+        }
     }
 }
