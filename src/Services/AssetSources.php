@@ -59,8 +59,8 @@ class AssetSources extends Base
     {
         Craft::log(Craft::t('Importing Asset Sources'));
 
-        foreach ($assetSourceDefinitions as $assetHandle => $assetSourceDefinition) {
-            $assetSource = $this->populateAssetSource($assetHandle, $assetSourceDefinition);
+        foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
+            $assetSource = $this->populateAssetSource($assetSourceHandle, $assetSourceDefinition);
 
             if (!Craft::app()->assetSources->saveSource($assetSource)) {
                 $this->addErrors($assetSource->getAllErrors());
@@ -73,21 +73,21 @@ class AssetSources extends Base
     /**
      * Populate asset source.
      *
-     * @param string $assetHandle
+     * @param string $assetSourceHandle
      * @param array  $assetSourceDefinition
      *
      * @return AssetSourceModel
      */
-    private function populateAssetSource($assetHandle, array $assetSourceDefinition)
+    private function populateAssetSource($assetSourceHandle, array $assetSourceDefinition)
     {
-        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetHandle]);
+        $assetSource = AssetSourceRecord::model()->findByAttributes(['handle' => $assetSourceHandle]);
         $assetSource = $assetSource ? AssetSourceModel::populateModel($assetSource) : new AssetSourceModel();
         $defaultAssetSourceSettings = array(
             'publicURLs' => true,
         );
 
         $assetSource->setAttributes([
-            'handle' => $assetHandle,
+            'handle' => $assetSourceHandle,
             'type' => $assetSourceDefinition['type'],
             'name' => $assetSourceDefinition['name'],
             'sortOrder' => $assetSourceDefinition['sortOrder'],

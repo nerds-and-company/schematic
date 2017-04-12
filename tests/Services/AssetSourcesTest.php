@@ -3,9 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\BaseTest;
-use Craft\CategoriesService;
-use Craft\CategoryGroupLocaleModel;
-use Craft\CategoryGroupModel;
+use Craft\AssetSourceModel;
 use Craft\Craft;
 use Craft\DbCommand;
 use Craft\DbConnection;
@@ -15,19 +13,19 @@ use NerdsAndCompany\Schematic\Models\Result;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * Class CategoryGroupsTest.
+ * Class AssetSourcesTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015-2017, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.nerds.company
+ * @see      http://www.nerds.company
  *
- * @coversDefaultClass NerdsAndCompany\Schematic\Services\CategoryGroups
+ * @coversDefaultClass \NerdsAndCompany\Schematic\Services\AssetSources
  * @covers ::__construct
  * @covers ::<!public>
  */
-class CategoryGroupsTest extends BaseTest
+class AssetSourcesTest extends BaseTest
 {
     //==============================================================================================================
     //=================================================  TESTS  ====================================================
@@ -35,38 +33,37 @@ class CategoryGroupsTest extends BaseTest
 
     /**
      * @covers ::export
-     * @dataProvider provideValidCategoryGroups
+     * @dataProvider provideValidAssetSources
      *
-     * @param CategoryGroupModel[] $groups
-     * @param array                $expectedResult
+     * @param AssetSourceModel[] $assetSources
+     * @param array              $expectedResult
      */
-    public function testSuccessfulExport(array $groups, array $expectedResult = [])
+    public function testSuccessfulExport(array $assetSources, array $expectedResult = [])
     {
         $this->setMockFieldsService();
         $this->setMockSchematicFields();
 
-        $schematicCategoryGroupsService = new CategoryGroups();
+        $schematicAssetSourcesService = new AssetSources();
 
-        $actualResult = $schematicCategoryGroupsService->export($groups);
+        $actualResult = $schematicAssetSourcesService->export($assetSources);
 
         $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
      * @covers ::import
-     * @dataProvider provideValidCategoryGroupDefinitions
+     * @dataProvider provideValidAssetSourceDefinitions
      *
-     * @param array $groupDefinitions
+     * @param array $assetSourceDefinitions
      */
-    public function testSuccessfulImport(array $groupDefinitions)
+    public function testSuccessfulImport(array $assetSourceDefinitions)
     {
-        $this->setMockCategoriesService();
         $this->setMockDbConnection();
         $this->setMockSchematicFields();
 
-        $schematicCategoryGroupsService = new CategoryGroups();
+        $schematicAssetSourcesService = new AssetSources();
 
-        $import = $schematicCategoryGroupsService->import($groupDefinitions);
+        $import = $schematicAssetSourcesService->import($assetSourceDefinitions);
 
         $this->assertInstanceOf(Result::class, $import);
         $this->assertFalse($import->hasErrors());
@@ -74,19 +71,18 @@ class CategoryGroupsTest extends BaseTest
 
       /**
        * @covers ::import
-       * @dataProvider provideValidCategoryGroupDefinitions
+       * @dataProvider provideValidAssetSourceDefinitions
        *
-       * @param array $groupDefinitions
+       * @param array $assetSourceDefinitions
        */
-      public function testImportWithForceOption(array $groupDefinitions)
+      public function testImportWithForceOption(array $assetSourceDefinitions)
       {
-          $this->setMockCategoriesService();
           $this->setMockDbConnection();
           $this->setMockSchematicFields();
 
-          $schematicCategoryGroupsService = new CategoryGroups();
+          $schematicAssetSourcesService = new AssetSources();
 
-          $import = $schematicCategoryGroupsService->import($groupDefinitions, true);
+          $import = $schematicAssetSourcesService->import($assetSourceDefinitions, true);
 
           $this->assertInstanceOf(Result::class, $import);
           $this->assertFalse($import->hasErrors());
@@ -99,67 +95,40 @@ class CategoryGroupsTest extends BaseTest
     /**
      * @return array
      */
-    public function provideValidCategoryGroups()
+    public function provideValidAssetSources()
     {
         return [
             'emptyArray' => [
-                'CategoryGroups' => [],
+                'AssetSources' => [],
                 'expectedResult' => [],
             ],
-            'single group' => [
-                'CategoryGroups' => [
-                    'group1' => $this->getMockCategoryGroup(1),
+            'single asset sources' => [
+                'AssetSources' => [
+                    'assetSource1' => $this->getMockAssetSource(1),
                 ],
                 'expectedResult' => [
-                    'groupHandle1' => [
-                        'name' => 'groupName1',
-                        'hasUrls' => null,
-                        'template' => null,
-                        'maxLevels' => null,
-                        'locales' => [
-                            'en' => [
-                                'urlFormat' => null,
-                                'nestedUrlFormat' => null,
-                            ],
-                        ],
+                    'assetSourceHandle1' => [
+                        'name' => 'assetSourceName1',
                         'fieldLayout' => [
                             'fields' => [],
                         ],
                     ],
                 ],
             ],
-            'multiple groups' => [
-                'CategoryGroups' => [
-                    'group1' => $this->getMockCategoryGroup(1),
-                    'group2' => $this->getMockCategoryGroup(2),
+            'multiple asset sources' => [
+                'AssetSources' => [
+                    'assetSource1' => $this->getMockAssetSource(1),
+                    'assetSource2' => $this->getMockAssetSource(2),
                 ],
                 'expectedResult' => [
-                    'groupHandle1' => [
-                        'name' => 'groupName1',
-                        'hasUrls' => null,
-                        'template' => null,
-                        'maxLevels' => null,
-                        'locales' => [
-                            'en' => [
-                                'urlFormat' => null,
-                                'nestedUrlFormat' => null,
-                            ],
-                        ],
+                    'assetSourceHandle1' => [
+                        'name' => 'assetSourceName1',
                         'fieldLayout' => [
                             'fields' => [],
                         ],
                     ],
-                    'groupHandle2' => [
-                        'name' => 'groupName2',
-                        'hasUrls' => null,
-                        'template' => null,
-                        'maxLevels' => null,
-                        'locales' => [
-                            'en' => [
-                                'urlFormat' => null,
-                                'nestedUrlFormat' => null,
-                            ],
-                        ],
+                    'assetSourceHandle2' => [
+                        'name' => 'assetSourceName2',
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -172,25 +141,16 @@ class CategoryGroupsTest extends BaseTest
     /**
      * @return array
      */
-    public function provideValidCategoryGroupDefinitions()
+    public function provideValidAssetSourceDefinitions()
     {
         return [
             'emptyArray' => [
-                'groupDefinitions' => [],
+                'assetSourceDefinitions' => [],
             ],
             'single group' => [
-                'groupDefinitions' => [
-                    'groupHandle1' => [
-                        'name' => 'groupName1',
-                        'hasUrls' => false,
-                        'template' => '',
-                        'maxLevels' => 3,
-                        'locales' => [
-                            'en' => [
-                                'urlFormat' => '',
-                                'nestedUrlFormat' => '',
-                            ],
-                        ],
+                'assetSourceDefinitions' => [
+                    'assetSourceHandle1' => [
+                        'name' => 'assetSourceName1',
                         'fieldLayout' => [
                             'fields' => [],
                         ],
@@ -205,36 +165,32 @@ class CategoryGroupsTest extends BaseTest
     //==============================================================================================================
 
     /**
-     * @param string $groupId
+     * @param string $assetSourceId
      *
-     * @return Mock|CategoryGroupModel
+     * @return Mock|AssetSourceModel
      */
-    private function getMockCategoryGroup($groupId)
+    private function getMockAssetSource($assetSourceId)
     {
-        $mockCategoryGroup = $this->getMockBuilder(CategoryGroupModel::class)
+        $mockAssetSource = $this->getMockBuilder(AssetSourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockCategoryGroup->expects($this->any())
+        $mockAssetSource->expects($this->any())
             ->method('__get')
             ->willReturnMap([
-                ['id', $groupId],
-                ['fieldLayoutId', $groupId],
-                ['handle', 'groupHandle'.$groupId],
-                ['name', 'groupName'.$groupId],
+                ['id', $assetSourceId],
+                ['fieldLayoutId', $assetSourceId],
+                ['handle', 'assetSourceHandle'.$assetSourceId],
+                ['name', 'assetSourceName'.$assetSourceId],
             ]);
 
-        $mockCategoryGroup->expects($this->any())
-            ->method('getLocales')
-            ->willReturn([$this->getMockCategoryGroupLocale()]);
-
-        $mockCategoryGroup->expects($this->any())
+        $mockAssetSource->expects($this->any())
             ->method('getAllErrors')
             ->willReturn([
                 'ohnoes' => 'horrible error',
             ]);
 
-        return $mockCategoryGroup;
+        return $mockAssetSource;
     }
 
     /**
@@ -281,26 +237,6 @@ class CategoryGroupsTest extends BaseTest
     }
 
     /**
-     * @return Mock|CategoriesService
-     */
-    private function setMockCategoriesService()
-    {
-        $mockCategoriesService = $this->getMockBuilder(CategoriesService::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllGroups', 'saveGroup', 'deleteGroupById'])
-            ->getMock();
-
-        $mockCategoriesService->expects($this->any())
-            ->method('getAllGroups')
-            ->with('handle')
-            ->willReturn([]);
-
-        $this->setComponent(Craft::app(), 'categories', $mockCategoriesService);
-
-        return $mockCategoriesService;
-    }
-
-    /**
      * @return Mock|FieldLayoutModel
      */
     private function getMockFieldLayout()
@@ -310,24 +246,6 @@ class CategoryGroupsTest extends BaseTest
             ->getMock();
 
         return $mockFieldLayout;
-    }
-
-    /**
-     * @return Mock|CategoryGroupLocaleModel
-     */
-    private function getMockCategoryGroupLocale()
-    {
-        $mockCategoryGroupLocale = $this->getMockBuilder(CategoryGroupLocaleModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockCategoryGroupLocale->expects($this->any())
-            ->method('__get')
-            ->willReturnMap([
-                ['locale', 'en'],
-            ]);
-
-        return $mockCategoryGroupLocale;
     }
 
     /**
