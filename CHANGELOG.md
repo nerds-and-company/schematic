@@ -1,3 +1,6 @@
+###3.7.0###
+- Asset Sources now respect the force option
+
 ###3.6.1###
 - Don't care about instable plugin database update outcome
 

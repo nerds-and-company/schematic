@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Models;
 use Craft\Craft;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
+use Craft\AssetSourceRecord;
 
 /**
  * Schematic Assets Field Model.
@@ -32,13 +33,13 @@ class AssetsField extends Field
 
         if ($settings && array_key_exists('defaultUploadLocationSource', $settings)) {
             $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-            $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($defaultUploadLocationSourceId);
+            $defaultUploadLocationSource = Craft::app()->assetSources->getSourceById($defaultUploadLocationSourceId);
             $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ? $defaultUploadLocationSource->handle : '';
         }
 
         if ($settings && array_key_exists('singleUploadLocationSource', $settings)) {
             $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-            $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeById($singleUploadLocationSourceId);
+            $singleUploadLocationSource = Craft::app()->assetSources->getSourceById($singleUploadLocationSourceId);
             $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->handle : '';
         }
 
@@ -62,13 +63,13 @@ class AssetsField extends Field
 
         if ($settings && array_key_exists('defaultUploadLocationSource', $settings)) {
             $defaultUploadLocationSourceId = $settings['defaultUploadLocationSource'];
-            $defaultUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($defaultUploadLocationSourceId);
+            $defaultUploadLocationSource = AssetSourceRecord::model()->findByAttributes(['handle' => $defaultUploadLocationSourceId]);
             $settings['defaultUploadLocationSource'] = $defaultUploadLocationSource ? $defaultUploadLocationSource->id : '';
         }
 
         if ($settings && array_key_exists('singleUploadLocationSource', $settings)) {
             $singleUploadLocationSourceId = $settings['singleUploadLocationSource'];
-            $singleUploadLocationSource = Craft::app()->schematic_assetSources->getSourceTypeByHandle($singleUploadLocationSourceId);
+            $singleUploadLocationSource = AssetSourceRecord::model()->findByAttributes(['handle' => $singleUploadLocationSourceId]);
             $settings['singleUploadLocationSource'] = $singleUploadLocationSource ? $singleUploadLocationSource->id : '';
         }
 
