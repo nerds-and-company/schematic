@@ -150,7 +150,7 @@ class Field
                     break;
                 case 'folder':
                     $service = Craft::app()->schematic_assetSources;
-                    $method = 'getSourceTypeBy';
+                    $method = 'getSourceBy';
                     break;
                 case 'taggroup':
                     $service = Craft::app()->tags;

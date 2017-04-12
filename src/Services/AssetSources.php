@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
+use Craft\AssetSourceRecord;
 use Craft\AssetSourceModel;
 
 /**
@@ -24,6 +25,26 @@ class AssetSources extends Base
     private function getAssetSourcesService()
     {
         return Craft::app()->assetSources;
+    }
+
+    /**
+     * @param $sourceId
+     *
+     * @return array|mixed|null
+     */
+    public function getSourceById($sourceId)
+    {
+        return AssetSourceRecord::model()->findByAttributes(['id' => $sourceId]);
+    }
+
+    /**
+     * @param $sourceHandle
+     *
+     * @return array|mixed|null
+     */
+    public function getSourceByHandle($sourceHandle)
+    {
+        return AssetSourceRecord::model()->findByAttributes(['handle' => $sourceHandle]);
     }
 
     /**
