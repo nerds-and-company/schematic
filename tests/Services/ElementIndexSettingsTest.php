@@ -4,10 +4,12 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft\Craft;
 use Craft\BaseTest;
-use Craft\ElementsService;
-use Craft\ElementIndexesService;
 use Craft\CategoryElementType;
+use Craft\ElementIndexesService;
+use Craft\ElementsService;
 use Craft\EntryElementType;
+use Craft\FieldModel;
+use Craft\FieldsService;
 use NerdsAndCompany\Schematic\Models\Result;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -38,6 +40,7 @@ class ElementIndexSettingsTest extends BaseTest
     {
         $this->schematicElementIndexSettingsService = new ElementIndexSettings();
         $this->setMockSources();
+        $this->setMockFieldsService();
     }
 
     /**
@@ -62,10 +65,14 @@ class ElementIndexSettingsTest extends BaseTest
      *
      * @return Mock
      */
-    protected function getMockElementIndexesService($getSettingsResponse = [])
+    protected function getMockElementIndexesService()
     {
+        $getSettingsResponse = $this->getElementIndexSettingsSavedData();
         $mock = $this->getMockBuilder(ElementIndexesService::class)->getMock();
-        $mock->expects($this->any())->method('getSettings')->willReturn($getSettingsResponse['Entry']);
+        $mock->expects($this->any())->method('getSettings')->will($this->returnValueMap([
+          ['Entry', $getSettingsResponse['Entry']],
+          ['Category', $getSettingsResponse['Category']]
+        ]));
         $mock->expects($this->any())->method('saveSettings')->willReturn(false);
 
         return $mock;
@@ -78,8 +85,8 @@ class ElementIndexSettingsTest extends BaseTest
      */
     public function testImport()
     {
-        $data = $this->getElementIndexSettingsData();
-        $mockElementIndexesService = $this->getMockElementIndexesService($data);
+        $data = $this->getElementIndexSettingsExportedData();
+        $mockElementIndexesService = $this->getMockElementIndexesService();
         $this->setComponent(Craft::app(), 'elementIndexes', $mockElementIndexesService);
 
         $import = $this->schematicElementIndexSettingsService->import($data);
@@ -99,8 +106,8 @@ class ElementIndexSettingsTest extends BaseTest
         $mockElementsService = $this->getMockElementsService($data);
         $this->setComponent(Craft::app(), 'elements', $mockElementsService);
 
-        $data = $this->getElementIndexSettingsData();
-        $mockElementIndexesService = $this->getMockElementIndexesService($data);
+        $data = $this->getElementIndexSettingsExportedData();
+        $mockElementIndexesService = $this->getMockElementIndexesService();
         $this->setComponent(Craft::app(), 'elementIndexes', $mockElementIndexesService);
 
         $export = $this->schematicElementIndexSettingsService->export();
@@ -121,11 +128,11 @@ class ElementIndexSettingsTest extends BaseTest
     }
 
     /**
-     * Returns element index settings data.
+     * Returns element index settings saved data.
      *
      * @return array
      */
-    public function getElementIndexSettingsData()
+    private function getElementIndexSettingsSavedData()
     {
         return [
             'Category' => [
@@ -137,6 +144,45 @@ class ElementIndexSettingsTest extends BaseTest
                             '3' => 'expiryDate',
                             '4' => 'author',
                             '5' => 'link',
+                            '6' => 'field:1',
+                        ],
+                    ],
+                ],
+            ],
+            'Entry' => [
+                'sources' => [
+                    '*' => [
+                        'tableAttributes' => [
+                            '1' => 'section',
+                            '2' => 'postDate',
+                            '3' => 'expiryDate',
+                            '4' => 'author',
+                            '5' => 'link',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Returns element index settings exported data.
+     *
+     * @return array
+     */
+    private function getElementIndexSettingsExportedData()
+    {
+        return [
+            'Category' => [
+                'sources' => [
+                    '*' => [
+                        'tableAttributes' => [
+                            '1' => 'section',
+                            '2' => 'postDate',
+                            '3' => 'expiryDate',
+                            '4' => 'author',
+                            '5' => 'link',
+                            '6' => 'field:handle',
                         ],
                     ],
                 ],
@@ -185,6 +231,35 @@ class ElementIndexSettingsTest extends BaseTest
      */
     public function getMockSourceCallback($fieldType, $source, $fromIndex, $toIndex)
     {
-        return $source;
+        switch ($source) {
+            case 'field:handle':
+                return 'field:1';
+                break;
+            case 'field:1':
+                return 'field:handle';
+                break;
+            default:
+                return $source;
+                break;
+        }
+    }
+
+    /**
+     * @return Mock|CraftFieldsService
+     */
+    private function setMockFieldsService()
+    {
+        $mockFieldsService = $this->getMockBuilder(FieldsService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockFieldsService->expects($this->any())
+            ->method('getFieldById')
+            ->with('1')
+            ->willReturn(new FieldModel(['handle' => 'handle']));
+
+        $this->setComponent(Craft::app(), 'fields', $mockFieldsService);
+
+        return $mockFieldsService;
     }
 }
