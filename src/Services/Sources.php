@@ -103,6 +103,6 @@ class Sources extends BaseApplication
            return $sourceType.':'.$sourceObject->$indexTo;
        }
 
-       return '';
+       return $source;
    }
 }

@@ -168,7 +168,7 @@ class ElementIndexSettingsTest extends BaseTest
 
         $mockSources->expects($this->any())
             ->method('getSource')
-            ->willReturn($this->returnCallback(array($this, 'getMockSourceCallback')));
+            ->will($this->returnCallback(array($this, 'getMockSourceCallback')));
 
         $this->setComponent(Craft::app(), 'schematic_sources', $mockSources);
 
