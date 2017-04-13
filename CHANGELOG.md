@@ -1,3 +1,6 @@
+###3.7.1###
+- Removed Asset Transform dimensionChangeTime attribute from schema
+
 ###3.7.0###
 - Added support for importing/exporting Asset Transforms
 - Asset Sources now respect the force option
