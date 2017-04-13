@@ -37,6 +37,7 @@ class ElementIndexSettingsTest extends BaseTest
     public function setUp()
     {
         $this->schematicElementIndexSettingsService = new ElementIndexSettings();
+        $this->setMockSources();
     }
 
     /**
@@ -154,5 +155,36 @@ class ElementIndexSettingsTest extends BaseTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return Mock|Sources
+     */
+    private function setMockSources()
+    {
+        $mockSources = $this->getMockBuilder(Sources::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockSources->expects($this->any())
+            ->method('getSource')
+            ->willReturn($this->returnCallback(array($this, 'getMockSourceCallback')));
+
+        $this->setComponent(Craft::app(), 'schematic_sources', $mockSources);
+
+        return $mockSources;
+    }
+
+    /**
+     * @param  string $fieldType
+     * @param  string $source
+     * @param  string $fromIndex
+     * @param  string $toIndex
+     *
+     * @return string
+     */
+    public function getMockSourceCallback($fieldType, $source, $fromIndex, $toIndex)
+    {
+        return $source;
     }
 }

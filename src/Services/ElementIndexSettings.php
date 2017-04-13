@@ -103,11 +103,11 @@ class ElementIndexSettings extends Base
         foreach ($settings['sources'] as $source => $sourceSettings) {
             $mappedSource = Craft::app()->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);
             $tableAttributesSettings = [];
-            foreach ($sourceSettings as $index => $columnSource) {
+            foreach ($sourceSettings['tableAttributes'] as $index => $columnSource) {
                 $mappedColumnSource = Craft::app()->schematic_sources->getSource(false, $columnSource, $fromIndex, $toIndex);
                 $tableAttributesSettings[$index] = $mappedColumnSource;
             }
-            $mappedSettings['sources'][$mappedSource]['tableAttributes'] = $tableAttributesSettings;
+            $mappedSettings['sources'][$mappedSource] = ['tableAttributes' => $tableAttributesSettings];
         }
         return $mappedSettings;
     }

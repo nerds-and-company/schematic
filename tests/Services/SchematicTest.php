@@ -265,7 +265,6 @@ class SchematicTest extends BaseTest
         $this->createMockService(CategoryGroups::class, 'schematic_categoryGroups');
         $this->createMockService(TagGroups::class, 'schematic_tagGroups');
         $this->createMockService(ElementIndexSettings::class, 'schematic_elementIndexSettings');
-        $this->createMockService(Sources::class, 'schematic_sources');
 
         $mockPluginsService = $this->getMockPluginsService();
         $this->setCraftComponent('plugins', $mockPluginsService);
