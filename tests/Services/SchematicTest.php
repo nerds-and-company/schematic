@@ -28,7 +28,7 @@ use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass NerdsAndCompany\Schematic\Services\Schematic
+ * @coversDefaultClass \NerdsAndCompany\Schematic\Services\Schematic
  * @covers ::<!public>
  */
 class SchematicTest extends BaseTest
@@ -265,6 +265,7 @@ class SchematicTest extends BaseTest
         $this->createMockService(CategoryGroups::class, 'schematic_categoryGroups');
         $this->createMockService(TagGroups::class, 'schematic_tagGroups');
         $this->createMockService(ElementIndexSettings::class, 'schematic_elementIndexSettings');
+        $this->createMockService(Sources::class, 'schematic_sources');
 
         $mockPluginsService = $this->getMockPluginsService();
         $this->setCraftComponent('plugins', $mockPluginsService);

@@ -44,7 +44,8 @@ class ElementIndexSettings extends Base
         Craft::log(Craft::t('Importing Element Index Settings'));
 
         foreach ($settingDefinitions as $elementType => $settings) {
-            if (!$this->getElementIndexesService()->saveSettings($elementType, $settings)) {
+            $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
+            if (!$this->getElementIndexesService()->saveSettings($elementType, $mappedSettings)) {
                 $this->addError(Craft::t('Element Index Settings for {elementType} could not be installed', ['elementType' => $elementType]));
             }
         }
@@ -79,10 +80,35 @@ class ElementIndexSettings extends Base
             if (is_array($settings)) {
 
                 // Group by element type and add to definitions
-                $settingDefinitions[$elementTypeName] = $settings;
+                $mappedSettings = $this->getMappedSettings($settings, 'id', 'handle');
+                $settingDefinitions[$elementTypeName] = $mappedSettings;
             }
         }
 
         return $settingDefinitions;
+    }
+
+    /**
+     * Get mapped element index settings, converting source ids to handles or back again
+     *
+     * @param  array  $settings
+     * @param  string $fromIndex
+     * @param  string $toIndex
+     *
+     * @return array
+     */
+    private function getMappedSettings(array $settings, $fromIndex, $toIndex)
+    {
+        $mappedSettings = ['sources' => []];
+        foreach ($settings['sources'] as $source => $sourceSettings) {
+            $mappedSource = Craft::app()->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);
+            $tableAttributesSettings = [];
+            foreach ($sourceSettings as $index => $columnSource) {
+                $mappedColumnSource = Craft::app()->schematic_sources->getSource(false, $columnSource, $fromIndex, $toIndex);
+                $tableAttributesSettings[$index] = $mappedColumnSource;
+            }
+            $mappedSettings['sources'][$mappedSource]['tableAttributes'] = $tableAttributesSettings;
+        }
+        return $mappedSettings;
     }
 }
