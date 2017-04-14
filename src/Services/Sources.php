@@ -59,8 +59,8 @@ class Sources extends BaseApplication
            return $source;
        }
 
-      /** @var BaseElementModel $sourceObject */
-      $sourceObject = null;
+       /** @var BaseElementModel $sourceObject */
+       $sourceObject = null;
 
        if (strpos($source, ':') > -1) {
            list($sourceType, $sourceFrom) = explode(':', $source);

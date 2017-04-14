@@ -28,7 +28,7 @@ use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
  *
  * @link      http://www.nerds.company
  *
- * @coversDefaultClass \NerdsAndCompany\Schematic\Services\Schematic
+ * @coversDefaultClass NerdsAndCompany\Schematic\Services\Schematic
  * @covers ::<!public>
  */
 class SchematicTest extends BaseTest
