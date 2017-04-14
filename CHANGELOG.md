@@ -1,3 +1,6 @@
+###3.7.2###
+- Use handles for element index settings
+
 ###3.7.1###
 - Removed Asset Transform dimensionChangeTime attribute from schema
 
