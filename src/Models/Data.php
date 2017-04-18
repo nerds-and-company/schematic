@@ -44,6 +44,7 @@ class Data extends Base
     {
         return [
             'locales' => [AttributeType::Mixed, 'default' => []],
+            'routes' => [AttributeType::Mixed, 'default' => []],
             'assetSources' => [AttributeType::Mixed, 'default' => []],
             'assetTransforms' => [AttributeType::Mixed, 'default' => []],
             'fields' => [AttributeType::Mixed, 'default' => []],
