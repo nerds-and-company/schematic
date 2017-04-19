@@ -60,9 +60,6 @@ class ElementIndexSettingsTest extends BaseTest
 
     /**
      * @return ElementIndexesService|Mock
-     *
-     * @param array $getSettingsResponse
-     *
      * @return Mock
      */
     protected function getMockElementIndexesService()
@@ -71,7 +68,7 @@ class ElementIndexSettingsTest extends BaseTest
         $mock = $this->getMockBuilder(ElementIndexesService::class)->getMock();
         $mock->expects($this->any())->method('getSettings')->will($this->returnValueMap([
           ['Entry', $getSettingsResponse['Entry']],
-          ['Category', $getSettingsResponse['Category']]
+          ['Category', $getSettingsResponse['Category']],
         ]));
         $mock->expects($this->any())->method('saveSettings')->willReturn(false);
 
@@ -222,10 +219,10 @@ class ElementIndexSettingsTest extends BaseTest
     }
 
     /**
-     * @param  string $fieldType
-     * @param  string $source
-     * @param  string $fromIndex
-     * @param  string $toIndex
+     * @param string $fieldType
+     * @param string $source
+     * @param string $fromIndex
+     * @param string $toIndex
      *
      * @return string
      */
@@ -234,13 +231,10 @@ class ElementIndexSettingsTest extends BaseTest
         switch ($source) {
             case 'field:handle':
                 return 'field:1';
-                break;
             case 'field:1':
                 return 'field:handle';
-                break;
             default:
                 return $source;
-                break;
         }
     }
 

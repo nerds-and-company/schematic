@@ -71,25 +71,25 @@ class TagGroupsTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
-      /**
-       * @covers ::import
-       * @dataProvider provideValidTagGroupDefinitions
-       *
-       * @param array $groupDefinitions
-       */
-      public function testImportWithForceOption(array $groupDefinitions)
-      {
-          $this->setMockTagsService();
-          $this->setMockDbConnection();
-          $this->setMockSchematicFields();
+    /**
+     * @covers ::import
+     * @dataProvider provideValidTagGroupDefinitions
+     *
+     * @param array $groupDefinitions
+     */
+    public function testImportWithForceOption(array $groupDefinitions)
+    {
+        $this->setMockTagsService();
+        $this->setMockDbConnection();
+        $this->setMockSchematicFields();
 
-          $schematicUserGroupsService = new TagGroups();
+        $schematicUserGroupsService = new TagGroups();
 
-          $import = $schematicUserGroupsService->import($groupDefinitions, true);
+        $import = $schematicUserGroupsService->import($groupDefinitions, true);
 
-          $this->assertInstanceOf(Result::class, $import);
-          $this->assertFalse($import->hasErrors());
-      }
+        $this->assertInstanceOf(Result::class, $import);
+        $this->assertFalse($import->hasErrors());
+    }
 
     //==============================================================================================================
     //==============================================  PROVIDERS  ===================================================
