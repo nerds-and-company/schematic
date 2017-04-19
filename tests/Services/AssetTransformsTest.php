@@ -65,24 +65,24 @@ class AssetTransformsTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
-      /**
-       * @covers ::import
-       * @dataProvider provideValidAssetTransformDefinitions
-       *
-       * @param array $assetTransformDefinitions
-       */
-      public function testImportWithForceOption(array $assetTransformDefinitions)
-      {
-          $this->setMockAssetTransformsService();
-          $this->setMockDbConnection();
+    /**
+     * @covers ::import
+     * @dataProvider provideValidAssetTransformDefinitions
+     *
+     * @param array $assetTransformDefinitions
+     */
+    public function testImportWithForceOption(array $assetTransformDefinitions)
+    {
+        $this->setMockAssetTransformsService();
+        $this->setMockDbConnection();
 
-          $schematicAssetTransformsService = new AssetTransforms();
+        $schematicAssetTransformsService = new AssetTransforms();
 
-          $import = $schematicAssetTransformsService->import($assetTransformDefinitions, true);
+        $import = $schematicAssetTransformsService->import($assetTransformDefinitions, true);
 
-          $this->assertInstanceOf(Result::class, $import);
-          $this->assertFalse($import->hasErrors());
-      }
+        $this->assertInstanceOf(Result::class, $import);
+        $this->assertFalse($import->hasErrors());
+    }
 
     //==============================================================================================================
     //==============================================  PROVIDERS  ===================================================

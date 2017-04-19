@@ -187,6 +187,10 @@ class Plugin_CustomSchematicFieldModel extends \NerdsAndCompany\Schematic\Models
 
 ```
 
+## See also
+
+For synchronizing Craft Commerce schema's, please see the [Schematic Commerce](https://github.com/nerds-and-company/schematic-commerce) package.
+
 ## License
 
 This project has been licensed under the MIT License (MIT). Please see [License File](LICENSE) for more information.

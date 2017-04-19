@@ -71,25 +71,25 @@ class AssetSourcesTest extends BaseTest
         $this->assertFalse($import->hasErrors());
     }
 
-      /**
-       * @covers ::import
-       * @dataProvider provideValidAssetSourceDefinitions
-       *
-       * @param array $assetSourceDefinitions
-       */
-      public function testImportWithForceOption(array $assetSourceDefinitions)
-      {
-          $this->setMockAssetSourcesService();
-          $this->setMockDbConnection();
-          $this->setMockSchematicFields();
+    /**
+     * @covers ::import
+     * @dataProvider provideValidAssetSourceDefinitions
+     *
+     * @param array $assetSourceDefinitions
+     */
+    public function testImportWithForceOption(array $assetSourceDefinitions)
+    {
+        $this->setMockAssetSourcesService();
+        $this->setMockDbConnection();
+        $this->setMockSchematicFields();
 
-          $schematicAssetSourcesService = new AssetSources();
+        $schematicAssetSourcesService = new AssetSources();
 
-          $import = $schematicAssetSourcesService->import($assetSourceDefinitions, true);
+        $import = $schematicAssetSourcesService->import($assetSourceDefinitions, true);
 
-          $this->assertInstanceOf(Result::class, $import);
-          $this->assertFalse($import->hasErrors());
-      }
+        $this->assertInstanceOf(Result::class, $import);
+        $this->assertFalse($import->hasErrors());
+    }
 
     //==============================================================================================================
     //==============================================  PROVIDERS  ===================================================
