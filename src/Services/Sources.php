@@ -66,14 +66,29 @@ class Sources extends BaseApplication
            list($sourceType, $sourceFrom) = explode(':', $source);
            switch ($sourceType) {
               case 'section':
+              case 'createEntries':
+              case 'deleteEntries':
+              case 'deletePeerEntries':
+              case 'deletePeerEntryDrafts':
+              case 'editEntries':
+              case 'editPeerEntries':
+              case 'editPeerEntryDrafts':
+              case 'publishEntries':
+              case 'publishPeerEntries':
+              case 'publishPeerEntryDrafts':
                   $service = Craft::app()->sections;
                   $method = 'getSectionBy';
                   break;
               case 'group':
+              case 'editCategories':
                   $service = $fieldType == 'Users' ? Craft::app()->userGroups : Craft::app()->categories;
                   $method = 'getGroupBy';
                   break;
               case 'folder':
+              case 'createSubfoldersInAssetSource':
+              case 'removeFromAssetSource':
+              case 'uploadToAssetSource':
+              case 'viewAssetSource':
                   $service = Craft::app()->schematic_assetSources;
                   $method = 'getSourceBy';
                   break;
@@ -84,6 +99,10 @@ class Sources extends BaseApplication
               case 'field':
                   $service = Craft::app()->fields;
                   $method = 'getFieldBy';
+                  break;
+              case 'editGlobalSet':
+                  $service = Craft::app()->globals;
+                  $method = 'getSetBy';
                   break;
           }
        } elseif ($source !== 'singles') {

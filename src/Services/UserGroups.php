@@ -18,64 +18,8 @@ use Craft\UserGroupModel;
  */
 class UserGroups extends Base
 {
-    /** @var SectionModel[] */
-    private $sectionsByHandle = [];
-    /** @var SectionModel[] */
-    private $sectionsById = [];
-    /** @var AssetSourceModel[] */
-    private $assetSourceByHandle = [];
-    /** @var AssetSourceModel[] */
-    private $assetSourceById = [];
-    /** @var GlobalSetModel[] */
-    private $globalSetsByHandle = [];
-    /** @var GlobalSetModel[] */
-    private $globalSetsById = [];
     /** @var string[] */
     private $mappedPermissions = [];
-
-    //==============================================================================================================
-    //===============================================  SERVICES  ===================================================
-    //==============================================================================================================
-
-    /**
-     * @return SectionsService
-     */
-    private function getSectionsService()
-    {
-        return Craft::app()->sections;
-    }
-
-    /**
-     * @return AssetSourcesService
-     */
-    private function getAssetSourcesService()
-    {
-        return Craft::app()->assetSources;
-    }
-
-    /**
-     * @return GlobalsService
-     */
-    private function getGlobalsService()
-    {
-        return Craft::app()->globals;
-    }
-
-    /**
-     * @return UserPermissionsService
-     */
-    private function getUserPermissionsService()
-    {
-        return Craft::app()->userPermissions;
-    }
-
-    /**
-     * @return UserGroupsService
-     */
-    private function getUserGroupsService()
-    {
-        return Craft::app()->userGroups;
-    }
 
     //==============================================================================================================
     //================================================  EXPORT  ====================================================
@@ -94,9 +38,6 @@ class UserGroups extends Base
 
         $groupDefinitions = [];
 
-        $this->sectionsById = $this->getSectionsService()->getAllSections('id');
-        $this->assetSourceById = $this->getAssetSourcesService()->getAllSources('id');
-        $this->globalSetsById = $this->getGlobalsService()->getAllSets('id');
         $this->mappedPermissions = $this->getAllMappedPermissions();
 
         foreach ($groups as $group) {
@@ -131,12 +72,12 @@ class UserGroups extends Base
     private function getGroupPermissionDefinitions($group)
     {
         $permissionDefinitions = [];
-        $groupPermissions = $this->getUserPermissionsService()->getPermissionsByGroupId($group->id);
+        $groupPermissions = Craft::app()->userPermissions->getPermissionsByGroupId($group->id);
 
         foreach ($groupPermissions as $permission) {
             if (array_key_exists($permission, $this->mappedPermissions)) {
                 $permission = $this->mappedPermissions[$permission];
-                $permissionDefinitions[] = $this->getPermissionDefinition($permission);
+                $permissionDefinitions[] = Craft::app()->schematic_sources->getSource(false, $permission, 'id', 'handle');
             }
         }
         sort($permissionDefinitions);
@@ -153,7 +94,7 @@ class UserGroups extends Base
     private function getAllMappedPermissions()
     {
         $mappedPermissions = [];
-        foreach ($this->getUserPermissionsService()->getAllPermissions() as $permissions) {
+        foreach (Craft::app()->userPermissions->getAllPermissions() as $permissions) {
             $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
         }
 
@@ -178,26 +119,6 @@ class UserGroups extends Base
         return $mappedPermissions;
     }
 
-    /**
-     * Get permission definition.
-     *
-     * @param string $permission
-     *
-     * @return string
-     */
-    private function getPermissionDefinition($permission)
-    {
-        if (strpos($permission, 'Asset') > -1) {
-            $permission = $this->mapPermissionSource($this->assetSourceById, $permission, true);
-        } elseif (strpos($permission, 'GlobalSet') > -1) {
-            $permission = $this->mapPermissionSource($this->globalSetsById, $permission, true);
-        } else {
-            $permission = $this->mapPermissionSource($this->sectionsById, $permission, true);
-        }
-
-        return $permission;
-    }
-
     //==============================================================================================================
     //================================================  IMPORT  ====================================================
     //==============================================================================================================
@@ -214,11 +135,7 @@ class UserGroups extends Base
     {
         Craft::log(Craft::t('Importing User Groups'));
 
-        $this->sectionsByHandle = $this->getSectionsService()->getAllSections('handle');
-        $this->assetSourceByHandle = $this->getAssetSourcesService()->getAllSources('handle');
-        $this->globalSetsByHandle = $this->getGlobalsService()->getAllSets('handle');
-
-        $userGroups = $this->getUserGroupsService()->getAllGroups('handle');
+        $userGroups = Craft::app()->userGroups->getAllGroups('handle');
 
         foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
             $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
@@ -228,7 +145,7 @@ class UserGroups extends Base
             $group->name = $groupDefinition['name'];
             $group->handle = $groupHandle;
 
-            if (!$this->getUserGroupsService()->saveGroup($group)) {
+            if (!Craft::app()->userGroups->saveGroup($group)) {
                 $this->addErrors($group->getAllErrors());
 
                 continue;
@@ -236,12 +153,12 @@ class UserGroups extends Base
 
             $permissions = $this->getPermissions($groupDefinition['permissions']);
 
-            $this->getUserPermissionsService()->saveGroupPermissions($group->id, $permissions);
+            Craft::app()->userPermissions->saveGroupPermissions($group->id, $permissions);
         }
 
         if ($force) {
             foreach ($userGroups as $group) {
-                $this->getUserGroupsService()->deleteGroupById($group->id);
+                Craft::app()->userGroups->deleteGroupById($group->id);
             }
         }
 
@@ -259,30 +176,10 @@ class UserGroups extends Base
     {
         $permissions = [];
         foreach ($permissionDefinitions as $permissionDefinition) {
-            $permissions[] = $this->getPermission($permissionDefinition);
+            $permissions[] = Craft::app()->schematic_sources->getSource(false, $permissionDefinition, 'handle', 'id');
         }
 
         return $permissions;
-    }
-
-    /**
-     * Get permission.
-     *
-     * @param string $permissionDefinition
-     *
-     * @return string
-     */
-    private function getPermission($permissionDefinition)
-    {
-        if (strpos($permissionDefinition, 'Asset') > -1) {
-            $permissionDefinition = $this->mapPermissionSource($this->assetSourceByHandle, $permissionDefinition, false);
-        } elseif (strpos($permissionDefinition, 'GlobalSet') > -1) {
-            $permissionDefinition = $this->mapPermissionSource($this->globalSetsByHandle, $permissionDefinition, false);
-        } else {
-            $permissionDefinition = $this->mapPermissionSource($this->sectionsByHandle, $permissionDefinition, false);
-        }
-
-        return $permissionDefinition;
     }
 
     //==============================================================================================================
