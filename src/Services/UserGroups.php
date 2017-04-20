@@ -181,34 +181,4 @@ class UserGroups extends Base
 
         return $permissions;
     }
-
-    //==============================================================================================================
-    //===============================================  HELPERS  ====================================================
-    //==============================================================================================================
-
-    /**
-     * @param BaseElementModel[] $mapping    AssetSources or Sections
-     * @param string             $permission
-     * @param bool               $export     is it an export or import
-     *
-     * @return string mapped permission
-     */
-    private function mapPermissionSource(array $mapping, $permission, $export)
-    {
-        if (strpos($permission, ':') > -1) {
-            /** @var BaseElementModel $source */
-            $source = false;
-            list($permissionName, $sourceId) = explode(':', $permission);
-
-            if (isset($mapping[$sourceId])) {
-                $source = $mapping[$sourceId];
-            }
-
-            if ($source) {
-                $permission = $permissionName.':'.($export ? $source->handle : $source->id);
-            }
-        }
-
-        return $permission;
-    }
 }
