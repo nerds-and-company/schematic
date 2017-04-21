@@ -104,7 +104,7 @@ class Sources extends BaseApplication
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
-           $method = $method.$indexFrom;
+           $method = $method.ucfirst($indexFrom);
            $sourceObject = $service->$method($sourceFrom);
        }
 
