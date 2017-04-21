@@ -5,13 +5,7 @@ namespace NerdsAndCompany\Schematic\Services;
 use Craft\Craft;
 use Craft\BaseTest;
 use Craft\UserGroupModel;
-use Craft\SectionModel;
-use Craft\AssetSourceModel;
-use Craft\GlobalSetModel;
 use Craft\UserGroupsService;
-use Craft\SectionsService;
-use Craft\AssetSourcesService;
-use Craft\GlobalsService;
 use Craft\UserPermissionsService;
 use NerdsAndCompany\Schematic\Models\Result;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -47,9 +41,7 @@ class UserGroupsTest extends BaseTest
     {
         $this->setMockUserGroupsService();
         $this->setMockUserPermissionsService($groupPermissions);
-        $this->setMockSectionsService('id');
-        $this->setMockAssetSourcesService('id');
-        $this->setMockGlobalsService('id');
+        $this->setMockSources();
 
         $schematicUserGroupsService = new UserGroups();
 
@@ -68,9 +60,7 @@ class UserGroupsTest extends BaseTest
     {
         $this->setMockUserGroupsService();
         $this->setMockUserPermissionsService();
-        $this->setMockSectionsService('handle');
-        $this->setMockAssetSourcesService('handle');
-        $this->setMockGlobalsService('handle');
+        $this->setMockSources();
 
         $schematicUserGroupsService = new UserGroups();
 
@@ -90,9 +80,7 @@ class UserGroupsTest extends BaseTest
     {
         $this->setMockUserGroupsService(false);
         $this->setMockUserPermissionsService();
-        $this->setMockSectionsService('handle');
-        $this->setMockAssetSourcesService('handle');
-        $this->setMockGlobalsService('handle');
+        $this->setMockSources();
 
         $schematicUserGroupsService = new UserGroups();
         $import = $schematicUserGroupsService->import($groupDefinitions);
@@ -113,9 +101,7 @@ class UserGroupsTest extends BaseTest
     {
         $this->setMockUserGroupsService();
         $this->setMockUserPermissionsService();
-        $this->setMockSectionsService('handle');
-        $this->setMockAssetSourcesService('handle');
-        $this->setMockGlobalsService('handle');
+        $this->setMockSources();
 
         $schematicUserGroupsService = new UserGroups();
 
@@ -271,156 +257,6 @@ class UserGroupsTest extends BaseTest
     }
 
     /**
-     * @param $indexBy
-     *
-     * @return Mock|SectionsService
-     */
-    private function setMockSectionsService($indexBy)
-    {
-        $mockSectionService = $this->getMockBuilder(SectionsService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockSectionService->expects($this->any())
-            ->method('getAllSections')
-            ->with($indexBy)
-            ->willReturn($this->getMockSections($indexBy, 2));
-
-        $this->setComponent(Craft::app(), 'sections', $mockSectionService);
-
-        return $mockSectionService;
-    }
-
-    /**
-     * @param string $indexBy
-     * @param int    $count
-     *
-     * @return Mock[]|SectionModel[]
-     */
-    private function getMockSections($indexBy, $count)
-    {
-        $keyPrefix = $indexBy == 'id' ? '' : 'sectionHandle';
-        $mockSections = [];
-        for ($x = 0; $x <= $count; ++$x) {
-            $mockSection = $this->getMockBuilder(SectionModel::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            $mockSection->expects($this->any())
-                ->method('__get')
-                ->willReturnMap([
-                    ['handle', 'sectionHandle'.$x],
-                    ['id', $x],
-                    ['name', 'sectionName'.$x],
-                ]);
-
-            $mockSections[$keyPrefix.$x] = $mockSection;
-        }
-
-        return $mockSections;
-    }
-
-    /**
-     * @param string $indexBy
-     *
-     * @return Mock|AssetSourcesService
-     */
-    private function setMockAssetSourcesService($indexBy)
-    {
-        $mockAssetSourcesService = $this->getMockBuilder(AssetSourcesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockAssetSourcesService->expects($this->exactly(1))
-            ->method('getAllSources')
-            ->with($indexBy)
-            ->willReturn($this->getMockAssetSources($indexBy, 1));
-
-        $this->setComponent(Craft::app(), 'assetSources', $mockAssetSourcesService);
-
-        return $mockAssetSourcesService;
-    }
-
-    /**
-     * @param string $indexBy
-     * @param int    $count
-     *
-     * @return Mock[]|AssetSourceModel[]
-     */
-    private function getMockAssetSources($indexBy, $count)
-    {
-        $keyPrefix = $indexBy == 'id' ? '' : 'assetSourceHandle';
-        $mockAssetSources = [];
-        for ($x = 0; $x <= $count; ++$x) {
-            $mockAssetSource = $this->getMockBuilder(AssetSourceModel::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            $mockAssetSource->expects($this->any())
-                ->method('__get')
-                ->willReturnMap([
-                    ['handle', 'assetSourceHandle'.$x],
-                    ['id', $x],
-                    ['name', 'assetSourceName'.$x],
-                ]);
-
-            $mockAssetSources[$keyPrefix.$x] = $mockAssetSource;
-        }
-
-        return $mockAssetSources;
-    }
-
-    /**
-     * @param string $indexBy
-     *
-     * @return Mock|AssetSourcesService
-     */
-    private function setMockGlobalsService($indexBy)
-    {
-        $mockAssetSourcesService = $this->getMockBuilder(GlobalsService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockAssetSourcesService->expects($this->exactly(1))
-            ->method('getAllSets')
-            ->with($indexBy)
-            ->willReturn($this->getMockGlobalSets($indexBy, 1));
-
-        $this->setComponent(Craft::app(), 'globals', $mockAssetSourcesService);
-
-        return $mockAssetSourcesService;
-    }
-
-    /**
-     * @param string $indexBy
-     * @param int    $count
-     *
-     * @return Mock[]|GlobalSetModel[]
-     */
-    private function getMockGlobalSets($indexBy, $count)
-    {
-        $keyPrefix = $indexBy == 'id' ? '' : 'globalSetHandle';
-        $mockGlobalSets = [];
-        for ($x = 0; $x <= $count; ++$x) {
-            $mockGlobalSet = $this->getMockBuilder(GlobalSetModel::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            $mockGlobalSet->expects($this->any())
-                ->method('__get')
-                ->willReturnMap([
-                    ['handle', 'globalSetHandle'.$x],
-                    ['id', $x],
-                    ['name', 'globalSetName'.$x],
-                ]);
-
-            $mockGlobalSets[$keyPrefix.$x] = $mockGlobalSet;
-        }
-
-        return $mockGlobalSets;
-    }
-
-    /**
      * @param bool $success
      *
      * @return UserGroupsService|Mock
@@ -488,6 +324,52 @@ class UserGroupsTest extends BaseTest
         $this->setComponent(Craft::app(), 'userPermissions', $mockUserPermissionsService);
 
         return $mockUserPermissionsService;
+    }
+
+    /**
+     * @return Mock|Sources
+     */
+    private function setMockSources()
+    {
+        $mockSources = $this->getMockBuilder(Sources::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockSources->expects($this->any())
+            ->method('getSource')
+            ->will($this->returnCallback(array($this, 'getMockSourceCallback')));
+
+        $this->setComponent(Craft::app(), 'schematic_sources', $mockSources);
+
+        return $mockSources;
+    }
+
+    /**
+     * @param string $fieldType
+     * @param string $source
+     * @param string $fromIndex
+     * @param string $toIndex
+     *
+     * @return string
+     */
+    public function getMockSourceCallback($fieldType, $source, $fromIndex, $toIndex)
+    {
+        switch ($source) {
+            case 'editEntries:sectionHandle1':
+                return 'editEntries:1';
+            case 'editEntries:1':
+                return 'editEntries:sectionHandle1';
+            case 'editGlobalSet:globalSetHandle1':
+                return 'editGlobalSet:1';
+            case 'editGlobalSet:1':
+                return 'editGlobalSet:globalSetHandle1';
+            case 'viewAssetSource:assetSourceHandle1':
+                return 'viewAssetSource:1';
+            case 'viewAssetSource:1':
+                return 'viewAssetSource:assetSourceHandle1';
+            default:
+                return $source;
+        }
     }
 
     /**
