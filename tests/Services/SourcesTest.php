@@ -46,8 +46,8 @@ class SourcesTest extends BaseTest
      * @covers ::getSource
      * @dataProvider provideValidSources
      *
-     * @param array  $sources
-     * @param array  $expectedResult
+     * @param array  $idSources
+     * @param array  $handleSources
      * @param string $fieldType
      */
     public function testGetMappedSourcesFromIdToHandle(array $idSources, array $handleSources, $fieldType = false)
@@ -63,8 +63,8 @@ class SourcesTest extends BaseTest
      * @covers ::getSource
      * @dataProvider provideValidSources
      *
-     * @param array  $sources
-     * @param array  $expectedResult
+     * @param array  $idSources
+     * @param array  $handleSources
      * @param string $fieldType
      */
     public function testGetMappedSourcesFromHandleToId(array $idSources, array $handleSources, $fieldType = false)
