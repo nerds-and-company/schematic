@@ -55,10 +55,6 @@ class Sources extends BaseApplication
     */
    public function getSource($fieldType, $source, $indexFrom, $indexTo)
    {
-       if ($source == 'singles' || $source == '*') {
-           return $source;
-       }
-
        /** @var BaseElementModel $sourceObject */
        $sourceObject = null;
 
@@ -105,12 +101,6 @@ class Sources extends BaseApplication
                   $method = 'getSetBy';
                   break;
           }
-       } elseif ($source !== 'singles') {
-           //Backwards compatibility
-          $sourceType = 'section';
-           $sourceFrom = $source;
-           $service = Craft::app()->sections;
-           $method = 'getSectionBy';
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
