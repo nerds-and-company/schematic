@@ -1,6 +1,14 @@
+### 3.8.2 ###
+- Fixed a bug where schematic would crash when a source does not exist yet
+- Fixed a bug where permission category ids were converted to section handles
+- Added tests for the sources service
+
+### 3.8.1 ###
+- Check if element index sources exist
+
 ### 3.8.0 ###
 - Renamed package to nerds-and-company/schematic
-- Added info about nerds-and-company/schematic-commerce to README 
+- Added info about nerds-and-company/schematic-commerce to README
 - Small fixes
 
 ### 3.7.2 ###
