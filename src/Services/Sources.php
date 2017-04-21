@@ -55,52 +55,54 @@ class Sources extends BaseApplication
     */
    public function getSource($fieldType, $source, $indexFrom, $indexTo)
    {
+       if (strpos($source, ':') === false) {
+           return $source;
+       }
+
        /** @var BaseElementModel $sourceObject */
        $sourceObject = null;
 
-       if (strpos($source, ':') > -1) {
-           list($sourceType, $sourceFrom) = explode(':', $source);
-           switch ($sourceType) {
-              case 'section':
-              case 'createEntries':
-              case 'deleteEntries':
-              case 'deletePeerEntries':
-              case 'deletePeerEntryDrafts':
-              case 'editEntries':
-              case 'editPeerEntries':
-              case 'editPeerEntryDrafts':
-              case 'publishEntries':
-              case 'publishPeerEntries':
-              case 'publishPeerEntryDrafts':
-                  $service = Craft::app()->sections;
-                  $method = 'getSectionBy';
-                  break;
-              case 'group':
-              case 'editCategories':
-                  $service = $fieldType == 'Users' ? Craft::app()->userGroups : Craft::app()->categories;
-                  $method = 'getGroupBy';
-                  break;
-              case 'folder':
-              case 'createSubfoldersInAssetSource':
-              case 'removeFromAssetSource':
-              case 'uploadToAssetSource':
-              case 'viewAssetSource':
-                  $service = Craft::app()->schematic_assetSources;
-                  $method = 'getSourceBy';
-                  break;
-              case 'taggroup':
-                  $service = Craft::app()->tags;
-                  $method = 'getTagGroupBy';
-                  break;
-              case 'field':
-                  $service = Craft::app()->fields;
-                  $method = 'getFieldBy';
-                  break;
-              case 'editGlobalSet':
-                  $service = Craft::app()->globals;
-                  $method = 'getSetBy';
-                  break;
-          }
+       list($sourceType, $sourceFrom) = explode(':', $source);
+       switch ($sourceType) {
+          case 'section':
+          case 'createEntries':
+          case 'deleteEntries':
+          case 'deletePeerEntries':
+          case 'deletePeerEntryDrafts':
+          case 'editEntries':
+          case 'editPeerEntries':
+          case 'editPeerEntryDrafts':
+          case 'publishEntries':
+          case 'publishPeerEntries':
+          case 'publishPeerEntryDrafts':
+              $service = Craft::app()->sections;
+              $method = 'getSectionBy';
+              break;
+          case 'group':
+          case 'editCategories':
+              $service = $fieldType == 'Users' ? Craft::app()->userGroups : Craft::app()->categories;
+              $method = 'getGroupBy';
+              break;
+          case 'folder':
+          case 'createSubfoldersInAssetSource':
+          case 'removeFromAssetSource':
+          case 'uploadToAssetSource':
+          case 'viewAssetSource':
+              $service = Craft::app()->schematic_assetSources;
+              $method = 'getSourceBy';
+              break;
+          case 'taggroup':
+              $service = Craft::app()->tags;
+              $method = 'getTagGroupBy';
+              break;
+          case 'field':
+              $service = Craft::app()->fields;
+              $method = 'getFieldBy';
+              break;
+          case 'editGlobalSet':
+              $service = Craft::app()->globals;
+              $method = 'getSetBy';
+              break;
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
@@ -112,6 +114,6 @@ class Sources extends BaseApplication
            return $sourceType.':'.$sourceObject->$indexTo;
        }
 
-       return $source;
+       return '';
    }
 }
