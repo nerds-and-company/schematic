@@ -70,7 +70,7 @@ require __DIR__.'/../../../autoload.php';
 Yii::$enableIncludePath = false;
 
 // Because CHttpRequest is one of those stupid Yii files that has multiple classes defined in it.
-require_once CRAFT_APP_PATH.'framework/web/CHttpRequest.php';
+require_once CRAFT_FRAMEWORK_PATH.'web/CHttpRequest.php';
 
 // Fake server name on cli
 $_SERVER['SERVER_NAME'] = getenv('CRAFT_SITENAME');
