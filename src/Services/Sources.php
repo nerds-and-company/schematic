@@ -103,6 +103,9 @@ class Sources extends BaseApplication
               $service = Craft::app()->globals;
               $method = 'getSetBy';
               break;
+          case 'editLocale':
+              return $source;
+              break;
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
