@@ -53,7 +53,7 @@ ini_set('display_errors', 1);
 defined('YII_DEBUG') || define('YII_DEBUG', false);
 defined('YII_TRACE_LEVEL') || define('YII_TRACE_LEVEL', 3);
 
-require_once CRAFT_APP_PATH.'framework/yii.php';
+require_once CRAFT_FRAMEWORK_PATH.'yii.php';
 require_once CRAFT_APP_PATH.'Craft.php';
 require_once CRAFT_APP_PATH.'Info.php';
 
@@ -70,7 +70,7 @@ require __DIR__.'/../../../autoload.php';
 Yii::$enableIncludePath = false;
 
 // Because CHttpRequest is one of those stupid Yii files that has multiple classes defined in it.
-require_once CRAFT_APP_PATH.'framework/web/CHttpRequest.php';
+require_once CRAFT_FRAMEWORK_PATH.'web/CHttpRequest.php';
 
 // Fake server name on cli
 $_SERVER['SERVER_NAME'] = getenv('CRAFT_SITENAME');
