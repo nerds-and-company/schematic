@@ -105,7 +105,6 @@ class Sources extends BaseApplication
               break;
           case 'editLocale':
               return $source;
-              break;
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
