@@ -310,6 +310,9 @@ class App extends Base
             'schematic_locales' => [
                 'class' => Service\Locales::class,
             ],
+            'schematic_routes' => [
+                'class' => Service\Routes::class,
+            ],
             'schematic_assetSources' => [
                 'class' => Service\AssetSources::class,
             ],
