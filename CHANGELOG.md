@@ -1,3 +1,7 @@
+### 3.8.3 ###
+- Fixed a bug where editLocale permission could not be synced
+- Use CRAFT_FRAMEWORK_PATH to locate framework files (thanks to @dnunez24)
+
 ### 3.8.2 ###
 - Fixed a bug where schematic would crash when a source does not exist yet
 - Fixed a bug where permission category ids were converted to section handles
