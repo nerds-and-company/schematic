@@ -190,6 +190,16 @@ class SourcesTest extends BaseTest
                     'editGlobalSet:globalSetHandle-2',
                 ],
             ],
+            'localePermissions' => [
+                'idSources' => [
+                    'editLocale:en',
+                    'editLocale:nl',
+                ],
+                'handleSources' => [
+                    'editLocale:en',
+                    'editLocale:nl',
+                ],
+            ],
         ];
     }
 
