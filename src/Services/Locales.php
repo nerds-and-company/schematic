@@ -13,7 +13,7 @@ use Craft\Craft;
  * @copyright Copyright (c) 2015-2017, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.nerds.company
+ * @see      http://www.nerds.company
  */
 class Locales extends Base
 {

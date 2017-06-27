@@ -15,7 +15,7 @@ use Craft\ElementType;
  * @copyright Copyright (c) 2015-2017, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.nerds.company
+ * @see      http://www.nerds.company
  */
 class Users extends Base
 {
@@ -72,7 +72,6 @@ class Users extends Base
         $fieldLayout->type = ElementType::User;
 
         if (!Craft::app()->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
-
             $this->addErrors($fieldLayout->getAllErrors());
         }
 

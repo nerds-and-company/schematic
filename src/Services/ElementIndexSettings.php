@@ -13,7 +13,7 @@ use Craft\Craft;
  * @copyright Copyright (c) 2015-2017, Nerds & Company
  * @license   MIT
  *
- * @link      http://www.nerds.company
+ * @see      http://www.nerds.company
  */
 class ElementIndexSettings extends Base
 {
@@ -69,7 +69,6 @@ class ElementIndexSettings extends Base
 
         // Loop through element types
         foreach ($elementTypes as $elementType) {
-
             // Get element type name
             $elementTypeName = preg_replace('/^Craft\\\(.*?)ElementType$/', '$1', get_class($elementType));
 
@@ -78,7 +77,6 @@ class ElementIndexSettings extends Base
 
             // If there are settings, export
             if (is_array($settings)) {
-
                 // Group by element type and add to definitions
                 $mappedSettings = $this->getMappedSettings($settings, 'id', 'handle');
                 $settingDefinitions[$elementTypeName] = $mappedSettings;
@@ -89,11 +87,11 @@ class ElementIndexSettings extends Base
     }
 
     /**
-     * Get mapped element index settings, converting source ids to handles or back again
+     * Get mapped element index settings, converting source ids to handles or back again.
      *
-     * @param  array  $settings
-     * @param  string $fromIndex
-     * @param  string $toIndex
+     * @param array  $settings
+     * @param string $fromIndex
+     * @param string $toIndex
      *
      * @return array
      */
