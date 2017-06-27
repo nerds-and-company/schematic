@@ -133,7 +133,7 @@ Then the environment variable `SCHEMATIC_KEY_VALUE` needs to be set. The value o
 
 ### Hooks
 
-This tool has two hooks that extending code can plug in to. An example of a project using these hooks is the [Schematic plugin for AmNav](https://github.com/nerds-and-company/schematic-amnav).
+This tool has three hooks that extending code can plug in to. An example of a project using some of these hooks is the [Schematic plugin for AmNav](https://github.com/nerds-and-company/schematic-amnav).
 
 
 #### registerMigrationService
@@ -151,6 +151,25 @@ public function registerMigrationService()
     return [
 		'amnav' => craft()->schematic_amNav
 	];
+}
+```
+
+#### registerSchematicSources
+
+<table>
+<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Services\Sources::getSource()</code></td></tr>
+<tr><td>Return</td><td>An array where the keys are mapped to a value depending on the indexFrom param of the source, id or handle.</td></tr>
+</table>
+
+Gives plugins a chance to register their own Migration Services to Schematic in order to import or exports their own data.
+
+```php
+public function registerSchematicSource($indexFrom)
+{
+  $mapping = [
+		'createSomething:handle1' => 'createSomething:1'
+	];
+  return $indexFrom == 'handle' ? $mapping : array_flip($mapping);
 }
 ```
 

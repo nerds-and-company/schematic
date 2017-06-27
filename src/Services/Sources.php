@@ -19,6 +19,11 @@ use Craft\BaseApplicationComponent as BaseApplication;
 class Sources extends BaseApplication
 {
     /**
+     * @var array()
+     */
+    private $hookedSources = [];
+
+   /**
     * Get sources based on the indexFrom attribute and return them with the indexTo attribute.
     *
     * @param string       $fieldType
@@ -116,6 +121,36 @@ class Sources extends BaseApplication
            return $sourceType.':'.$sourceObject->$indexTo;
        }
 
-       return '';
+       return $this->getHookedSource($source, $indexFrom);
+   }
+
+    /**
+     * See if the source can be found in the hooked sources.
+     *
+     * @param string $source
+     * @param string $indexFrom
+     *
+     * @return string
+     */
+    private function getHookedSource($source, $indexFrom)
+    {
+        $this->loadHookedSources($indexFrom);
+        foreach ($this->hookedSources[$indexFrom] as $hookedSources) {
+            if (array_key_exists($source, $hookedSources)) {
+                return $hookedSources[$source];
+            }
+        }
+
+        return '';
+    }
+
+   /**
+    * Load the hooked sources.
+    */
+   private function loadHookedSources($indexFrom)
+   {
+       if (!isset($this->hookedSources[$indexFrom])) {
+           $this->hookedSources[$indexFrom] = Craft::app()->plugins->call('registerSchematicSources');
+       }
    }
 }
