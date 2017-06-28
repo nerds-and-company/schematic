@@ -166,10 +166,10 @@ Gives plugins a chance to register their own Migration Services to Schematic in 
 ```php
 public function registerSchematicSource($indexFrom)
 {
-  $mapping = [
-		'createSomething:handle1' => 'createSomething:1'
-	];
-  return $indexFrom == 'handle' ? $mapping : array_flip($mapping);
+    $mapping = [
+        'createSomething:handle1' => 'createSomething:1'
+    ];
+    return $indexFrom == 'handle' ? $mapping : array_flip($mapping);
 }
 ```
 
