@@ -1,3 +1,6 @@
+### 3.8.4 ##
+- Added hook to map custom sources
+
 ### 3.8.3 ###
 - Fixed a bug where editLocale permission could not be synced
 - Use CRAFT_FRAMEWORK_PATH to locate framework files (thanks to @dnunez24)
