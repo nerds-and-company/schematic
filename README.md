@@ -114,6 +114,36 @@ Optionally the `--force` flag can be used to make the import delete any items wh
 
 **WARNING!!** This will also delete any _related_ content.
 
+To skip importing a specific of data type, exclusions can be specified in the following form:
+
+```
+./vendor/bin/schematic import --exclude=assetSources
+```
+
+Multiple exclusions can also be specified:
+
+```
+./vendor/bin/schematic import --exclude=assetSources --exclude=categoryGroups
+```
+
+Here is a list of all of the data types and their corresponding exclude parameter values:
+
+| Data Type | Exlude Parameter |
+| ------------- |-------------|
+| Asset Sources | assetSources |
+| Asset Transforms | assetTransforms |
+| Category Groups | categoryGroups |
+| Element Indexes | elementIndexSettings |
+| Fields | fields |
+| Global Sets | globalSets |
+| Locales | locales |
+| Plugins | plugins |
+| Plugin Data | pluginData |
+| Sections | sections |
+| Tag Groups | tagGroups |
+| Users | users |
+| User Groups | userGroups |
+
 Keys in the schema file can be overridden by passing an override file to schematic using the `--override_file` flag, for instance: `vendor/bin/schematic import --override_file=craft/config/override.yml`.
 
 ### Overrides

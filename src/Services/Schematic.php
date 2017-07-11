@@ -65,11 +65,13 @@ class Schematic extends BaseApplication
      *
      * @param string $file
      * @param string $override
-     * @param bool   $force    if set to true items not included in import will be deleted
+     * @param bool   $force if set to true items not included in import will be deleted
+     * @param string $dataTypes The data types to import
      *
      * @return Result
+     * @throws Exception
      */
-    public function importFromYaml($file, $override = null, $force = false)
+    public function importFromYaml($file, $override = null, $force = false, $dataTypes = 'all')
     {
         Craft::app()->config->maxPowerCaptain();
         Craft::app()->setComponent('userSession', $this);
@@ -78,7 +80,7 @@ class Schematic extends BaseApplication
         $yaml_override = IOHelper::getFileContents($override);
         $dataModel = Data::fromYaml($yaml, $yaml_override);
 
-        return $this->importDataModel($dataModel, $force);
+        return $this->importDataModel($dataModel, $force, $dataTypes);
     }
 
     /**
@@ -108,75 +110,117 @@ class Schematic extends BaseApplication
     /**
      * Import data model.
      *
-     * @param Data $model
-     * @param bool $force if set to true items not in the import will be deleted
+     * @param Data         $model
+     * @param bool         $force     if set to true items not in the import will be deleted
+     * @param string|array $dataTypes The data types to export
      *
      * @return Result
+     * @throws Exception
      */
-    private function importDataModel(Data $model, $force)
+    private function importDataModel(Data $model, $force, $dataTypes = 'all')
     {
+        // If all data types should be imported, get all the available data types that can be imported.
+        if (is_array($dataTypes)) {
+            // Validate that each data type specified to be imported is reconized.
+            foreach ($dataTypes as $dataType) {
+                if (!in_array($dataType, $this->exportableDataTypes)) {
+                    $errorMessage = 'Invalid export type "'.$dataType.'". Accepted types are '
+                                    .implode(', ', $this->exportableDataTypes);
+                    throw new Exception($errorMessage);
+                }
+            }
+        } else {
+            $dataTypes = $this->exportableDataTypes;
+        }
+
         // Import schema
-        $locales = $model->getAttribute('locales', $force);
-        $localesImportResult = Craft::app()->schematic_locales->import($locales);
+        if (in_array('locales', $dataTypes)) {
+            $locales = $model->getAttribute('locales', $force);
+            $localesImportResult = Craft::app()->schematic_locales->import($locales);
+        }
 
-        $plugins = $model->getAttribute('plugins', $force);
-        $pluginImportResult = Craft::app()->schematic_plugins->import($plugins);
+        if (in_array('plugins', $dataTypes)) {
+            $plugins = $model->getAttribute('plugins', $force);
+            $pluginImportResult = Craft::app()->schematic_plugins->import($plugins);
+        }
 
-        $fields = $model->getAttribute('fields');
-        $fieldImportResult = Craft::app()->schematic_fields->import($fields, $force);
+        if (in_array('fields', $dataTypes)) {
+            $fields = $model->getAttribute('fields');
+            $fieldImportResult = Craft::app()->schematic_fields->import($fields, $force);
+        }
 
-        $assetSources = $model->getAttribute('assetSources');
-        $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($assetSources, $force);
+        if (in_array('assetSources', $dataTypes)) {
+            $assetSources = $model->getAttribute('assetSources');
+            $assetSourcesImportResult = Craft::app()->schematic_assetSources->import($assetSources, $force);
+        }
 
-        $assetTransforms = $model->getAttribute('assetTransforms');
-        $assetTransformsImportResult = Craft::app()->schematic_assetTransforms->import($assetTransforms, $force);
+        if (in_array('assetTransforms', $dataTypes)) {
+            $assetTransforms = $model->getAttribute('assetTransforms');
+            $assetTransformsImportResult = Craft::app()->schematic_assetTransforms->import($assetTransforms, $force);
+        }
 
-        $globalSets = $model->getAttribute('globalSets');
-        $globalSetsImportResult = Craft::app()->schematic_globalSets->import($globalSets, $force);
+        if (in_array('globalSets', $dataTypes)) {
+            $globalSets = $model->getAttribute('globalSets');
+            $globalSetsImportResult = Craft::app()->schematic_globalSets->import($globalSets, $force);
+        }
 
-        $sections = $model->getAttribute('sections');
-        $sectionImportResult = Craft::app()->schematic_sections->import($sections, $force);
+        if (in_array('sections', $dataTypes)) {
+            $sections = $model->getAttribute('sections');
+            $sectionImportResult = Craft::app()->schematic_sections->import($sections, $force);
+        }
 
-        $categoryGroups = $model->getAttribute('categoryGroups');
-        $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($categoryGroups, $force);
+        if (in_array('categoryGroups', $dataTypes)) {
+            $categoryGroups = $model->getAttribute('categoryGroups');
+            $categoryGroupImportResult = Craft::app()->schematic_categoryGroups->import($categoryGroups, $force);
+        }
 
-        $tagGroups = $model->getAttribute('tagGroups');
-        $tagGroupImportResult = Craft::app()->schematic_tagGroups->import($tagGroups, $force);
+        if (in_array('tagGroups', $dataTypes)) {
+            $tagGroups = $model->getAttribute('tagGroups');
+            $tagGroupImportResult = Craft::app()->schematic_tagGroups->import($tagGroups, $force);
+        }
 
-        $userGroups = $model->getAttribute('userGroups');
-        $userGroupImportResult = Craft::app()->schematic_userGroups->import($userGroups, $force);
+        if (in_array('userGroups', $dataTypes)) {
+            $userGroups = $model->getAttribute('userGroups');
+            $userGroupImportResult = Craft::app()->schematic_userGroups->import($userGroups, $force);
+        }
 
-        $users = $model->getAttribute('users');
-        $userImportResult = Craft::app()->schematic_users->import($users, true);
+        if (in_array('users', $dataTypes)) {
+            $users = $model->getAttribute('users');
+            $userImportResult = Craft::app()->schematic_users->import($users, true);
+        }
 
-        $fields = $model->getAttribute('fields');
-        $fieldImportResultFinal = Craft::app()->schematic_fields->import($fields, $force);
+        if (in_array('fields', $dataTypes)) {
+            $fields = $model->getAttribute('fields');
+            $fieldImportResultFinal = Craft::app()->schematic_fields->import($fields, $force);
+        }
 
-        // Element index settings are supported from Craft 2.5
-        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
-            $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import(
-                $model->getAttribute('elementIndexSettings'),
-                $force
-            );
+        if (in_array('elementIndexSettings', $dataTypes)) {
+            // Element index settings are supported from Craft 2.5
+            if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+                $elementIndexSettingsImportResult = Craft::app()->schematic_elementIndexSettings->import(
+                    $model->getAttribute('elementIndexSettings'),
+                    $force
+                );
+            }
         }
 
         // Verify results
         $result = new Result();
-        $result->consume($localesImportResult);
-        $result->consume($pluginImportResult);
-        $result->consume($fieldImportResult);
-        $result->consume($assetSourcesImportResult);
-        $result->consume($assetTransformsImportResult);
-        $result->consume($globalSetsImportResult);
-        $result->consume($sectionImportResult);
-        $result->consume($categoryGroupImportResult);
-        $result->consume($tagGroupImportResult);
-        $result->consume($userGroupImportResult);
-        $result->consume($userImportResult);
-        $result->consume($fieldImportResultFinal);
+        empty($localesImportResult) ?: $result->consume($localesImportResult);
+        empty($pluginImportResult) ?: $result->consume($pluginImportResult);
+        empty($fieldImportResult) ?: $result->consume($fieldImportResult);
+        empty($assetSourcesImportResult) ?: $result->consume($assetSourcesImportResult);
+        empty($assetTransformsImportResult) ?: $result->consume($assetTransformsImportResult);
+        empty($globalSetsImportResult) ?: $result->consume($globalSetsImportResult);
+        empty($sectionImportResult) ?: $result->consume($sectionImportResult);
+        empty($categoryGroupImportResult) ?: $result->consume($categoryGroupImportResult);
+        empty($tagGroupImportResult) ?: $result->consume($tagGroupImportResult);
+        empty($userGroupImportResult) ?: $result->consume($userGroupImportResult);
+        empty($userImportResult) ?: $result->consume($userImportResult);
+        empty($fieldImportResultFinal) ?: $result->consume($fieldImportResultFinal);
 
         // Element index settings are supported from Craft 2.5
-        if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
+        if (!empty($elementIndexSettingsImportResult) && version_compare(CRAFT_VERSION, '2.5', '>=')) {
             $result->consume($elementIndexSettingsImportResult);
         }
 
