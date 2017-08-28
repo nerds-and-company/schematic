@@ -47,30 +47,6 @@ class Fields extends Base
     }
 
     //==============================================================================================================
-    //===============================================  SERVICES  ===================================================
-    //==============================================================================================================
-
-    /**
-     * Returns fields service.
-     *
-     * @return FieldsService
-     */
-    private function getFieldsService()
-    {
-        return Craft::app()->fields;
-    }
-
-    /**
-     * Returns content service.
-     *
-     * @return ContentService
-     */
-    private function getContentService()
-    {
-        return Craft::app()->content;
-    }
-
-    //==============================================================================================================
     //================================================  EXPORT  ====================================================
     //==============================================================================================================
 
@@ -133,14 +109,10 @@ class Fields extends Base
         Craft::log(Craft::t('Importing Fields'));
 
         if (!empty($groupDefinitions)) {
-            $contentService = $this->getContentService();
-
-            $contentService->fieldContext = 'global';
-            $contentService->contentTable = 'content';
-
+            $this->setGlobalContext();
             $this->resetCraftFieldsServiceGroupsCache();
-            $this->groups = $this->getFieldsService()->getAllGroups('name');
-            $this->fields = $this->getFieldsService()->getAllFields('handle');
+            $this->groups = Craft::app()->fields->getAllGroups('name');
+            $this->fields = Craft::app()->fields->getAllFields('handle');
 
             foreach ($groupDefinitions as $name => $fieldDefinitions) {
                 try {
@@ -178,7 +150,7 @@ class Fields extends Base
      */
     private function saveFieldGroupModel(FieldGroupModel $group)
     {
-        if (!$this->getFieldsService()->saveGroup($group)) {
+        if (!Craft::app()->fields->saveGroup($group)) {
             $this->addErrors($group->getAllErrors());
 
             throw new Exception('Failed to save group');
@@ -195,7 +167,10 @@ class Fields extends Base
     private function saveFieldModel(FieldModel $field)
     {
         $this->validateFieldModel($field); // Validate field
-        if (!$this->getFieldsService()->saveField($field)) {
+        if ($field->context === 'global') {
+            $this->setGlobalContext();
+        }
+        if (!Craft::app()->fields->saveField($field)) {
             $this->addErrors($field->getAllErrors());
 
             throw new Exception('Failed to save field');
@@ -207,7 +182,7 @@ class Fields extends Base
      */
     private function deleteFields()
     {
-        $fieldsService = $this->getFieldsService();
+        $fieldsService = Craft::app()->fields;
         foreach ($this->fields as $field) {
             $fieldsService->deleteFieldById($field->id);
         }
@@ -218,7 +193,7 @@ class Fields extends Base
      */
     private function deleteGroups()
     {
-        $fieldsService = $this->getFieldsService();
+        $fieldsService = Craft::app()->fields;
         foreach ($this->groups as $group) {
             $fieldsService->deleteGroupById($group->id);
         }
@@ -322,6 +297,15 @@ class Fields extends Base
                 unset($this->fields[$handle]);
             }
         }
+    }
+
+    /**
+     * Set global field context
+     */
+    private function setGlobalContext()
+    {
+      Craft::app()->content->fieldContext = 'global';
+      Craft::app()->content->contentTable = 'content';
     }
 
     //==============================================================================================================
@@ -432,7 +416,7 @@ class Fields extends Base
      */
     private function resetCraftFieldsServiceGroupsCache()
     {
-        $obj = $this->getFieldsService();
+        $obj = Craft::app()->fields;
         $refObject = new \ReflectionObject($obj);
         $refProperty = $refObject->getProperty('_fetchedAllGroups');
         $refProperty->setAccessible(true);
@@ -444,7 +428,7 @@ class Fields extends Base
      */
     private function resetCraftFieldsServiceFieldsCache()
     {
-        $obj = $this->getFieldsService();
+        $obj = Craft::app()->fields;
         $refObject = new \ReflectionObject($obj);
         $refProperty1 = $refObject->getProperty('_allFieldsInContext');
         $refProperty1->setAccessible(true);

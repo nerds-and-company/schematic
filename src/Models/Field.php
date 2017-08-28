@@ -80,6 +80,10 @@ class Field
             $field->groupId = $group->id;
         }
 
+        if (isset($fieldDefinition['context'])) {
+            $field->context = $fieldDefinition['context'];
+        }
+
         if (isset($fieldDefinition['settings']['sources'])) {
             $settings = $fieldDefinition['settings'];
             $settings['sources'] = Craft::app()->schematic_sources->getMappedSources($field->type, $settings['sources'], 'handle', 'id');

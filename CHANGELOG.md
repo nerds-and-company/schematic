@@ -1,3 +1,6 @@
+### 3.8.5 ##
+- Make sure field context is set to global for global fields
+
 ### 3.8.4 ##
 - Added hook to map custom sources
 
