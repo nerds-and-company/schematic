@@ -28,6 +28,7 @@ install:
   - echo "<?php return ['user' => 'test'];" > craft/config/db.php
   - composer install
   - cd craft/app
+  - echo "{}" > composer.json
   - composer require mockery/mockery
   - cd ../..
 
