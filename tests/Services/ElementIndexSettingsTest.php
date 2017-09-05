@@ -133,6 +133,7 @@ class ElementIndexSettingsTest extends BaseTest
     {
         return [
             'Category' => [
+                'sourceOrder' => [],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -147,6 +148,7 @@ class ElementIndexSettingsTest extends BaseTest
                 ],
             ],
             'Entry' => [
+                'sourceOrder' => [],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -171,6 +173,7 @@ class ElementIndexSettingsTest extends BaseTest
     {
         return [
             'Category' => [
+                'sourceOrder' => [],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -185,6 +188,7 @@ class ElementIndexSettingsTest extends BaseTest
                 ],
             ],
             'Entry' => [
+                'sourceOrder' => [],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
