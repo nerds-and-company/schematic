@@ -133,7 +133,10 @@ class ElementIndexSettingsTest extends BaseTest
     {
         return [
             'Category' => [
-                'sourceOrder' => [],
+                'sourceOrder' => [
+                    ['heading', 'Channels'],
+                    ['key', 'source:1'],
+                ],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -148,7 +151,10 @@ class ElementIndexSettingsTest extends BaseTest
                 ],
             ],
             'Entry' => [
-                'sourceOrder' => [],
+                'sourceOrder' => [
+                    ['heading', 'Channels'],
+                    ['key', 'source:1'],
+                ],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -173,7 +179,10 @@ class ElementIndexSettingsTest extends BaseTest
     {
         return [
             'Category' => [
-                'sourceOrder' => [],
+                'sourceOrder' => [
+                    ['heading', 'Channels'],
+                    ['key', 'source:handle'],
+                ],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -188,7 +197,10 @@ class ElementIndexSettingsTest extends BaseTest
                 ],
             ],
             'Entry' => [
-                'sourceOrder' => [],
+                'sourceOrder' => [
+                    ['heading', 'Channels'],
+                    ['key', 'source:handle'],
+                ],
                 'sources' => [
                     '*' => [
                         'tableAttributes' => [
@@ -233,6 +245,10 @@ class ElementIndexSettingsTest extends BaseTest
     public function getMockSourceCallback($fieldType, $source, $fromIndex, $toIndex)
     {
         switch ($source) {
+            case 'source:handle':
+                return 'source:1';
+            case 'source:1':
+                return 'source:handle';
             case 'field:handle':
                 return 'field:1';
             case 'field:1':
