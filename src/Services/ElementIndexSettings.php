@@ -97,7 +97,17 @@ class ElementIndexSettings extends Base
      */
     private function getMappedSettings(array $settings, $fromIndex, $toIndex)
     {
-        $mappedSettings = ['sources' => []];
+        $mappedSettings = ['sourceOrder' => [], 'sources' => []];
+
+        if (isset($settings['sourceOrder'])) {
+            foreach ($settings['sourceOrder'] as $row) {
+                if ($row[0] == 'key') {
+                    $row[1] = Craft::app()->schematic_sources->getSource(false, $row[1], $fromIndex, $toIndex);
+                }
+                $mappedSettings['sourceOrder'][] = $row;
+            }
+        }
+
         if (isset($settings['sources'])) {
             foreach ($settings['sources'] as $source => $sourceSettings) {
                 $mappedSource = Craft::app()->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);

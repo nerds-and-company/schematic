@@ -1,7 +1,10 @@
-### 3.8.5 ##
+### 3.8.6 ###
+- Fixed a bug where element index settings source order was not synced
+
+### 3.8.5 ###
 - Make sure field context is set to global for global fields
 
-### 3.8.4 ##
+### 3.8.4 ###
 - Added hook to map custom sources
 
 ### 3.8.3 ###
