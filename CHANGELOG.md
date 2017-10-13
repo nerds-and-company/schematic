@@ -1,3 +1,6 @@
+### 3.8.7 ###
+- Fixes missing field errors
+
 ### 3.8.6 ###
 - Fixed a bug where element index settings source order was not synced
 
