@@ -186,7 +186,7 @@ class Fields extends Base
         foreach ($this->fields as $field) {
             $fieldsService->deleteFieldById($field->id);
         }
-        $this->resetCraftFieldsServiceFieldsWithContentCache();
+        $this->resetCraftDbSchemaContentTableCache();
     }
 
     /**
@@ -440,14 +440,14 @@ class Fields extends Base
     }
 
     /**
-     * Reset craft fields service fields with content cache using reflection.
+     * Reset craft db schema content table cache using reflection.
      */
-    private function resetCraftFieldsServiceFieldsWithContentCache()
+    private function resetCraftDbSchemaContentTableCache()
     {
-        $obj = Craft::app()->fields;
-        $refObject = new \ReflectionObject($obj);
-        $refProperty1 = $refObject->getProperty('_fieldsWithContent');
-        $refProperty1->setAccessible(true);
-        $refProperty1->setValue($obj, array());
+        $obj = Craft::app()->db->schema;
+        $refObject = (new \ReflectionObject($obj))->getParentClass()->getParentClass();
+        $refProperty = $refObject->getProperty('_tables');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($obj, array());
     }
 }
