@@ -186,6 +186,7 @@ class Fields extends Base
         foreach ($this->fields as $field) {
             $fieldsService->deleteFieldById($field->id);
         }
+        $this->resetCraftFieldsServiceFieldsWithContentCache();
     }
 
     /**
@@ -300,12 +301,12 @@ class Fields extends Base
     }
 
     /**
-     * Set global field context
+     * Set global field context.
      */
     private function setGlobalContext()
     {
-      Craft::app()->content->fieldContext = 'global';
-      Craft::app()->content->contentTable = 'content';
+        Craft::app()->content->fieldContext = 'global';
+        Craft::app()->content->contentTable = 'content';
     }
 
     //==============================================================================================================
@@ -436,5 +437,17 @@ class Fields extends Base
         $refProperty2 = $refObject->getProperty('_fieldsByContextAndHandle');
         $refProperty2->setAccessible(true);
         $refProperty2->setValue($obj, array());
+    }
+
+    /**
+     * Reset craft fields service fields with content cache using reflection.
+     */
+    private function resetCraftFieldsServiceFieldsWithContentCache()
+    {
+        $obj = Craft::app()->fields;
+        $refObject = new \ReflectionObject($obj);
+        $refProperty1 = $refObject->getProperty('_fieldsWithContent');
+        $refProperty1->setAccessible(true);
+        $refProperty1->setValue($obj, array());
     }
 }
