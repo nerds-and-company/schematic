@@ -282,6 +282,25 @@ class SchematicTest extends BaseTest
     }
 
     /**
+     * Test import from yml excluding data types.
+     *
+     * @covers ::exportToYaml
+     */
+    public function testImportFromYamlExcludingDataTypes()
+    {
+        //We do not want to import these DataTypes, so these import functions should not be called.
+        Craft::app()->schematic_users->expects($this->exactly(0))->method('import');
+        Craft::app()->schematic_plugins->expects($this->exactly(0))->method('import');
+
+        //We do want to import these DataTypes, so these import functions should be called.
+        Craft::app()->schematic_userGroups->expects($this->exactly(1))->method('import');
+        Craft::app()->schematic_assetSources->expects($this->exactly(1))->method('import');
+
+        $results = $this->schematicService->importFromYaml($this->getYamlTestFile(), null, false, ['assetSources', 'userGroups']);
+        $this->assertFalse($results->hasErrors());
+    }
+
+    /**
      * @param $service
      *
      * @return Mock
