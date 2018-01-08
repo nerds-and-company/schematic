@@ -1,3 +1,6 @@
+### 3.8.8 ###
+- Added ability to exclude datatypes on import (thanks @Zae)
+
 ### 3.8.7 ###
 - Fixes missing field errors
 
