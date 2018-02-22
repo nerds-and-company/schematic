@@ -149,6 +149,7 @@ class Sections extends Base
     {
         Craft::log(Craft::t('Importing Sections'));
 
+        $this->resetCraftSectionsServiceCache();
         $sections = Craft::app()->sections->getAllSections('handle');
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {
@@ -344,6 +345,25 @@ class Sections extends Base
 
         $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
         $entryType->setFieldLayout($fieldLayout);
+    }
+
+    /**
+     * Reset craft sections service cache using reflection.
+     */
+    private function resetCraftSectionsServiceCache()
+    {
+        $obj = Craft::app()->sections;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_fetchedAllSections')) {
+            $refProperty = $refObject->getProperty('_fetchedAllSections');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
+        }
+        if ($refObject->hasProperty('_sectionsById')) {
+            $refProperty = $refObject->getProperty('_sectionsById');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, array());
+        }
     }
 
     /**
