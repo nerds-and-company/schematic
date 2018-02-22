@@ -1,3 +1,6 @@
+### 3.8.9 ###
+- Reset craft sections service cache before loading sections
+
 ### 3.8.8 ###
 - Added ability to exclude datatypes on import (thanks @Zae)
 
