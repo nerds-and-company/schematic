@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 
 /**
  * Schematic Element Index Settings Service.
@@ -22,7 +22,7 @@ class ElementIndexSettings extends Base
      */
     protected function getElementsService()
     {
-        return Craft::app()->elements;
+        return Craft::$app->elements;
     }
 
     /**
@@ -30,7 +30,7 @@ class ElementIndexSettings extends Base
      */
     protected function getElementIndexesService()
     {
-        return Craft::app()->elementIndexes;
+        return Craft::$app->elementIndexes;
     }
 
     /**
@@ -102,7 +102,7 @@ class ElementIndexSettings extends Base
         if (isset($settings['sourceOrder'])) {
             foreach ($settings['sourceOrder'] as $row) {
                 if ($row[0] == 'key') {
-                    $row[1] = Craft::app()->schematic_sources->getSource(false, $row[1], $fromIndex, $toIndex);
+                    $row[1] = Craft::$app->schematic_sources->getSource(false, $row[1], $fromIndex, $toIndex);
                 }
                 $mappedSettings['sourceOrder'][] = $row;
             }
@@ -110,10 +110,10 @@ class ElementIndexSettings extends Base
 
         if (isset($settings['sources'])) {
             foreach ($settings['sources'] as $source => $sourceSettings) {
-                $mappedSource = Craft::app()->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);
+                $mappedSource = Craft::$app->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);
                 $tableAttributesSettings = [];
                 foreach ($sourceSettings['tableAttributes'] as $index => $columnSource) {
-                    $mappedColumnSource = Craft::app()->schematic_sources->getSource(false, $columnSource, $fromIndex, $toIndex);
+                    $mappedColumnSource = Craft::$app->schematic_sources->getSource(false, $columnSource, $fromIndex, $toIndex);
                     $tableAttributesSettings[$index] = $mappedColumnSource;
                 }
                 $mappedSettings['sources'][$mappedSource] = ['tableAttributes' => $tableAttributesSettings];

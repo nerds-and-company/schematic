@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+use \Craft;
 use Craft\AssetSourceRecord;
 use Craft\AssetSourceModel;
 
@@ -24,7 +24,7 @@ class AssetSources extends Base
      */
     private function getAssetSourcesService()
     {
-        return Craft::app()->assetSources;
+        return Craft::$app->assetSources;
     }
 
     /**
@@ -74,14 +74,14 @@ class AssetSources extends Base
      */
     private function getAssetSourceDefinition(AssetSourceModel $assetSource)
     {
-        $fieldLayout = Craft::app()->fields->getLayoutById($assetSource->fieldLayoutId);
+        $fieldLayout = Craft::$app->fields->getLayoutById($assetSource->fieldLayoutId);
 
         return [
             'type' => $assetSource->type,
             'name' => $assetSource->name,
             'sortOrder' => $assetSource->sortOrder,
             'settings' => $assetSource->settings,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($fieldLayout),
+            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($fieldLayout),
         ];
     }
 
@@ -149,7 +149,7 @@ class AssetSources extends Base
         ]);
 
         if (array_key_exists('fieldLayout', $assetSourceDefinition)) {
-            $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
+            $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
             $assetSource->setFieldLayout($fieldLayout);
         }
 

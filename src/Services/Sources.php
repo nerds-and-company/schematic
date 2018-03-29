@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\BaseApplicationComponent as BaseApplication;
 
 /**
@@ -80,12 +80,12 @@ class Sources extends BaseApplication
           case 'publishEntries':
           case 'publishPeerEntries':
           case 'publishPeerEntryDrafts':
-              $service = Craft::app()->sections;
+              $service = Craft::$app->sections;
               $method = 'getSectionBy';
               break;
           case 'group':
           case 'editCategories':
-              $service = $fieldType == 'Users' ? Craft::app()->userGroups : Craft::app()->categories;
+              $service = $fieldType == 'Users' ? Craft::$app->userGroups : Craft::$app->categories;
               $method = 'getGroupBy';
               break;
           case 'folder':
@@ -93,19 +93,19 @@ class Sources extends BaseApplication
           case 'removeFromAssetSource':
           case 'uploadToAssetSource':
           case 'viewAssetSource':
-              $service = Craft::app()->schematic_assetSources;
+              $service = Craft::$app->schematic_assetSources;
               $method = 'getSourceBy';
               break;
           case 'taggroup':
-              $service = Craft::app()->tags;
+              $service = Craft::$app->tags;
               $method = 'getTagGroupBy';
               break;
           case 'field':
-              $service = Craft::app()->fields;
+              $service = Craft::$app->fields;
               $method = 'getFieldBy';
               break;
           case 'editGlobalSet':
-              $service = Craft::app()->globals;
+              $service = Craft::$app->globals;
               $method = 'getSetBy';
               break;
           case 'editLocale':
@@ -150,7 +150,7 @@ class Sources extends BaseApplication
    private function loadHookedSources($indexFrom)
    {
        if (!isset($this->hookedSources[$indexFrom])) {
-           $this->hookedSources[$indexFrom] = Craft::app()->plugins->call('registerSchematicSources');
+           $this->hookedSources[$indexFrom] = Craft::$app->plugins->call('registerSchematicSources');
        }
    }
 }

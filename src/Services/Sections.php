@@ -2,19 +2,18 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
-use Craft\SectionRecord;
-use Craft\SectionModel;
-use Craft\SectionLocaleModel;
-use Craft\EntryTypeModel;
+use Craft;
+use craft\base\Model;
+use craft\models\Section;
+use craft\models\EntryType;
 
 /**
- * Schematic Result Model.
+ * Schematic Sections
  *
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -24,117 +23,37 @@ class Sections extends Base
     /**
      * Export sections.
      *
-     * @param SectionModel[] $sections
-     * @param array|null     $allowedEntryTypeIds
-     *
      * @return array
      */
-    public function export(array $sections = [], array $allowedEntryTypeIds = null)
+    public function export()
     {
-        Craft::log(Craft::t('Exporting Sections'));
+        Craft::info('Exporting Sections');
 
-        $sectionDefinitions = [];
-
-        foreach ($sections as $section) {
-            $sectionDefinitions[$section->handle] = $this->getSectionDefinition($section, $allowedEntryTypeIds);
-        }
-
-        return $sectionDefinitions;
+        $sections = Craft::$app->sections->getAllSections();
+        return $this->getRecordDefinitions($sections);
     }
 
     /**
      * Get section definition.
      *
-     * @param SectionModel $section
+     * @param Model $record
      * @param $allowedEntryTypeIds
      *
      * @return array
      */
-    private function getSectionDefinition(SectionModel $section, $allowedEntryTypeIds)
+    protected function getRecordDefinition(Model $record)
     {
-        return [
-            'name' => $section->name,
-            'type' => $section->type,
-            'hasUrls' => $section->hasUrls,
-            'template' => $section->template,
-            'maxLevels' => $section->maxLevels,
-            'enableVersioning' => $section->enableVersioning,
-            'locales' => $this->getLocaleDefinitions($section->getLocales()),
-            'entryTypes' => $this->getEntryTypeDefinitions($section->getEntryTypes(), $allowedEntryTypeIds),
-        ];
-    }
-
-    /**
-     * Get locale definitions.
-     *
-     * @param SectionLocaleModel[] $locales
-     *
-     * @return array
-     */
-    private function getLocaleDefinitions(array $locales)
-    {
-        $localeDefinitions = [];
-
-        foreach ($locales as $locale) {
-            $localeDefinitions[$locale->locale] = $this->getLocaleDefinition($locale);
+        $attributes = parent::getRecordDefinition($record);
+        if ($record instanceof Section) {
+            $attributes['entryTypes'] = $this->getRecordDefinitions($record->getEntryTypes());
+        }
+        if ($record instanceof EntryType) {
+            unset($attributes['sectionId']);
+            unset($attributes['fieldLayoutId']);
+            $attributes['fieldLayout'] = Craft::$app->schematic_fields->getFieldLayoutDefinition($record->getFieldLayout());
         }
 
-        return $localeDefinitions;
-    }
-
-    /**
-     * Get locale definition.
-     *
-     * @param SectionLocaleModel $locale
-     *
-     * @return array
-     */
-    private function getLocaleDefinition(SectionLocaleModel $locale)
-    {
-        return [
-            'enabledByDefault' => $locale->enabledByDefault,
-            'urlFormat' => $locale->urlFormat,
-            'nestedUrlFormat' => $locale->nestedUrlFormat,
-        ];
-    }
-
-    /**
-     * Get entry type definitions.
-     *
-     * @param array $entryTypes
-     * @param $allowedEntryTypeIds
-     *
-     * @return array
-     */
-    private function getEntryTypeDefinitions(array $entryTypes, $allowedEntryTypeIds)
-    {
-        $entryTypeDefinitions = [];
-
-        foreach ($entryTypes as $entryType) {
-            if ($allowedEntryTypeIds === null || in_array($entryType->id, $allowedEntryTypeIds)) {
-                $entryTypeDefinitions[$entryType->handle] = $this->getEntryTypeDefinition($entryType);
-            }
-        }
-
-        return $entryTypeDefinitions;
-    }
-
-    /**
-     * Get entry type definition.
-     *
-     * @param EntryTypeModel $entryType
-     *
-     * @return array
-     */
-    private function getEntryTypeDefinition(EntryTypeModel $entryType)
-    {
-        return [
-            'name' => $entryType->name,
-            'hasTitleField' => $entryType->hasTitleField,
-            'titleLabel' => $entryType->titleLabel,
-            'titleFormat' => $entryType->titleFormat,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($entryType->getFieldLayout()),
-        ];
+        return $attributes;
     }
 
     /**
@@ -149,12 +68,12 @@ class Sections extends Base
     {
         Craft::log(Craft::t('Importing Sections'));
 
-        $sections = Craft::app()->sections->getAllSections('handle');
+        $sections = Craft::$app->sections->getAllSections('handle');
 
         foreach ($sectionDefinitions as $sectionHandle => $sectionDefinition) {
             $section = array_key_exists($sectionHandle, $sections)
                 ? $sections[$sectionHandle]
-                : new SectionModel();
+                : new Section();
 
             unset($sections[$sectionHandle]);
 
@@ -178,7 +97,6 @@ class Sections extends Base
             Craft::log(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]));
 
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
-            $this->resetCraftFieldsSectionModelCache($section);
 
             // Create initial section record
             if (!$this->preSaveSection($section)) {
@@ -190,14 +108,14 @@ class Sections extends Base
             $this->importEntryTypes($section, $sectionDefinition['entryTypes'], $force);
 
             // Save section via craft after entrytypes have been created
-            if (!Craft::app()->sections->saveSection($section)) {
+            if (!Craft::$app->sections->saveSection($section)) {
                 $this->addErrors($section->getAllErrors());
             }
         }
 
         if ($force) {
             foreach ($sections as $section) {
-                Craft::app()->sections->deleteSectionById($section->id);
+                Craft::$app->sections->deleteSectionById($section->id);
             }
         }
 
@@ -205,13 +123,13 @@ class Sections extends Base
     }
 
     /**
-     * @param SectionModel $section
+     * @param Section $section
      * @param array        $entryTypeDefinitions
      * @param bool         $force
      */
-    private function importEntryTypes(SectionModel $section, array $entryTypeDefinitions, $force)
+    private function importEntryTypes(Section $section, array $entryTypeDefinitions, $force)
     {
-        $entryTypes = Craft::app()->sections->getEntryTypesBySectionId($section->id, 'handle');
+        $entryTypes = Craft::$app->sections->getEntryTypesBySectionId($section->id, 'handle');
 
         foreach ($entryTypeDefinitions as $entryTypeHandle => $entryTypeDefinition) {
             $entryType = array_key_exists($entryTypeHandle, $entryTypes)
@@ -222,7 +140,7 @@ class Sections extends Base
 
             $this->populateEntryType($entryType, $entryTypeDefinition, $entryTypeHandle, $section->id);
 
-            if (!Craft::app()->sections->saveEntryType($entryType)) {
+            if (!Craft::$app->sections->saveEntryType($entryType)) {
                 $this->addError($entryType->getAllErrors());
 
                 continue;
@@ -231,7 +149,7 @@ class Sections extends Base
 
         if ($force) {
             foreach ($entryTypes as $entryType) {
-                Craft::app()->sections->deleteEntryTypeById($entryType->id);
+                Craft::$app->sections->deleteEntryTypeById($entryType->id);
             }
         }
     }
@@ -241,11 +159,11 @@ class Sections extends Base
      * In case of a single we do want the default entry type and do a normal save
      * Todo: This method is a bit hackish, find a better way.
      *
-     * @param SectionModel $section
+     * @param Section $section
      *
      * @return mixed
      */
-    private function preSaveSection(SectionModel $section)
+    private function preSaveSection(Section $section)
     {
         if ($section->type != 'single' && !$section->id) {
             $sectionRecord = new SectionRecord();
@@ -266,17 +184,17 @@ class Sections extends Base
             return true;
         }
 
-        return Craft::app()->sections->saveSection($section);
+        return Craft::$app->sections->saveSection($section);
     }
 
     /**
      * Populate section.
      *
-     * @param SectionModel $section
+     * @param Section $section
      * @param array        $sectionDefinition
      * @param string       $sectionHandle
      */
-    private function populateSection(SectionModel $section, array $sectionDefinition, $sectionHandle)
+    private function populateSection(Section $section, array $sectionDefinition, $sectionHandle)
     {
         $section->setAttributes([
             'handle' => $sectionHandle,
@@ -294,10 +212,10 @@ class Sections extends Base
     /**
      * Populate section locales.
      *
-     * @param SectionModel $section
+     * @param Section $section
      * @param $localeDefinitions
      */
-    private function populateSectionLocales(SectionModel $section, $localeDefinitions)
+    private function populateSectionLocales(Section $section, $localeDefinitions)
     {
         $locales = $section->getLocales();
 
@@ -313,7 +231,7 @@ class Sections extends Base
 
             // Todo: Is this a hack? I don't see another way.
             // Todo: Might need a sorting order as well? It's NULL at the moment.
-            Craft::app()->db->createCommand()->insertOrUpdate('locales', [
+            Craft::$app->db->createCommand()->insertOrUpdate('locales', [
                 'locale' => $locale->locale,
             ], []);
 
@@ -342,21 +260,7 @@ class Sections extends Base
             'titleFormat' => $entryTypeDefinition['titleFormat'],
         ]);
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
+        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($entryTypeDefinition['fieldLayout']);
         $entryType->setFieldLayout($fieldLayout);
-    }
-
-    /**
-     * Reset craft section model cache using reflection.
-     *
-     * @param SectionModel $section
-     */
-    private function resetCraftFieldsSectionModelCache(SectionModel $section)
-    {
-        $obj = $section;
-        $refObject = new \ReflectionObject($obj);
-        $refProperty = $refObject->getProperty('_entryTypes');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, null);
     }
 }

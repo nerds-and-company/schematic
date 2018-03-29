@@ -2,12 +2,12 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\Exception;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
-use Craft\FieldLayoutModel;
 use Craft\ElementType;
+use craft\models\FieldLayout;
 use NerdsAndCompany\Schematic\Models\FieldFactory;
 
 /**
@@ -110,9 +110,8 @@ class Fields extends Base
 
         if (!empty($groupDefinitions)) {
             $this->setGlobalContext();
-            $this->resetCraftFieldsServiceGroupsCache();
-            $this->groups = Craft::app()->fields->getAllGroups('name');
-            $this->fields = Craft::app()->fields->getAllFields('handle');
+            $this->groups = Craft::$app->fields->getAllGroups('name');
+            $this->fields = Craft::$app->fields->getAllFields('handle');
 
             foreach ($groupDefinitions as $name => $fieldDefinitions) {
                 try {
@@ -135,7 +134,6 @@ class Fields extends Base
             if ($force) { // Remove not imported data
                 $this->deleteFieldsAndGroups();
             }
-            $this->resetCraftFieldsServiceFieldsCache();
         }
 
         return $this->getResultModel();
@@ -150,7 +148,7 @@ class Fields extends Base
      */
     private function saveFieldGroupModel(FieldGroupModel $group)
     {
-        if (!Craft::app()->fields->saveGroup($group)) {
+        if (!Craft::$app->fields->saveGroup($group)) {
             $this->addErrors($group->getAllErrors());
 
             throw new Exception('Failed to save group');
@@ -170,7 +168,7 @@ class Fields extends Base
         if ($field->context === 'global') {
             $this->setGlobalContext();
         }
-        if (!Craft::app()->fields->saveField($field)) {
+        if (!Craft::$app->fields->saveField($field)) {
             $this->addErrors($field->getAllErrors());
 
             throw new Exception('Failed to save field');
@@ -182,11 +180,10 @@ class Fields extends Base
      */
     private function deleteFields()
     {
-        $fieldsService = Craft::app()->fields;
+        $fieldsService = Craft::$app->fields;
         foreach ($this->fields as $field) {
             $fieldsService->deleteFieldById($field->id);
         }
-        $this->resetCraftDbSchemaContentTableCache();
     }
 
     /**
@@ -194,7 +191,7 @@ class Fields extends Base
      */
     private function deleteGroups()
     {
-        $fieldsService = Craft::app()->fields;
+        $fieldsService = Craft::$app->fields;
         foreach ($this->groups as $group) {
             $fieldsService->deleteGroupById($group->id);
         }
@@ -305,8 +302,8 @@ class Fields extends Base
      */
     private function setGlobalContext()
     {
-        Craft::app()->content->fieldContext = 'global';
-        Craft::app()->content->contentTable = 'content';
+        Craft::$app->content->fieldContext = 'global';
+        Craft::$app->content->contentTable = 'content';
     }
 
     //==============================================================================================================
@@ -316,11 +313,11 @@ class Fields extends Base
     /**
      * Get field layout definition.
      *
-     * @param FieldLayoutModel $fieldLayout
+     * @param FieldLayout $fieldLayout
      *
      * @return array
      */
-    public function getFieldLayoutDefinition(FieldLayoutModel $fieldLayout)
+    public function getFieldLayoutDefinition(FieldLayout $fieldLayout)
     {
         if ($fieldLayout->getTabs()) {
             $tabDefinitions = [];
@@ -347,7 +344,7 @@ class Fields extends Base
         $fieldDefinitions = [];
 
         foreach ($fields as $field) {
-            $fieldDefinitions[$field->getField()->handle] = $field->required;
+            $fieldDefinitions[$field->handle] = $field->required;
         }
 
         return $fieldDefinitions;
@@ -358,7 +355,7 @@ class Fields extends Base
      *
      * @param array $fieldLayoutDef
      *
-     * @return FieldLayoutModel
+     * @return FieldLayout
      */
     public function getFieldLayout(array $fieldLayoutDef)
     {
@@ -377,7 +374,7 @@ class Fields extends Base
             $layoutFields = $layoutTabFields['fields'];
         }
 
-        $fieldLayout = Craft::app()->fields->assembleLayout($layoutFields, $requiredFields);
+        $fieldLayout = Craft::$app->fields->assembleLayout($layoutFields, $requiredFields);
         $fieldLayout->type = ElementType::Entry;
 
         return $fieldLayout;
@@ -396,7 +393,7 @@ class Fields extends Base
         $requiredFields = [];
 
         foreach ($fieldLayoutDef as $fieldHandle => $required) {
-            $field = Craft::app()->fields->getFieldByHandle($fieldHandle);
+            $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
             if ($field instanceof FieldModel) {
                 $layoutFields[] = $field->id;
 
@@ -410,44 +407,5 @@ class Fields extends Base
             'fields' => $layoutFields,
             'required' => $requiredFields,
         ];
-    }
-
-    /**
-     * Reset craft fields service groups cache using reflection.
-     */
-    private function resetCraftFieldsServiceGroupsCache()
-    {
-        $obj = Craft::app()->fields;
-        $refObject = new \ReflectionObject($obj);
-        $refProperty = $refObject->getProperty('_fetchedAllGroups');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, false);
-    }
-
-    /**
-     * Reset craft fields service fields cache using reflection.
-     */
-    private function resetCraftFieldsServiceFieldsCache()
-    {
-        $obj = Craft::app()->fields;
-        $refObject = new \ReflectionObject($obj);
-        $refProperty1 = $refObject->getProperty('_allFieldsInContext');
-        $refProperty1->setAccessible(true);
-        $refProperty1->setValue($obj, array());
-        $refProperty2 = $refObject->getProperty('_fieldsByContextAndHandle');
-        $refProperty2->setAccessible(true);
-        $refProperty2->setValue($obj, array());
-    }
-
-    /**
-     * Reset craft db schema content table cache using reflection.
-     */
-    private function resetCraftDbSchemaContentTableCache()
-    {
-        $obj = Craft::app()->db->schema;
-        $refObject = (new \ReflectionObject($obj))->getParentClass()->getParentClass();
-        $refProperty = $refObject->getProperty('_tables');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, array());
     }
 }

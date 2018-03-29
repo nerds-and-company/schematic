@@ -2,8 +2,8 @@
 
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
-use Craft\Craft;
-use Craft\BaseCommand as Base;
+use \Craft;
+use yii\console\Controller as Base;
 use Craft\IOHelper;
 use NerdsAndCompany\Schematic\Services\Schematic;
 
@@ -64,7 +64,7 @@ class ImportCommand extends Base
             $dataTypes = array_diff($dataTypes, $exclude);
         }
 
-        $result = Craft::app()->schematic->importFromYaml($file, $override_file, $force, $dataTypes);
+        $result = Craft::$app->schematic->importFromYaml($file, $override_file, $force, $dataTypes);
 
         if (!$result->hasErrors()) {
             Craft::log(Craft::t('Loaded schema from {file}', ['file' => $file]));

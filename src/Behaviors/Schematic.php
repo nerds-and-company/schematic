@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Behaviors;
 
-use Craft\Craft;
+use \Craft;
 use Craft\AppBehavior as Base;
 
 /**
@@ -36,9 +36,9 @@ class Schematic extends Base
         if (!isset($this->_isInstalled)) {
             try {
                 // First check to see if DbConnection has even been initialized, yet.
-                if (Craft::app()->getComponent('db')) {
+                if (Craft::$app->getComponent('db')) {
                     // If the db config isn't valid, then we'll assume it's not installed.
-                    if (!Craft::app()->getIsDbConnectionValid()) {
+                    if (!Craft::$app->getIsDbConnectionValid()) {
                         return false;
                     }
                 } else {
@@ -48,7 +48,7 @@ class Schematic extends Base
                 return false;
             }
 
-            $this->_isInstalled = Craft::app()->db->tableExists('info', false);
+            $this->_isInstalled = Craft::$app->db->tableExists('info', false);
         }
 
         return $this->_isInstalled;

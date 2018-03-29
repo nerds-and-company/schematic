@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\CategoryGroupModel;
 use Craft\CategoryGroupLocaleModel;
 
@@ -48,7 +48,7 @@ class CategoryGroups extends Base
      */
     private function getCategoryGroupDefinition(CategoryGroupModel $categoryGroup)
     {
-        $fieldLayout = Craft::app()->fields->getLayoutById($categoryGroup->fieldLayoutId);
+        $fieldLayout = Craft::$app->fields->getLayoutById($categoryGroup->fieldLayoutId);
 
         return [
             'name' => $categoryGroup->name,
@@ -56,7 +56,7 @@ class CategoryGroups extends Base
             'template' => $categoryGroup->template,
             'maxLevels' => $categoryGroup->maxLevels,
             'locales' => $this->getLocaleDefinitions($categoryGroup->getLocales()),
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($fieldLayout),
+            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($fieldLayout),
         ];
     }
 
@@ -106,7 +106,7 @@ class CategoryGroups extends Base
         Craft::log(Craft::t('Importing Category Groups'));
 
         $this->resetCraftCategoriesServiceCache();
-        $categoryGroups = Craft::app()->categories->getAllGroups('handle');
+        $categoryGroups = Craft::$app->categories->getAllGroups('handle');
 
         foreach ($categoryGroupDefinitions as $categoryGroupHandle => $categoryGroupDefinition) {
             $categoryGroup = array_key_exists($categoryGroupHandle, $categoryGroups)
@@ -117,7 +117,7 @@ class CategoryGroups extends Base
 
             $this->populateCategoryGroup($categoryGroup, $categoryGroupDefinition, $categoryGroupHandle);
 
-            if (!Craft::app()->categories->saveGroup($categoryGroup)) { // Save categorygroup via craft
+            if (!Craft::$app->categories->saveGroup($categoryGroup)) { // Save categorygroup via craft
                 $this->addErrors($categoryGroup->getAllErrors());
 
                 continue;
@@ -126,7 +126,7 @@ class CategoryGroups extends Base
 
         if ($force) {
             foreach ($categoryGroups as $categoryGroup) {
-                Craft::app()->categories->deleteGroupById($categoryGroup->id);
+                Craft::$app->categories->deleteGroupById($categoryGroup->id);
             }
         }
 
@@ -152,7 +152,7 @@ class CategoryGroups extends Base
 
         $this->populateCategoryGroupLocales($categoryGroup, $categoryGroupDefinition['locales']);
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($categoryGroupDefinition['fieldLayout']);
+        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($categoryGroupDefinition['fieldLayout']);
         $categoryGroup->setFieldLayout($fieldLayout);
     }
 
@@ -177,7 +177,7 @@ class CategoryGroups extends Base
 
             // Todo: Is this a hack? I don't see another way.
             // Todo: Might need a sorting order as well? It's NULL at the moment.
-            Craft::app()->db->createCommand()->insertOrUpdate('locales', [
+            Craft::$app->db->createCommand()->insertOrUpdate('locales', [
                 'locale' => $locale->locale,
             ], []);
 
@@ -192,7 +192,7 @@ class CategoryGroups extends Base
      */
     private function resetCraftCategoriesServiceCache()
     {
-        $obj = Craft::app()->categories;
+        $obj = Craft::$app->categories;
         $refObject = new \ReflectionObject($obj);
         if ($refObject->hasProperty('_fetchedAllCategoryGroups')) {
             $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');

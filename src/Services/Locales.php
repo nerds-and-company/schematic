@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 
 /**
  * Schematic Locales Service.
@@ -22,7 +22,7 @@ class Locales extends Base
      */
     protected function getLocalizationService()
     {
-        return Craft::app()->i18n;
+        return Craft::$app->i18n;
     }
 
     /**

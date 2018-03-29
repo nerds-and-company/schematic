@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\UserGroupModel;
 
 /**
@@ -72,12 +72,12 @@ class UserGroups extends Base
     private function getGroupPermissionDefinitions($group)
     {
         $permissionDefinitions = [];
-        $groupPermissions = Craft::app()->userPermissions->getPermissionsByGroupId($group->id);
+        $groupPermissions = Craft::$app->userPermissions->getPermissionsByGroupId($group->id);
 
         foreach ($groupPermissions as $permission) {
             if (array_key_exists($permission, $this->mappedPermissions)) {
                 $permission = $this->mappedPermissions[$permission];
-                $permissionDefinitions[] = Craft::app()->schematic_sources->getSource(false, $permission, 'id', 'handle');
+                $permissionDefinitions[] = Craft::$app->schematic_sources->getSource(false, $permission, 'id', 'handle');
             }
         }
         sort($permissionDefinitions);
@@ -94,7 +94,7 @@ class UserGroups extends Base
     private function getAllMappedPermissions()
     {
         $mappedPermissions = [];
-        foreach (Craft::app()->userPermissions->getAllPermissions() as $permissions) {
+        foreach (Craft::$app->userPermissions->getAllPermissions() as $permissions) {
             $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($permissions));
         }
 
@@ -135,7 +135,7 @@ class UserGroups extends Base
     {
         Craft::log(Craft::t('Importing User Groups'));
 
-        $userGroups = Craft::app()->userGroups->getAllGroups('handle');
+        $userGroups = Craft::$app->userGroups->getAllGroups('handle');
 
         foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
             $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
@@ -145,7 +145,7 @@ class UserGroups extends Base
             $group->name = $groupDefinition['name'];
             $group->handle = $groupHandle;
 
-            if (!Craft::app()->userGroups->saveGroup($group)) {
+            if (!Craft::$app->userGroups->saveGroup($group)) {
                 $this->addErrors($group->getAllErrors());
 
                 continue;
@@ -153,12 +153,12 @@ class UserGroups extends Base
 
             $permissions = $this->getPermissions($groupDefinition['permissions']);
 
-            Craft::app()->userPermissions->saveGroupPermissions($group->id, $permissions);
+            Craft::$app->userPermissions->saveGroupPermissions($group->id, $permissions);
         }
 
         if ($force) {
             foreach ($userGroups as $group) {
-                Craft::app()->userGroups->deleteGroupById($group->id);
+                Craft::$app->userGroups->deleteGroupById($group->id);
             }
         }
 
@@ -176,7 +176,7 @@ class UserGroups extends Base
     {
         $permissions = [];
         foreach ($permissionDefinitions as $permissionDefinition) {
-            $permissions[] = Craft::app()->schematic_sources->getSource(false, $permissionDefinition, 'handle', 'id');
+            $permissions[] = Craft::$app->schematic_sources->getSource(false, $permissionDefinition, 'handle', 'id');
         }
 
         return $permissions;

@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\GlobalSetModel;
 
 /**
@@ -49,7 +49,7 @@ class GlobalSets extends Base
     {
         return [
             'name' => $globalSet->name,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($globalSet->getFieldLayout()),
+            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($globalSet->getFieldLayout()),
         ];
     }
 
@@ -65,7 +65,7 @@ class GlobalSets extends Base
     {
         Craft::log(Craft::t('Importing Global Sets'));
 
-        $globalSets = Craft::app()->globals->getAllSets('handle');
+        $globalSets = Craft::$app->globals->getAllSets('handle');
 
         foreach ($globalSetDefinitions as $globalSetHandle => $globalSetDefinition) {
             $global = array_key_exists($globalSetHandle, $globalSets)
@@ -76,7 +76,7 @@ class GlobalSets extends Base
 
             $this->populateGlobalSet($global, $globalSetDefinition, $globalSetHandle);
 
-            if (!Craft::app()->globals->saveSet($global)) { // Save globalset via craft
+            if (!Craft::$app->globals->saveSet($global)) { // Save globalset via craft
                 $this->addErrors($global->getAllErrors());
 
                 continue;
@@ -85,7 +85,7 @@ class GlobalSets extends Base
 
         if ($force) {
             foreach ($globalSets as $globalSet) {
-                Craft::app()->globals->deleteSetById($globalSet->id);
+                Craft::$app->globals->deleteSetById($globalSet->id);
             }
         }
 
@@ -106,7 +106,7 @@ class GlobalSets extends Base
             'name' => $globalSetDefinition['name'],
         ]);
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($globalSetDefinition['fieldLayout']);
+        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($globalSetDefinition['fieldLayout']);
         $globalSet->setFieldLayout($fieldLayout);
     }
 }

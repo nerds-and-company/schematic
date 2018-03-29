@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+use \Craft;
 use Craft\AssetTransformModel;
 
 /**
@@ -23,7 +23,7 @@ class AssetTransforms extends Base
      */
     private function getAssetTransformsService()
     {
-        return Craft::app()->assetTransforms;
+        return Craft::$app->assetTransforms;
     }
 
     /**

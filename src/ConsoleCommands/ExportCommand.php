@@ -2,8 +2,8 @@
 
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
-use Craft\Craft;
-use Craft\BaseCommand as Base;
+use Craft;
+use yii\console\Controller as Base;
 use NerdsAndCompany\Schematic\Services\Schematic;
 
 /**
@@ -19,6 +19,20 @@ use NerdsAndCompany\Schematic\Services\Schematic;
  */
 class ExportCommand extends Base
 {
+    public $file = 'config/schema.yml';
+    public $exclude;
+    public $include;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function options($actionID)
+    {
+        return ['file', 'include', 'exclude'];
+    }
+
     /**
      * Exports the Craft datamodel.
      *
@@ -27,40 +41,69 @@ class ExportCommand extends Base
      *
      * @return int
      */
-    public function actionIndex($file = 'craft/config/schema.yml', array $exclude = null)
+    public function actionIndex()
     {
-        $dataTypes = Schematic::getExportableDataTypes();
+        $dataTypes = Schematic::DATA_TYPES;
 
-        // If there are data exclusions.
-        if ($exclude !== null) {
-            // Find any invalid data to exclude.
-            $invalidExcludes = array_diff($exclude, $dataTypes);
-
-            // If any invalid exclusions were specified.
-            if (count($invalidExcludes) > 0) {
-                $errorMessage = 'Invalid exlude';
-
-                if (count($invalidExcludes) > 1) {
-                    $errorMessage .= 's';
-                }
-
-                $errorMessage .= ': '.implode(', ', $invalidExcludes).'.';
-                $errorMessage .= ' Valid exclusions are '.implode(', ', $dataTypes);
-
-                // Output an error message outlining what invalid exclusions were specified.
-                echo "\n".$errorMessage."\n\n";
-
-                return 1;
-            }
-
-            // Remove any explicitly excluded data types from the list of data types to export.
-            $dataTypes = array_diff($dataTypes, $exclude);
+        // If include is specified.
+        if ($this->include !== null) {
+            $dataTypes = $this->applyIncludes($dataTypes);
         }
 
-        Craft::app()->schematic->exportToYaml($file, $dataTypes);
+        // If there are exclusions.
+        if ($this->exclude !== null) {
+            $dataTypes = $this->applyExcludes($dataTypes);
+        }
 
-        Craft::log(Craft::t('Exported schema to {file}', ['file' => $file]));
+        Craft::$app->schematic->exportToYaml($this->file, $dataTypes);
+        Craft::info('Exported schema to '.$this->file);
 
         return 0;
+    }
+
+    /**
+     * Apply given includes
+     *
+     * @param  array $dataTypes
+     * @return array
+     */
+    private function applyIncludes($dataTypes)
+    {
+        $inclusions = explode(',', $this->include);
+        // Find any invalid data to include.
+        $invalidIncludes = array_diff($inclusions, $dataTypes);
+        if (count($invalidIncludes) > 0) {
+            $errorMessage = 'WARNING: Invalid include(s)';
+            $errorMessage .= ': '.implode(', ', $invalidIncludes).'.'.PHP_EOL;
+            $errorMessage .= ' Valid inclusions are '.implode(', ', $dataTypes);
+
+            // Output an error message outlining what invalid exclusions were specified.
+            echo PHP_EOL.$errorMessage.PHP_EOL;
+        }
+        // Remove any explicitly included data types from the list of data types to export.
+        return array_intersect($dataTypes, $inclusions);
+    }
+
+    /**
+     * Apply given excludes
+     *
+     * @param  array $dataTypes
+     * @return array
+     */
+    private function applyExcludes(array $dataTypes)
+    {
+        $exclusions = explode(',', $this->exclude);
+        // Find any invalid data to exclude.
+        $invalidExcludes = array_diff($exclusions, $dataTypes);
+        if (count($invalidExcludes) > 0) {
+            $errorMessage = 'WARNING: Invalid exlude(s)';
+            $errorMessage .= ': '.implode(', ', $invalidExcludes).'.'.PHP_EOL;
+            $errorMessage .= ' Valid exclusions are '.implode(', ', $dataTypes);
+
+            // Output an error message outlining what invalid exclusions were specified.
+            echo PHP_EOL.$errorMessage.PHP_EOL;
+        }
+        // Remove any explicitly excluded data types from the list of data types to export.
+        return array_diff($dataTypes, $exclusions);
     }
 }

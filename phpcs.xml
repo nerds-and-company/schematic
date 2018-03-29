@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="PHP_CodeSniffer">
+ <description>Coding standard for Roessingh</description>
+
+ <file>modules/</file>
+
+ <arg name="colors"/>
+ <arg name="extensions" value="php"/>
+ <arg value="n"/>
+
+ <rule ref="PSR2">
+  <exclude name="Squiz.Classes.ValidClassName"/>
+  <exclude name="Squiz.WhiteSpace.ControlStructureSpacing"/>
+ </rule>
+</ruleset>

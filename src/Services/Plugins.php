@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\Exception;
 use Craft\BasePlugin;
 
@@ -24,7 +24,7 @@ class Plugins extends Base
      */
     protected function getPluginService()
     {
-        return Craft::app()->plugins;
+        return Craft::$app->plugins;
     }
 
     /**
@@ -32,7 +32,7 @@ class Plugins extends Base
      */
     protected function getUpdatesService()
     {
-        return Craft::app()->updates;
+        return Craft::$app->updates;
     }
 
     /**

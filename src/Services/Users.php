@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\UserModel;
 use Craft\ElementType;
 
@@ -43,7 +43,7 @@ class Users extends Base
     private function getUsersDefinition(UserModel $user)
     {
         return [
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($user->getFieldLayout()),
+            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($user->getFieldLayout()),
         ];
     }
 
@@ -60,7 +60,7 @@ class Users extends Base
         Craft::log(Craft::t('Importing Users'));
 
         // always delete existing fieldlayout first
-        Craft::app()->fields->deleteLayoutsByType(ElementType::User);
+        Craft::$app->fields->deleteLayoutsByType(ElementType::User);
 
         if (isset($user_settings['fieldLayout'])) {
             $fieldLayoutDefinition = (array) $user_settings['fieldLayout'];
@@ -68,10 +68,10 @@ class Users extends Base
             $fieldLayoutDefinition = [];
         }
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($fieldLayoutDefinition);
+        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($fieldLayoutDefinition);
         $fieldLayout->type = ElementType::User;
 
-        if (!Craft::app()->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
+        if (!Craft::$app->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
             $this->addErrors($fieldLayout->getAllErrors());
         }
 

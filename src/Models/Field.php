@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
-use Craft\Craft;
+;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
 
@@ -24,7 +24,7 @@ class Field
      */
     protected function getFieldFactory()
     {
-        return Craft::app()->schematic_fields->getFieldFactory();
+        return Craft::$app->schematic_fields->getFieldFactory();
     }
 
     /**
@@ -49,11 +49,11 @@ class Field
         }
 
         if (isset($definition['settings']['sources'])) {
-            $definition['settings']['sources'] = Craft::app()->schematic_sources->getMappedSources($field->type, $definition['settings']['sources'], 'id', 'handle');
+            $definition['settings']['sources'] = Craft::$app->schematic_sources->getMappedSources($field->type, $definition['settings']['sources'], 'id', 'handle');
         }
 
         if (isset($definition['settings']['source'])) {
-            $definition['settings']['source'] = Craft::app()->schematic_sources->getSource($field->type, $definition['settings']['source'], 'id', 'handle');
+            $definition['settings']['source'] = Craft::$app->schematic_sources->getSource($field->type, $definition['settings']['source'], 'id', 'handle');
         }
 
         return $definition;
@@ -86,13 +86,13 @@ class Field
 
         if (isset($fieldDefinition['settings']['sources'])) {
             $settings = $fieldDefinition['settings'];
-            $settings['sources'] = Craft::app()->schematic_sources->getMappedSources($field->type, $settings['sources'], 'handle', 'id');
+            $settings['sources'] = Craft::$app->schematic_sources->getMappedSources($field->type, $settings['sources'], 'handle', 'id');
             $field->settings = $settings;
         }
 
         if (isset($fieldDefinition['settings']['source'])) {
             $settings = $fieldDefinition['settings'];
-            $settings['source'] = Craft::app()->schematic_sources->getSource($field->type, $settings['source'], 'handle', 'id');
+            $settings['source'] = Craft::$app->schematic_sources->getSource($field->type, $settings['source'], 'handle', 'id');
             $field->settings = $settings;
         }
     }

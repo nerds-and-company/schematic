@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
-use Craft\Craft;
+;
 use Craft\BaseModel as Base;
 use Craft\AttributeType;
 use Craft\Exception;

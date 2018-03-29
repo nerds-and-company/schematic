@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use Craft\Craft;
+;
 use Craft\TagGroupModel;
 
 /**
@@ -49,7 +49,7 @@ class TagGroups extends Base
     {
         return [
             'name' => $tagGroup->name,
-            'fieldLayout' => Craft::app()->schematic_fields->getFieldLayoutDefinition($tagGroup->getFieldLayout()),
+            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($tagGroup->getFieldLayout()),
         ];
     }
 
@@ -65,7 +65,7 @@ class TagGroups extends Base
     {
         Craft::log(Craft::t('Importing TagGroups'));
 
-        $tagGroups = Craft::app()->tags->getAllTagGroups('handle');
+        $tagGroups = Craft::$app->tags->getAllTagGroups('handle');
 
         foreach ($tagGroupDefinitions as $tagGroupHandle => $tagGroupDefinition) {
             $tagGroup = array_key_exists($tagGroupHandle, $tagGroups)
@@ -76,7 +76,7 @@ class TagGroups extends Base
 
             $this->populateTagGroup($tagGroup, $tagGroupDefinition, $tagGroupHandle);
 
-            if (!Craft::app()->tags->saveTagGroup($tagGroup)) { // Save taggroup via craft
+            if (!Craft::$app->tags->saveTagGroup($tagGroup)) { // Save taggroup via craft
                 $this->addErrors($tagGroup->getAllErrors());
 
                 continue;
@@ -85,7 +85,7 @@ class TagGroups extends Base
 
         if ($force) {
             foreach ($tagGroups as $tagGroup) {
-                Craft::app()->tags->deleteTagGroupById($tagGroup->id);
+                Craft::$app->tags->deleteTagGroupById($tagGroup->id);
             }
         }
 
@@ -106,7 +106,7 @@ class TagGroups extends Base
             'name' => $tagGroupDefinition['name'],
         ]);
 
-        $fieldLayout = Craft::app()->schematic_fields->getFieldLayout($tagGroupDefinition['fieldLayout']);
+        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($tagGroupDefinition['fieldLayout']);
         $tagGroup->setFieldLayout($fieldLayout);
     }
 }
