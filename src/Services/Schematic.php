@@ -22,19 +22,18 @@ use yii\base\Component as BaseComponent;
 class Schematic extends BaseComponent
 {
     const DATA_TYPES = [
-        'locales',
         'assetSources',
         'assetTransforms',
         'fields',
-        'plugins',
+        // 'plugins',
         'sections',
         'globalSets',
         'userGroups',
-        'users',
+        // 'users',
         'categoryGroups',
         'tagGroups',
         'elementIndexSettings',
-        'pluginData',
+        // 'pluginData',
     ];
 
     // /**

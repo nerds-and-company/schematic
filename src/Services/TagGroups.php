@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-;
+use Craft;
 use Craft\TagGroupModel;
 
 /**
@@ -27,7 +27,7 @@ class TagGroups extends Base
      */
     public function export(array $tagGroups = [])
     {
-        Craft::info(Craft::t('Exporting TagGroups'), 'schematic');
+        Craft::info('Exporting TagGroups', 'schematic');
 
         $tagGroupDefinitions = [];
 
@@ -63,7 +63,7 @@ class TagGroups extends Base
      */
     public function import(array $tagGroupDefinitions, $force = false)
     {
-        Craft::info(Craft::t('Importing TagGroups'), 'schematic');
+        Craft::info('Importing TagGroups', 'schematic');
 
         $tagGroups = Craft::$app->tags->getAllTagGroups('handle');
 

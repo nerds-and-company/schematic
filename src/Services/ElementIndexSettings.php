@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-;
+use Craft;
 
 /**
  * Schematic Element Index Settings Service.
@@ -41,12 +41,12 @@ class ElementIndexSettings extends Base
      */
     public function import(array $settingDefinitions, $force = false)
     {
-        Craft::info(Craft::t('Importing Element Index Settings'), 'schematic');
+        Craft::info('Importing Element Index Settings', 'schematic');
 
         foreach ($settingDefinitions as $elementType => $settings) {
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
             if (!$this->getElementIndexesService()->saveSettings($elementType, $mappedSettings)) {
-                $this->addError(Craft::t('Element Index Settings for {elementType} could not be installed', ['elementType' => $elementType]));
+                $this->addError('Element Index Settings for {elementType} could not be installed', ['elementType' => $elementType]);
             }
         }
 
@@ -60,17 +60,16 @@ class ElementIndexSettings extends Base
      */
     public function export(array $data = [])
     {
-        Craft::info(Craft::t('Exporting Element Index Settings'), 'schematic');
+        Craft::info('Exporting Element Index Settings', 'schematic');
 
         $settingDefinitions = [];
 
         // Get all element types
         $elementTypes = $this->getElementsService()->getAllElementTypes();
-
         // Loop through element types
         foreach ($elementTypes as $elementType) {
             // Get element type name
-            $elementTypeName = preg_replace('/^Craft\\\(.*?)ElementType$/', '$1', get_class($elementType));
+            $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
 
             // Get existing settings for element type
             $settings = $this->getElementIndexesService()->getSettings($elementTypeName);

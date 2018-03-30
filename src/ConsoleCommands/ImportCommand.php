@@ -33,7 +33,7 @@ class ImportCommand extends Base
     public function actionIndex($file = 'craft/config/schema.yml', $override_file = 'craft/config/override.yml', $force = false, array $exclude = null)
     {
         if (!IOHelper::fileExists($file)) {
-            $this->usageError(Craft::t('File not found.'));
+            $this->usageError('File not found.');
         }
 
         $dataTypes = Schematic::getExportableDataTypes();
@@ -67,12 +67,12 @@ class ImportCommand extends Base
         $result = Craft::$app->schematic->importFromYaml($file, $override_file, $force, $dataTypes);
 
         if (!$result->hasErrors()) {
-            Craft::info(Craft::t('Loaded schema from {file}', ['file' => $file]), 'schematic');
+            Craft::info('Loaded schema from {file}', ['file' => $file], 'schematic');
 
             return 0;
         }
 
-        Craft::info(Craft::t('There was an error loading schema from {file}', ['file' => $file]), 'schematic');
+        Craft::info('There was an error loading schema from {file}', ['file' => $file], 'schematic');
         print_r($result->getErrors());
 
         return 1;

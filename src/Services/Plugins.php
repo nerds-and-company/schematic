@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-;
+use Craft;
 use Craft\Exception;
 use Craft\BasePlugin;
 
@@ -42,7 +42,7 @@ class Plugins extends Base
      */
     protected function installPluginByHandle($handle)
     {
-        Craft::info(Craft::t('Installing plugin {handle}', ['handle' => $handle]), 'schematic');
+        Craft::info('Installing plugin {handle}', ['handle' => $handle], 'schematic');
 
         try {
             $this->getPluginService()->installPlugin($handle);
@@ -72,7 +72,7 @@ class Plugins extends Base
     {
         $plugin = $this->getPluginService()->getPlugin($handle, false);
         if (!$plugin) {
-            $this->addError(Craft::t("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", ['handle' => $handle]));
+            $this->addError("Plugin {handle} could not be found, make sure it's files are located in the plugins folder", ['handle' => $handle]);
         }
 
         return $plugin;
@@ -115,7 +115,7 @@ class Plugins extends Base
      */
     public function import(array $pluginDefinitions, $force = false)
     {
-        Craft::info(Craft::t('Updating Craft'), 'schematic');
+        Craft::info('Updating Craft', 'schematic');
         if ($this->getUpdatesService()->isCraftDbMigrationNeeded()) {
             $result = $this->getUpdatesService()->updateDatabase('craft');
             if (!$result['success']) {
@@ -123,9 +123,9 @@ class Plugins extends Base
             }
         }
 
-        Craft::info(Craft::t('Importing Plugins'), 'schematic');
+        Craft::info('Importing Plugins', 'schematic');
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            Craft::info(Craft::t('Applying definitions for {handle}', ['handle' => $handle]), 'schematic');
+            Craft::info('Applying definitions for {handle}', ['handle' => $handle], 'schematic');
 
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
@@ -141,7 +141,7 @@ class Plugins extends Base
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
-                        Craft::info(Craft::t('Saving plugin settings for {handle}', ['handle' => $handle]), 'schematic');
+                        Craft::info('Saving plugin settings for {handle}', ['handle' => $handle], 'schematic');
 
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
@@ -161,7 +161,7 @@ class Plugins extends Base
      */
     public function export(array $data = [])
     {
-        Craft::info(Craft::t('Exporting Plugins'), 'schematic');
+        Craft::info('Exporting Plugins', 'schematic');
 
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = [];

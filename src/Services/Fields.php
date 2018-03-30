@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-;
+use Craft;
 use Craft\Exception;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
@@ -59,7 +59,7 @@ class Fields extends Base
      */
     public function export(array $groups = [])
     {
-        Craft::info(Craft::t('Exporting Fields'), 'schematic');
+        Craft::info('Exporting Fields', 'schematic');
 
         $groupDefinitions = [];
 
@@ -106,7 +106,7 @@ class Fields extends Base
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        Craft::info(Craft::t('Importing Fields'), 'schematic');
+        Craft::info('Importing Fields', 'schematic');
 
         if (!empty($groupDefinitions)) {
             $this->setGlobalContext();
@@ -270,11 +270,11 @@ class Fields extends Base
             $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
 
             if ($schematicFieldModel->getDefinition($field, true) === $fieldDef) {
-                Craft::info(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]), 'schematic');
+                Craft::info('Skipping `{name}`, no changes detected', ['name' => $field->name], 'schematic');
                 continue;
             }
 
-            Craft::info(Craft::t('Importing `{name}`', ['name' => $fieldDef['name']]), 'schematic');
+            Craft::info('Importing `{name}`', ['name' => $fieldDef['name']], 'schematic');
 
             $schematicFieldModel->populate($fieldDef, $field, $fieldHandle, $group, $force);
             $this->saveFieldModel($field);

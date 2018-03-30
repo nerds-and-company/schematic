@@ -8,7 +8,7 @@ use craft\models\Section;
 use craft\models\EntryType;
 
 /**
- * Schematic Sections
+ * Schematic Sections.
  *
  * Sync Craft Setups.
  *
@@ -30,6 +30,7 @@ class Sections extends Base
         Craft::info('Exporting Sections', 'schematic');
 
         $sections = Craft::$app->sections->getAllSections();
+
         return $this->getRecordDefinitions($sections);
     }
 
@@ -66,7 +67,7 @@ class Sections extends Base
      */
     public function import(array $sectionDefinitions, $force = false)
     {
-        Craft::info(Craft::t('Importing Sections'), 'schematic');
+        Craft::info(Craft::t('Importing Sections', 'schematic'));
 
         $sections = Craft::$app->sections->getAllSections('handle');
 
@@ -78,7 +79,7 @@ class Sections extends Base
             unset($sections[$sectionHandle]);
 
             if ($sectionDefinition === $this->getSectionDefinition($section, null)) {
-                Craft::info(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name]), 'schematic');
+                Craft::info(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name], 'schematic'));
                 continue;
             }
 
@@ -94,7 +95,7 @@ class Sections extends Base
                 continue;
             }
 
-            Craft::info(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]), 'schematic');
+            Craft::info(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']], 'schematic'));
 
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
 
@@ -124,8 +125,8 @@ class Sections extends Base
 
     /**
      * @param Section $section
-     * @param array        $entryTypeDefinitions
-     * @param bool         $force
+     * @param array   $entryTypeDefinitions
+     * @param bool    $force
      */
     private function importEntryTypes(Section $section, array $entryTypeDefinitions, $force)
     {
@@ -191,8 +192,8 @@ class Sections extends Base
      * Populate section.
      *
      * @param Section $section
-     * @param array        $sectionDefinition
-     * @param string       $sectionHandle
+     * @param array   $sectionDefinition
+     * @param string  $sectionHandle
      */
     private function populateSection(Section $section, array $sectionDefinition, $sectionHandle)
     {

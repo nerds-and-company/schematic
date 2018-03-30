@@ -105,7 +105,7 @@ class Data extends Base
             $env_variable = 'SCHEMATIC_'.$env_variable;
             $env_value = getenv($env_variable);
             if (!$env_value) {
-                throw new Exception(Craft::t("Schematic environment variable not set: {$env_variable}"));
+                throw new Exception("Schematic environment variable not set: {$env_variable}");
             }
             $replace_values[] = $env_value;
         }
