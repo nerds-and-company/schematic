@@ -28,7 +28,7 @@ class CategoryGroups extends Base
      */
     public function export(array $categoryGroups = [])
     {
-        Craft::log(Craft::t('Exporting Category Groups'));
+        Craft::info(Craft::t('Exporting Category Groups'), 'schematic');
 
         $categoryGroupDefinitions = [];
 
@@ -103,7 +103,7 @@ class CategoryGroups extends Base
      */
     public function import(array $categoryGroupDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Category Groups'));
+        Craft::info(Craft::t('Importing Category Groups'), 'schematic');
 
         $this->resetCraftCategoriesServiceCache();
         $categoryGroups = Craft::$app->categories->getAllGroups('handle');

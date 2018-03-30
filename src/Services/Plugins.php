@@ -42,7 +42,7 @@ class Plugins extends Base
      */
     protected function installPluginByHandle($handle)
     {
-        Craft::log(Craft::t('Installing plugin {handle}', ['handle' => $handle]));
+        Craft::info(Craft::t('Installing plugin {handle}', ['handle' => $handle]), 'schematic');
 
         try {
             $this->getPluginService()->installPlugin($handle);
@@ -115,7 +115,7 @@ class Plugins extends Base
      */
     public function import(array $pluginDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Updating Craft'));
+        Craft::info(Craft::t('Updating Craft'), 'schematic');
         if ($this->getUpdatesService()->isCraftDbMigrationNeeded()) {
             $result = $this->getUpdatesService()->updateDatabase('craft');
             if (!$result['success']) {
@@ -123,9 +123,9 @@ class Plugins extends Base
             }
         }
 
-        Craft::log(Craft::t('Importing Plugins'));
+        Craft::info(Craft::t('Importing Plugins'), 'schematic');
         foreach ($pluginDefinitions as $handle => $pluginDefinition) {
-            Craft::log(Craft::t('Applying definitions for {handle}', ['handle' => $handle]));
+            Craft::info(Craft::t('Applying definitions for {handle}', ['handle' => $handle]), 'schematic');
 
             if ($plugin = $this->getPlugin($handle)) {
                 if ($pluginDefinition['isInstalled']) {
@@ -141,7 +141,7 @@ class Plugins extends Base
                     }
 
                     if (array_key_exists('settings', $pluginDefinition)) {
-                        Craft::log(Craft::t('Saving plugin settings for {handle}', ['handle' => $handle]));
+                        Craft::info(Craft::t('Saving plugin settings for {handle}', ['handle' => $handle]), 'schematic');
 
                         $this->getPluginService()->savePluginSettings($plugin, $pluginDefinition['settings']);
                     }
@@ -161,7 +161,7 @@ class Plugins extends Base
      */
     public function export(array $data = [])
     {
-        Craft::log(Craft::t('Exporting Plugins'));
+        Craft::info(Craft::t('Exporting Plugins'), 'schematic');
 
         $plugins = $this->getPluginService()->getPlugins(false);
         $pluginDefinitions = [];

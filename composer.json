@@ -1,56 +1,33 @@
 {
-    "name": "nerds-and-company/schematic",
-    "description": "Craft setup and sync tool",
-    "authors": [
-        {
-            "name": "Bart van Gennep",
-            "email": "b.vangennep@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        },
-        {
-            "name": "Bob Olde Hampsink",
-            "email": "b.oldehampsink@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        },
-        {
-            "name": "Gijs Stegehuis",
-            "email": "g.stegehuis@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        },
-        {
-            "name": "Nick Obermeijer",
-            "email": "n.obermeijer@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        },
-        {
-            "name": "Arjan Kleene",
-            "email": "a.kleene@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        },
-        {
-            "name": "Niek Schmoller",
-            "email": "n.schmoller@nerds.company",
-            "homepage": "http://www.nerds.company",
-            "role": "Developer"
-        }
-    ],
-    "license": "MIT",
-    "require": {
-        "php": ">=5.5",
-        "symfony/yaml": "~3.2"
+  "name": "nerds-and-company/schematic",
+  "description": "Craft setup and sync tool",
+  "authors": [{
+      "name": "Bart van Gennep",
+      "email": "b.vangennep@nerds.company",
+      "homepage": "http://www.nerds.company",
+      "role": "Developer"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^4.5.0"
-    },
-    "bin": ["bin/schematic"],
-    "autoload" : {
-        "psr-4": {
-            "NerdsAndCompany\\Schematic\\": "src/"
-        }
+    {
+      "name": "Bob Olde Hampsink",
+      "email": "b.oldehampsink@nerds.company",
+      "homepage": "http://www.nerds.company",
+      "role": "Developer"
     }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0",
+    "symfony/yaml": "~3.2",
+    "pahanini/yii2-consolelog": "^3.0",
+    "craftcms/cms": "^3.0.0-RC1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.5.0"
+  },
+  "bin": ["bin/schematic"],
+  "autoload": {
+    "psr-4": {
+      "NerdsAndCompany\\Schematic\\": "src/"
+    }
+  }
 }

@@ -67,12 +67,12 @@ class ImportCommand extends Base
         $result = Craft::$app->schematic->importFromYaml($file, $override_file, $force, $dataTypes);
 
         if (!$result->hasErrors()) {
-            Craft::log(Craft::t('Loaded schema from {file}', ['file' => $file]));
+            Craft::info(Craft::t('Loaded schema from {file}', ['file' => $file]), 'schematic');
 
             return 0;
         }
 
-        Craft::log(Craft::t('There was an error loading schema from {file}', ['file' => $file]));
+        Craft::info(Craft::t('There was an error loading schema from {file}', ['file' => $file]), 'schematic');
         print_r($result->getErrors());
 
         return 1;

@@ -27,7 +27,7 @@ class TagGroups extends Base
      */
     public function export(array $tagGroups = [])
     {
-        Craft::log(Craft::t('Exporting TagGroups'));
+        Craft::info(Craft::t('Exporting TagGroups'), 'schematic');
 
         $tagGroupDefinitions = [];
 
@@ -63,7 +63,7 @@ class TagGroups extends Base
      */
     public function import(array $tagGroupDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing TagGroups'));
+        Craft::info(Craft::t('Importing TagGroups'), 'schematic');
 
         $tagGroups = Craft::$app->tags->getAllTagGroups('handle');
 

@@ -41,7 +41,7 @@ class ElementIndexSettings extends Base
      */
     public function import(array $settingDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Element Index Settings'));
+        Craft::info(Craft::t('Importing Element Index Settings'), 'schematic');
 
         foreach ($settingDefinitions as $elementType => $settings) {
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
@@ -60,7 +60,7 @@ class ElementIndexSettings extends Base
      */
     public function export(array $data = [])
     {
-        Craft::log(Craft::t('Exporting Element Index Settings'));
+        Craft::info(Craft::t('Exporting Element Index Settings'), 'schematic');
 
         $settingDefinitions = [];
 

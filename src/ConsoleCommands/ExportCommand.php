@@ -56,7 +56,7 @@ class ExportCommand extends Base
         }
 
         Craft::$app->schematic->exportToYaml($this->file, $dataTypes);
-        Craft::info('Exported schema to '.$this->file);
+        Craft::info('Exported schema to '.$this->file, 'schematic');
 
         return 0;
     }

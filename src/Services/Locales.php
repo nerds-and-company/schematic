@@ -33,7 +33,7 @@ class Locales extends Base
      */
     public function import(array $localeDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Locales'));
+        Craft::info(Craft::t('Importing Locales'), 'schematic');
 
         // Get existing locales
         $locales = $this->getLocalizationService()->getSiteLocaleIds();
@@ -59,7 +59,7 @@ class Locales extends Base
      */
     public function export(array $data = [])
     {
-        Craft::log(Craft::t('Exporting Locales'));
+        Craft::info(Craft::t('Exporting Locales'), 'schematic');
 
         $locales = $this->getLocalizationService()->getSiteLocales();
         $localeDefinitions = [];

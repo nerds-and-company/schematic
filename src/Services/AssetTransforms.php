@@ -35,7 +35,7 @@ class AssetTransforms extends Base
      */
     public function export(array $assetTransforms = [])
     {
-        Craft::log(Craft::t('Exporting Asset Transforms'));
+        Craft::info(Craft::t('Exporting Asset Transforms'), 'schematic');
 
         $assetTransformDefinitions = [];
 
@@ -74,7 +74,7 @@ class AssetTransforms extends Base
      */
     public function import(array $assetTransformDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Asset Transforms'));
+        Craft::info(Craft::t('Importing Asset Transforms'), 'schematic');
 
         $this->resetCraftAssetTransformsServiceCache();
         $assetTransforms = $this->getAssetTransformsService()->getAllTransforms('handle');

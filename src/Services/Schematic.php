@@ -92,7 +92,7 @@ class Schematic extends BaseComponent
 
         $yaml = Yaml::dump($result, 10);
         if (!FileHelper::writeToFile($file, $yaml)) {
-            Craft::error('error', "Failed to write contents to \"$file\"");
+            Craft::error('error', "Failed to write contents to \"$file\"", 'schematic');
         }
 
         return true;

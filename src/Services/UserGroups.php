@@ -34,7 +34,7 @@ class UserGroups extends Base
      */
     public function export(array $groups = [])
     {
-        Craft::log(Craft::t('Exporting User Groups'));
+        Craft::info(Craft::t('Exporting User Groups'), 'schematic');
 
         $groupDefinitions = [];
 
@@ -133,7 +133,7 @@ class UserGroups extends Base
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing User Groups'));
+        Craft::info(Craft::t('Importing User Groups'), 'schematic');
 
         $userGroups = Craft::$app->userGroups->getAllGroups('handle');
 

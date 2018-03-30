@@ -27,7 +27,7 @@ class Sections extends Base
      */
     public function export()
     {
-        Craft::info('Exporting Sections');
+        Craft::info('Exporting Sections', 'schematic');
 
         $sections = Craft::$app->sections->getAllSections();
         return $this->getRecordDefinitions($sections);
@@ -66,7 +66,7 @@ class Sections extends Base
      */
     public function import(array $sectionDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Sections'));
+        Craft::info(Craft::t('Importing Sections'), 'schematic');
 
         $sections = Craft::$app->sections->getAllSections('handle');
 
@@ -78,7 +78,7 @@ class Sections extends Base
             unset($sections[$sectionHandle]);
 
             if ($sectionDefinition === $this->getSectionDefinition($section, null)) {
-                Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name]));
+                Craft::info(Craft::t('Skipping `{name}`, no changes detected', ['name' => $section->name]), 'schematic');
                 continue;
             }
 
@@ -94,7 +94,7 @@ class Sections extends Base
                 continue;
             }
 
-            Craft::log(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]));
+            Craft::info(Craft::t('Importing section `{name}`', ['name' => $sectionDefinition['name']]), 'schematic');
 
             $this->populateSection($section, $sectionDefinition, $sectionHandle);
 

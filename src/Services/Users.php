@@ -28,7 +28,7 @@ class Users extends Base
      */
     public function export(array $users = [])
     {
-        Craft::log(Craft::t('Exporting Users'));
+        Craft::info(Craft::t('Exporting Users'), 'schematic');
 
         return $this->getUsersDefinition(new UserModel());
     }
@@ -57,7 +57,7 @@ class Users extends Base
      */
     public function import(array $user_settings, $force = true)
     {
-        Craft::log(Craft::t('Importing Users'));
+        Craft::info(Craft::t('Importing Users'), 'schematic');
 
         // always delete existing fieldlayout first
         Craft::$app->fields->deleteLayoutsByType(ElementType::User);

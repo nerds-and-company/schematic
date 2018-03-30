@@ -27,7 +27,7 @@ class GlobalSets extends Base
      */
     public function export(array $globalSets = [])
     {
-        Craft::log(Craft::t('Exporting Global Sets'));
+        Craft::info(Craft::t('Exporting Global Sets'), 'schematic');
 
         $globalDefinitions = [];
 
@@ -63,7 +63,7 @@ class GlobalSets extends Base
      */
     public function import(array $globalSetDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Global Sets'));
+        Craft::info(Craft::t('Importing Global Sets'), 'schematic');
 
         $globalSets = Craft::$app->globals->getAllSets('handle');
 

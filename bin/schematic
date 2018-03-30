@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 use yii\console\controllers\HelpController;
+use pahanini\log\ConsoleTarget;
 use NerdsAndCompany\Schematic\Services\Schematic;
 use NerdsAndCompany\Schematic\ConsoleCommands\ImportCommand;
 use NerdsAndCompany\Schematic\ConsoleCommands\ExportCommand;
@@ -16,6 +17,11 @@ require_once CRAFT_VENDOR_PATH.'/autoload.php';
 // Load and run Craft
 $app = require_once CRAFT_VENDOR_PATH.'/craftcms/cms/bootstrap/console.php';
 
+// Set console logger
+$consoleTarget = new ConsoleTarget();
+$consoleTarget->categories = ['schematic'];
+Craft::getLogger()->dispatcher->targets[] = $consoleTarget;
+
 // Add schematic controllers
 $app->controllerMap = [
   'import' => ImportCommand::class,
@@ -28,6 +34,7 @@ $components = [
       'class' => Schematic::class,
   ],
 ];
+
 foreach (Schematic::DATA_TYPES as $dataType) {
     $components['schematic_'.$dataType] = [
         'class' => 'NerdsAndCompany\\Schematic\\Services\\'.ucfirst($dataType),

@@ -56,7 +56,7 @@ class AssetSources extends Base
      */
     public function export(array $assetSources = [])
     {
-        Craft::log(Craft::t('Exporting Asset Sources'));
+        Craft::info(Craft::t('Exporting Asset Sources'), 'schematic');
 
         $assetSourceDefinitions = [];
 
@@ -95,7 +95,7 @@ class AssetSources extends Base
      */
     public function import(array $assetSourceDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Asset Sources'));
+        Craft::info(Craft::t('Importing Asset Sources'), 'schematic');
 
         $this->resetCraftAssetSourcesServiceCache();
         $assetSources = $this->getAssetSourcesService()->getAllSources('handle');

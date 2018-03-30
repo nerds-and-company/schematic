@@ -59,7 +59,7 @@ class Fields extends Base
      */
     public function export(array $groups = [])
     {
-        Craft::log(Craft::t('Exporting Fields'));
+        Craft::info(Craft::t('Exporting Fields'), 'schematic');
 
         $groupDefinitions = [];
 
@@ -106,7 +106,7 @@ class Fields extends Base
      */
     public function import(array $groupDefinitions, $force = false)
     {
-        Craft::log(Craft::t('Importing Fields'));
+        Craft::info(Craft::t('Importing Fields'), 'schematic');
 
         if (!empty($groupDefinitions)) {
             $this->setGlobalContext();
@@ -270,11 +270,11 @@ class Fields extends Base
             $schematicFieldModel = $fieldFactory->build($fieldDef['type']);
 
             if ($schematicFieldModel->getDefinition($field, true) === $fieldDef) {
-                Craft::log(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]));
+                Craft::info(Craft::t('Skipping `{name}`, no changes detected', ['name' => $field->name]), 'schematic');
                 continue;
             }
 
-            Craft::log(Craft::t('Importing `{name}`', ['name' => $fieldDef['name']]));
+            Craft::info(Craft::t('Importing `{name}`', ['name' => $fieldDef['name']]), 'schematic');
 
             $schematicFieldModel->populate($fieldDef, $field, $fieldHandle, $group, $force);
             $this->saveFieldModel($field);
