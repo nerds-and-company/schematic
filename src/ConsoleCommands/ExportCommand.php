@@ -3,8 +3,10 @@
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
 use Craft;
+use craft\helpers\FileHelper;
+use NerdsAndCompany\Schematic\Schematic;
+use Symfony\Component\Yaml\Yaml;
 use yii\console\Controller as Base;
-use NerdsAndCompany\Schematic\Services\Schematic;
 
 /**
  * Schematic Export Command.
@@ -12,7 +14,7 @@ use NerdsAndCompany\Schematic\Services\Schematic;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -55,10 +57,35 @@ class ExportCommand extends Base
             $dataTypes = $this->applyExcludes($dataTypes);
         }
 
-        Craft::$app->schematic->exportToYaml($this->file, $dataTypes);
+        $this->exportToYaml($this->file, $dataTypes);
         Craft::info('Exported schema to '.$this->file, 'schematic');
 
         return 0;
+    }
+
+    /**
+     * Export to Yaml file.
+     *
+     * @param string $file
+     * @param bool   $autoCreate
+     *
+     * @return Result
+     */
+    public function exportToYaml($file, $dataTypes)
+    {
+        $result = [];
+        foreach (array_keys($dataTypes) as $dataType) {
+            Craft::info('Exporting '.$dataType, 'schematic');
+            $component = 'schematic_'.$dataType;
+            $result[$dataType] = Craft::$app->$component->export();
+        }
+
+        $yaml = Yaml::dump($result, 10);
+        if (!FileHelper::writeToFile($file, $yaml)) {
+            Craft::error('error', "Failed to write contents to \"$file\"", 'schematic');
+        }
+
+        return true;
     }
 
     /**

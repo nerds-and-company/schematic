@@ -19,21 +19,23 @@ use Craft\BasePlugin;
  */
 class Plugins extends Base
 {
-    /**
-     * @return PluginsService
-     */
-    protected function getPluginService()
-    {
-        return Craft::$app->plugins;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * @return UpdatesService
+     * Get all asset transforms
+     *
+     * @return Plugin[]
      */
-    protected function getUpdatesService()
+    protected function getRecords()
     {
-        return Craft::$app->updates;
+        return Craft::$app->plugins->getAllPlugins();
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Installs plugin by handle.
@@ -152,26 +154,5 @@ class Plugins extends Base
         }
 
         return $this->getResultModel();
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    public function export(array $data = [])
-    {
-        Craft::info('Exporting Plugins', 'schematic');
-
-        $plugins = $this->getPluginService()->getPlugins(false);
-        $pluginDefinitions = [];
-
-        foreach ($plugins as $plugin) {
-            $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));
-            $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
-        }
-        ksort($pluginDefinitions);
-
-        return $pluginDefinitions;
     }
 }

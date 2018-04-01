@@ -3,12 +3,9 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\Exception;
-use Craft\FieldModel;
-use Craft\FieldGroupModel;
-use Craft\ElementType;
+use craft\base\Model;
+use craft\base\Field;
 use craft\models\FieldLayout;
-use NerdsAndCompany\Schematic\Models\FieldFactory;
 
 /**
  * Schematic Fields Service.
@@ -23,73 +20,52 @@ use NerdsAndCompany\Schematic\Models\FieldFactory;
  */
 class Fields extends Base
 {
-    /**
-     * @var FieldModel[]
-     */
-    private $fields = [];
-
-    /**
-     * @var FieldGroupModel[]
-     */
-    private $groups = [];
-
-    /**
-     * @var FieldFactory
-     */
-    private $fieldFactory;
-
-    /**
-     * @return FieldFactory
-     */
-    public function getFieldFactory()
-    {
-        return isset($this->fieldFactory) ? $this->fieldFactory : new FieldFactory();
-    }
-
     //==============================================================================================================
     //================================================  EXPORT  ====================================================
     //==============================================================================================================
 
     /**
-     * Export fields.
+     * Get all field groups
      *
-     * @param FieldGroupModel[] $groups
-     *
-     * @return array
+     * @return FieldGroup[]
      */
-    public function export(array $groups = [])
+    protected function getRecords()
     {
-        Craft::info('Exporting Fields', 'schematic');
-
-        $groupDefinitions = [];
-
-        foreach ($groups as $group) {
-            $fieldDefinitions = [];
-
-            foreach ($group->getFields() as $field) {
-                $fieldDefinitions[$field->handle] = $this->getFieldDefinition($field);
-            }
-
-            $groupDefinitions[$group->name] = $fieldDefinitions;
-        }
-
-        return $groupDefinitions;
+        return Craft::$app->fields->getAllGroups();
     }
 
     /**
-     * Get field definition.
-     *
-     * @param FieldModel $field
+     * Get all field definitions per group
      *
      * @return array
      */
-    private function getFieldDefinition(FieldModel $field)
+    public function export($records = null)
     {
-        $fieldFactory = $this->getFieldFactory();
-        $schematicFieldModel = $fieldFactory->build($field->type);
-        $definition = $schematicFieldModel->getDefinition($field, true);
+        $fieldGroups = $records ?: $this->getRecords();
+        $result = [];
+        foreach ($fieldGroups as $group) {
+            $result[$group->name] = parent::export($group->getFields());
+        }
+        return $result;
+    }
 
-        return $definition;
+    /**
+     * Get section definition.
+     *
+     * @param Model $record
+     *
+     * @return array
+     */
+    protected function getRecordDefinition(Model $record)
+    {
+        $attributes = parent::getRecordDefinition($record);
+        if ($record instanceof Field) {
+            unset($attributes['groupId']);
+            unset($attributes['layoutId']);
+            unset($attributes['tabId']);
+        }
+
+        return $attributes;
     }
 
     //==============================================================================================================
@@ -304,108 +280,5 @@ class Fields extends Base
     {
         Craft::$app->content->fieldContext = 'global';
         Craft::$app->content->contentTable = 'content';
-    }
-
-    //==============================================================================================================
-    //=============================================  FIELD LAYOUT  =================================================
-    //==============================================================================================================
-
-    /**
-     * Get field layout definition.
-     *
-     * @param FieldLayout $fieldLayout
-     *
-     * @return array
-     */
-    public function getFieldLayoutDefinition(FieldLayout $fieldLayout)
-    {
-        if ($fieldLayout->getTabs()) {
-            $tabDefinitions = [];
-
-            foreach ($fieldLayout->getTabs() as $tab) {
-                $tabDefinitions[$tab->name] = $this->getFieldLayoutFieldsDefinition($tab->getFields());
-            }
-
-            return ['tabs' => $tabDefinitions];
-        }
-
-        return ['fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields())];
-    }
-
-    /**
-     * Get field layout fields definition.
-     *
-     * @param FieldLayoutFieldModel[] $fields
-     *
-     * @return array
-     */
-    private function getFieldLayoutFieldsDefinition(array $fields)
-    {
-        $fieldDefinitions = [];
-
-        foreach ($fields as $field) {
-            $fieldDefinitions[$field->handle] = $field->required;
-        }
-
-        return $fieldDefinitions;
-    }
-
-    /**
-     * Attempt to import a field layout.
-     *
-     * @param array $fieldLayoutDef
-     *
-     * @return FieldLayout
-     */
-    public function getFieldLayout(array $fieldLayoutDef)
-    {
-        $layoutFields = [];
-        $requiredFields = [];
-
-        if (array_key_exists('tabs', $fieldLayoutDef)) {
-            foreach ($fieldLayoutDef['tabs'] as $tabName => $tabDef) {
-                $layoutTabFields = $this->getPrepareFieldLayout($tabDef);
-                $requiredFields = array_merge($requiredFields, $layoutTabFields['required']);
-                $layoutFields[$tabName] = $layoutTabFields['fields'];
-            }
-        } elseif (array_key_exists('fields', $fieldLayoutDef)) {
-            $layoutTabFields = $this->getPrepareFieldLayout($fieldLayoutDef);
-            $requiredFields = $layoutTabFields['required'];
-            $layoutFields = $layoutTabFields['fields'];
-        }
-
-        $fieldLayout = Craft::$app->fields->assembleLayout($layoutFields, $requiredFields);
-        $fieldLayout->type = ElementType::Entry;
-
-        return $fieldLayout;
-    }
-
-    /**
-     * Get a prepared fieldLayout for the craft assembleLayout function.
-     *
-     * @param array $fieldLayoutDef
-     *
-     * @return array
-     */
-    private function getPrepareFieldLayout(array $fieldLayoutDef)
-    {
-        $layoutFields = [];
-        $requiredFields = [];
-
-        foreach ($fieldLayoutDef as $fieldHandle => $required) {
-            $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
-            if ($field instanceof FieldModel) {
-                $layoutFields[] = $field->id;
-
-                if ($required) {
-                    $requiredFields[] = $field->id;
-                }
-            }
-        }
-
-        return [
-            'fields' => $layoutFields,
-            'required' => $requiredFields,
-        ];
     }
 }

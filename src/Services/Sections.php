@@ -21,24 +21,19 @@ use craft\models\EntryType;
 class Sections extends Base
 {
     /**
-     * Export sections.
+     * Get all section records
      *
-     * @return array
+     * @return Section[]
      */
-    public function export()
+    protected function getRecords()
     {
-        Craft::info('Exporting Sections', 'schematic');
-
-        $sections = Craft::$app->sections->getAllSections();
-
-        return $this->getRecordDefinitions($sections);
+        return Craft::$app->sections->getAllSections();
     }
 
     /**
      * Get section definition.
      *
      * @param Model $record
-     * @param $allowedEntryTypeIds
      *
      * @return array
      */
@@ -46,16 +41,18 @@ class Sections extends Base
     {
         $attributes = parent::getRecordDefinition($record);
         if ($record instanceof Section) {
-            $attributes['entryTypes'] = $this->getRecordDefinitions($record->getEntryTypes());
+            $attributes['entryTypes'] = $this->export($record->getEntryTypes());
         }
         if ($record instanceof EntryType) {
             unset($attributes['sectionId']);
-            unset($attributes['fieldLayoutId']);
-            $attributes['fieldLayout'] = Craft::$app->schematic_fields->getFieldLayoutDefinition($record->getFieldLayout());
         }
 
         return $attributes;
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Attempt to import sections.

@@ -2,8 +2,8 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use \Craft;
-use Craft\AssetTransformModel;
+use Craft;
+use craft\models\AssetTransform;
 
 /**
  * Schematic Asset Transforms Service.
@@ -18,51 +18,23 @@ use Craft\AssetTransformModel;
  */
 class AssetTransforms extends Base
 {
-    /**
-     * @return AssetTransformsService
-     */
-    private function getAssetTransformsService()
-    {
-        return Craft::$app->assetTransforms;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * Export all asset transforms.
+     * Get all asset transforms
      *
-     * @param AssetTransformModel[] $assetTransforms
-     *
-     * @return array
+     * @return AssetTransform[]
      */
-    public function export(array $assetTransforms = [])
+    protected function getRecords()
     {
-        Craft::info('Exporting Asset Transforms', 'schematic');
-
-        $assetTransformDefinitions = [];
-
-        foreach ($assetTransforms as $assetTransform) {
-            $assetTransformDefinitions[$assetTransform->handle] = $this->getAssetTransformDefinition($assetTransform);
-        }
-
-        return $assetTransformDefinitions;
+        return Craft::$app->assetTransforms->getAllTransforms();
     }
 
-    /**
-     * @param AssetTransformModel $assetTransform
-     *
-     * @return array
-     */
-    private function getAssetTransformDefinition(AssetTransformModel $assetTransform)
-    {
-        return [
-            'name' => $assetTransform->name,
-            'width' => $assetTransform->width,
-            'height' => $assetTransform->height,
-            'format' => $assetTransform->format,
-            'mode' => $assetTransform->mode,
-            'position' => $assetTransform->position,
-            'quality' => $assetTransform->quality,
-        ];
-    }
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Import asset transform definitions.

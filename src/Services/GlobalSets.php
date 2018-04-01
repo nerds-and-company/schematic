@@ -18,40 +18,23 @@ use Craft\GlobalSetModel;
  */
 class GlobalSets extends Base
 {
-    /**
-     * Export globalsets.
-     *
-     * @param GlobalSetModel[] $globalSets
-     *
-     * @return array
-     */
-    public function export(array $globalSets = [])
-    {
-        Craft::info('Exporting Global Sets', 'schematic');
-
-        $globalDefinitions = [];
-
-        foreach ($globalSets as $globalSet) {
-            $globalDefinitions[$globalSet->handle] = $this->getGlobalDefinition($globalSet);
-        }
-
-        return $globalDefinitions;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * Get global definition.
+     * Get all asset transforms
      *
-     * @param GlobalSetModel $globalSet
-     *
-     * @return array
+     * @return GlobalSet[]
      */
-    private function getGlobalDefinition(GlobalSetModel $globalSet)
+    protected function getRecords()
     {
-        return [
-            'name' => $globalSet->name,
-            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($globalSet->getFieldLayout()),
-        ];
+        return Craft::$app->globals->getAllSets();
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Attempt to import globals.

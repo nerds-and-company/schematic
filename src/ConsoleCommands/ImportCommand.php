@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
-use \Craft;
+use Craft;
 use yii\console\Controller as Base;
 use Craft\IOHelper;
 use NerdsAndCompany\Schematic\Services\Schematic;
@@ -77,4 +77,27 @@ class ImportCommand extends Base
 
         return 1;
     }
+
+    // /**
+    //  * Import from Yaml file.
+    //  *
+    //  * @param string $file
+    //  * @param string $override
+    //  * @param bool   $force if set to true items not included in import will be deleted
+    //  * @param string $dataTypes The data types to import
+    //  *
+    //  * @return Result
+    //  * @throws Exception
+    //  */
+    // public function importFromYaml($file, $override = null, $force = false, $dataTypes = 'all')
+    // {
+    //     Craft::$app->config->maxPowerCaptain();
+    //     Craft::$app->setComponent('userSession', $this);
+    //
+    //     $yaml = FileHelper::getFileContents($file);
+    //     $yaml_override = FileHelper::getFileContents($override);
+    //     $dataModel = Data::fromYaml($yaml, $yaml_override);
+    //
+    //     return $this->importDataModel($dataModel, $force, $dataTypes);
+    // }
 }

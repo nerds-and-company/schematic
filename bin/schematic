@@ -2,7 +2,7 @@
 <?php
 use yii\console\controllers\HelpController;
 use pahanini\log\ConsoleTarget;
-use NerdsAndCompany\Schematic\Services\Schematic;
+use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\ConsoleCommands\ImportCommand;
 use NerdsAndCompany\Schematic\ConsoleCommands\ExportCommand;
 
@@ -29,15 +29,10 @@ $app->controllerMap = [
 ];
 
 // Add schematic components
-$components = [
-  'schematic' => [
-      'class' => Schematic::class,
-  ],
-];
-
-foreach (Schematic::DATA_TYPES as $dataType) {
+$componets = [];
+foreach (Schematic::DATA_TYPES as $dataType => $componentClass) {
     $components['schematic_'.$dataType] = [
-        'class' => 'NerdsAndCompany\\Schematic\\Services\\'.ucfirst($dataType),
+        'class' => $componentClass,
     ];
 }
 

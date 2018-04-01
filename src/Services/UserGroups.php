@@ -3,7 +3,8 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\UserGroupModel;
+use craft\base\Model;
+use craft\models\UserGroup;
 
 /**
  * Schematic User Groups Service.
@@ -26,25 +27,15 @@ class UserGroups extends Base
     //==============================================================================================================
 
     /**
-     * Export user groups.
+     * Get all section records
      *
-     * @param UserGroupModel[] $groups
-     *
-     * @return array
+     * @return UserGroup[]
      */
-    public function export(array $groups = [])
+    protected function getRecords()
     {
-        Craft::info('Exporting User Groups', 'schematic');
-
-        $groupDefinitions = [];
-
         $this->mappedPermissions = $this->getAllMappedPermissions();
 
-        foreach ($groups as $group) {
-            $groupDefinitions[$group->handle] = $this->getGroupDefinition($group);
-        }
-
-        return $groupDefinitions;
+        return Craft::$app->userGroups->getAllGroups();
     }
 
     /**
@@ -54,12 +45,11 @@ class UserGroups extends Base
      *
      * @return array
      */
-    private function getGroupDefinition(UserGroupModel $group)
+    protected function getRecordDefinition(Model $record)
     {
-        return [
-            'name' => $group->name,
-            'permissions' => $this->getGroupPermissionDefinitions($group),
-        ];
+        $attributes = parent::getRecordDefinition($record);
+        $attributes['permissions'] = $this->getGroupPermissionDefinitions($record);
+        return $attributes;
     }
 
     /**

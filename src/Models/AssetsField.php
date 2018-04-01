@@ -2,7 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
-use \Craft;
+use Craft;
 use Craft\FieldModel;
 use Craft\FieldGroupModel;
 

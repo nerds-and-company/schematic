@@ -3,8 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use \Craft;
-use Craft\AssetSourceRecord;
-use Craft\AssetSourceModel;
+use craft\base\VolumeInterface;
 
 /**
  * Schematic Asset Sources Service.
@@ -12,78 +11,30 @@ use Craft\AssetSourceModel;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
  */
-class AssetSources extends Base
+class Volumes extends Base
 {
-    /**
-     * @return AssetSourcesService
-     */
-    private function getAssetSourcesService()
-    {
-        return Craft::$app->assetSources;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * @param $sourceId
+     * Get all asset transforms
      *
-     * @return array|mixed|null
+     * @return VolumeInterface[]
      */
-    public function getSourceById($sourceId)
+    protected function getRecords()
     {
-        return AssetSourceRecord::model()->findByAttributes(['id' => $sourceId]);
+        return Craft::$app->volumes->getAllVolumes();
     }
 
-    /**
-     * @param $sourceHandle
-     *
-     * @return array|mixed|null
-     */
-    public function getSourceByHandle($sourceHandle)
-    {
-        return AssetSourceRecord::model()->findByAttributes(['handle' => $sourceHandle]);
-    }
-
-    /**
-     * Export all asset sources.
-     *
-     * @param AssetSourceModel[] $assetSources
-     *
-     * @return array
-     */
-    public function export(array $assetSources = [])
-    {
-        Craft::info('Exporting Asset Sources', 'schematic');
-
-        $assetSourceDefinitions = [];
-
-        foreach ($assetSources as $assetSource) {
-            $assetSourceDefinitions[$assetSource->handle] = $this->getAssetSourceDefinition($assetSource);
-        }
-
-        return $assetSourceDefinitions;
-    }
-
-    /**
-     * @param AssetSourceModel $assetSource
-     *
-     * @return array
-     */
-    private function getAssetSourceDefinition(AssetSourceModel $assetSource)
-    {
-        $fieldLayout = Craft::$app->fields->getLayoutById($assetSource->fieldLayoutId);
-
-        return [
-            'type' => $assetSource->type,
-            'name' => $assetSource->name,
-            'sortOrder' => $assetSource->sortOrder,
-            'settings' => $assetSource->settings,
-            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($fieldLayout),
-        ];
-    }
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Import asset source definitions.
