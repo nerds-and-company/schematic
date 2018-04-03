@@ -4,7 +4,9 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
 use Craft\Exception;
-use Craft\BasePlugin;
+use craft\base\Plugin;
+use yii\base\Component as BaseComponent;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 
 /**
  * Schematic Plugins Service.
@@ -17,20 +19,42 @@ use Craft\BasePlugin;
  *
  * @see      http://www.nerds.company
  */
-class Plugins extends Base
+class Plugins extends BaseComponent implements MappingInterface
 {
     //==============================================================================================================
     //================================================  EXPORT  ====================================================
     //==============================================================================================================
 
     /**
-     * Get all asset transforms
-     *
-     * @return Plugin[]
-     */
-    protected function getRecords()
+    * @param array $data
+    *
+    * @return array
+    */
+    public function export()
     {
-        return Craft::$app->plugins->getAllPlugins();
+        $plugins = Craft::$app->plugins->getAllPlugins();
+        $pluginDefinitions = [];
+
+        foreach ($plugins as $plugin) {
+            $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));
+            $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
+        }
+        ksort($pluginDefinitions);
+
+        return $pluginDefinitions;
+    }
+
+    /**
+     * @param Plugin $plugin
+     *
+     * @return array
+     */
+    private function getPluginDefinition(Plugin $plugin)
+    {
+        return [
+            'isInstalled' => $plugin->isInstalled,
+            'settings' => $plugin->getSettings()->attributes,
+        ];
     }
 
     //==============================================================================================================
@@ -93,20 +117,6 @@ class Plugins extends Base
         } else {
             $this->getPluginService()->disablePlugin($handle);
         }
-    }
-
-    /**
-     * @param BasePlugin $plugin
-     *
-     * @return array
-     */
-    private function getPluginDefinition(BasePlugin $plugin)
-    {
-        return [
-            'isInstalled' => $plugin->isInstalled,
-            'isEnabled' => $plugin->isEnabled,
-            'settings' => $plugin->getSettings()->attributes,
-        ];
     }
 
     /**

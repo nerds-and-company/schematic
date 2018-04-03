@@ -37,8 +37,6 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
     //==============================================================================================================
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function export()
@@ -46,11 +44,10 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
         $settingDefinitions = [];
         $elementTypes = Craft::$app->elements->getAllElementTypes();
         foreach ($elementTypes as $elementType) {
-            $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
             $settings = Craft::$app->elementIndexes->getSettings($elementType);
             if (is_array($settings)) {
-                $mappedSettings = $this->getMappedSettings($settings, 'id', 'handle');
-                $settingDefinitions[$elementTypeName] = $mappedSettings;
+                $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
+                $settingDefinitions[$elementTypeName] = $this->getMappedSettings($settings, 'id', 'handle');
             }
         }
 
