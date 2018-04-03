@@ -2,8 +2,8 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
-;
-use Craft\BaseModel as Base;
+use Craft;
+use craft\base\Model;
 use Craft\AttributeType;
 use Craft\Exception;
 use Symfony\Component\Yaml\Yaml;
@@ -19,8 +19,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @see      http://www.nerds.company
  *
- * @property array $Locales
- * @property array $assetSources
+ * @property array $volumes
  * @property array $assetTransforms
  * @property array $fields
  * @property array $globalSets
@@ -29,35 +28,22 @@ use Symfony\Component\Yaml\Yaml;
  * @property array $userGroups
  * @property array $users
  * @property array $elementIndexSettings
- * @property array $pluginData
  * @property array $categoryGroups
  * @property array $tagGroups
  */
-class Data extends Base
+class Data extends Model
 {
-    /**
-     * Define attributes.
-     *
-     * {@inheritdoc}
-     */
-    protected function defineAttributes()
-    {
-        return [
-            'locales' => [AttributeType::Mixed, 'default' => []],
-            'assetSources' => [AttributeType::Mixed, 'default' => []],
-            'assetTransforms' => [AttributeType::Mixed, 'default' => []],
-            'fields' => [AttributeType::Mixed, 'default' => []],
-            'globalSets' => [AttributeType::Mixed, 'default' => []],
-            'plugins' => [AttributeType::Mixed, 'default' => []],
-            'sections' => [AttributeType::Mixed, 'default' => []],
-            'userGroups' => [AttributeType::Mixed, 'default' => []],
-            'users' => [AttributeType::Mixed, 'default' => []],
-            'elementIndexSettings' => [AttributeType::Mixed, 'default' => []],
-            'pluginData' => [AttributeType::Mixed, 'default' => []],
-            'categoryGroups' => [AttributeType::Mixed, 'default' => []],
-            'tagGroups' => [AttributeType::Mixed, 'default' => []],
-        ];
-    }
+    public $volumes;
+    public $assetTransforms;
+    public $fields;
+    public $globalSets;
+    public $plugins;
+    public $sections;
+    public $userGroups;
+    public $users;
+    public $elementIndexSettings;
+    public $categoryGroups;
+    public $tagGroups;
 
     /**
      * Populate data model from yaml.
