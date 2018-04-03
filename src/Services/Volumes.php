@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use \Craft;
 use craft\base\VolumeInterface;
+use craft\volumes\Local;
 
 /**
  * Schematic Asset Sources Service.
@@ -36,93 +37,50 @@ class Volumes extends Base
     //================================================  IMPORT  ====================================================
     //==============================================================================================================
 
+
     /**
-     * Import asset source definitions.
+     * Import asset volumes.
      *
-     * @param array $assetSourceDefinitions
+     * @TODO Export volume class
+     *
+     * @param array $volumeDefinitions
      * @param bool  $force
      *
      * @return Result
      */
-    public function import($force = false, array $assetSourceDefinitions = null)
+    public function import(array $volumeDefinitions, $force = false)
     {
-        Craft::info('Importing Asset Sources', 'schematic');
+        $recordsByHandle = [];
+        foreach ($this->getRecords() as $record) {
+            $recordsByHandle[$record->handle] = $record;
+        }
 
-        $this->resetCraftAssetSourcesServiceCache();
-        $assetSources = $this->getAssetSourcesService()->getAllSources('handle');
-
-        foreach ($assetSourceDefinitions as $assetSourceHandle => $assetSourceDefinition) {
-            $assetSource = array_key_exists($assetSourceHandle, $assetSources)
-                ? $assetSources[$assetSourceHandle]
-                : new AssetSourceModel();
-
-            unset($assetSources[$assetSourceHandle]);
-
-            $this->populateAssetSource($assetSource, $assetSourceDefinition, $assetSourceHandle);
-
-            if (!$this->getAssetSourcesService()->saveSource($assetSource)) { // Save assetsource via craft
-                $this->addErrors($assetSource->getAllErrors());
-
-                continue;
+        foreach ($volumeDefinitions as $handle => $definition) {
+            $record = new Local();
+            if (array_key_exists($handle, $recordsByHandle)) {
+                $record = $recordsByHandle[$handle];
             }
+            $record->setAttributes($definition);
+            if (Craft::$app->volumes->saveVolume($record)) {
+                Craft::info('Imported volume '.$handle, 'schematic');
+            } else {
+                Craft::warning('Error importing volume '.$handle, 'schematic');
+                foreach ($record->getErrors() as $errors) {
+                    foreach ($errors as $error) {
+                        var_dump($error);
+                        Craft::error($error, 'schematic');
+                    }
+                }
+            }
+            unset($recordsByHandle[$handle]);
         }
 
         if ($force) {
-            foreach ($assetSources as $assetSource) {
-                $this->getAssetSourcesService()->deleteSourceById($assetSource->id);
+            // Delete volumes not in definitions
+            foreach ($recordsByHandle as $handle => $record) {
+                Craft::info('Deleting volume '.$handle, 'schematic');
+                Craft::$app->volumes->deleteVolume($record);
             }
-        }
-
-        return $this->getResultModel();
-    }
-
-    /**
-     * Populate asset source.
-     *
-     * @param AssetSourceModel $assetSource
-     * @param array            $assetSourceDefinition
-     * @param string           $assetSourceHandle
-     *
-     * @return AssetSourceModel
-     */
-    private function populateAssetSource(AssetSourceModel $assetSource, array $assetSourceDefinition, $assetSourceHandle)
-    {
-        $defaultAssetSourceSettings = array(
-            'publicURLs' => true,
-        );
-
-        $assetSource->setAttributes([
-            'handle' => $assetSourceHandle,
-            'type' => $assetSourceDefinition['type'],
-            'name' => $assetSourceDefinition['name'],
-            'sortOrder' => $assetSourceDefinition['sortOrder'],
-            'settings' => array_merge($defaultAssetSourceSettings, $assetSourceDefinition['settings']),
-        ]);
-
-        if (array_key_exists('fieldLayout', $assetSourceDefinition)) {
-            $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($assetSourceDefinition['fieldLayout']);
-            $assetSource->setFieldLayout($fieldLayout);
-        }
-
-        return $assetSource;
-    }
-
-    /**
-     * Reset craft fields service cache using reflection.
-     */
-    private function resetCraftAssetSourcesServiceCache()
-    {
-        $obj = $this->getAssetSourcesService();
-        $refObject = new \ReflectionObject($obj);
-        if ($refObject->hasProperty('_fetchedAllSources')) {
-            $refProperty = $refObject->getProperty('_fetchedAllSources');
-            $refProperty->setAccessible(true);
-            $refProperty->setValue($obj, false);
-        }
-        if ($refObject->hasProperty('_sourcesById')) {
-            $refProperty = $refObject->getProperty('_sourcesById');
-            $refProperty->setAccessible(true);
-            $refProperty->setValue($obj, array());
         }
     }
 }

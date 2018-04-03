@@ -93,7 +93,7 @@ abstract class Base extends BaseComponent implements MappingInterface
     //================================================  IMPORT  ====================================================
     //==============================================================================================================
 
-    public function import($force = false)
+    public function import(array $definitions, $force = false)
     {
     }
 }

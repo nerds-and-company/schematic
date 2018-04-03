@@ -6,5 +6,5 @@ namespace NerdsAndCompany\Schematic\Interfaces;
 interface MappingInterface
 {
     public function export();
-    public function import($force);
+    public function import(array $definitions, $force);
 }
