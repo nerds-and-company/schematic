@@ -3,8 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\CategoryGroupModel;
-use Craft\CategoryGroupLocaleModel;
+use craft\models\CategoryGroup;
 
 /**
  * Schematic Category Groups Service.
@@ -19,79 +18,24 @@ use Craft\CategoryGroupLocaleModel;
  */
 class CategoryGroups extends Base
 {
-    /**
-     * Export categoryGroups.
-     *
-     * @param CategoryGroupModel[] $categoryGroups
-     *
-     * @return array
-     */
-    public function export(array $categoryGroups = [])
-    {
-        Craft::info('Exporting Category Groups', 'schematic');
 
-        $categoryGroupDefinitions = [];
-
-        foreach ($categoryGroups as $categoryGroup) {
-            $categoryGroupDefinitions[$categoryGroup->handle] = $this->getCategoryGroupDefinition($categoryGroup);
-        }
-
-        return $categoryGroupDefinitions;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * Get category groups definition.
+     * Get all category groups
      *
-     * @param CategoryGroupModel $categoryGroup
-     *
-     * @return array
+     * @return CategoryGroup[]
      */
-    private function getCategoryGroupDefinition(CategoryGroupModel $categoryGroup)
+    protected function getRecords()
     {
-        $fieldLayout = Craft::$app->fields->getLayoutById($categoryGroup->fieldLayoutId);
-
-        return [
-            'name' => $categoryGroup->name,
-            'hasUrls' => $categoryGroup->hasUrls,
-            'template' => $categoryGroup->template,
-            'maxLevels' => $categoryGroup->maxLevels,
-            'locales' => $this->getLocaleDefinitions($categoryGroup->getLocales()),
-            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($fieldLayout),
-        ];
+        return Craft::$app->categories->getAllGroups();
     }
 
-    /**
-     * Get locale definitions.
-     *
-     * @param CategoryGroupLocaleModel[] $locales
-     *
-     * @return array
-     */
-    private function getLocaleDefinitions(array $locales)
-    {
-        $localeDefinitions = [];
-
-        foreach ($locales as $locale) {
-            $localeDefinitions[$locale->locale] = $this->getLocaleDefinition($locale);
-        }
-
-        return $localeDefinitions;
-    }
-
-    /**
-     * Get locale definition.
-     *
-     * @param CategoryGroupLocaleModel $locale
-     *
-     * @return array
-     */
-    private function getLocaleDefinition(CategoryGroupLocaleModel $locale)
-    {
-        return [
-            'urlFormat' => $locale->urlFormat,
-            'nestedUrlFormat' => $locale->nestedUrlFormat,
-        ];
-    }
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Attempt to import category groups.
@@ -101,7 +45,7 @@ class CategoryGroups extends Base
      *
      * @return Result
      */
-    public function import($force = false, array $categoryGroupDefinitions)
+    public function import($force = false, array $categoryGroupDefinitions = null)
     {
         Craft::info('Importing Category Groups', 'schematic');
 

@@ -18,40 +18,23 @@ use Craft\TagGroupModel;
  */
 class TagGroups extends Base
 {
-    /**
-     * Export taggroups.
-     *
-     * @param TagGroupModel[] $tagGroups
-     *
-     * @return array
-     */
-    public function export(array $tagGroups = [])
-    {
-        Craft::info('Exporting TagGroups', 'schematic');
-
-        $tagGroupDefinitions = [];
-
-        foreach ($tagGroups as $tagGroup) {
-            $tagGroupDefinitions[$tagGroup->handle] = $this->getTagGroupDefinition($tagGroup);
-        }
-
-        return $tagGroupDefinitions;
-    }
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
 
     /**
-     * Get tagGroup definition.
+     * Get all tag groups
      *
-     * @param TagGroupModel $tagGroup
-     *
-     * @return array
+     * @return TagGroup[]
      */
-    private function getTagGroupDefinition(TagGroupModel $tagGroup)
+    protected function getRecords()
     {
-        return [
-            'name' => $tagGroup->name,
-            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($tagGroup->getFieldLayout()),
-        ];
+        return Craft::$app->tags->getAllTagGroups();
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Attempt to import tagGroups.

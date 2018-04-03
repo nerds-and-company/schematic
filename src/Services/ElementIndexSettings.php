@@ -3,6 +3,9 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
+use yii\base\Component as BaseComponent;
+use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 
 /**
  * Schematic Element Index Settings Service.
@@ -15,23 +18,48 @@ use Craft;
  *
  * @see      http://www.nerds.company
  */
-class ElementIndexSettings extends Base
+class ElementIndexSettings extends BaseComponent implements MappingInterface
 {
     /**
-     * @return ElementsService
+     * Load sources behaviors
+     *
+     * @return array
      */
-    protected function getElementsService()
+    public function behaviors()
     {
-        return Craft::$app->elements;
+        return [
+          SourcesBehavior::className(),
+        ];
     }
 
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
+
     /**
-     * @return ElementIndexesService
+     * @param array $data
+     *
+     * @return array
      */
-    protected function getElementIndexesService()
+    public function export()
     {
-        return Craft::$app->elementIndexes;
+        $settingDefinitions = [];
+        $elementTypes = Craft::$app->elements->getAllElementTypes();
+        foreach ($elementTypes as $elementType) {
+            $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
+            $settings = Craft::$app->elementIndexes->getSettings($elementType);
+            if (is_array($settings)) {
+                $mappedSettings = $this->getMappedSettings($settings, 'id', 'handle');
+                $settingDefinitions[$elementTypeName] = $mappedSettings;
+            }
+        }
+
+        return $settingDefinitions;
     }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * @param array $settingDefinitions
@@ -39,7 +67,7 @@ class ElementIndexSettings extends Base
      *
      * @return Result
      */
-    public function import($force = false, array $settingDefinitions)
+    public function import($force = false, array $settingDefinitions = null)
     {
         Craft::info('Importing Element Index Settings', 'schematic');
 
@@ -51,38 +79,6 @@ class ElementIndexSettings extends Base
         }
 
         return $this->getResultModel();
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    public function export(array $data = [])
-    {
-        Craft::info('Exporting Element Index Settings', 'schematic');
-
-        $settingDefinitions = [];
-
-        // Get all element types
-        $elementTypes = $this->getElementsService()->getAllElementTypes();
-        // Loop through element types
-        foreach ($elementTypes as $elementType) {
-            // Get element type name
-            $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
-
-            // Get existing settings for element type
-            $settings = $this->getElementIndexesService()->getSettings($elementTypeName);
-
-            // If there are settings, export
-            if (is_array($settings)) {
-                // Group by element type and add to definitions
-                $mappedSettings = $this->getMappedSettings($settings, 'id', 'handle');
-                $settingDefinitions[$elementTypeName] = $mappedSettings;
-            }
-        }
-
-        return $settingDefinitions;
     }
 
     /**
@@ -101,7 +97,7 @@ class ElementIndexSettings extends Base
         if (isset($settings['sourceOrder'])) {
             foreach ($settings['sourceOrder'] as $row) {
                 if ($row[0] == 'key') {
-                    $row[1] = Craft::$app->schematic_sources->getSource(false, $row[1], $fromIndex, $toIndex);
+                    $row[1] = $this->getSource(false, $row[1], $fromIndex, $toIndex);
                 }
                 $mappedSettings['sourceOrder'][] = $row;
             }
@@ -109,13 +105,10 @@ class ElementIndexSettings extends Base
 
         if (isset($settings['sources'])) {
             foreach ($settings['sources'] as $source => $sourceSettings) {
-                $mappedSource = Craft::$app->schematic_sources->getSource(false, $source, $fromIndex, $toIndex);
-                $tableAttributesSettings = [];
-                foreach ($sourceSettings['tableAttributes'] as $index => $columnSource) {
-                    $mappedColumnSource = Craft::$app->schematic_sources->getSource(false, $columnSource, $fromIndex, $toIndex);
-                    $tableAttributesSettings[$index] = $mappedColumnSource;
-                }
-                $mappedSettings['sources'][$mappedSource] = ['tableAttributes' => $tableAttributesSettings];
+                $mappedSource = $this->getSource(false, $source, $fromIndex, $toIndex);
+                $mappedSettings['sources'][$mappedSource] = [
+                  'tableAttributes' => $this->getSources('', $sourceSettings['tableAttributes'], $fromIndex, $toIndex),
+                ];
             }
         }
 

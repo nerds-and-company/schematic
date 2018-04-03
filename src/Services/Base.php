@@ -21,6 +21,11 @@ use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
  */
 abstract class Base extends BaseComponent implements MappingInterface
 {
+    /**
+     * Load fieldlayout and sources behaviors
+     *
+     * @return array
+     */
     public function behaviors()
     {
         return [

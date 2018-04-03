@@ -24,9 +24,8 @@ class Schematic
         'globalSets' => Services\GlobalSets::class,
         'userGroups' => Services\UserGroups::class,
         'users' => Services\Users::class,
-        // 'categoryGroups',
-        // 'tagGroups',
-        // 'elementIndexSettings',
-        // 'pluginData',
+        'categoryGroups' => Services\CategoryGroups::class,
+        'tagGroups' => Services\TagGroups::class,
+        'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
 }

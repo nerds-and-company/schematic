@@ -22,7 +22,7 @@ use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 class Users extends BaseComponent implements MappingInterface
 {
     /**
-     * Load behaviors
+     * Load fieldlayout behavior
      *
      * @return array
      */
