@@ -11,7 +11,7 @@ use Craft\TagGroupModel;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -61,7 +61,7 @@ class TagGroups extends Base
      *
      * @return Result
      */
-    public function import(array $tagGroupDefinitions, $force = false)
+    public function import($force = false, array $tagGroupDefinitions = null)
     {
         Craft::info('Importing TagGroups', 'schematic');
 

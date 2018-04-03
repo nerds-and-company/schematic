@@ -12,7 +12,7 @@ use Craft\CategoryGroupLocaleModel;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -101,7 +101,7 @@ class CategoryGroups extends Base
      *
      * @return Result
      */
-    public function import(array $categoryGroupDefinitions, $force = false)
+    public function import($force = false, array $categoryGroupDefinitions)
     {
         Craft::info('Importing Category Groups', 'schematic');
 

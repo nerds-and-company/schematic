@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\ConsoleCommands;
 use Craft;
 use craft\helpers\FileHelper;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use Symfony\Component\Yaml\Yaml;
 use yii\console\Controller as Base;
 
@@ -75,9 +76,13 @@ class ExportCommand extends Base
     {
         $result = [];
         foreach (array_keys($dataTypes) as $dataType) {
-            Craft::info('Exporting '.$dataType, 'schematic');
             $component = 'schematic_'.$dataType;
-            $result[$dataType] = Craft::$app->$component->export();
+            if (Craft::$app->$component instanceof MappingInterface) {
+                Craft::info('Exporting '.$dataType, 'schematic');
+                $result[$dataType] = Craft::$app->$component->export();
+            } else {
+                Craft::error(get_class(Craft::$app->$component).' does not implement MappingInterface', 'schematic');
+            }
         }
 
         $yaml = Yaml::dump($result, 10);
@@ -105,7 +110,7 @@ class ExportCommand extends Base
             $errorMessage .= ' Valid inclusions are '.implode(', ', $dataTypes);
 
             // Output an error message outlining what invalid exclusions were specified.
-            echo PHP_EOL.$errorMessage.PHP_EOL;
+            Craft::warning($errorMessage, 'schematic');
         }
         // Remove any explicitly included data types from the list of data types to export.
         return array_intersect($dataTypes, $inclusions);
@@ -128,7 +133,7 @@ class ExportCommand extends Base
             $errorMessage .= ' Valid exclusions are '.implode(', ', $dataTypes);
 
             // Output an error message outlining what invalid exclusions were specified.
-            echo PHP_EOL.$errorMessage.PHP_EOL;
+            Craft::warning($errorMessage, 'schematic');
         }
         // Remove any explicitly excluded data types from the list of data types to export.
         return array_diff($dataTypes, $exclusions);

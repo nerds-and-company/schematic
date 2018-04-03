@@ -8,7 +8,7 @@ namespace NerdsAndCompany\Schematic;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -23,7 +23,7 @@ class Schematic
         'sections' => Services\Sections::class,
         'globalSets' => Services\GlobalSets::class,
         'userGroups' => Services\UserGroups::class,
-        // 'users',
+        'users' => Services\Users::class,
         // 'categoryGroups',
         // 'tagGroups',
         // 'elementIndexSettings',

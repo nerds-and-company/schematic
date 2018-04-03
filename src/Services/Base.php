@@ -6,6 +6,7 @@ use craft\base\Model;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 
 /**
  * Schematic Base Service.
@@ -18,7 +19,7 @@ use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
  *
  * @see      http://www.nerds.company
  */
-abstract class Base extends BaseComponent
+abstract class Base extends BaseComponent implements MappingInterface
 {
     public function behaviors()
     {
@@ -44,7 +45,7 @@ abstract class Base extends BaseComponent
      *
      * @return array
      */
-    public function export($records = null)
+    public function export(array $records = null)
     {
         $records = $records ?: $this->getRecords();
         $result = [];
@@ -86,4 +87,8 @@ abstract class Base extends BaseComponent
     //==============================================================================================================
     //================================================  IMPORT  ====================================================
     //==============================================================================================================
+
+    public function import($force = false)
+    {
+    }
 }

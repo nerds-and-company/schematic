@@ -13,7 +13,7 @@ use craft\models\FieldLayout;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -39,7 +39,7 @@ class Fields extends Base
      *
      * @return array
      */
-    public function export($records = null)
+    public function export(array $records = null)
     {
         $fieldGroups = $records ?: $this->getRecords();
         $result = [];
@@ -80,7 +80,7 @@ class Fields extends Base
      *
      * @return Result
      */
-    public function import(array $groupDefinitions, $force = false)
+    public function import($force = false, array $groupDefinitions = null)
     {
         Craft::info('Importing Fields', 'schematic');
 

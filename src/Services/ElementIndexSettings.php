@@ -10,7 +10,7 @@ use Craft;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -39,7 +39,7 @@ class ElementIndexSettings extends Base
      *
      * @return Result
      */
-    public function import(array $settingDefinitions, $force = false)
+    public function import($force = false, array $settingDefinitions)
     {
         Craft::info('Importing Element Index Settings', 'schematic');
 

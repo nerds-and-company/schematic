@@ -3,8 +3,10 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use craft\models\UserModel;
-use Craft\ElementType;
+use craft\elements\User;
+use yii\base\Component as BaseComponent;
+use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 
 /**
  * Schematic Users Service.
@@ -12,40 +14,47 @@ use Craft\ElementType;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
  */
-class Users extends Base
+class Users extends BaseComponent implements MappingInterface
 {
     /**
-     * Export user settings.
-     *
-     * @param UserModel[] $users
+     * Load behaviors
      *
      * @return array
      */
-    public function export(array $users = [])
-    {
-        Craft::info('Exporting Users', 'schematic');
-
-        return $this->getUsersDefinition(new UserModel());
-    }
-
-    /**
-     * Get users definition.
-     *
-     * @param UserModel $user
-     *
-     * @return array
-     */
-    private function getUsersDefinition(UserModel $user)
+    public function behaviors()
     {
         return [
-            'fieldLayout' => Craft::$app->schematic_fields->getFieldLayoutDefinition($user->getFieldLayout()),
+          FieldLayoutBehavior::className(),
         ];
     }
+
+    //==============================================================================================================
+    //================================================  EXPORT  ====================================================
+    //==============================================================================================================
+
+    /**
+     * Export user settings
+     *
+     * @return array
+     */
+    public function export()
+    {
+        $settings = Craft::$app->getSystemSettings()->getSettings('users');
+        $fieldLayout = Craft::$app->getFields()->getLayoutByType(User::class);
+        return [
+            'settings' => $settings,
+            'fieldLayout' => $this->getFieldLayoutDefinition($fieldLayout),
+        ];
+    }
+
+    //==============================================================================================================
+    //================================================  IMPORT  ====================================================
+    //==============================================================================================================
 
     /**
      * Attempt to import user settings.
@@ -55,7 +64,7 @@ class Users extends Base
      *
      * @return Result
      */
-    public function import(array $user_settings, $force = true)
+    public function import($force = true, array $user_settings = null)
     {
         Craft::info('Importing Users', 'schematic');
 

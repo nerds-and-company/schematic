@@ -12,7 +12,7 @@ use Craft\BasePlugin;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -115,7 +115,7 @@ class Plugins extends Base
      *
      * @return Result
      */
-    public function import(array $pluginDefinitions, $force = false)
+    public function import($force = false, array $pluginDefinitions = null)
     {
         Craft::info('Updating Craft', 'schematic');
         if ($this->getUpdatesService()->isCraftDbMigrationNeeded()) {

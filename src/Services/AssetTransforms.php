@@ -11,7 +11,7 @@ use craft\models\AssetTransform;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -44,7 +44,7 @@ class AssetTransforms extends Base
      *
      * @return Result
      */
-    public function import(array $assetTransformDefinitions, $force = false)
+    public function import($force = false, array $assetTransformDefinitions = null)
     {
         Craft::info('Importing Asset Transforms', 'schematic');
 

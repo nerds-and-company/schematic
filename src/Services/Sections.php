@@ -62,7 +62,7 @@ class Sections extends Base
      *
      * @return Result
      */
-    public function import(array $sectionDefinitions, $force = false)
+    public function import($force = false, array $sectionDefinitions = null)
     {
         Craft::info(Craft::t('Importing Sections', 'schematic'));
 

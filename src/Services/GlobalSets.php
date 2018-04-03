@@ -11,7 +11,7 @@ use Craft\GlobalSetModel;
  * Sync Craft Setups.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
@@ -44,7 +44,7 @@ class GlobalSets extends Base
      *
      * @return Result
      */
-    public function import(array $globalSetDefinitions, $force = false)
+    public function import($force = false, array $globalSetDefinitions = null)
     {
         Craft::info('Importing Global Sets', 'schematic');
 

@@ -44,7 +44,7 @@ class Volumes extends Base
      *
      * @return Result
      */
-    public function import(array $assetSourceDefinitions, $force = false)
+    public function import($force = false, array $assetSourceDefinitions = null)
     {
         Craft::info('Importing Asset Sources', 'schematic');
 

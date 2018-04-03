@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_Matcher_Invocation as Invocation;
  * Class Schematic_UsersServiceTest.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2018, Nerds & Company
  * @license   MIT
  *
  * @link      http://www.nerds.company

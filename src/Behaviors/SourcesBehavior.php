@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Behaviors;
 
 use Craft;
 use yii\base\Behavior;
+use craft\base\Model;
 
 /**
  * Schematic Sources Behavior.
@@ -18,11 +19,6 @@ use yii\base\Behavior;
  */
 class SourcesBehavior extends Behavior
 {
-    /**
-     * @var array()
-     */
-    private $hookedSources = [];
-
     /**
      * Get sources based on the indexFrom attribute and return them with the indexTo attribute.
      *
@@ -64,18 +60,18 @@ class SourcesBehavior extends Behavior
             return $source;
         }
 
-        /** @var BaseElementModel $sourceObject */
+        /** @var Model $sourceObject */
         $sourceObject = null;
 
         list($sourceType, $sourceFrom) = explode(':', $source);
         switch ($sourceType) {
             case 'section':
             case 'createEntries':
+            case 'editPeerEntries':
             case 'deleteEntries':
             case 'deletePeerEntries':
             case 'deletePeerEntryDrafts':
             case 'editEntries':
-            case 'editPeerEntries':
             case 'editPeerEntryDrafts':
             case 'publishEntries':
             case 'publishPeerEntries':
@@ -84,17 +80,16 @@ class SourcesBehavior extends Behavior
                 $method = 'getSectionBy';
                 break;
             case 'group':
-            case 'editCategories':
                 $service = $fieldType == 'Users' ? Craft::$app->userGroups : Craft::$app->categories;
                 $method = 'getGroupBy';
                 break;
             case 'folder':
-            case 'createSubfoldersInAssetSource':
-            case 'removeFromAssetSource':
-            case 'uploadToAssetSource':
-            case 'viewAssetSource':
-                $service = Craft::$app->schematic_assetSources;
-                $method = 'getSourceBy';
+            case 'createFoldersInVolume':
+            case 'deleteFilesAndFoldersInVolume':
+            case 'saveAssetInVolume':
+            case 'viewVolume':
+                $service = Craft::$app->volumes;
+                $method = 'getVolumeBy';
                 break;
             case 'taggroup':
                 $service = Craft::$app->tags;
@@ -108,7 +103,7 @@ class SourcesBehavior extends Behavior
                 $service = Craft::$app->globals;
                 $method = 'getSetBy';
                 break;
-            case 'editLocale':
+            case 'utility':
                 return $source;
         }
 
@@ -121,36 +116,7 @@ class SourcesBehavior extends Behavior
             return $sourceType.':'.$sourceObject->$indexTo;
         }
 
-        return $this->getHookedSource($source, $indexFrom);
-    }
-
-    /**
-     * See if the source can be found in the hooked sources.
-     *
-     * @param string $source
-     * @param string $indexFrom
-     *
-     * @return string
-     */
-    private function getHookedSource($source, $indexFrom)
-    {
-        $this->loadHookedSources($indexFrom);
-        foreach ($this->hookedSources[$indexFrom] as $hookedSources) {
-            if (array_key_exists($source, $hookedSources)) {
-                return $hookedSources[$source];
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * Load the hooked sources.
-     */
-    private function loadHookedSources($indexFrom)
-    {
-        if (!isset($this->hookedSources[$indexFrom])) {
-            $this->hookedSources[$indexFrom] = Craft::$app->plugins->call('registerSchematicSources');
-        }
+        Craft::warning('No mapping found for source'.$source, 'schematic');
+        return $source;
     }
 }
