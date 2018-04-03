@@ -44,7 +44,10 @@ class Fields extends Base
         $fieldGroups = $records ?: $this->getRecords();
         $result = [];
         foreach ($fieldGroups as $group) {
-            $result[$group->name] = parent::export($group->getFields());
+            $fields = $group->getFields();
+            if (count($fields) > 0) {
+                $result[$group->name] = parent::export($group->getFields());
+            }
         }
         return $result;
     }

@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
-use yii\console\controllers\HelpController;
+use craft\migrations\Install;
+use craft\models\Site;
 use pahanini\log\ConsoleTarget;
+use yii\console\controllers\HelpController;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\ConsoleCommands\ImportCommand;
 use NerdsAndCompany\Schematic\ConsoleCommands\ExportCommand;
@@ -29,7 +31,7 @@ $app->controllerMap = [
 ];
 
 // Add schematic components
-$componets = [];
+$components = [];
 foreach (Schematic::DATA_TYPES as $dataType => $componentClass) {
     $components['schematic_'.$dataType] = [
         'class' => $componentClass,
@@ -38,5 +40,43 @@ foreach (Schematic::DATA_TYPES as $dataType => $componentClass) {
 
 $app->setComponents($components);
 $app->init();
+
+// Install Craft if needed
+if (!$app->getIsInstalled()) {
+    Craft::info('Craft is not installed, installing', 'schematic');
+
+    if (!getenv('CRAFT_EMAIL') || !getenv('CRAFT_PASSWORD')) {
+        Craft::error('Please supply CRAFT_EMAIL and CRAFT_PASSWORD environment variables for install', 'schematic');
+    }
+
+    $site = new Site([
+        'name' => getenv('CRAFT_SITENAME') ?: 'default',
+        'handle' => 'default',
+        'hasUrls' => true,
+        'baseUrl' => getenv('CRAFT_SITEURL') ?: '@web',
+        'language' => getenv('CRAFT_LOCALE') ?: 'en-US',
+    ]);
+
+    $migration = new Install([
+        'username' => getenv('CRAFT_USERNAME') ?: 'admin',
+        'password' => getenv('CRAFT_PASSWORD'),
+        'email' => getenv('CRAFT_EMAIL'),
+        'site' => $site,
+    ]);
+
+    // Run the install migration
+    Craft::info('Installing Craft', 'schematic');
+    $migrator = Craft::$app->getMigrator();
+    $result = $migrator->migrateUp($migration);
+
+    if ($result === false) {
+        Craft::error('Failed to install Craft', 'schematic');
+        exit(1);
+    }
+    Craft::info('Craft has been installed', 'schematic');
+} else {
+    Craft::info('Craft is installed, continueing', 'schematic');
+}
+
 $exitCode = $app->run();
 exit($exitCode);
