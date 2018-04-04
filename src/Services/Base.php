@@ -115,7 +115,7 @@ abstract class Base extends BaseComponent implements MappingInterface
             if (array_key_exists($handle, $recordsByHandle)) {
                 $record = $recordsByHandle[$handle];
             }
-            Schematic::info('- Saving record '.$handle);
+            Schematic::info('- Saving '.get_class($record).' '.$handle);
             $this->setRecordAttributes($record, $definition, $defaultAttributes);
             if (!$this->saveRecord($record, $definition)) {
                 $this->importError($record, $handle);
@@ -126,7 +126,7 @@ abstract class Base extends BaseComponent implements MappingInterface
         if (Schematic::$force) {
             // Delete volumes not in definitions
             foreach ($recordsByHandle as $handle => $record) {
-                Schematic::info('- Deleting record '.$handle);
+                Schematic::info('- Deleting '.get_class($record).' '.$handle);
                 $this->deleteRecord($record);
             }
         }
