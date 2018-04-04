@@ -42,6 +42,6 @@ class TagGroups extends Base
      */
     protected function deleteRecord(Model $record)
     {
-        return Craft::$app->tags->deleteTagGroup($record);
+        return Craft::$app->tags->deleteTagGroupById($record->id);
     }
 }

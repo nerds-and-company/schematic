@@ -55,6 +55,6 @@ class AssetTransforms extends Base
      */
     protected function deleteRecord(Model $record)
     {
-        return Craft::$app->assetTransforms->deleteTransform($record);
+        return Craft::$app->assetTransforms->deleteTransform($record->id);
     }
 }

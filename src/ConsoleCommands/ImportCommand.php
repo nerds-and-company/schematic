@@ -46,7 +46,7 @@ class ImportCommand extends Base
         }
 
         $dataTypes = $this->getDataTypes();
-        if (!$this->importFromYaml($dataTypes)) {
+        if ($this->importFromYaml($dataTypes)) {
             Schematic::info('Loaded schema from '. $this->file);
             return 0;
         }

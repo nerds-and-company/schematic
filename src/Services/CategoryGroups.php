@@ -42,6 +42,6 @@ class CategoryGroups extends Base
      */
     protected function deleteRecord(Model $record)
     {
-        return Craft::$app->categories->deleteGroup($record);
+        return Craft::$app->categories->deleteGroupById($record->id);
     }
 }
