@@ -61,10 +61,7 @@ class ExportCommand extends Base
         }
 
         $yaml = Yaml::dump($result, 10);
-        if (!FileHelper::writeToFile($file, $yaml)) {
-            Schematic::error('error', "Failed to write contents to \"$file\"");
-            return 1;
-        }
+        FileHelper::writeToFile($file, $yaml);
 
         return 0;
     }
