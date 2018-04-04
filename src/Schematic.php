@@ -2,6 +2,8 @@
 
 namespace NerdsAndCompany\Schematic;
 
+use Craft;
+
 /**
  * Schematic.
  *
@@ -28,4 +30,37 @@ class Schematic
         'tagGroups' => Services\TagGroups::class,
         'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
+
+    /**
+     * Logs an error message
+     *
+     * @param  string|array $message the message to be logged. This can be a simple string or a more
+     *                               complex data structure, such as array.
+     */
+    public static function error($message)
+    {
+        Craft::error($message, 'schematic');
+    }
+
+    /**
+     * Logs a warning message
+     *
+     * @param  string|array $message the message to be logged. This can be a simple string or a more
+     *                               complex data structure, such as array.
+     */
+    public static function warning($message)
+    {
+        Craft::warning($message, 'schematic');
+    }
+
+    /**
+     * Logs an info message
+     *
+     * @param  string|array $message the message to be logged. This can be a simple string or a more
+     *                               complex data structure, such as array.
+     */
+    public static function info($message)
+    {
+        Craft::info($message, 'schematic');
+    }
 }

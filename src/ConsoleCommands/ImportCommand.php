@@ -6,7 +6,7 @@ use Craft;
 use craft\helpers\FileHelper;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Models\Data;
-use NerdsAndCompany\Schematic\Services\Schematic;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Import Command.
@@ -41,17 +41,17 @@ class ImportCommand extends Base
     public function actionIndex()
     {
         if (!file_exists($this->file)) {
-            Craft::error('File not found: '.$this->file, 'schematic');
+            Schematic::error('File not found: '.$this->file);
             return 1;
         }
 
         $dataTypes = $this->getDataTypes();
         if (!$this->importFromYaml($dataTypes)) {
-            Craft::info('Loaded schema from '. $this->file, 'schematic');
+            Schematic::info('Loaded schema from '. $this->file);
             return 0;
         }
 
-        Craft::info('There was an error loading schema from '. $this->file, 'schematic');
+        Schematic::info('There was an error loading schema from '. $this->file);
         return 1;
     }
 
@@ -75,10 +75,10 @@ class ImportCommand extends Base
         foreach (array_keys($dataTypes) as $dataType) {
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
-                Craft::info('Importing '.$dataType, 'schematic');
+                Schematic::info('Importing '.$dataType);
                 Craft::$app->$component->import($dataModel->$dataType, $this->force);
             } else {
-                Craft::error(get_class(Craft::$app->$component).' does not implement MappingInterface', 'schematic');
+                Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
             }
         }
 

@@ -6,6 +6,7 @@ use Craft;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Element Index Settings Service.
@@ -64,18 +65,14 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
      *
      * @return Result
      */
-    public function import($force = false, array $settingDefinitions = null)
+    public function import(array $settingDefinitions, $force = false)
     {
-        Craft::info('Importing Element Index Settings', 'schematic');
+        Schematic::warning('Element index import is not yey implemented');
 
         foreach ($settingDefinitions as $elementType => $settings) {
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
-            if (!$this->getElementIndexesService()->saveSettings($elementType, $mappedSettings)) {
-                $this->addError('Element Index Settings for {elementType} could not be installed', ['elementType' => $elementType]);
-            }
+            // Import the settings
         }
-
-        return $this->getResultModel();
     }
 
     /**

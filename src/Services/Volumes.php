@@ -2,9 +2,11 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
-use \Craft;
+use Craft;
 use craft\base\VolumeInterface;
+use craft\base\Model;
 use craft\volumes\Local;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Asset Sources Service.
@@ -19,9 +21,12 @@ use craft\volumes\Local;
  */
 class Volumes extends Base
 {
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
+    /**
+     * The record class
+     * @TODO: export to schema file
+     * @var string
+     */
+    protected $recordClass = Local::class;
 
     /**
      * Get all asset transforms
@@ -33,54 +38,25 @@ class Volumes extends Base
         return Craft::$app->volumes->getAllVolumes();
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
+    /**
+     * Save a record
+     *
+     * @param Model $record
+     * @return boolean
+     */
+    protected function saveRecord(Model $record)
+    {
+        return Craft::$app->volumes->saveVolume($record);
+    }
 
     /**
-     * Import asset volumes.
+     * Delete a record
      *
-     * @TODO Export volume class
-     *
-     * @param array $volumeDefinitions
-     * @param bool  $force
-     *
-     * @return Result
+     * @param Model $record
+     * @return boolean
      */
-    public function import(array $volumeDefinitions, $force = false)
+    protected function deleteRecord(Model $record)
     {
-        $recordsByHandle = [];
-        foreach ($this->getRecords() as $record) {
-            $recordsByHandle[$record->handle] = $record;
-        }
-
-        foreach ($volumeDefinitions as $handle => $definition) {
-            $record = new Local();
-            if (array_key_exists($handle, $recordsByHandle)) {
-                $record = $recordsByHandle[$handle];
-            }
-            $record->setAttributes($definition);
-            if (Craft::$app->volumes->saveVolume($record)) {
-                Craft::info('Imported volume '.$handle, 'schematic');
-            } else {
-                Craft::warning('Error importing volume '.$handle, 'schematic');
-                foreach ($record->getErrors() as $errors) {
-                    foreach ($errors as $error) {
-                        var_dump($error);
-                        Craft::error($error, 'schematic');
-                    }
-                }
-            }
-            unset($recordsByHandle[$handle]);
-        }
-
-        if ($force) {
-            // Delete volumes not in definitions
-            foreach ($recordsByHandle as $handle => $record) {
-                Craft::info('Deleting volume '.$handle, 'schematic');
-                Craft::$app->volumes->deleteVolume($record);
-            }
-        }
+        return Craft::$app->volumes->deleteVolume($record);
     }
 }

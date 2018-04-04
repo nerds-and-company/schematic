@@ -3,7 +3,8 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\GlobalSetModel;
+use craft\elements\GlobalSet;
+use craft\base\Model;
 
 /**
  * Schematic Globals Service.
@@ -18,9 +19,7 @@ use Craft\GlobalSetModel;
  */
 class GlobalSets extends Base
 {
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
+    protected $recordClass = GlobalSet::class;
 
     /**
      * Get all asset transforms
@@ -32,64 +31,25 @@ class GlobalSets extends Base
         return Craft::$app->globals->getAllSets();
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
     /**
-     * Attempt to import globals.
+     * Save a record
      *
-     * @param array $globalSetDefinitions
-     * @param bool  $force                If set to true globals not included in the import will be deleted
-     *
-     * @return Result
+     * @param Model $record
+     * @return boolean
      */
-    public function import($force = false, array $globalSetDefinitions = null)
+    protected function saveRecord(Model $record)
     {
-        Craft::info('Importing Global Sets', 'schematic');
-
-        $globalSets = Craft::$app->globals->getAllSets('handle');
-
-        foreach ($globalSetDefinitions as $globalSetHandle => $globalSetDefinition) {
-            $global = array_key_exists($globalSetHandle, $globalSets)
-                ? $globalSets[$globalSetHandle]
-                : new GlobalSetModel();
-
-            unset($globalSets[$globalSetHandle]);
-
-            $this->populateGlobalSet($global, $globalSetDefinition, $globalSetHandle);
-
-            if (!Craft::$app->globals->saveSet($global)) { // Save globalset via craft
-                $this->addErrors($global->getAllErrors());
-
-                continue;
-            }
-        }
-
-        if ($force) {
-            foreach ($globalSets as $globalSet) {
-                Craft::$app->globals->deleteSetById($globalSet->id);
-            }
-        }
-
-        return $this->getResultModel();
+        return Craft::$app->globals->saveSet($record);
     }
 
     /**
-     * Populate globalset.
+     * Delete a record
      *
-     * @param GlobalSetModel $globalSet
-     * @param array          $globalSetDefinition
-     * @param string         $globalSetHandle
+     * @param Model $record
+     * @return boolean
      */
-    private function populateGlobalSet(GlobalSetModel $globalSet, array $globalSetDefinition, $globalSetHandle)
+    protected function deleteRecord(Model $record)
     {
-        $globalSet->setAttributes([
-            'handle' => $globalSetHandle,
-            'name' => $globalSetDefinition['name'],
-        ]);
-
-        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($globalSetDefinition['fieldLayout']);
-        $globalSet->setFieldLayout($fieldLayout);
+        return Craft::$app->globals->deleteSet($record);
     }
 }

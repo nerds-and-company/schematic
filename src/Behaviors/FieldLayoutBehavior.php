@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Behaviors;
 use Craft;
 use yii\base\Behavior;
 use craft\models\FieldLayout;
+use craft\elements\Entry;
 
 /**
  * Schematic FieldLayout Behavior.
@@ -83,7 +84,7 @@ class FieldLayoutBehavior extends Behavior
         }
 
         $fieldLayout = Craft::$app->fields->assembleLayout($layoutFields, $requiredFields);
-        $fieldLayout->type = ElementType::Entry;
+        $fieldLayout->type = Entry::class;
 
         return $fieldLayout;
     }

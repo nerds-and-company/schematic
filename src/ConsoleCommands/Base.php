@@ -72,7 +72,7 @@ class Base extends Controller
             $errorMessage .= ' Valid inclusions are '.implode(', ', $dataTypes);
 
             // Output an error message outlining what invalid exclusions were specified.
-            Craft::warning($errorMessage, 'schematic');
+            Schematic::warning($errorMessage);
         }
         // Remove any explicitly included data types from the list of data types to export.
         return array_intersect($dataTypes, $inclusions);
@@ -95,7 +95,7 @@ class Base extends Controller
             $errorMessage .= ' Valid exclusions are '.implode(', ', $dataTypes);
 
             // Output an error message outlining what invalid exclusions were specified.
-            Craft::warning($errorMessage, 'schematic');
+            Schematic::warning($errorMessage);
         }
         // Remove any explicitly excluded data types from the list of data types to export.
         return array_diff($dataTypes, $exclusions);

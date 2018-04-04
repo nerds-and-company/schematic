@@ -7,6 +7,7 @@ use craft\elements\User;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Users Service.
@@ -59,31 +60,25 @@ class Users extends BaseComponent implements MappingInterface
     /**
      * Attempt to import user settings.
      *
-     * @param array $user_settings
+     * @param array $userSettings
      * @param bool  $force         If set to true user settings not included in the import will be deleted
-     *
-     * @return Result
      */
-    public function import($force = true, array $user_settings = null)
+    public function import(array $userSettings, $force = true)
     {
-        Craft::info('Importing Users', 'schematic');
-
         // always delete existing fieldlayout first
-        Craft::$app->fields->deleteLayoutsByType(ElementType::User);
+        Craft::$app->fields->deleteLayoutsByType(User::class);
 
-        if (isset($user_settings['fieldLayout'])) {
-            $fieldLayoutDefinition = (array) $user_settings['fieldLayout'];
+        if (isset($userSettings['fieldLayout'])) {
+            $fieldLayoutDefinition = (array) $userSettings['fieldLayout'];
         } else {
             $fieldLayoutDefinition = [];
         }
 
         $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($fieldLayoutDefinition);
-        $fieldLayout->type = ElementType::User;
+        $fieldLayout->type = User::class;
 
         if (!Craft::$app->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
             $this->addErrors($fieldLayout->getAllErrors());
         }
-
-        return $this->getResultModel();
     }
 }

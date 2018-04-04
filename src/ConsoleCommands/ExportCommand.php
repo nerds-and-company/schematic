@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\ConsoleCommands;
 use Craft;
 use craft\helpers\FileHelper;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Schematic;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -33,7 +34,7 @@ class ExportCommand extends Base
         $dataTypes = $this->getDataTypes();
 
         $this->exportToYaml($this->file, $dataTypes);
-        Craft::info('Exported schema to '.$this->file, 'schematic');
+        Schematic::info('Exported schema to '.$this->file);
 
         return 0;
     }
@@ -52,16 +53,16 @@ class ExportCommand extends Base
         foreach (array_keys($dataTypes) as $dataType) {
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
-                Craft::info('Exporting '.$dataType, 'schematic');
+                Schematic::info('Exporting '.$dataType);
                 $result[$dataType] = Craft::$app->$component->export();
             } else {
-                Craft::error(get_class(Craft::$app->$component).' does not implement MappingInterface', 'schematic');
+                Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
             }
         }
 
         $yaml = Yaml::dump($result, 10);
         if (!FileHelper::writeToFile($file, $yaml)) {
-            Craft::error('error', "Failed to write contents to \"$file\"", 'schematic');
+            Schematic::error('error', "Failed to write contents to \"$file\"");
             return 1;
         }
 

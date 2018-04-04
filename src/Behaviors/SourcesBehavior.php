@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Behaviors;
 use Craft;
 use yii\base\Behavior;
 use craft\base\Model;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Sources Behavior.
@@ -116,7 +117,7 @@ class SourcesBehavior extends Behavior
             return $sourceType.':'.$sourceObject->$indexTo;
         }
 
-        Craft::warning('No mapping found for source'.$source, 'schematic');
+        Schematic::warning('No mapping found for source'.$source);
         return $source;
     }
 }

@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
+use craft\base\Model;
 use craft\models\CategoryGroup;
 
 /**
@@ -18,10 +19,7 @@ use craft\models\CategoryGroup;
  */
 class CategoryGroups extends Base
 {
-
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
+    protected $recordClass = CategoryGroup::class;
 
     /**
      * Get all category groups
@@ -33,120 +31,25 @@ class CategoryGroups extends Base
         return Craft::$app->categories->getAllGroups();
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
     /**
-     * Attempt to import category groups.
+     * Save a record
      *
-     * @param array $categoryGroupDefinitions
-     * @param bool  $force                    If set to true category groups not included in the import will be deleted
-     *
-     * @return Result
+     * @param Model $record
+     * @return boolean
      */
-    public function import($force = false, array $categoryGroupDefinitions = null)
+    protected function saveRecord(Model $record)
     {
-        Craft::info('Importing Category Groups', 'schematic');
-
-        $this->resetCraftCategoriesServiceCache();
-        $categoryGroups = Craft::$app->categories->getAllGroups('handle');
-
-        foreach ($categoryGroupDefinitions as $categoryGroupHandle => $categoryGroupDefinition) {
-            $categoryGroup = array_key_exists($categoryGroupHandle, $categoryGroups)
-                ? $categoryGroups[$categoryGroupHandle]
-                : new CategoryGroupModel();
-
-            unset($categoryGroups[$categoryGroupHandle]);
-
-            $this->populateCategoryGroup($categoryGroup, $categoryGroupDefinition, $categoryGroupHandle);
-
-            if (!Craft::$app->categories->saveGroup($categoryGroup)) { // Save categorygroup via craft
-                $this->addErrors($categoryGroup->getAllErrors());
-
-                continue;
-            }
-        }
-
-        if ($force) {
-            foreach ($categoryGroups as $categoryGroup) {
-                Craft::$app->categories->deleteGroupById($categoryGroup->id);
-            }
-        }
-
-        return $this->getResultModel();
+        return Craft::$app->categories->saveGroup($record);
     }
 
     /**
-     * Populate categorygroup.
+     * Delete a record
      *
-     * @param CategoryGroupModel $categoryGroup
-     * @param array              $categoryGroupDefinition
-     * @param string             $categoryGroupHandle
+     * @param Model $record
+     * @return boolean
      */
-    private function populateCategoryGroup(CategoryGroupModel $categoryGroup, array $categoryGroupDefinition, $categoryGroupHandle)
+    protected function deleteRecord(Model $record)
     {
-        $categoryGroup->setAttributes([
-            'handle' => $categoryGroupHandle,
-            'name' => $categoryGroupDefinition['name'],
-            'hasUrls' => $categoryGroupDefinition['hasUrls'],
-            'template' => $categoryGroupDefinition['template'],
-            'maxLevels' => $categoryGroupDefinition['maxLevels'],
-        ]);
-
-        $this->populateCategoryGroupLocales($categoryGroup, $categoryGroupDefinition['locales']);
-
-        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($categoryGroupDefinition['fieldLayout']);
-        $categoryGroup->setFieldLayout($fieldLayout);
-    }
-
-    /**
-     * Populate section locales.
-     *
-     * @param CategoryGroupModel $categoryGroup
-     * @param $localeDefinitions
-     */
-    private function populateCategoryGroupLocales(CategoryGroupModel $categoryGroup, $localeDefinitions)
-    {
-        $locales = $categoryGroup->getLocales();
-
-        foreach ($localeDefinitions as $localeId => $localeDef) {
-            $locale = array_key_exists($localeId, $locales) ? $locales[$localeId] : new CategoryGroupLocaleModel();
-
-            $locale->setAttributes([
-                'locale' => $localeId,
-                'urlFormat' => $localeDef['urlFormat'],
-                'nestedUrlFormat' => $localeDef['nestedUrlFormat'],
-            ]);
-
-            // Todo: Is this a hack? I don't see another way.
-            // Todo: Might need a sorting order as well? It's NULL at the moment.
-            Craft::$app->db->createCommand()->insertOrUpdate('locales', [
-                'locale' => $locale->locale,
-            ], []);
-
-            $locales[$localeId] = $locale;
-        }
-
-        $categoryGroup->setLocales($locales);
-    }
-
-    /**
-     * Reset craft fields service cache using reflection.
-     */
-    private function resetCraftCategoriesServiceCache()
-    {
-        $obj = Craft::$app->categories;
-        $refObject = new \ReflectionObject($obj);
-        if ($refObject->hasProperty('_fetchedAllCategoryGroups')) {
-            $refProperty = $refObject->getProperty('_fetchedAllCategoryGroups');
-            $refProperty->setAccessible(true);
-            $refProperty->setValue($obj, false);
-        }
-        if ($refObject->hasProperty('_categoryGroupsById')) {
-            $refProperty = $refObject->getProperty('_categoryGroupsById');
-            $refProperty->setAccessible(true);
-            $refProperty->setValue($obj, array());
-        }
+        return Craft::$app->categories->deleteGroup($record);
     }
 }

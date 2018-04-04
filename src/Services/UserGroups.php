@@ -19,6 +19,8 @@ use craft\models\UserGroup;
  */
 class UserGroups extends Base
 {
+    protected $recordClass = UserGroup::class;
+
     /** @var string[] */
     private $mappedPermissions = [];
 
@@ -114,61 +116,24 @@ class UserGroups extends Base
     //==============================================================================================================
 
     /**
-     * Import usergroups.
+     * Save a record
      *
-     * @param array $groupDefinitions
-     * @param bool  $force            if set to true items not in the import will be deleted
-     *
-     * @return Result
+     * @param Model $record
+     * @return boolean
      */
-    public function import($force = false, array $groupDefinitions = null)
+    protected function saveRecord(Model $record)
     {
-        Craft::info('Importing User Groups', 'schematic');
-
-        $userGroups = Craft::$app->userGroups->getAllGroups('handle');
-
-        foreach ($groupDefinitions as $groupHandle => $groupDefinition) {
-            $group = array_key_exists($groupHandle, $userGroups) ? $userGroups[$groupHandle] : new UserGroupModel();
-
-            unset($userGroups[$groupHandle]);
-
-            $group->name = $groupDefinition['name'];
-            $group->handle = $groupHandle;
-
-            if (!Craft::$app->userGroups->saveGroup($group)) {
-                $this->addErrors($group->getAllErrors());
-
-                continue;
-            }
-
-            $permissions = $this->getPermissions($groupDefinition['permissions']);
-
-            Craft::$app->userPermissions->saveGroupPermissions($group->id, $permissions);
-        }
-
-        if ($force) {
-            foreach ($userGroups as $group) {
-                Craft::$app->userGroups->deleteGroupById($group->id);
-            }
-        }
-
-        return $this->getResultModel();
+        return Craft::$app->userGroups->saveGroup($record);
     }
 
     /**
-     * Get permissions.
+     * Delete a record
      *
-     * @param array $permissionDefinitions
-     *
-     * @return array
+     * @param Model $record
+     * @return boolean
      */
-    private function getPermissions(array $permissionDefinitions)
+    protected function deleteRecord(Model $record)
     {
-        $permissions = [];
-        foreach ($permissionDefinitions as $permissionDefinition) {
-            $permissions[] = Craft::$app->schematic_sources->getSource(false, $permissionDefinition, 'handle', 'id');
-        }
-
-        return $permissions;
+        return Craft::$app->userGroups->deleteGroup($record);
     }
 }

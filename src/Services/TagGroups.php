@@ -3,7 +3,8 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\TagGroupModel;
+use craft\base\Model;
+use craft\models\TagGroup;
 
 /**
  * Schematic TagGroups Service.
@@ -18,9 +19,7 @@ use Craft\TagGroupModel;
  */
 class TagGroups extends Base
 {
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
+    protected $recordClass = TagGroup::class;
 
     /**
      * Get all tag groups
@@ -32,64 +31,25 @@ class TagGroups extends Base
         return Craft::$app->tags->getAllTagGroups();
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
     /**
-     * Attempt to import tagGroups.
+     * Save a record
      *
-     * @param array $tagGroupDefinitions
-     * @param bool  $force               If set to true tagGroups not included in the import will be deleted
-     *
-     * @return Result
+     * @param Model $record
+     * @return boolean
      */
-    public function import($force = false, array $tagGroupDefinitions = null)
+    protected function saveRecord(Model $record)
     {
-        Craft::info('Importing TagGroups', 'schematic');
-
-        $tagGroups = Craft::$app->tags->getAllTagGroups('handle');
-
-        foreach ($tagGroupDefinitions as $tagGroupHandle => $tagGroupDefinition) {
-            $tagGroup = array_key_exists($tagGroupHandle, $tagGroups)
-                ? $tagGroups[$tagGroupHandle]
-                : new TagGroupModel();
-
-            unset($tagGroups[$tagGroupHandle]);
-
-            $this->populateTagGroup($tagGroup, $tagGroupDefinition, $tagGroupHandle);
-
-            if (!Craft::$app->tags->saveTagGroup($tagGroup)) { // Save taggroup via craft
-                $this->addErrors($tagGroup->getAllErrors());
-
-                continue;
-            }
-        }
-
-        if ($force) {
-            foreach ($tagGroups as $tagGroup) {
-                Craft::$app->tags->deleteTagGroupById($tagGroup->id);
-            }
-        }
-
-        return $this->getResultModel();
+        return Craft::$app->tags->saveTagGroup($record);
     }
 
     /**
-     * Populate taggroup.
+     * Delete a record
      *
-     * @param TagGroupModel $tagGroup
-     * @param array         $tagGroupDefinition
-     * @param string        $tagGroupHandle
+     * @param Model $record
+     * @return boolean
      */
-    private function populateTagGroup(TagGroupModel $tagGroup, array $tagGroupDefinition, $tagGroupHandle)
+    protected function deleteRecord(Model $record)
     {
-        $tagGroup->setAttributes([
-            'handle' => $tagGroupHandle,
-            'name' => $tagGroupDefinition['name'],
-        ]);
-
-        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($tagGroupDefinition['fieldLayout']);
-        $tagGroup->setFieldLayout($fieldLayout);
+        return Craft::$app->tags->deleteTagGroup($record);
     }
 }

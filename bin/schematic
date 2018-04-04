@@ -43,10 +43,10 @@ $app->init();
 
 // Install Craft if needed
 if (!$app->getIsInstalled()) {
-    Craft::info('Craft is not installed, installing', 'schematic');
+    Schematic::info('Craft is not installed, installing');
 
     if (!getenv('CRAFT_EMAIL') || !getenv('CRAFT_PASSWORD')) {
-        Craft::error('Please supply CRAFT_EMAIL and CRAFT_PASSWORD environment variables for install', 'schematic');
+        Schematic::error('Please supply CRAFT_EMAIL and CRAFT_PASSWORD environment variables for install');
     }
 
     $site = new Site([
@@ -65,17 +65,17 @@ if (!$app->getIsInstalled()) {
     ]);
 
     // Run the install migration
-    Craft::info('Installing Craft', 'schematic');
+    Schematic::info('Installing Craft');
     $migrator = Craft::$app->getMigrator();
     $result = $migrator->migrateUp($migration);
 
     if ($result === false) {
-        Craft::error('Failed to install Craft', 'schematic');
+        Schematic::error('Failed to install Craft');
         exit(1);
     }
-    Craft::info('Craft has been installed', 'schematic');
+    Schematic::info('Craft has been installed');
 } else {
-    Craft::info('Craft is installed, continueing', 'schematic');
+    Schematic::info('Craft is installed, continueing');
 }
 
 $exitCode = $app->run();
