@@ -116,7 +116,7 @@ abstract class Base extends BaseComponent implements MappingInterface
                 $record = $recordsByHandle[$handle];
             }
             Schematic::info('- Saving record '.$handle);
-            $definition['attributes'] = array_merge($definition['attributes'], $defaultAttributes);
+            $this->setRecordAttributes($record, $definition, $defaultAttributes);
             if (!$this->saveRecord($record, $definition)) {
                 $this->importError($record, $handle);
             }
@@ -145,6 +145,22 @@ abstract class Base extends BaseComponent implements MappingInterface
             foreach ($errors as $error) {
                 Schematic::error('   - '.$error);
             }
+        }
+    }
+
+    /**
+     * Set record attributes from definition
+     *
+     * @param Model $record
+     * @param array $definition
+     */
+    private function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
+    {
+        $attributes = array_merge($definition['attributes'], $defaultAttributes);
+        $record->setAttributes($attributes);
+
+        if (array_key_exists('fieldLayout', $definition)) {
+            $record->setFieldLayout($this->getFieldLayout($definition['fieldLayout']));
         }
     }
 

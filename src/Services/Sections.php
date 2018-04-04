@@ -81,9 +81,6 @@ class Sections extends Base
         }
 
         if ($record instanceof EntryType) {
-            if ($definition['fieldLayout']) {
-                $record->setFieldLayout($this->getFieldLayout($definition['fieldLayout']));
-            }
             return Craft::$app->sections->saveEntryType($record);
         }
 
