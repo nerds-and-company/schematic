@@ -39,11 +39,7 @@ class UserGroups extends Base
     }
 
     /**
-     * Get group definition.
-     *
-     * @param UserGroupModel $group
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getRecordDefinition(Model $record)
     {

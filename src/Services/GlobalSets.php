@@ -32,6 +32,21 @@ class GlobalSets extends Base
     /**
      * {@inheritdoc}
      */
+    protected function getRecordDefinition(Model $record)
+    {
+        $definition = parent::getRecordDefinition($record);
+        if ($record instanceof GlobalSet) {
+            unset($definition['attributes']['tempId']);
+            unset($definition['attributes']['uid']);
+            unset($definition['attributes']['contentId']);
+        }
+
+        return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function saveRecord(Model $record, array $definition)
     {
         return Craft::$app->globals->saveSet($record);

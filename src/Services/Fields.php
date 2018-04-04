@@ -37,11 +37,7 @@ class Fields extends Base
     }
 
     /**
-     * Get section definition.
-     *
-     * @param Model $record
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getRecordDefinition(Model $record)
     {
