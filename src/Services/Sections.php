@@ -20,8 +20,6 @@ use craft\models\EntryType;
  */
 class Sections extends Base
 {
-    protected $recordClass = Section::class;
-
     /**
      * Get all section records
      *
@@ -45,29 +43,27 @@ class Sections extends Base
      */
     protected function getRecordDefinition(Model $record)
     {
-        $attributes = parent::getRecordDefinition($record);
+        $definition = parent::getRecordDefinition($record);
         if ($record instanceof Section) {
-            $attributes['entryTypes'] = $this->export($record->getEntryTypes());
+            $definition['entryTypes'] = $this->export($record->getEntryTypes());
         }
         if ($record instanceof EntryType) {
-            unset($attributes['sectionId']);
+            unset($definition['attributes']['sectionId']);
         }
 
-        return $attributes;
+        return $definition;
     }
-
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
 
     /**
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
         return Craft::$app->sections->saveSection($record);
     }
 

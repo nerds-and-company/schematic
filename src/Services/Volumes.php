@@ -22,13 +22,6 @@ use NerdsAndCompany\Schematic\Schematic;
 class Volumes extends Base
 {
     /**
-     * The record class
-     * @TODO: export to schema file
-     * @var string
-     */
-    protected $recordClass = Local::class;
-
-    /**
      * Get all asset transforms
      *
      * @return VolumeInterface[]
@@ -42,10 +35,12 @@ class Volumes extends Base
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
         return Craft::$app->volumes->saveVolume($record);
     }
 

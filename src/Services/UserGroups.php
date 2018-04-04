@@ -19,8 +19,6 @@ use craft\models\UserGroup;
  */
 class UserGroups extends Base
 {
-    protected $recordClass = UserGroup::class;
-
     /** @var string[] */
     private $mappedPermissions = [];
 
@@ -119,10 +117,12 @@ class UserGroups extends Base
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
         return Craft::$app->userGroups->saveGroup($record);
     }
 

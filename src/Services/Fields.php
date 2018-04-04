@@ -3,9 +3,10 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
+use craft\base\Field;
 use craft\base\Model;
 use craft\fields\PlainText;
-use craft\models\FieldLayout;
+use craft\models\FieldGroup;
 
 /**
  * Schematic Fields Service.
@@ -21,10 +22,9 @@ use craft\models\FieldLayout;
 class Fields extends Base
 {
     /**
-     * @TODO: export to schema file
-     * @var Field
+     * @var number[]
      */
-    protected $recordClass = PlainText::class;
+    private $groups;
 
     /**
      * Get all field groups
@@ -45,25 +45,28 @@ class Fields extends Base
      */
     protected function getRecordDefinition(Model $record)
     {
-        $attributes = parent::getRecordDefinition($record);
+        $definition = parent::getRecordDefinition($record);
         if ($record instanceof Field) {
-            $attributes = $record->group->name;
-            unset($attributes['groupId']);
-            unset($attributes['layoutId']);
-            unset($attributes['tabId']);
+            $definition['group'] = $record->group->name;
+            unset($definition['attributes']['groupId']);
+            unset($definition['attributes']['layoutId']);
+            unset($definition['attributes']['tabId']);
         }
 
-        return $attributes;
+        return $definition;
     }
 
     /**
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
+        $record->groupId = $this->getGroupIdByName($definition['group']);
         return Craft::$app->fields->saveField($record);
     }
 
@@ -76,5 +79,29 @@ class Fields extends Base
     protected function deleteRecord(Model $record)
     {
         return Craft::$app->fields->deleteField($record);
+    }
+
+    /**
+     * Get group id by name
+     * @param  string $name
+     * @return
+     */
+    private function getGroupIdByName($name)
+    {
+        if (!isset($this->groups)) {
+            $this->groups = [];
+            foreach (Craft::$app->fields->getAllGroups() as $group) {
+                $this->groups[$group->name] = $group->id;
+            }
+        }
+        if (!array_key_exists($name, $this->groups)) {
+            $group = new FieldGroup(['name' => $name]);
+            if (Craft::$app->fields->saveGroup($group)) {
+                $this->groups[$name] = $group->id;
+            } else {
+                $this->importError($group, $name);
+            }
+        }
+        return $this->groups[$name];
     }
 }

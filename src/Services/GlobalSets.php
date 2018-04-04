@@ -19,8 +19,6 @@ use craft\base\Model;
  */
 class GlobalSets extends Base
 {
-    protected $recordClass = GlobalSet::class;
-
     /**
      * Get all asset transforms
      *
@@ -35,10 +33,12 @@ class GlobalSets extends Base
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
         return Craft::$app->globals->saveSet($record);
     }
 

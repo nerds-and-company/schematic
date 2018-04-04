@@ -19,8 +19,6 @@ use craft\models\CategoryGroup;
  */
 class CategoryGroups extends Base
 {
-    protected $recordClass = CategoryGroup::class;
-
     /**
      * Get all category groups
      *
@@ -35,10 +33,12 @@ class CategoryGroups extends Base
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    protected function saveRecord(Model $record)
+    protected function saveRecord(Model $record, array $definition)
     {
+        $record->setAttributes($definition['attributes']);
         return Craft::$app->categories->saveGroup($record);
     }
 

@@ -24,16 +24,6 @@ use LogicException;
 abstract class Base extends BaseComponent implements MappingInterface
 {
     /**
-     * Check required properties
-     */
-    public function __construct()
-    {
-        if (!isset($this->recordClass)) {
-            throw new LogicException(get_class($this) . ' must have a $recordClass');
-        }
-    }
-
-    /**
      * Load fieldlayout and sources behaviors
      *
      * @return array
@@ -80,25 +70,28 @@ abstract class Base extends BaseComponent implements MappingInterface
      */
     protected function getRecordDefinition(Model $record)
     {
-        $attributes = $record->attributes;
-        unset($attributes['id']);
-        unset($attributes['dateCreated']);
-        unset($attributes['dateUpdated']);
+        $definition = [
+          'class' => get_class($record),
+          'attributes' => $record->attributes,
+        ];
+        unset($definition['attributes']['id']);
+        unset($definition['attributes']['dateCreated']);
+        unset($definition['attributes']['dateUpdated']);
 
-        if (isset($attributes['sources'])) {
-            $attributes['sources'] = $this->getSources(get_class($record), $attributes['sources'], 'id', 'handle');
+        if (isset($definition['attributes']['sources'])) {
+            $definition['sources'] = $this->getSources($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
         }
 
-        if (isset($attributes['source'])) {
-            $attributes['source'] = $this->getSource(get_class($record), $attributes['sources'], 'id', 'handle');
+        if (isset($definition['attributes']['source'])) {
+            $definition['source'] = $this->getSource($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
         }
 
-        if (isset($attributes['fieldLayoutId'])) {
-            $attributes['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
-            unset($attributes['fieldLayoutId']);
+        if (isset($definition['attributes']['fieldLayoutId'])) {
+            $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
+            unset($definition['attributes']['fieldLayoutId']);
         }
 
-        return $attributes;
+        return $definition;
     }
 
     //==============================================================================================================
@@ -119,19 +112,13 @@ abstract class Base extends BaseComponent implements MappingInterface
         }
 
         foreach ($definitions as $handle => $definition) {
-            $record = new $this->recordClass();
+            $record = new $definition['class']();
             if (array_key_exists($handle, $recordsByHandle)) {
                 $record = $recordsByHandle[$handle];
             }
-            $record->setAttributes($definition);
             Schematic::info('Importing record '.$handle);
-            if (!$this->saveRecord($record)) {
-                Schematic::warning('Error importing record '.$handle);
-                foreach ($record->getErrors() as $errors) {
-                    foreach ($errors as $error) {
-                        Schematic::error($error);
-                    }
-                }
+            if (!$this->saveRecord($record, $definition)) {
+                $this->importError($record, $handle);
             }
             unset($recordsByHandle[$handle]);
         }
@@ -146,12 +133,29 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
+     * Log an import error
+     *
+     * @param  Model $record
+     * @param  string $handle
+     */
+    protected function importError($record, $handle)
+    {
+        Schematic::warning('Error importing record '.$handle);
+        foreach ($record->getErrors() as $errors) {
+            foreach ($errors as $error) {
+                Schematic::error($error);
+            }
+        }
+    }
+
+    /**
      * Save a record
      *
      * @param Model $record
+     * @param array $definition
      * @return boolean
      */
-    abstract protected function saveRecord(Model $record);
+    abstract protected function saveRecord(Model $record, array $definition);
 
     /**
      * Delete a record
