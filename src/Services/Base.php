@@ -146,7 +146,7 @@ abstract class Base extends BaseComponent implements MappingInterface
      */
     protected function importError($record, $handle)
     {
-        Schematic::warning('- Error importing record '.$handle);
+        Schematic::warning('- Error importing '.get_class($record).' '.$handle);
         foreach ($record->getErrors() as $errors) {
             foreach ($errors as $error) {
                 Schematic::error('   - '.$error);

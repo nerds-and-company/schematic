@@ -32,9 +32,22 @@ class AssetTransforms extends Base
     /**
      * {@inheritdoc}
      */
+    protected function getRecordDefinition(Model $record)
+    {
+        $definition = parent::getRecordDefinition($record);
+        if ($record instanceof AssetTransform) {
+            unset($definition['attributes']['dimensionChangeTime']);
+        }
+
+        return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function saveRecord(Model $record, array $definition)
     {
-        $record->setAttributes($definition['attributes']);
+        return Craft::$app->assetTransforms->saveTransform($record);
     }
 
     /**
