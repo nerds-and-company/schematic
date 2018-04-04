@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use craft\base\Model;
+use craft\helpers\ArrayHelper;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
@@ -102,31 +103,30 @@ abstract class Base extends BaseComponent implements MappingInterface
      * Import asset volumes.
      *
      * @param array $definitions
-     * @param bool  $force
+     * @param Model $records The existing records
+     * @param array $defaultAttributes Default attributes to use for each record
      */
-    public function import(array $definitions, $force = false)
+    public function import(array $definitions, array $records = [], array $defaultAttributes = [])
     {
-        $recordsByHandle = [];
-        foreach ($this->getRecords() as $record) {
-            $recordsByHandle[$record->handle] = $record;
-        }
-
+        $records = $records ?: $this->getRecords();
+        $recordsByHandle = ArrayHelper::index($records, 'handle');
         foreach ($definitions as $handle => $definition) {
             $record = new $definition['class']();
             if (array_key_exists($handle, $recordsByHandle)) {
                 $record = $recordsByHandle[$handle];
             }
-            Schematic::info('Importing record '.$handle);
+            Schematic::info('- Saving record '.$handle);
+            $definition['attributes'] = array_merge($definition['attributes'], $defaultAttributes);
             if (!$this->saveRecord($record, $definition)) {
                 $this->importError($record, $handle);
             }
             unset($recordsByHandle[$handle]);
         }
 
-        if ($force) {
+        if (Schematic::$force) {
             // Delete volumes not in definitions
             foreach ($recordsByHandle as $handle => $record) {
-                Schematic::info('Deleting record '.$handle);
+                Schematic::info('- Deleting record '.$handle);
                 $this->deleteRecord($record);
             }
         }
@@ -140,10 +140,10 @@ abstract class Base extends BaseComponent implements MappingInterface
      */
     protected function importError($record, $handle)
     {
-        Schematic::warning('Error importing record '.$handle);
+        Schematic::warning('- Error importing record '.$handle);
         foreach ($record->getErrors() as $errors) {
             foreach ($errors as $error) {
-                Schematic::error($error);
+                Schematic::error('   - '.$error);
             }
         }
     }

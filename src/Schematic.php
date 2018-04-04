@@ -32,6 +32,12 @@ class Schematic
     ];
 
     /**
+     * Is force enabled?
+     * @var boolean
+     */
+    public static $force = false;
+
+    /**
      * Logs an error message
      *
      * @param  string|array $message the message to be logged. This can be a simple string or a more

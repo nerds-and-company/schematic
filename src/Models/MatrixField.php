@@ -90,7 +90,7 @@ class MatrixField extends Field
      * @param FieldGroupModel|null $group
      * @param bool                 $force
      */
-    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null, $force = false)
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
     {
         parent::populate($fieldDefinition, $field, $fieldHandle, $group);
 
@@ -110,7 +110,7 @@ class MatrixField extends Field
      *
      * @return mixed
      */
-    protected function getBlockTypes(array $fieldDefinition, FieldModel $field, $force = false)
+    protected function getBlockTypes(array $fieldDefinition, FieldModel $field)
     {
         $blockTypes = $this->getMatrixService()->getBlockTypesByFieldId($field->id, 'handle');
 

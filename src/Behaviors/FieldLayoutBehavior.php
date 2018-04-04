@@ -3,6 +3,7 @@ namespace NerdsAndCompany\Schematic\Behaviors;
 
 use Craft;
 use yii\base\Behavior;
+use craft\base\Field;
 use craft\models\FieldLayout;
 use craft\elements\Entry;
 
@@ -44,7 +45,7 @@ class FieldLayoutBehavior extends Behavior
     /**
      * Get field layout fields definition.
      *
-     * @param FieldLayoutFieldModel[] $fields
+     * @param Field[] $fields
      *
      * @return array
      */
@@ -103,7 +104,7 @@ class FieldLayoutBehavior extends Behavior
 
         foreach ($fieldLayoutDef as $fieldHandle => $required) {
             $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
-            if ($field instanceof FieldModel) {
+            if ($field instanceof Field) {
                 $layoutFields[] = $field->id;
 
                 if ($required) {

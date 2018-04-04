@@ -76,7 +76,8 @@ class ImportCommand extends Base
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
                 Schematic::info('Importing '.$dataType);
-                Craft::$app->$component->import($dataModel->$dataType, $this->force);
+                Schematic::$force = $this->force;
+                Craft::$app->$component->import($dataModel->$dataType);
             } else {
                 Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
             }

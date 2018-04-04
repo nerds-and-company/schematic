@@ -54,7 +54,7 @@ class AssetsField extends Field
      * @param FieldGroupModel|null $group
      * @param bool                 $force
      */
-    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null, $force = false)
+    public function populate(array $fieldDefinition, FieldModel $field, $fieldHandle, FieldGroupModel $group = null)
     {
         parent::populate($fieldDefinition, $field, $fieldHandle, $group, $force);
 

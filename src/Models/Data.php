@@ -84,19 +84,19 @@ class Data extends Model
     {
         $matches = null;
         preg_match_all('/%\w+%/', $yaml, $matches);
-        $original_values = $matches[0];
-        $replace_values = [];
-        foreach ($original_values as $match) {
-            $env_variable = strtoupper(substr($match, 1, -1));
-            $env_variable = 'SCHEMATIC_'.$env_variable;
-            $env_value = getenv($env_variable);
-            if (!$env_value) {
-                throw new Exception("Schematic environment variable not set: {$env_variable}");
+        $originalValues = $matches[0];
+        $replaceValues = [];
+        foreach ($originalValues as $match) {
+            $envVariable = strtoupper(substr($match, 1, -1));
+            $envVariable = 'SCHEMATIC_'.$envVariable;
+            $envValue = getenv($envVariable);
+            if (!$envValue) {
+                throw new Exception("Schematic environment variable not set: {$envVariable}");
             }
-            $replace_values[] = $env_value;
+            $replaceValues[] = $envValue;
         }
 
-        return str_replace($original_values, $replace_values, $yaml);
+        return str_replace($originalValues, $replaceValues, $yaml);
     }
 
     /**

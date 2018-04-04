@@ -61,11 +61,10 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
 
     /**
      * @param array $settingDefinitions
-     * @param bool  $force
      *
      * @return Result
      */
-    public function import(array $settingDefinitions, $force = false)
+    public function import(array $settingDefinitions)
     {
         Schematic::warning('Element index import is not yet implemented');
 

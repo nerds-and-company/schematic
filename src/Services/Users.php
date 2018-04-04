@@ -61,9 +61,8 @@ class Users extends BaseComponent implements MappingInterface
      * Attempt to import user settings.
      *
      * @param array $userSettings
-     * @param bool  $force         If set to true user settings not included in the import will be deleted
      */
-    public function import(array $userSettings, $force = true)
+    public function import(array $userSettings)
     {
         // always delete existing fieldlayout first
         Craft::$app->fields->deleteLayoutsByType(User::class);

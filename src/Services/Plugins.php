@@ -64,11 +64,10 @@ class Plugins extends BaseComponent implements MappingInterface
 
     /**
      * @param array $pluginDefinitions
-     * @param bool  $force
      *
      * @return Result
      */
-    public function import(array $pluginDefinitions, $force = false)
+    public function import(array $pluginDefinitions)
     {
         Schematic::warning('Import of plugins is not yet implemented');
         //TODO rebuild plugins import
