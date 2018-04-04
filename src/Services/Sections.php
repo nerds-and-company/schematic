@@ -59,15 +59,10 @@ class Sections extends Base
     }
 
     /**
-     * Save a record
-     *
-     * @param Model $record
-     * @param array $definition
-     * @return boolean
+     * {@inheritdoc}
      */
     protected function saveRecord(Model $record, array $definition)
     {
-        $record->setAttributes($definition['attributes']);
         if ($record instanceof Section) {
             $siteSettings = [];
             foreach ($definition['siteSettings'] as $siteSettingDefinition) {

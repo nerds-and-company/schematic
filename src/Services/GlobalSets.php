@@ -30,23 +30,15 @@ class GlobalSets extends Base
     }
 
     /**
-     * Save a record
-     *
-     * @param Model $record
-     * @param array $definition
-     * @return boolean
+     * {@inheritdoc}
      */
     protected function saveRecord(Model $record, array $definition)
     {
-        $record->setAttributes($definition['attributes']);
         return Craft::$app->globals->saveSet($record);
     }
 
     /**
-     * Delete a record
-     *
-     * @param Model $record
-     * @return boolean
+     * {@inheritdoc}
      */
     protected function deleteRecord(Model $record)
     {

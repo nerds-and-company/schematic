@@ -57,24 +57,16 @@ class Fields extends Base
     }
 
     /**
-     * Save a record
-     *
-     * @param Model $record
-     * @param array $definition
-     * @return boolean
+     * {@inheritdoc}
      */
     protected function saveRecord(Model $record, array $definition)
     {
-        $record->setAttributes($definition['attributes']);
         $record->groupId = $this->getGroupIdByName($definition['group']);
         return Craft::$app->fields->saveField($record);
     }
 
     /**
-     * Delete a record
-     *
-     * @param Model $record
-     * @return boolean
+     * {@inheritdoc}
      */
     protected function deleteRecord(Model $record)
     {
