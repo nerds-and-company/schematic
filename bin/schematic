@@ -47,6 +47,7 @@ if (!$app->getIsInstalled()) {
 
     if (!getenv('CRAFT_EMAIL') || !getenv('CRAFT_PASSWORD')) {
         Schematic::error('Please supply CRAFT_EMAIL and CRAFT_PASSWORD environment variables for install');
+        exit(1);
     }
 
     $site = new Site([
