@@ -114,7 +114,13 @@ abstract class Base extends BaseComponent implements MappingInterface
             $record = new $definition['class']();
             if (array_key_exists($handle, $recordsByHandle)) {
                 $record = $recordsByHandle[$handle];
+                if ($this->getRecordDefinition($record) === $definition) {
+                    Schematic::info('- Skipping '.get_class($record).' '.$handle);
+                    unset($recordsByHandle[$handle]);
+                    continue;
+                }
             }
+
             Schematic::info('- Saving '.get_class($record).' '.$handle);
             $this->setRecordAttributes($record, $definition, $defaultAttributes);
             if (!$this->saveRecord($record, $definition)) {
