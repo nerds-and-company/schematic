@@ -45,7 +45,7 @@ class Users extends BaseComponent implements MappingInterface
      */
     public function export()
     {
-        $settings = Craft::$app->getSystemSettings()->getSettings('users');
+        $settings = Craft::$app->systemSettings->getSettings('users');
         $fieldLayout = Craft::$app->getFields()->getLayoutByType(User::class);
         return [
             'settings' => $settings,
@@ -53,31 +53,29 @@ class Users extends BaseComponent implements MappingInterface
         ];
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
     /**
-     * Attempt to import user settings.
+     * Import user settings.
      *
      * @param array $userSettings
      */
     public function import(array $userSettings)
     {
-        // always delete existing fieldlayout first
-        Craft::$app->fields->deleteLayoutsByType(User::class);
-
-        if (isset($userSettings['fieldLayout'])) {
-            $fieldLayoutDefinition = (array) $userSettings['fieldLayout'];
-        } else {
-            $fieldLayoutDefinition = [];
+        if (array_key_exists('settings', $userSettings)) {
+            Schematic::info('- Saving user settings');
+            if (!Craft::$app->systemSettings->saveSettings('users', $userSettings['settings'])) {
+                Schematic::warning('- Couldn’t save user settings.');
+            }
         }
 
-        $fieldLayout = Craft::$app->schematic_fields->getFieldLayout($fieldLayoutDefinition);
-        $fieldLayout->type = User::class;
+        if (array_key_exists('fieldLayout', $userSettings)) {
+            Schematic::info('- Saving user field layout');
+            $fieldLayout = $this->getFieldLayout($userSettings['fieldLayout']);
+            $fieldLayout->type = User::class;
 
-        if (!Craft::$app->fields->saveLayout($fieldLayout)) {  // Save fieldlayout via craft
-            $this->addErrors($fieldLayout->getAllErrors());
+            Craft::$app->fields->deleteLayoutsByType(User::class);
+            if (!Craft::$app->fields->saveLayout($fieldLayout)) {
+                Schematic::warning('- Couldn’t save user field layout.');
+            }
         }
     }
 }
