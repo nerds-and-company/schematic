@@ -60,11 +60,13 @@ class Sections extends Base
     protected function saveRecord(Model $record, array $definition)
     {
         if ($record instanceof Section) {
-            $siteSettings = [];
-            foreach ($definition['siteSettings'] as $siteSettingDefinition) {
-                $siteSettings[] = new Section_SiteSettings($siteSettingDefinition);
+            if (array_key_exists('siteSettings', $definition)) {
+                $siteSettings = [];
+                foreach ($definition['siteSettings'] as $siteSettingDefinition) {
+                    $siteSettings[] = new Section_SiteSettings($siteSettingDefinition);
+                }
+                $record->setSiteSettings($siteSettings);
             }
-            $record->setSiteSettings($siteSettings);
             if (Craft::$app->sections->saveSection($record)) {
                 parent::import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
                 return true;

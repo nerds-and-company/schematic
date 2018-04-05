@@ -50,7 +50,7 @@ class ExportCommand extends Base
     public function exportToYaml($file, $dataTypes)
     {
         $result = [];
-        foreach (array_keys($dataTypes) as $dataType) {
+        foreach ($dataTypes as $dataType) {
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
                 Schematic::info('Exporting '.$dataType);

@@ -114,6 +114,7 @@ class UserGroups extends Base
      */
     protected function saveRecord(Model $record, array $definition)
     {
+        Schematic::warning('Importing usergroup permissions is not yet implemented');
         return Craft::$app->userGroups->saveGroup($record);
     }
 

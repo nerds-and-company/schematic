@@ -72,7 +72,7 @@ class ImportCommand extends Base
         }
         $dataModel = Data::fromYaml($yaml, $yamlOverride);
 
-        foreach (array_keys($dataTypes) as $dataType) {
+        foreach ($dataTypes as $dataType) {
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
                 Schematic::info('Importing '.$dataType);

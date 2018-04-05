@@ -39,6 +39,16 @@ class Fields extends Base
     /**
      * {@inheritdoc}
      */
+    public function import(array $definitions, array $records = [], array $defaultAttributes = [])
+    {
+        parent::import($definitions, $records, $defaultAttributes);
+        // Update field version so that contentbehavior is regenetated
+        Craft::$app->fields->updateFieldVersion();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
@@ -71,6 +81,7 @@ class Fields extends Base
 
     /**
      * Get group id by name
+     *
      * @param  string $name
      * @return
      */
