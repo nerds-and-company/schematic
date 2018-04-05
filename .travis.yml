@@ -3,12 +3,6 @@ language: php
 
 # list any PHP version you want to test against
 php:
-  # using major version aliases
-
-  # aliased to a recent 5.5.x version
-  - 5.5
-  # aliased to a recent 5.6.x version
-  - 5.6
   # aliased to a recent 7.x version
   - 7.0
   # aliased to a recent hhvm version
@@ -17,25 +11,16 @@ php:
 # optionally set up exclutions and allowed failures in the matrix
 matrix:
   allow_failures:
-    - php: 7.0
     - php: hhvm
 
  # execute any number of scripts before the test run, custom env's are available as variables
 install:
-  - curl -sS https://download.craftcdn.com/craft/2.6/2.6.2950/Craft-2.6.2950.zip > craft.zip
-  - unzip craft.zip
-  - rm craft.zip
-  - echo "<?php return ['user' => 'test'];" > craft/config/db.php
   - composer install
-  - cd craft/app
-  - echo "{}" > composer.json
-  - composer require mockery/mockery
-  - cd ../..
 
 # execute tests
-script: phpunit --bootstrap tests/bootstrap.php --configuration phpunit.xml.dist --coverage-clover coverage.clover tests
+script: php vendor/bin/codecept run --coverage
 
 # upload coverage to scrutinizer
 after_script:
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
