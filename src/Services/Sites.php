@@ -63,7 +63,7 @@ class Sites extends Base
      */
     protected function deleteRecord(Model $record)
     {
-        return Craft::$app->sites->deleteSite($record);
+        return Craft::$app->sites->deleteSiteById($record->id);
     }
 
     /**
