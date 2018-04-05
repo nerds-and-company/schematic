@@ -22,7 +22,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class Volumes extends Base
 {
     /**
-     * Get all asset transforms
+     * Get all volumes
      *
      * @return VolumeInterface[]
      */

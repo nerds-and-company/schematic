@@ -36,13 +36,10 @@ class CategoryGroups extends Base
     protected function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof CategoryGroup) {
-            $definition['siteSettings'] = [];
-            foreach ($record->getSiteSettings() as $siteSetting) {
-                $attributes = $siteSetting->attributes;
-                unset($attributes['id']);
-                $definition['siteSettings'][] = $attributes;
-            }
+
+        if ($record instanceof CategoryGroup_SiteSettings) {
+            unset($definition['attributes']['groupId']);
+            unset($definition['attributes']['siteId']);
         }
 
         return $definition;
@@ -53,14 +50,6 @@ class CategoryGroups extends Base
      */
     protected function saveRecord(Model $record, array $definition)
     {
-        if (array_key_exists('siteSettings', $definition)) {
-            $siteSettings = [];
-            foreach ($definition['siteSettings'] as $siteSettingDefinition) {
-                $siteSettings[] = new CategoryGroup_SiteSettings($siteSettingDefinition);
-            }
-            $record->setSiteSettings($siteSettings);
-        }
-
         return Craft::$app->categories->saveGroup($record);
     }
 

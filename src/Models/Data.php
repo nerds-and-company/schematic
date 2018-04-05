@@ -33,6 +33,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Data extends Model
 {
+    public $sites;
     public $volumes;
     public $assetTransforms;
     public $fields;

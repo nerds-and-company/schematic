@@ -37,18 +37,18 @@ class Sections extends Base
     protected function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
+
         if ($record instanceof Section) {
             $definition['entryTypes'] = $this->export($record->getEntryTypes());
-            $definition['siteSettings'] = [];
-            foreach ($record->getSiteSettings() as $siteSetting) {
-                $attributes = $siteSetting->attributes;
-                unset($attributes['sectionId']);
-                unset($attributes['id']);
-                $definition['siteSettings'][] = $attributes;
-            }
         }
+
         if ($record instanceof EntryType) {
             unset($definition['attributes']['sectionId']);
+        }
+
+        if ($record instanceof Section_SiteSettings) {
+            unset($definition['attributes']['sectionId']);
+            unset($definition['attributes']['siteId']);
         }
 
         return $definition;
@@ -60,13 +60,6 @@ class Sections extends Base
     protected function saveRecord(Model $record, array $definition)
     {
         if ($record instanceof Section) {
-            if (array_key_exists('siteSettings', $definition)) {
-                $siteSettings = [];
-                foreach ($definition['siteSettings'] as $siteSettingDefinition) {
-                    $siteSettings[] = new Section_SiteSettings($siteSettingDefinition);
-                }
-                $record->setSiteSettings($siteSettings);
-            }
             if (Craft::$app->sections->saveSection($record)) {
                 parent::import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
                 return true;

@@ -18,6 +18,7 @@ use Craft;
 class Schematic
 {
     const DATA_TYPES = [
+        'sites' => Services\Sites::class,
         'volumes' => Services\Volumes::class,
         'assetTransforms' => Services\assetTransforms::class,
         'fields' => Services\Fields::class,

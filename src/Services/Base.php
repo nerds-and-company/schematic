@@ -79,6 +79,7 @@ abstract class Base extends BaseComponent implements MappingInterface
         unset($definition['attributes']['dateCreated']);
         unset($definition['attributes']['dateUpdated']);
 
+        // Define sources
         if (isset($definition['attributes']['sources'])) {
             $definition['sources'] = $this->getSources($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
         }
@@ -87,9 +88,18 @@ abstract class Base extends BaseComponent implements MappingInterface
             $definition['source'] = $this->getSource($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
         }
 
+        // Define field layout
         if (isset($definition['attributes']['fieldLayoutId'])) {
             $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
             unset($definition['attributes']['fieldLayoutId']);
+        }
+
+        // Define site settings
+        if (isset($record->siteSettings)) {
+            $definition['siteSettings'] = [];
+            foreach ($record->getSiteSettings() as $siteSetting) {
+                $definition['siteSettings'][$siteSetting->site->handle] = $this->getRecordDefinition($siteSetting);
+            }
         }
 
         return $definition;
@@ -165,8 +175,25 @@ abstract class Base extends BaseComponent implements MappingInterface
         $attributes = array_merge($definition['attributes'], $defaultAttributes);
         $record->setAttributes($attributes);
 
+        // Set field layout
         if (array_key_exists('fieldLayout', $definition)) {
             $record->setFieldLayout($this->getFieldLayout($definition['fieldLayout']));
+        }
+
+        // Set site settings
+        if (array_key_exists('siteSettings', $definition)) {
+            $siteSettings = [];
+            foreach ($definition['siteSettings'] as $handle => $siteSettingDefinition) {
+                $siteSetting = new $siteSettingDefinition['class']($siteSettingDefinition['attributes']);
+                $site = Craft::$app->sites->getSiteByHandle($handle);
+                if ($site) {
+                    $siteSetting->siteId = $site->id;
+                    $siteSettings[] = $siteSetting;
+                } else {
+                    Schematic::warning('  - Site '.$handle.' could not be found');
+                }
+            }
+            $record->setSiteSettings($siteSettings);
         }
     }
 
