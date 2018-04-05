@@ -42,9 +42,14 @@ class Users extends BaseComponent implements MappingInterface
     public function export()
     {
         $settings = Craft::$app->systemSettings->getSettings('users');
+        $photoVolumeId = (int)$settings['photoVolumeId'];
+        $volume = Craft::$app->volumes->getVolumeById($photoVolumeId);
+        unset($settings['photoVolumeId']);
+
         $fieldLayout = Craft::$app->getFields()->getLayoutByType(User::class);
         return [
             'settings' => $settings,
+            'photoVolume' => $volume ? $volume->handle : null,
             'fieldLayout' => $this->getFieldLayoutDefinition($fieldLayout),
         ];
     }
@@ -56,8 +61,14 @@ class Users extends BaseComponent implements MappingInterface
      */
     public function import(array $userSettings)
     {
+        $photoVolumeId = null;
+        if (array_key_exists('photoVolume', $userSettings) && $userSettings['photoVolume'] != null) {
+            $volume = Craft::$app->volumes->getVolumeByHandle($userSettings['photoVolume']);
+            $photoVolumeId = $volume ? $volume->id : null;
+        }
         if (array_key_exists('settings', $userSettings)) {
             Schematic::info('- Saving user settings');
+            $userSettings['photoVolumeId'] = $photoVolumeId;
             if (!Craft::$app->systemSettings->saveSettings('users', $userSettings['settings'])) {
                 Schematic::warning('- Couldn’t save user settings.');
             }
