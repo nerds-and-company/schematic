@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use Craft\Exception;
 use craft\base\Plugin;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;

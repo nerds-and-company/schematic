@@ -1,5 +1,5 @@
-assetSources:
+volumes:
   uploads:
-    settings:
+    attributes:
       keyId: override_key
       bucket: %s3_bucket%

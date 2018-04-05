@@ -4,8 +4,6 @@ namespace NerdsAndCompany\Schematic\Models;
 
 use Craft;
 use craft\base\Model;
-use Craft\AttributeType;
-use Craft\Exception;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -112,19 +110,5 @@ class Data extends Model
         $data = $data === null ? null : new static($data);
 
         return Yaml::dump($data->attributes, 12, 2);
-    }
-
-    /**
-     * @param string     $attribute
-     * @param bool|false $flattenValue
-     * @param array      $default
-     *
-     * @return array
-     */
-    public function getAttribute($attribute, $flattenValue = false, $default = [])
-    {
-        $attribute = parent::getAttribute($attribute, $flattenValue);
-
-        return !is_null($attribute) ? $attribute : $default;
     }
 }

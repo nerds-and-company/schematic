@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\ConsoleCommands;
 use Craft;
 use craft\helpers\FileHelper;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
 use Symfony\Component\Yaml\Yaml;
 
@@ -60,8 +61,7 @@ class ExportCommand extends Base
             }
         }
 
-        $yaml = Yaml::dump($result, 10);
-        FileHelper::writeToFile($file, $yaml);
+        FileHelper::writeToFile($file, Data::toYaml($result));
 
         return 0;
     }
