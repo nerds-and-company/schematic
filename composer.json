@@ -22,11 +22,7 @@
     "craftcms/cms": "^3.0.0-RC1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.5.0",
-    "codeception/codeception": "^2.4",
-    "codeception/mockery-module": "~0.2.2",
-    "codeception/specify": "~0.4.6",
-    "codeception/verify": "~0.3.3"
+    "codeception/codeception": "^2.4"
   },
   "bin": ["bin/schematic"],
   "autoload": {

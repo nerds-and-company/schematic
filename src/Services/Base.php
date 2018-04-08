@@ -9,7 +9,6 @@ use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Schematic;
-use LogicException;
 
 /**
  * Schematic Base Service.
@@ -25,7 +24,7 @@ use LogicException;
 abstract class Base extends BaseComponent implements MappingInterface
 {
     /**
-     * Load fieldlayout and sources behaviors
+     * Load fieldlayout and sources behaviors.
      *
      * @return array
      */
@@ -38,14 +37,14 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Get all records
+     * Get all records.
      *
      * @return Model[]
      */
     abstract protected function getRecords();
 
     /**
-     * Get all record definitions
+     * Get all record definitions.
      *
      * @return array
      */
@@ -56,13 +55,15 @@ abstract class Base extends BaseComponent implements MappingInterface
         foreach ($records as $record) {
             $result[$record->handle] = $this->getRecordDefinition($record);
         }
+
         return $result;
     }
 
     /**
-     * Get single record definition
+     * Get single record definition.
      *
-     * @param  Model $record
+     * @param Model $record
+     *
      * @return array
      */
     protected function getRecordDefinition(Model $record)
@@ -102,13 +103,13 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Import asset volumes.
+     * Import records.
      *
      * @param array $definitions
-     * @param Model $records The existing records
+     * @param Model $records           The existing records
      * @param array $defaultAttributes Default attributes to use for each record
      */
-    public function import(array $definitions, array $records = [], array $defaultAttributes = [])
+    public function import(array $definitions, array $records = null, array $defaultAttributes = [])
     {
         $records = $records ?: $this->getRecords();
         $recordsByHandle = ArrayHelper::index($records, 'handle');
@@ -132,7 +133,7 @@ abstract class Base extends BaseComponent implements MappingInterface
         }
 
         if (Schematic::$force) {
-            // Delete volumes not in definitions
+            // Delete records not in definitions
             foreach ($recordsByHandle as $handle => $record) {
                 Schematic::info('- Deleting '.get_class($record).' '.$handle);
                 $this->deleteRecord($record);
@@ -141,10 +142,10 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Log an import error
+     * Log an import error.
      *
-     * @param  Model $record
-     * @param  string $handle
+     * @param Model  $record
+     * @param string $handle
      */
     protected function importError($record, $handle)
     {
@@ -157,7 +158,7 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Set record attributes from definition
+     * Set record attributes from definition.
      *
      * @param Model $record
      * @param array $definition
@@ -190,19 +191,21 @@ abstract class Base extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Save a record
+     * Save a record.
      *
      * @param Model $record
      * @param array $definition
-     * @return boolean
+     *
+     * @return bool
      */
     abstract protected function saveRecord(Model $record, array $definition);
 
     /**
-     * Delete a record
+     * Delete a record.
      *
      * @param Model $record
-     * @return boolean
+     *
+     * @return bool
      */
     abstract protected function deleteRecord(Model $record);
 }
