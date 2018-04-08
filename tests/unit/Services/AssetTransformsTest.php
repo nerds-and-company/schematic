@@ -20,6 +20,9 @@ use craft\console\Application;
  */
 class AssetTransformsTest extends Unit
 {
+    /**
+     * @var AssetTransforms
+     */
     private $service;
 
     /**
@@ -61,7 +64,8 @@ class AssetTransformsTest extends Unit
      */
     public function testSuccessfulExport(array $assetTransforms, array $expectedResult = [])
     {
-        $actualResult = $this->service->export($assetTransforms);
+        $this->expectList($assetTransforms);
+        $actualResult = $this->service->export();
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -116,7 +120,7 @@ class AssetTransformsTest extends Unit
             ],
             'single asset transform' => [
                 'assetTransforms' => [
-                    $this->getMockAssetTransform(1),
+                    $this->getAssetTransform(1),
                 ],
                 'expectedResult' => [
                     'assetTransformHandle1' => $this->getAssetTransformDefinition(1),
@@ -124,8 +128,8 @@ class AssetTransformsTest extends Unit
             ],
             'multiple asset transforms' => [
                 'assetTransforms' => [
-                    $this->getMockAssetTransform(1),
-                    $this->getMockAssetTransform(2),
+                    $this->getAssetTransform(1),
+                    $this->getAssetTransform(2),
                 ],
                 'expectedResult' => [
                     'assetTransformHandle1' => $this->getAssetTransformDefinition(1),
@@ -144,18 +148,18 @@ class AssetTransformsTest extends Unit
             'emptyArray' => [
                 'assetTransformDefinitions' => [],
                 'existingTransforms' => [
-                    $this->getMockAssetTransform(1),
+                    $this->getAssetTransform(1),
                 ],
                 'saveCount' => 0,
                 'deleteCount' => 1,
             ],
-            'single group' => [
+            'single new group' => [
                 'assetTransformDefinitions' => [
                     'assetTransformHandle1' => $this->getAssetTransformDefinition(1),
                     'assetTransformHandle2' => $this->getAssetTransformDefinition(2),
                 ],
                 'existingTransforms' => [
-                    $this->getMockAssetTransform(1),
+                    $this->getAssetTransform(1),
                 ],
                 'saveCount' => 1,
                 'deleteCount' => 0,
@@ -170,9 +174,9 @@ class AssetTransformsTest extends Unit
     /**
      * @param int $assetTransformId
      *
-     * @return Mock|AssetTransform
+     * @return AssetTransform
      */
-    private function getMockAssetTransform(int $assetTransformId)
+    private function getAssetTransform(int $assetTransformId)
     {
         return new AssetTransform([
             'id' => $assetTransformId,
@@ -204,6 +208,11 @@ class AssetTransformsTest extends Unit
         ];
     }
 
+    /**
+     * Expect a list of AssetTransforms.
+     *
+     * @param AssetTransform[] $assetTransforms
+     */
     private function expectList(array $assetTransforms)
     {
         Craft::$app->assetTransforms
@@ -212,6 +221,11 @@ class AssetTransformsTest extends Unit
                    ->willReturn($assetTransforms);
     }
 
+    /**
+     * Expect a number of transform saves.
+     *
+     * @param int $saveCount
+     */
     private function expectSaves(int $saveCount)
     {
         Craft::$app->assetTransforms
@@ -220,6 +234,11 @@ class AssetTransformsTest extends Unit
                    ->willReturn(true);
     }
 
+    /**
+     * Expect a number of transform deletes.
+     *
+     * @param int $deleteCount
+     */
     private function expectDeletes(int $deleteCount)
     {
         Craft::$app->assetTransforms

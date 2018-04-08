@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Services;
 
+use Craft;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use yii\base\Component as BaseComponent;
@@ -73,6 +74,7 @@ abstract class Base extends BaseComponent implements MappingInterface
           'attributes' => $record->attributes,
         ];
         unset($definition['attributes']['id']);
+        unset($definition['attributes']['structureId']);
         unset($definition['attributes']['dateCreated']);
         unset($definition['attributes']['dateUpdated']);
 
