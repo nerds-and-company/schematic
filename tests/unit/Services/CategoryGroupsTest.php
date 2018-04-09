@@ -34,13 +34,9 @@ class CategoryGroupsTest extends Unit
      */
     protected function _before()
     {
-        $mockSite = $this->getMockBuilder(Site::class)
-                         ->disableOriginalConstructor()
-                         ->getMock();
-
         Craft::$app->sites->expects($this->any())
                   ->method('getSiteByHandle')
-                  ->willReturn($mockSite);
+                  ->willReturn($this->getMockSite());
 
         $this->service = new CategoryGroups();
     }
@@ -220,18 +216,38 @@ class CategoryGroupsTest extends Unit
                   ->method('getFieldLayout')
                   ->willReturn($mockFieldLayout);
 
-        $mocksiteSettings = $this->getMockBuilder(CategoryGroup_SiteSettings::class)->setMethods(['getSite'])->getMock();
-        $mockSite = $this->getMockBuilder(Site::class)->getMock();
-
-        $mocksiteSettings->expects($this->any())
-            ->method('getSite')
-            ->willReturn($mockSite);
+        $mockSiteSettings = $this->getMockSiteSettings();
 
         $mockGroup->expects($this->any())
                   ->method('getSiteSettings')
-                  ->willReturn([$mocksiteSettings]);
+                  ->willReturn([$mockSiteSettings]);
 
         return $mockGroup;
+    }
+
+    /**
+     * Get mock siteSettings.
+     *
+     * @param string $class
+     *
+     * @return Mock|CategoryGroup_SiteSettings
+     */
+    private function getMockSiteSettings()
+    {
+        $mockSiteSettings = $this->getMockBuilder(CategoryGroup_SiteSettings::class)
+                                 ->setMethods(['getSite'])
+                                 ->getMock();
+
+        $mockSiteSettings->expects($this->any())
+          ->method('getSite')
+          ->willReturn($this->getMockSite());
+
+        return $mockSiteSettings;
+    }
+
+    private function getMockSite()
+    {
+        return $this->getMockBuilder(Site::class)->getMock();
     }
 
     /**
