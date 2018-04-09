@@ -3,14 +3,11 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use craft\console\Application;
 use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
 use craft\models\FieldLayout;
 use craft\models\Site;
-use craft\services\Categories;
 use craft\services\Fields;
-use craft\services\Sites;
 use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -37,40 +34,13 @@ class CategoryGroupsTest extends Unit
      */
     protected function _before()
     {
-        $mockCategoryGroups = $this->getMockBuilder(Categories::class)
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
-
-        $mockFields = $this->getMockBuilder(Fields::class)
-                           ->disableOriginalConstructor()
-                           ->getMock();
-
         $mockSite = $this->getMockBuilder(Site::class)
                          ->disableOriginalConstructor()
                          ->getMock();
 
-        $mockSites = $this->getMockBuilder(Sites::class)
-                          ->disableOriginalConstructor()
-                          ->getMock();
-
-        $mockSites->expects($this->any())
+        Craft::$app->sites->expects($this->any())
                   ->method('getSiteByHandle')
                   ->willReturn($mockSite);
-
-        $mockApp = $this->getMockBuilder(Application::class)
-                        ->disableOriginalConstructor()
-                        ->getMock();
-
-        $mockApp->expects($this->any())
-            ->method('__get')
-            ->willReturnMap([
-                ['categories', $mockCategoryGroups],
-                ['fields', $mockFields],
-                ['sites', $mockSites],
-            ]);
-
-        Craft::$app = $mockApp;
-        Schematic::$force = false;
 
         $this->service = new CategoryGroups();
     }

@@ -5,7 +5,6 @@ namespace NerdsAndCompany\Schematic\Services;
 use Craft;
 use craft\base\Field;
 use craft\base\Model;
-use craft\fields\PlainText;
 use craft\models\FieldGroup;
 
 /**
@@ -27,7 +26,7 @@ class Fields extends Base
     private $groups;
 
     /**
-     * Get all field groups
+     * Get all field groups.
      *
      * @return FieldGroup[]
      */
@@ -42,7 +41,7 @@ class Fields extends Base
     public function import(array $definitions, array $records = [], array $defaultAttributes = [])
     {
         parent::import($definitions, $records, $defaultAttributes);
-        // Update field version so that contentbehavior is regenetated
+        // Update field version so that contentbehavior is regenerated
         Craft::$app->fields->updateFieldVersion();
     }
 
@@ -68,6 +67,7 @@ class Fields extends Base
     protected function saveRecord(Model $record, array $definition)
     {
         $record->groupId = $this->getGroupIdByName($definition['group']);
+
         return Craft::$app->fields->saveField($record);
     }
 
@@ -80,9 +80,10 @@ class Fields extends Base
     }
 
     /**
-     * Get group id by name
+     * Get group id by name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return
      */
     private function getGroupIdByName($name)
@@ -101,6 +102,7 @@ class Fields extends Base
                 $this->importError($group, $name);
             }
         }
+
         return $this->groups[$name];
     }
 }
