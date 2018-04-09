@@ -13,7 +13,6 @@ use craft\i18n\I18n;
 use Codeception\Module;
 use Codeception\TestCase;
 use NerdsAndCompany\Schematic\Schematic;
-use Mockery;
 
 class Unit extends Module
 {
@@ -65,15 +64,5 @@ class Unit extends Module
         return $test->getMockBuilder($class)
                 ->disableOriginalConstructor()
                 ->getMock();
-    }
-
-    /**
-     * Do cleanup.
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    public function _cleanup()
-    {
-        Mockery::close();
     }
 }

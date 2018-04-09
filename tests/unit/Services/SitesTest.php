@@ -31,6 +31,14 @@ class SitesTest extends Unit
      */
     protected function _before()
     {
+        Craft::$app->sites->expects($this->any())
+                          ->method('getAllGroups')
+                          ->willReturn([$this->getMockSiteGroup(1)]);
+
+        Craft::$app->sites->expects($this->any())
+                          ->method('saveGroup')
+                          ->willReturn(true);
+
         $this->service = new Sites();
     }
 
@@ -91,8 +99,8 @@ class SitesTest extends Unit
      */
     public function provideValidSites()
     {
-        $mockSite1 = $this->getMockSite(1);
-        $mockSite2 = $this->getMockSite(2);
+        $mockSite1 = $this->getMockSite(1, 1);
+        $mockSite2 = $this->getMockSite(2, 1);
 
         return [
             'emptyArray' => [
@@ -125,8 +133,8 @@ class SitesTest extends Unit
      */
     public function provideValidSiteDefinitions()
     {
-        $mockSite1 = $this->getMockSite(1);
-        $mockSite2 = $this->getMockSite(2);
+        $mockSite1 = $this->getMockSite(1, 1);
+        $mockSite2 = $this->getMockSite(2, 2);
 
         return [
             'emptyArray' => [
@@ -137,7 +145,7 @@ class SitesTest extends Unit
                 'saveCount' => 0,
                 'deleteCount' => 1,
             ],
-            'single site' => [
+            'single new site' => [
                 'siteDefinitions' => [
                     'siteHandle1' => $this->getMockSiteDefinition($mockSite1),
                     'siteHandle2' => $this->getMockSiteDefinition($mockSite2),
@@ -175,16 +183,16 @@ class SitesTest extends Unit
                 'baseUrl' => '@web/',
                 'sortOrder' => 1,
             ],
-            'group' => null,
+            'group' => $mockSite->group->name,
         ];
     }
 
     /**
-     * @param string $siteId
+     * @param int $siteId
      *
      * @return Mock|Site
      */
-    private function getMockSite($siteId)
+    private function getMockSite(int $siteId, int $groupId)
     {
         $mockSite = $this->getMockBuilder(Site::class)
                                     ->setMethods(['getGroup'])
@@ -202,18 +210,30 @@ class SitesTest extends Unit
         $mockSite->baseUrl = '@web/';
         $mockSite->sortOrder = 1;
 
-        // $mockGroup = $this->getMockBuilder(SiteGroup::class)
-        //                   ->setConstructorArgs([
-        //                       'id' => 1,
-        //                       'handle' => 'defaultGroup',
-        //                   ])
-        //                   ->getmock();
-        //
-        // $mockSite->expects($this->any())
-        //          ->method('getGroup')
-        //          ->willReturn($mockGroup);
+        $mockSite->expects($this->any())
+                 ->method('getGroup')
+                 ->willReturn($this->getMockSiteGroup($groupId));
 
         return $mockSite;
+    }
+
+    /**
+     * Get a mock site group.
+     *
+     * @param int $groupId
+     *
+     * @return Mock|SiteGroup
+     */
+    private function getMockSiteGroup(int $groupId)
+    {
+        $mockGroup = $this->getMockBuilder(SiteGroup::class)
+                        ->disableOriginalConstructor()
+                        ->getmock();
+
+        $mockGroup->id = $groupId;
+        $mockGroup->name = 'siteGroup'.$groupId;
+
+        return $mockGroup;
     }
 
     /**

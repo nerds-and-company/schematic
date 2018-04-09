@@ -144,7 +144,7 @@ class CategoryGroupsTest extends Unit
                 'saveCount' => 0,
                 'deleteCount' => 1,
             ],
-            'single group' => [
+            'single new group' => [
                 'groupDefinitions' => [
                     'groupHandle1' => $this->getMockCategoryGroupDefinition($mockCategoryGroup1),
                     'groupHandle2' => $this->getMockCategoryGroupDefinition($mockCategoryGroup2),
@@ -193,11 +193,11 @@ class CategoryGroupsTest extends Unit
     }
 
     /**
-     * @param string $groupId
+     * @param int $groupId
      *
      * @return Mock|CategoryGroup
      */
-    private function getMockCategoryGroup($groupId)
+    private function getMockCategoryGroup(int $groupId)
     {
         $mockGroup = $this->getMockBuilder(CategoryGroup::class)
                                     ->setMethods(['getFieldLayout', 'getSiteSettings'])

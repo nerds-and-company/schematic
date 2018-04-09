@@ -89,7 +89,7 @@ class Sites extends Base
             if (Craft::$app->sites->saveGroup($group)) {
                 $this->groups[$name] = $group->id;
             } else {
-                $this->importError($group, $name);
+                return $this->importError($group, $name);
             }
         }
 
