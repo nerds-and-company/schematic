@@ -103,11 +103,11 @@ class CategoryGroupsTest extends Unit
 
         return [
             'emptyArray' => [
-                'CategoryGroups' => [],
+                'categoryGroups' => [],
                 'expectedResult' => [],
             ],
             'single group' => [
-                'CategoryGroups' => [
+                'categoryGroups' => [
                     'group1' => $mockCategoryGroup1,
                 ],
                 'expectedResult' => [
@@ -115,7 +115,7 @@ class CategoryGroupsTest extends Unit
                 ],
             ],
             'multiple groups' => [
-                'CategoryGroups' => [
+                'categoryGroups' => [
                     'group1' => $mockCategoryGroup1,
                     'group2' => $mockCategoryGroup2,
                 ],

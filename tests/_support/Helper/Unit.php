@@ -9,6 +9,7 @@ use craft\services\Elements;
 use craft\services\Globals;
 use craft\services\Fields;
 use craft\services\Sites;
+use craft\i18n\I18n;
 use Codeception\Module;
 use Codeception\TestCase;
 use NerdsAndCompany\Schematic\Schematic;
@@ -31,6 +32,7 @@ class Unit extends Module
         $mockFields = $this->getMock($test, Fields::class);
         $mockGlobals = $this->getMock($test, Globals::class);
         $mockSites = $this->getMock($test, Sites::class);
+        $mockI18n = $this->getMock($test, I18n::class);
 
         $mockApp->expects($test->any())
             ->method('__get')
@@ -41,6 +43,10 @@ class Unit extends Module
                 ['fields', $mockFields],
                 ['sites', $mockSites],
             ]);
+
+        $mockApp->expects($test->any())
+            ->method('getI18n')
+            ->willReturn($mockI18n);
 
         Craft::$app = $mockApp;
         Schematic::$force = false;

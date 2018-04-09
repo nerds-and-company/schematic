@@ -26,7 +26,7 @@ class Sites extends Base
     private $groups;
 
     /**
-     * Get all sites
+     * Get all sites.
      *
      * @return Site[]
      */
@@ -54,7 +54,10 @@ class Sites extends Base
      */
     protected function saveRecord(Model $record, array $definition)
     {
-        $record->groupId = $this->getGroupIdByName($definition['group']);
+        if ($definition['group']) {
+            $record->groupId = $this->getGroupIdByName($definition['group']);
+        }
+
         return Craft::$app->sites->saveSite($record);
     }
 
@@ -67,9 +70,10 @@ class Sites extends Base
     }
 
     /**
-     * Get group id by name
+     * Get group id by name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return
      */
     private function getGroupIdByName($name)
@@ -88,6 +92,7 @@ class Sites extends Base
                 $this->importError($group, $name);
             }
         }
+
         return $this->groups[$name];
     }
 }
