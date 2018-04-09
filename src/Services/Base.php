@@ -71,7 +71,7 @@ abstract class Base extends BaseComponent implements MappingInterface
     {
         $definition = [
           'class' => get_class($record),
-          'attributes' => $record->attributes,
+          'attributes' => $record->getAttributes(),
         ];
         unset($definition['attributes']['id']);
         unset($definition['attributes']['structureId']);

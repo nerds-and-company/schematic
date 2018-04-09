@@ -20,7 +20,7 @@ use craft\base\Model;
 class GlobalSets extends Base
 {
     /**
-     * Get all global sets
+     * Get all global sets.
      *
      * @return GlobalSet[]
      */
@@ -36,7 +36,7 @@ class GlobalSets extends Base
     {
         $definition = parent::getRecordDefinition($record);
         if ($record instanceof GlobalSet) {
-            $definition['site'] = $record->site->handle;
+            $definition['site'] = $record->getSite()->handle;
             unset($definition['attributes']['tempId']);
             unset($definition['attributes']['uid']);
             unset($definition['attributes']['contentId']);
@@ -55,8 +55,9 @@ class GlobalSets extends Base
         if ($site) {
             $record->siteId = $site->id;
         } else {
-            Schematic::warning('Site '.$definition['site']. ' could not be found');
+            Schematic::warning('Site '.$definition['site'].' could not be found');
         }
+
         return Craft::$app->globals->saveSet($record);
     }
 
@@ -65,6 +66,6 @@ class GlobalSets extends Base
      */
     protected function deleteRecord(Model $record)
     {
-        return Craft::$app->globals->deleteSet($record);
+        return Craft::$app->elements->deleteElementById($record->id);
     }
 }

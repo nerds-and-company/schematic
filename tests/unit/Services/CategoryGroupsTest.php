@@ -163,7 +163,7 @@ class CategoryGroupsTest extends Unit
     //==============================================================================================================
 
     /**
-     * @param CategoryGroup $$group
+     * @param CategoryGroup $mockCategoryGroup
      *
      * @return array
      */
@@ -245,6 +245,11 @@ class CategoryGroupsTest extends Unit
         return $mockSiteSettings;
     }
 
+    /**
+     * Get a mock site.
+     *
+     * @return Mock|Site
+     */
     private function getMockSite()
     {
         return $this->getMockBuilder(Site::class)->getMock();
