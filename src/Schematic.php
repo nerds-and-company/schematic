@@ -20,7 +20,7 @@ class Schematic
     const DATA_TYPES = [
         'sites' => Services\Sites::class,
         'volumes' => Services\Volumes::class,
-        'assetTransforms' => Services\assetTransforms::class,
+        'assetTransforms' => Services\ModelProcessor::class,
         'fields' => Services\Fields::class,
         'plugins' => Services\Plugins::class,
         'sections' => Services\Sections::class,
@@ -32,17 +32,30 @@ class Schematic
         'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
 
+    public static function getRecords(string $datatype)
+    {
+        $records = [];
+        switch ($datatype) {
+            case 'assetTransforms':
+                $records = Craft::$app->assetTransforms->getAllTransforms();
+                break;
+        }
+
+        return $records;
+    }
+
     /**
      * Is force enabled?
-     * @var boolean
+     *
+     * @var bool
      */
     public static $force = false;
 
     /**
-     * Logs an error message
+     * Logs an error message.
      *
-     * @param  string|array $message the message to be logged. This can be a simple string or a more
-     *                               complex data structure, such as array.
+     * @param string|array $message the message to be logged. This can be a simple string or a more
+     *                              complex data structure, such as array.
      */
     public static function error($message)
     {
@@ -50,10 +63,10 @@ class Schematic
     }
 
     /**
-     * Logs a warning message
+     * Logs a warning message.
      *
-     * @param  string|array $message the message to be logged. This can be a simple string or a more
-     *                               complex data structure, such as array.
+     * @param string|array $message the message to be logged. This can be a simple string or a more
+     *                              complex data structure, such as array.
      */
     public static function warning($message)
     {
@@ -61,10 +74,10 @@ class Schematic
     }
 
     /**
-     * Logs an info message
+     * Logs an info message.
      *
-     * @param  string|array $message the message to be logged. This can be a simple string or a more
-     *                               complex data structure, such as array.
+     * @param string|array $message the message to be logged. This can be a simple string or a more
+     *                              complex data structure, such as array.
      */
     public static function info($message)
     {

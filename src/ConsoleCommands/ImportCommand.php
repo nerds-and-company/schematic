@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\ConsoleCommands;
 
 use Craft;
-use craft\helpers\FileHelper;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
@@ -42,16 +41,19 @@ class ImportCommand extends Base
     {
         if (!file_exists($this->file)) {
             Schematic::error('File not found: '.$this->file);
+
             return 1;
         }
 
         $dataTypes = $this->getDataTypes();
         if ($this->importFromYaml($dataTypes)) {
-            Schematic::info('Loaded schema from '. $this->file);
+            Schematic::info('Loaded schema from '.$this->file);
+
             return 0;
         }
 
-        Schematic::info('There was an error loading schema from '. $this->file);
+        Schematic::info('There was an error loading schema from '.$this->file);
+
         return 1;
     }
 
@@ -60,7 +62,8 @@ class ImportCommand extends Base
      *
      * @param string $dataTypes The data types to import
      *
-     * @return boolean
+     * @return bool
+     *
      * @throws Exception
      */
     private function importFromYaml($dataTypes)
@@ -78,7 +81,8 @@ class ImportCommand extends Base
                 Schematic::info('Importing '.$dataType);
                 Schematic::$force = $this->force;
                 if (is_array($dataModel->$dataType)) {
-                    Craft::$app->$component->import($dataModel->$dataType);
+                    $records = Schematic::getRecords($dataType);
+                    Craft::$app->$component->import($dataModel->$dataType, $records);
                 }
             } else {
                 Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');

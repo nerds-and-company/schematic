@@ -55,7 +55,8 @@ class ExportCommand extends Base
             $component = 'schematic_'.$dataType;
             if (Craft::$app->$component instanceof MappingInterface) {
                 Schematic::info('Exporting '.$dataType);
-                $result[$dataType] = Craft::$app->$component->export();
+                $records = Schematic::getRecords($dataType);
+                $result[$dataType] = Craft::$app->$component->export($records);
             } else {
                 Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
             }

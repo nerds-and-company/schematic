@@ -49,7 +49,7 @@ class AssetTransformsTest extends Unit
         Craft::$app = $mockApp;
         Schematic::$force = false;
 
-        $this->service = new AssetTransforms();
+        $this->service = new ModelProcessor();
     }
 
     //==============================================================================================================
@@ -64,8 +64,7 @@ class AssetTransformsTest extends Unit
      */
     public function testSuccessfulExport(array $assetTransforms, array $expectedResult = [])
     {
-        $this->expectList($assetTransforms);
-        $actualResult = $this->service->export();
+        $actualResult = $this->service->export($assetTransforms);
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -79,11 +78,10 @@ class AssetTransformsTest extends Unit
      */
     public function testSuccessfulImport(array $assetTransformDefinitions, array $existingTransforms, int $saveCount)
     {
-        $this->expectList($existingTransforms);
         $this->expectSaves($saveCount);
         $this->expectDeletes(0);
 
-        $this->service->import($assetTransformDefinitions);
+        $this->service->import($assetTransformDefinitions, $existingTransforms);
     }
 
     /**
@@ -97,11 +95,10 @@ class AssetTransformsTest extends Unit
     public function testImportWithForceOption(array $assetTransformDefinitions, array $existingTransforms, int $saveCount, int $deleteCount)
     {
         Schematic::$force = true;
-        $this->expectList($existingTransforms);
         $this->expectSaves($saveCount);
         $this->expectDeletes($deleteCount);
 
-        $this->service->import($assetTransformDefinitions);
+        $this->service->import($assetTransformDefinitions, $existingTransforms);
     }
 
     //==============================================================================================================
@@ -206,19 +203,6 @@ class AssetTransformsTest extends Unit
               'quality' => null,
           ],
         ];
-    }
-
-    /**
-     * Expect a list of AssetTransforms.
-     *
-     * @param AssetTransform[] $assetTransforms
-     */
-    private function expectList(array $assetTransforms)
-    {
-        Craft::$app->assetTransforms
-                   ->expects($this->exactly(1))
-                   ->method('getAllTransforms')
-                   ->willReturn($assetTransforms);
     }
 
     /**

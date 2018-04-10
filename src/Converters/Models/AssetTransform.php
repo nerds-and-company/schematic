@@ -1,13 +1,13 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\AssetTransform;
+use craft\models\AssetTransform as AssetTransformModel;
 
 /**
- * Schematic Asset Transforms Service.
+ * Schematic Asset Transforms converter.
  *
  * Sync Craft Setups.
  *
@@ -17,25 +17,15 @@ use craft\models\AssetTransform;
  *
  * @see      http://www.nerds.company
  */
-class AssetTransforms extends Base
+class AssetTransform extends Base
 {
-    /**
-     * Get all asset transforms
-     *
-     * @return AssetTransform[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->assetTransforms->getAllTransforms();
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof AssetTransform) {
+        if ($record instanceof AssetTransformModel) {
             unset($definition['attributes']['dimensionChangeTime']);
         }
 
@@ -45,7 +35,7 @@ class AssetTransforms extends Base
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         return Craft::$app->assetTransforms->saveTransform($record);
     }
@@ -53,7 +43,7 @@ class AssetTransforms extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->assetTransforms->deleteTransform($record->id);
     }
