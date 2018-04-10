@@ -4,9 +4,9 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
 use craft\base\Plugin;
-use yii\base\Component as BaseComponent;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use yii\base\Component as BaseComponent;
 
 /**
  * Schematic Plugins Service.
@@ -21,16 +21,10 @@ use NerdsAndCompany\Schematic\Schematic;
  */
 class Plugins extends BaseComponent implements MappingInterface
 {
-    //==============================================================================================================
-    //================================================  EXPORT  ====================================================
-    //==============================================================================================================
-
     /**
-    * @param array $data
-    *
-    * @return array
-    */
-    public function export()
+     * {@inheritdoc}
+     */
+    public function export(array $plugins = null): array
     {
         $plugins = Craft::$app->plugins->getAllPlugins();
         $pluginDefinitions = [];
@@ -57,19 +51,13 @@ class Plugins extends BaseComponent implements MappingInterface
         ];
     }
 
-    //==============================================================================================================
-    //================================================  IMPORT  ====================================================
-    //==============================================================================================================
-
     /**
-     * @param array $pluginDefinitions
-     *
-     * @return Result
+     * {@inheritdoc}
      */
-    public function import(array $pluginDefinitions)
+    public function import(array $pluginDefinitions, array $plugins): array
     {
         Schematic::warning('Import of plugins is not yet implemented');
         //TODO rebuild plugins import
-        return true;
+        return $plugins;
     }
 }

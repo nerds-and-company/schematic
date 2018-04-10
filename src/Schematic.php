@@ -25,7 +25,7 @@ class Schematic
         'plugins' => Services\Plugins::class,
         'sections' => Services\ModelProcessor::class,
         'globalSets' => Services\ModelProcessor::class,
-        'userGroups' => Services\UserGroups::class,
+        'userGroups' => Services\ModelProcessor::class,
         'users' => Services\Users::class,
         'categoryGroups' => Services\ModelProcessor::class,
         'tagGroups' => Services\ModelProcessor::class,
@@ -62,6 +62,9 @@ class Schematic
                 break;
             case 'sites':
                 $records = Craft::$app->sites->getAllSites();
+                break;
+            case 'userGroups':
+                $records = Craft::$app->userGroups->getAllGroups();
                 break;
             case 'volumes':
                 $records = Craft::$app->volumes->getAllVolumes();

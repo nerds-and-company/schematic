@@ -3,10 +3,10 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use yii\base\Component as BaseComponent;
 
 /**
  * Schematic Element Index Settings Service.
@@ -22,7 +22,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class ElementIndexSettings extends BaseComponent implements MappingInterface
 {
     /**
-     * Load sources behaviors
+     * Load sources behaviors.
      *
      * @return array
      */
@@ -36,7 +36,7 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
     /**
      * @return array
      */
-    public function export()
+    public function export(array $elementTypes = []): array
     {
         $settingDefinitions = [];
         $elementTypes = Craft::$app->elements->getAllElementTypes();
@@ -56,7 +56,7 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
      *
      * @return Result
      */
-    public function import(array $settingDefinitions)
+    public function import(array $settingDefinitions, array $elementTypes = []): array
     {
         Schematic::warning('Element index import is not yet implemented');
 
@@ -64,6 +64,8 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
             // Import the settings
         }
+
+        return $elementTypes;
     }
 
     /**

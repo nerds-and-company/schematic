@@ -5,10 +5,10 @@ namespace NerdsAndCompany\Schematic\Services;
 use Craft;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
-use yii\base\Component as BaseComponent;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Base as BaseConverter;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use yii\base\Component as BaseComponent;
 
 /**
  * Schematic Base Service.
@@ -28,7 +28,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      *
      * @return array
      */
-    public function export(array $records = [])
+    public function export(array $records): array
     {
         $result = [];
         foreach ($records as $record) {
@@ -52,7 +52,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      * @param array $defaultAttributes Default attributes to use for each record
      * @param bool  $persist           Whether to persist the parsed records
      */
-    public function import(array $definitions, array $records = [], array $defaultAttributes = [], $persist = true)
+    public function import(array $definitions, array $records, array $defaultAttributes = [], $persist = true): array
     {
         $imported = [];
         $recordsByHandle = ArrayHelper::index($records, 'handle');

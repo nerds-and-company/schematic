@@ -4,10 +4,10 @@ namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
 use craft\elements\User;
-use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use yii\base\Component as BaseComponent;
 
 /**
  * Schematic Users Service.
@@ -23,7 +23,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class Users extends BaseComponent implements MappingInterface
 {
     /**
-     * Load fieldlayout behavior
+     * Load fieldlayout behavior.
      *
      * @return array
      */
@@ -35,18 +35,17 @@ class Users extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Export user settings
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function export()
+    public function export(array $settings = []): array
     {
         $settings = Craft::$app->systemSettings->getSettings('users');
-        $photoVolumeId = (int)$settings['photoVolumeId'];
+        $photoVolumeId = (int) $settings['photoVolumeId'];
         $volume = Craft::$app->volumes->getVolumeById($photoVolumeId);
         unset($settings['photoVolumeId']);
 
         $fieldLayout = Craft::$app->getFields()->getLayoutByType(User::class);
+
         return [
             'settings' => $settings,
             'photoVolume' => $volume ? $volume->handle : null,
@@ -55,11 +54,9 @@ class Users extends BaseComponent implements MappingInterface
     }
 
     /**
-     * Import user settings.
-     *
-     * @param array $userSettings
+     * {@inheritdoc}
      */
-    public function import(array $userSettings)
+    public function import(array $userSettings, array $settings = []): array
     {
         $photoVolumeId = null;
         if (array_key_exists('photoVolume', $userSettings) && $userSettings['photoVolume'] != null) {
@@ -84,5 +81,7 @@ class Users extends BaseComponent implements MappingInterface
                 Schematic::warning('- Couldn’t save user field layout.');
             }
         }
+
+        return [];
     }
 }
