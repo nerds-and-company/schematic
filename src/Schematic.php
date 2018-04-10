@@ -28,7 +28,7 @@ class Schematic
         'userGroups' => Services\UserGroups::class,
         'users' => Services\Users::class,
         'categoryGroups' => Services\ModelProcessor::class,
-        'tagGroups' => Services\TagGroups::class,
+        'tagGroups' => Services\ModelProcessor::class,
         'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
 
@@ -65,6 +65,9 @@ class Schematic
                 break;
             case 'volumes':
                 $records = Craft::$app->volumes->getAllVolumes();
+                break;
+            case 'tagGroups':
+                $records = Craft::$app->tags->getAllTagGroups();
                 break;
         }
 

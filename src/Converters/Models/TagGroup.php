@@ -1,13 +1,12 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\TagGroup;
 
 /**
- * Schematic TagGroups Service.
+ * Schematic TagGroups Converter.
  *
  * Sync Craft Setups.
  *
@@ -17,22 +16,12 @@ use craft\models\TagGroup;
  *
  * @see      http://www.nerds.company
  */
-class TagGroups extends Base
+class TagGroup extends Base
 {
-    /**
-     * Get all tag groups
-     *
-     * @return TagGroup[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->tags->getAllTagGroups();
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         return Craft::$app->tags->saveTagGroup($record);
     }
@@ -40,7 +29,7 @@ class TagGroups extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->tags->deleteTagGroupById($record->id);
     }
