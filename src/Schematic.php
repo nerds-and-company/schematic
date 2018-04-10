@@ -27,7 +27,7 @@ class Schematic
         'globalSets' => Services\GlobalSets::class,
         'userGroups' => Services\UserGroups::class,
         'users' => Services\Users::class,
-        'categoryGroups' => Services\CategoryGroups::class,
+        'categoryGroups' => Services\ModelProcessor::class,
         'tagGroups' => Services\TagGroups::class,
         'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
@@ -38,6 +38,9 @@ class Schematic
         switch ($datatype) {
             case 'assetTransforms':
                 $records = Craft::$app->assetTransforms->getAllTransforms();
+                break;
+            case 'categoryGroups':
+                $records = Craft::$app->categories->getAllGroups();
                 break;
         }
 

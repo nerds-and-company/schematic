@@ -38,7 +38,7 @@ class CategoryGroupsTest extends Unit
                   ->method('getSiteByHandle')
                   ->willReturn($this->getMockSite());
 
-        $this->service = new CategoryGroups();
+        $this->service = new ModelProcessor();
     }
 
     //==============================================================================================================
@@ -53,9 +53,7 @@ class CategoryGroupsTest extends Unit
      */
     public function testSuccessfulExport(array $groups, array $expectedResult = [])
     {
-        $this->expectList($groups);
-
-        $actualResult = $this->service->export();
+        $actualResult = $this->service->export($groups);
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -67,11 +65,10 @@ class CategoryGroupsTest extends Unit
      */
     public function testSuccessfulImport(array $groupDefinitions, array $existingGroups, int $saveCount)
     {
-        $this->expectList($existingGroups);
         $this->expectSaves($saveCount);
         $this->expectDeletes(0);
 
-        $this->service->import($groupDefinitions);
+        $this->service->import($groupDefinitions, $existingGroups);
     }
 
     /**
@@ -82,11 +79,10 @@ class CategoryGroupsTest extends Unit
     public function testImportWithForceOption(array $groupDefinitions, array $existingGroups, int $saveCount, int $deleteCount)
     {
         Schematic::$force = true;
-        $this->expectList($existingGroups);
         $this->expectSaves($saveCount);
         $this->expectDeletes($deleteCount);
 
-        $this->service->import($groupDefinitions);
+        $this->service->import($groupDefinitions, $existingGroups);
     }
 
     //==============================================================================================================
@@ -253,19 +249,6 @@ class CategoryGroupsTest extends Unit
     private function getMockSite()
     {
         return $this->getMockBuilder(Site::class)->getMock();
-    }
-
-    /**
-     * Expect a list of category groups.
-     *
-     * @param CategoryGroup[] $categoryGroups
-     */
-    private function expectList(array $categoryGroups)
-    {
-        Craft::$app->categories
-                   ->expects($this->exactly(1))
-                   ->method('getAllGroups')
-                   ->willReturn($categoryGroups);
     }
 
     /**

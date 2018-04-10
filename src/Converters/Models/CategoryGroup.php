@@ -1,10 +1,9 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
 
 /**
@@ -18,22 +17,12 @@ use craft\models\CategoryGroup_SiteSettings;
  *
  * @see      http://www.nerds.company
  */
-class CategoryGroups extends Base
+class CategoryGroup extends Base
 {
-    /**
-     * Get all category groups
-     *
-     * @return CategoryGroup[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->categories->getAllGroups();
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
 
@@ -48,7 +37,7 @@ class CategoryGroups extends Base
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         return Craft::$app->categories->saveGroup($record);
     }
@@ -56,7 +45,7 @@ class CategoryGroups extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->categories->deleteGroupById($record->id);
     }
