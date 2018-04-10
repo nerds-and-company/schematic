@@ -99,6 +99,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      *
      * @param Model[] $recordsByHandle
      * @param array   $definition
+     * @param string  $handle
      *
      * @return Model
      */

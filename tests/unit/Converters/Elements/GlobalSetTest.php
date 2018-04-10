@@ -5,13 +5,14 @@ namespace NerdsAndCompany\Schematic\Converters\Elements;
 use Craft;
 use craft\elements\GlobalSet as GlobalSetElement;
 use craft\base\Field;
+use yii\base\Behavior;
 use craft\models\FieldLayout;
 use craft\models\Site;
 use craft\services\Fields;
 use Codeception\Test\Unit;
 
 /**
- * Class GlobalSetsTest.
+ * Class GlobalSetTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015-2017, Nerds & Company
@@ -163,7 +164,7 @@ class GlobalSetsTest extends Unit
     private function getMockGlobalSet(int $setId, string $siteHandle = 'default')
     {
         $mockSet = $this->getMockBuilder(GlobalSetElement::class)
-                                    ->setMethods(['__isset', 'getSite', 'getFieldLayout', 'fieldByHandle'])
+                                    ->setMethods(['__isset', 'getSite', 'getFieldLayout', 'fieldByHandle', 'getBehavior'])
                                     ->disableOriginalConstructor()
                                     ->getMock();
 
@@ -171,6 +172,11 @@ class GlobalSetsTest extends Unit
         $mockSet->fieldLayoutId = $setId;
         $mockSet->handle = 'setHandle'.$setId;
         $mockSet->name = 'setName'.$setId;
+
+        $mockBehavior = $this->getMockbuilder(Behavior::class)->getMock();
+        $mockSet->expects($this->any())
+                ->method('getBehavior')
+                ->willReturn($mockBehavior);
 
         $mockSet->expects($this->any())
                 ->method('getSite')
@@ -180,6 +186,10 @@ class GlobalSetsTest extends Unit
         $mockField->id = $setId;
         $mockField->handle = 'field'.$setId;
         $mockField->required = false;
+
+        $mockSet->expects($this->any())
+                ->method('fieldByHandle')
+                ->willReturn($mockField);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
 
