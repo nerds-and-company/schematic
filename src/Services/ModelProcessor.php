@@ -63,34 +63,21 @@ class ModelProcessor extends BaseComponent implements MappingInterface
                 Schematic::error('No converter found for '.$modelClass);
                 continue;
             }
+            $record = $this->findOrNewRecord($recordsByHandle, $definition, $handle);
 
-            $record = new $modelClass();
-            if (array_key_exists($handle, $recordsByHandle)) {
-                $existing = $recordsByHandle[$handle];
-                if (get_class($record) == get_class($existing)) {
-                    $record = $existing;
-                } else {
-                    $record->id = $existing->id;
-                    $record->setAttributes($existing->getAttributes());
-                }
-
-                if ($converter->getRecordDefinition($record) === $definition) {
-                    Schematic::info('- Skipping '.get_class($record).' '.$handle);
-                    unset($recordsByHandle[$handle]);
-                    continue;
-                }
-            }
-
-            $converter->setRecordAttributes($record, $definition, $defaultAttributes);
-            if (!$persist) {
-                $imported[] = $record;
+            if ($converter->getRecordDefinition($record) === $definition) {
+                Schematic::info('- Skipping '.get_class($record).' '.$handle);
             } else {
-                Schematic::info('- Saving '.get_class($record).' '.$handle);
-                if ($converter->saveRecord($record, $definition)) {
-                } else {
-                    $this->importError($record, $handle);
+                $converter->setRecordAttributes($record, $definition, $defaultAttributes);
+                if ($persist) {
+                    Schematic::info('- Saving '.get_class($record).' '.$handle);
+                    if ($converter->saveRecord($record, $definition)) {
+                    } else {
+                        $this->importError($record, $handle);
+                    }
                 }
             }
+            $imported[] = $record;
             unset($recordsByHandle[$handle]);
         }
 
@@ -105,6 +92,30 @@ class ModelProcessor extends BaseComponent implements MappingInterface
         }
 
         return $imported;
+    }
+
+    /**
+     * Find record from records by handle or new record.
+     *
+     * @param Model[] $recordsByHandle
+     * @param array   $definition
+     *
+     * @return Model
+     */
+    private function findOrNewRecord(array $recordsByHandle, array $definition, string $handle): Model
+    {
+        $record = new  $definition['class']();
+        if (array_key_exists($handle, $recordsByHandle)) {
+            $existing = $recordsByHandle[$handle];
+            if (get_class($record) == get_class($existing)) {
+                $record = $existing;
+            } else {
+                $record->id = $existing->id;
+                $record->setAttributes($existing->getAttributes());
+            }
+        }
+
+        return $record;
     }
 
     /**
