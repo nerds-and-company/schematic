@@ -42,7 +42,6 @@ class MatrixBlockType extends Base
         $context = 'matrixBlockType:'.$record->id;
         $existingFields = Craft::$app->fields->getAllFields($context);
         $fields = Craft::$app->schematic_fields->import($definition['fields'], $existingFields, [], false);
-        // $record->fieldLayout->setFields($fields);
         $record->setFields($fields);
 
         return Craft::$app->matrix->saveBlockType($record);

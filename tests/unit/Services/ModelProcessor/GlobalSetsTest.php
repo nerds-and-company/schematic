@@ -175,12 +175,6 @@ class GlobalSetsTest extends Unit
                 'title' => null,
                 'slug' => null,
                 'uri' => null,
-                'hasDescendants' => null,
-                'ref' => null,
-                'status' => null,
-                'totalDescendants' => null,
-                'url' => null,
-                'text' => null,
             ],
             'fieldLayout' => [
                 'fields' => [],
@@ -228,7 +222,6 @@ class GlobalSetsTest extends Unit
               'structureId',
               'totalDescendants',
               'url',
-              'text',
           ]);
 
         $mockSet->id = $setId;
@@ -239,6 +232,10 @@ class GlobalSetsTest extends Unit
         $mockSet->expects($this->any())
                 ->method('getSite')
                 ->willReturn($this->getMockSite());
+
+        $mockSet->expects($this->any())
+                ->method('getScenario')
+                ->willReturn([]);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
 
