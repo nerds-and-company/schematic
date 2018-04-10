@@ -1,10 +1,11 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Elements;
 
 use Craft;
-use craft\elements\GlobalSet;
+use craft\elements\GlobalSet as GlobalSetElement;
 use craft\base\Model;
+use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
  * Schematic Globals Service.
@@ -17,30 +18,25 @@ use craft\base\Model;
  *
  * @see      http://www.nerds.company
  */
-class GlobalSets extends Base
+class GlobalSet extends Base
 {
-    /**
-     * Get all global sets.
-     *
-     * @return GlobalSet[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->globals->getAllSets();
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof GlobalSet) {
+
+        if ($record instanceof GlobalSetElement) {
             $definition['site'] = $record->getSite()->handle;
             unset($definition['attributes']['tempId']);
             unset($definition['attributes']['uid']);
             unset($definition['attributes']['contentId']);
             unset($definition['attributes']['siteId']);
+
+            foreach ($record->getFieldLayout()->getFields() as $field) {
+                unset($definition['attributes'][$field->handle]);
+            }
         }
 
         return $definition;
@@ -49,7 +45,7 @@ class GlobalSets extends Base
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         $site = Craft::$app->sites->getSiteByHandle($definition['site']);
         if ($site) {
@@ -64,7 +60,7 @@ class GlobalSets extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->elements->deleteElementById($record->id);
     }

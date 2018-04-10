@@ -24,7 +24,7 @@ class Schematic
         'fields' => Services\Fields::class,
         'plugins' => Services\Plugins::class,
         'sections' => Services\Sections::class,
-        'globalSets' => Services\GlobalSets::class,
+        'globalSets' => Services\ModelProcessor::class,
         'userGroups' => Services\UserGroups::class,
         'users' => Services\Users::class,
         'categoryGroups' => Services\ModelProcessor::class,
@@ -32,6 +32,13 @@ class Schematic
         'elementIndexSettings' => Services\ElementIndexSettings::class,
     ];
 
+    /**
+     * Get records for datatype.
+     *
+     * @param string $datatype
+     *
+     * @return Model[]
+     */
     public static function getRecords(string $datatype)
     {
         $records = [];
@@ -41,6 +48,9 @@ class Schematic
                 break;
             case 'categoryGroups':
                 $records = Craft::$app->categories->getAllGroups();
+                break;
+            case 'globalSets':
+                $records = Craft::$app->globals->getAllSets();
                 break;
         }
 

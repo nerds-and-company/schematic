@@ -37,7 +37,7 @@ class GlobalSetsTest extends Unit
                   ->method('getSiteByHandle')
                   ->willReturn($this->getMockSite());
 
-        $this->service = new GlobalSets();
+        $this->service = new ModelProcessor();
     }
 
     //==============================================================================================================
@@ -52,9 +52,7 @@ class GlobalSetsTest extends Unit
      */
     public function testSuccessfulExport(array $sets, array $expectedResult = [])
     {
-        $this->expectList($sets);
-
-        $actualResult = $this->service->export();
+        $actualResult = $this->service->export($sets);
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -66,11 +64,10 @@ class GlobalSetsTest extends Unit
      */
     public function testSuccessfulImport(array $setDefinitions, array $existingSets, int $saveCount)
     {
-        $this->expectList($existingSets);
         $this->expectSaves($saveCount);
         $this->expectDeletes(0);
 
-        $this->service->import($setDefinitions);
+        $this->service->import($setDefinitions, $existingSets);
     }
 
     /**
@@ -81,11 +78,10 @@ class GlobalSetsTest extends Unit
     public function testImportWithForceOption(array $setDefinitions, array $existingSets, int $saveCount, int $deleteCount)
     {
         Schematic::$force = true;
-        $this->expectList($existingSets);
         $this->expectSaves($saveCount);
         $this->expectDeletes($deleteCount);
 
-        $this->service->import($setDefinitions);
+        $this->service->import($setDefinitions, $existingSets);
     }
 
     //==============================================================================================================
@@ -203,7 +199,7 @@ class GlobalSetsTest extends Unit
         $mockSet = $this->getMockBuilder(GlobalSet::class)
                                     ->setMethods(array_diff(
                                         get_class_methods(GlobalSet::class),
-                                        ['setAttributes', 'safeAttributes', 'getAttributes']
+                                        ['setAttributes', 'safeAttributes', 'getAttributes', 'getFields']
                                     ))
                                     ->disableOriginalConstructor()
                                     ->getMock();
@@ -246,6 +242,10 @@ class GlobalSetsTest extends Unit
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
 
+        $mockFieldLayout->expects($this->any())
+                        ->method('getFields')
+                        ->willReturn([]);
+
         $mockSet->expects($this->any())
                   ->method('getFieldLayout')
                   ->willReturn($mockFieldLayout);
@@ -266,19 +266,6 @@ class GlobalSetsTest extends Unit
         ]);
 
         return $mockSite;
-    }
-
-    /**
-     * Expect a list of global sets.
-     *
-     * @param GlobalSet[] $GlobalSets
-     */
-    private function expectList(array $globalSets)
-    {
-        Craft::$app->globals
-                   ->expects($this->exactly(1))
-                   ->method('getAllSets')
-                   ->willReturn($globalSets);
     }
 
     /**
