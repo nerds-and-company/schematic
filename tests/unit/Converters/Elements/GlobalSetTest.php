@@ -164,7 +164,7 @@ class GlobalSetsTest extends Unit
     private function getMockGlobalSet(int $setId, string $siteHandle = 'default')
     {
         $mockSet = $this->getMockBuilder(GlobalSetElement::class)
-                                    ->setMethods(['__isset', 'getSite', 'getFieldLayout', 'fieldByHandle', 'getBehavior'])
+                                    ->setMethods(['__isset', 'getSite', 'getFieldLayout', 'fieldByHandle', 'getBehavior', 'behaviors'])
                                     ->disableOriginalConstructor()
                                     ->getMock();
 
@@ -172,6 +172,11 @@ class GlobalSetsTest extends Unit
         $mockSet->fieldLayoutId = $setId;
         $mockSet->handle = 'setHandle'.$setId;
         $mockSet->name = 'setName'.$setId;
+
+        $mockBehavior = $this->getMockbuilder(Behavior::class)->getMock();
+        $mockSet->expects($this->any())
+                ->method('behaviors')
+                ->willReturn([]);
 
         $mockBehavior = $this->getMockbuilder(Behavior::class)->getMock();
         $mockSet->expects($this->any())
