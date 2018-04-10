@@ -1,9 +1,7 @@
 #!/usr/bin/env php
 <?php
 use craft\migrations\Install;
-use craft\models\Site;
 use pahanini\log\ConsoleTarget;
-use yii\console\controllers\HelpController;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\ConsoleCommands\ImportCommand;
 use NerdsAndCompany\Schematic\ConsoleCommands\ExportCommand;
@@ -43,40 +41,8 @@ $app->init();
 
 // Install Craft if needed
 if (!$app->getIsInstalled()) {
-    Schematic::info('Craft is not installed, installing');
-
-    if (!getenv('CRAFT_EMAIL') || !getenv('CRAFT_PASSWORD')) {
-        Schematic::error('Please supply CRAFT_EMAIL and CRAFT_PASSWORD environment variables for install');
-        exit(1);
-    }
-
-    $site = new Site([
-        'name' => getenv('CRAFT_SITENAME') ?: 'default',
-        'handle' => 'default',
-        'hasUrls' => true,
-        'baseUrl' => getenv('CRAFT_SITEURL') ?: '@web',
-        'language' => getenv('CRAFT_LOCALE') ?: 'en-US',
-    ]);
-
-    $migration = new Install([
-        'username' => getenv('CRAFT_USERNAME') ?: 'admin',
-        'password' => getenv('CRAFT_PASSWORD'),
-        'email' => getenv('CRAFT_EMAIL'),
-        'site' => $site,
-    ]);
-
-    // Run the install migration
-    Schematic::info('Installing Craft');
-    $migrator = Craft::$app->getMigrator();
-    $result = $migrator->migrateUp($migration);
-
-    if ($result === false) {
-        Schematic::error('Failed to install Craft');
-        exit(1);
-    }
-    Schematic::info('Craft has been installed');
-} else {
-    Schematic::info('Craft is installed, continueing');
+    Schematic::info('Craft is not yet installed');
+    exit(1);
 }
 
 $exitCode = $app->run();
