@@ -87,8 +87,8 @@ abstract class Base extends BaseComponent
             if (!$record instanceof MatrixBlockType) {
                 $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
             }
-            unset($definition['attributes']['fieldLayoutId']);
         }
+        unset($definition['attributes']['fieldLayoutId']);
 
         // Define site settings
         if (isset($record->siteSettings)) {
