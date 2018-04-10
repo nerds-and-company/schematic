@@ -173,11 +173,16 @@ class GlobalSetsTest extends Unit
         $mockSet->handle = 'setHandle'.$setId;
         $mockSet->name = 'setName'.$setId;
 
+        $mockBehavior = $this->getMockbuilder(Behavior::class)->getMock();
+
+        $mockBehavior->expects($this->any())
+                     ->method('canGetProperty')
+                     ->willReturn(true);
+
         $mockSet->expects($this->any())
                 ->method('behaviors')
-                ->willReturn([]);
+                ->willReturn([$mockBehavior]);
 
-        $mockBehavior = $this->getMockbuilder(Behavior::class)->getMock();
         $mockSet->expects($this->any())
                 ->method('getBehavior')
                 ->willReturn($mockBehavior);
