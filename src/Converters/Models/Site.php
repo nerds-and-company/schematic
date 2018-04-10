@@ -1,9 +1,8 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
-use craft\models\Site;
 use craft\models\SiteGroup;
 use craft\base\Model;
 
@@ -18,7 +17,7 @@ use craft\base\Model;
  *
  * @see      http://www.nerds.company
  */
-class Sites extends Base
+class Site extends Base
 {
     /**
      * @var number[]
@@ -26,25 +25,14 @@ class Sites extends Base
     private $groups;
 
     /**
-     * Get all sites.
-     *
-     * @return Site[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->sites->getAllSites();
-    }
-
-    /**
      * {@inheritdoc}
      */
-    protected function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof Site) {
-            $definition['group'] = $record->group->name;
-            unset($definition['attributes']['groupId']);
-        }
+
+        $definition['group'] = $record->group->name;
+        unset($definition['attributes']['groupId']);
 
         return $definition;
     }
@@ -52,7 +40,7 @@ class Sites extends Base
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         if ($definition['group']) {
             $record->groupId = $this->getGroupIdByName($definition['group']);
@@ -64,7 +52,7 @@ class Sites extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->sites->deleteSiteById($record->id);
     }
@@ -76,7 +64,7 @@ class Sites extends Base
      *
      * @return
      */
-    private function getGroupIdByName($name)
+    public function getGroupIdByName($name)
     {
         if (!isset($this->groups)) {
             $this->groups = [];

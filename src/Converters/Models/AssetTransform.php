@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\AssetTransform as AssetTransformModel;
 
 /**
  * Schematic Asset Transforms converter.
@@ -25,9 +24,8 @@ class AssetTransform extends Base
     public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof AssetTransformModel) {
-            unset($definition['attributes']['dimensionChangeTime']);
-        }
+
+        unset($definition['attributes']['dimensionChangeTime']);
 
         return $definition;
     }

@@ -39,7 +39,7 @@ class SitesTest extends Unit
                           ->method('saveGroup')
                           ->willReturn(true);
 
-        $this->service = new Sites();
+        $this->service = new ModelProcessor();
     }
 
     //==============================================================================================================
@@ -54,9 +54,7 @@ class SitesTest extends Unit
      */
     public function testSuccessfulExport(array $sites, array $expectedResult = [])
     {
-        $this->expectList($sites);
-
-        $actualResult = $this->service->export();
+        $actualResult = $this->service->export($sites);
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -68,11 +66,10 @@ class SitesTest extends Unit
      */
     public function testSuccessfulImport(array $siteDefinitions, array $existingsites, int $saveCount)
     {
-        $this->expectList($existingsites);
         $this->expectSaves($saveCount);
         $this->expectDeletes(0);
 
-        $this->service->import($siteDefinitions);
+        $this->service->import($siteDefinitions, $existingsites);
     }
 
     /**
@@ -83,11 +80,10 @@ class SitesTest extends Unit
     public function testImportWithForceOption(array $siteDefinitions, array $existingsites, int $saveCount, int $deleteCount)
     {
         Schematic::$force = true;
-        $this->expectList($existingsites);
         $this->expectSaves($saveCount);
         $this->expectDeletes($deleteCount);
 
-        $this->service->import($siteDefinitions);
+        $this->service->import($siteDefinitions, $existingsites);
     }
 
     //==============================================================================================================
@@ -234,19 +230,6 @@ class SitesTest extends Unit
         $mockGroup->name = 'siteGroup'.$groupId;
 
         return $mockGroup;
-    }
-
-    /**
-     * Expect a list of sites.
-     *
-     * @param Site[] $sites
-     */
-    private function expectList(array $sites)
-    {
-        Craft::$app->sites
-                   ->expects($this->exactly(1))
-                   ->method('getAllSites')
-                   ->willReturn($sites);
     }
 
     /**

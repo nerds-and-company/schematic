@@ -18,7 +18,7 @@ use Craft;
 class Schematic
 {
     const DATA_TYPES = [
-        'sites' => Services\Sites::class,
+        'sites' => Services\ModelProcessor::class,
         'volumes' => Services\Volumes::class,
         'assetTransforms' => Services\ModelProcessor::class,
         'fields' => Services\Fields::class,
@@ -34,6 +34,8 @@ class Schematic
 
     /**
      * Get records for datatype.
+     *
+     * @TODO: Make this more dynamic
      *
      * @param string $datatype
      *
@@ -51,6 +53,9 @@ class Schematic
                 break;
             case 'globalSets':
                 $records = Craft::$app->globals->getAllSets();
+                break;
+            case 'sites':
+                $records = Craft::$app->sites->getAllSites();
                 break;
         }
 
