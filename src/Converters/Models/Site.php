@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 use Craft;
 use craft\models\SiteGroup;
 use craft\base\Model;
+use NerdsAndCompany\Schematic\Schematic;
 
 /**
  * Schematic Sites Converter.
@@ -73,7 +74,9 @@ class Site extends Base
             if (Craft::$app->sites->saveGroup($group)) {
                 $this->groups[$name] = $group->id;
             } else {
-                return $this->importError($group, $name);
+                Schematic::importError($group, $name);
+
+                return null;
             }
         }
 

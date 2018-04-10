@@ -85,7 +85,7 @@ class Field extends Base
             if (Craft::$app->fields->saveGroup($group)) {
                 $this->groups[$name] = $group->id;
             } else {
-                Craft::$app->schematic_fields->importError($group, $name);
+                return Schematic::importError($group, $name);
             }
         }
 

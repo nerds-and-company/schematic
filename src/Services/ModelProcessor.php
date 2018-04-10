@@ -73,7 +73,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
                     Schematic::info('- Saving '.get_class($record).' '.$handle);
                     if ($converter->saveRecord($record, $definition)) {
                     } else {
-                        $this->importError($record, $handle);
+                        Schematic::importError($record, $handle);
                     }
                 }
             }
@@ -137,21 +137,5 @@ class ModelProcessor extends BaseComponent implements MappingInterface
         }
 
         return false;
-    }
-
-    /**
-     * Log an import error.
-     *
-     * @param Model  $record
-     * @param string $handle
-     */
-    public function importError(Model $record, string $handle)
-    {
-        Schematic::warning('- Error importing '.get_class($record).' '.$handle);
-        foreach ($record->getErrors() as $errors) {
-            foreach ($errors as $error) {
-                Schematic::error('   - '.$error);
-            }
-        }
     }
 }

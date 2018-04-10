@@ -43,8 +43,8 @@ class GlobalSetsTest extends Unit
     /**
      * @dataProvider provideGlobalSets
      *
-     * @param GlobalSetModel $set
-     * @param array          $definition
+     * @param GlobalSetElement $set
+     * @param array            $definition
      */
     public function testGetRecordDefinition(GlobalSetElement $set, array $definition)
     {
@@ -56,9 +56,9 @@ class GlobalSetsTest extends Unit
     /**
      * @dataProvider provideGlobalSets
      *
-     * @param GlobalSetModel $set
-     * @param array          $definition
-     * @param bool           $valid
+     * @param GlobalSetElement $set
+     * @param array            $definition
+     * @param bool             $valid
      */
     public function testSaveRecord(GlobalSetElement $set, array $definition, bool $valid)
     {
@@ -82,11 +82,14 @@ class GlobalSetsTest extends Unit
     /**
      * @dataProvider provideGlobalSets
      *
-     * @param GlobalSetModel $set
+     * @param GlobalSetElement $set
      */
     public function testDeleteRecord(GlobalSetElement $set)
     {
-        Craft::$app->elements->expects($this->exactly(1))->method('deleteElementById')->with($set->id);
+        Craft::$app->elements->expects($this->exactly(1))
+                             ->method('deleteElementById')
+                             ->with($set->id);
+
         $this->converter->deleteRecord($set);
     }
 

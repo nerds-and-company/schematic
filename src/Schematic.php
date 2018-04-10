@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic;
 
 use Craft;
+use craft\base\Model;
 
 /**
  * Schematic.
@@ -122,5 +123,21 @@ class Schematic
     public static function info($message)
     {
         Craft::info($message, 'schematic');
+    }
+
+    /**
+     * Log an import error.
+     *
+     * @param Model  $record
+     * @param string $handle
+     */
+    public static function importError(Model $record, string $handle)
+    {
+        static::warning('- Error importing '.get_class($record).' '.$handle);
+        foreach ($record->getErrors() as $errors) {
+            foreach ($errors as $error) {
+                static::error('   - '.$error);
+            }
+        }
     }
 }
