@@ -8,7 +8,7 @@ use craft\models\SiteGroup;
 use Codeception\Test\Unit;
 
 /**
- * Class SitesTest.
+ * Class SiteTest.
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015-2017, Nerds & Company
@@ -24,7 +24,7 @@ class SiteTest extends Unit
     private $converter;
 
     /**
-     * Set the service.
+     * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */

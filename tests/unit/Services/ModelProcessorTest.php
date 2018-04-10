@@ -12,7 +12,9 @@ use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
 
 /**
- * Class CategoryGroupsTest.
+ * Class ModelProcessorTest.
+ *
+ * @TODO: Isolate from category groups
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015-2017, Nerds & Company
@@ -20,7 +22,7 @@ use NerdsAndCompany\Schematic\Schematic;
  *
  * @see      http://www.nerds.company
  */
-class CategoryGroupsTest extends Unit
+class ModelProcessorTest extends Unit
 {
     /**
      * @var CategoryGroups
