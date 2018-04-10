@@ -19,7 +19,7 @@ class Schematic
 {
     const DATA_TYPES = [
         'sites' => Services\ModelProcessor::class,
-        'volumes' => Services\Volumes::class,
+        'volumes' => Services\ModelProcessor::class,
         'assetTransforms' => Services\ModelProcessor::class,
         'fields' => Services\Fields::class,
         'plugins' => Services\Plugins::class,
@@ -56,6 +56,9 @@ class Schematic
                 break;
             case 'sites':
                 $records = Craft::$app->sites->getAllSites();
+                break;
+            case 'volumes':
+                $records = Craft::$app->volumes->getAllVolumes();
                 break;
         }
 

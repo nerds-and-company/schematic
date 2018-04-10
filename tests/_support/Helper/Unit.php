@@ -26,6 +26,8 @@ class Unit extends Module
     public function _before(TestCase $test)
     {
         $mockApp = $this->getMock($test, Application::class);
+        $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
+        $mockvolumes = $this->getMock($test, Volumes::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
         $mockElements = $this->getMock($test, Elements::class);
         $mockFields = $this->getMock($test, Fields::class);

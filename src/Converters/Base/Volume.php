@@ -1,12 +1,10 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Base;
 
 use Craft;
-use craft\base\VolumeInterface;
 use craft\base\Model;
-use craft\volumes\Local;
-use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
  * Schematic Asset Sources Service.
@@ -19,22 +17,12 @@ use NerdsAndCompany\Schematic\Schematic;
  *
  * @see      http://www.nerds.company
  */
-class Volumes extends Base
+class Volume extends Base
 {
-    /**
-     * Get all volumes
-     *
-     * @return VolumeInterface[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->volumes->getAllVolumes();
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         return Craft::$app->volumes->saveVolume($record);
     }
@@ -42,7 +30,7 @@ class Volumes extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->volumes->deleteVolume($record);
     }
