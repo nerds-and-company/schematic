@@ -118,7 +118,14 @@ abstract class Base extends BaseComponent implements MappingInterface
         foreach ($definitions as $handle => $definition) {
             $record = new $definition['class']();
             if (array_key_exists($handle, $recordsByHandle)) {
-                $record = $recordsByHandle[$handle];
+                $existing = $recordsByHandle[$handle];
+                if (get_class($record) == get_class($existing)) {
+                    $record = $existing;
+                } else {
+                    $record->id = $existing->id;
+                    $record->setAttributes($existing->getAttributes());
+                }
+
                 if ($this->getRecordDefinition($record) === $definition) {
                     Schematic::info('- Skipping '.get_class($record).' '.$handle);
                     unset($recordsByHandle[$handle]);
@@ -183,7 +190,7 @@ abstract class Base extends BaseComponent implements MappingInterface
                 $site = Craft::$app->sites->getSiteByHandle($handle);
                 if ($site) {
                     $siteSetting->siteId = $site->id;
-                    $siteSettings[] = $siteSetting;
+                    $siteSettings[$site->id] = $siteSetting;
                 } else {
                     Schematic::warning('  - Site '.$handle.' could not be found');
                 }
