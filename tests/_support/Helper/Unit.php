@@ -4,16 +4,22 @@ namespace Helper;
 
 use Craft;
 use craft\console\Application;
+use craft\i18n\I18n;
 use craft\services\Categories;
 use craft\services\Elements;
-use craft\services\Globals;
 use craft\services\Fields;
+use craft\services\Globals;
+use craft\services\Path;
 use craft\services\Sites;
-use craft\i18n\I18n;
 use Codeception\Module;
 use Codeception\TestCase;
 use NerdsAndCompany\Schematic\Schematic;
 
+/**
+ * UnitTest helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Unit extends Module
 {
     /**
@@ -26,6 +32,7 @@ class Unit extends Module
     public function _before(TestCase $test)
     {
         $mockApp = $this->getMock($test, Application::class);
+        $mockPath = $this->getMock($test, Path::class);
         $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
         $mockvolumes = $this->getMock($test, Volumes::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
@@ -38,12 +45,18 @@ class Unit extends Module
         $mockApp->expects($test->any())
             ->method('__get')
             ->willReturnMap([
+                ['assetTransforms', $mockAssetTransforms],
+                ['volumes', $mockvolumes],
                 ['categories', $mockCategoryGroups],
                 ['elements', $mockElements],
                 ['globals', $mockGlobals],
                 ['fields', $mockFields],
                 ['sites', $mockSites],
             ]);
+
+        $mockApp->expects($test->any())
+            ->method('getPath')
+            ->willreturn($mockPath);
 
         $mockApp->expects($test->any())
             ->method('getI18n')

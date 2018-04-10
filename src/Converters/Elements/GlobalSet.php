@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Converters\Elements;
 use Craft;
 use craft\elements\GlobalSet as GlobalSetElement;
 use craft\base\Model;
+use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
@@ -52,11 +53,15 @@ class GlobalSet extends Base
      */
     public function saveRecord(Model $record, array $definition)
     {
-        $site = Craft::$app->sites->getSiteByHandle($definition['site']);
-        if ($site) {
-            $record->siteId = $site->id;
-        } else {
-            Schematic::warning('Site '.$definition['site'].' could not be found');
+        if (array_key_exists('site', $definition)) {
+            $site = Craft::$app->sites->getSiteByHandle($definition['site']);
+            if ($site) {
+                $record->siteId = $site->id;
+            } else {
+                Schematic::error('Site '.$definition['site'].' could not be found');
+
+                return false;
+            }
         }
 
         return Craft::$app->globals->saveSet($record);
