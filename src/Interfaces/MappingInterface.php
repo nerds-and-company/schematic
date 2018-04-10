@@ -15,7 +15,21 @@ namespace NerdsAndCompany\Schematic\Interfaces;
  */
 interface MappingInterface
 {
+    /**
+     * Export given records.
+     *
+     * @param array $records
+     *
+     * @return array
+     */
     public function export(array $records): array;
 
+    /**
+     * Import given definitions.
+     *
+     * @param array $records
+     *
+     * @return array
+     */
     public function import(array $definitions, array $records): array;
 }
