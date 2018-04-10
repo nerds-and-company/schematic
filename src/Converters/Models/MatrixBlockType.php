@@ -28,8 +28,7 @@ class MatrixBlockType extends Base
         unset($definition['attributes']['fieldId']);
         unset($definition['attributes']['hasFieldErrors']);
 
-        $fields = Craft::$app->fields->getAllFields('matrixBlockType:'.$record->id);
-        $definition['fields'] = Craft::$app->schematic_fields->export($fields);
+        $definition['fields'] = Craft::$app->schematic_fields->export($record->fieldLayout->getFields());
 
         return $definition;
     }
@@ -41,10 +40,10 @@ class MatrixBlockType extends Base
     {
         $context = 'matrixBlockType:'.$record->id;
         $existingFields = Craft::$app->fields->getAllFields($context);
-        $fields = Craft::$app->schematic_fields->import($definition['fields'], $existingFields, [], false);
+        $fields = Craft::$app->schematic_fields->import($definition['fields'], $existingFields, ['context' => $context], false);
         $record->setFields($fields);
 
-        return Craft::$app->matrix->saveBlockType($record);
+        return Craft::$app->matrix->saveBlockType($record, false);
     }
 
     /**

@@ -81,12 +81,15 @@ class ModelProcessor extends BaseComponent implements MappingInterface
                 }
             }
 
-            Schematic::info('- Saving '.get_class($record).' '.$handle);
             $converter->setRecordAttributes($record, $definition, $defaultAttributes);
-            if (!$persist || $converter->saveRecord($record, $definition)) {
+            if (!$persist) {
                 $imported[] = $record;
             } else {
-                $this->importError($record, $handle);
+                Schematic::info('- Saving '.get_class($record).' '.$handle);
+                if ($converter->saveRecord($record, $definition)) {
+                } else {
+                    $this->importError($record, $handle);
+                }
             }
             unset($recordsByHandle[$handle]);
         }
