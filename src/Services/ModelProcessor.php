@@ -50,6 +50,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      * @param array $definitions
      * @param Model $records           The existing records
      * @param array $defaultAttributes Default attributes to use for each record
+     * @param bool  $persist           Whether to persist the parsed records
      */
     public function import(array $definitions, array $records = [], array $defaultAttributes = [], $persist = true)
     {
@@ -130,7 +131,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      * @param Model  $record
      * @param string $handle
      */
-    protected function importError(Model $record, string $handle)
+    public function importError(Model $record, string $handle)
     {
         Schematic::warning('- Error importing '.get_class($record).' '.$handle);
         foreach ($record->getErrors() as $errors) {

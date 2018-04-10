@@ -110,7 +110,7 @@ abstract class Base extends BaseComponent
     public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
     {
         $attributes = array_merge($definition['attributes'], $defaultAttributes);
-        $record->setAttributes($attributes);
+        $record->setAttributes($attributes, false);
 
         // Set field layout
         if (array_key_exists('fieldLayout', $definition)) {

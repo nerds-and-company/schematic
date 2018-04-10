@@ -33,6 +33,11 @@ class GlobalSet extends Base
             unset($definition['attributes']['uid']);
             unset($definition['attributes']['contentId']);
             unset($definition['attributes']['siteId']);
+            unset($definition['attributes']['hasDescendants']);
+            unset($definition['attributes']['ref']);
+            unset($definition['attributes']['status']);
+            unset($definition['attributes']['totalDescendants']);
+            unset($definition['attributes']['url']);
 
             foreach ($record->getFieldLayout()->getFields() as $field) {
                 unset($definition['attributes'][$field->handle]);
