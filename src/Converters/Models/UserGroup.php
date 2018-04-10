@@ -1,10 +1,9 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\UserGroup;
 
 /**
  * Schematic User Groups Service.
@@ -17,54 +16,53 @@ use craft\models\UserGroup;
  *
  * @see      http://www.nerds.company
  */
-class UserGroups extends Base
+class UserGroup extends Base
 {
-    /** @var string[] */
-    private $mappedPermissions = [];
-
     /**
-     * Get all section records
-     *
-     * @return UserGroup[]
+     * {@inheritdoc}
      */
-    protected function getRecords()
+    public function getRecordDefinition(Model $record)
     {
-        $this->mappedPermissions = $this->getAllMappedPermissions();
+        $attributes = parent::getRecordDefinition($record);
+        $mappedPermissions = $this->getAllMappedPermissions();
 
-        return Craft::$app->userGroups->getAllGroups();
+        $groupPermissions = [];
+        foreach (Craft::$app->userPermissions->getPermissionsByGroupId($record->id) as $permission) {
+            if (array_key_exists($permission, $mappedPermissions)) {
+                $groupPermissions[] = $mappedPermissions[$permission];
+            } else {
+                $groupPermissions[] = $permission;
+            }
+        }
+
+        $permissionDefinitions = $this->getSources(false, $groupPermissions, 'id', 'handle');
+        sort($permissionDefinitions);
+
+        $attributes['permissions'] = $permissionDefinitions;
+
+        return $attributes;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getRecordDefinition(Model $record)
+    public function saveRecord(Model $record, array $definition)
     {
-        $attributes = parent::getRecordDefinition($record);
-        $attributes['permissions'] = $this->getGroupPermissionDefinitions($record);
-        return $attributes;
+        if (Craft::$app->userGroups->saveGroup($record)) {
+            $permissions = $this->getSources(false, $definition['permissions'], 'handle', 'id');
+
+            return Craft::$app->userPermissions->saveGroupPermissions($record->id, $permissions);
+        }
+
+        return false;
     }
 
     /**
-     * Get group permissions.
-     *
-     * @param $group
-     *
-     * @return array|string
+     * {@inheritdoc}
      */
-    private function getGroupPermissionDefinitions($group)
+    public function deleteRecord(Model $record)
     {
-        $permissionDefinitions = [];
-        $groupPermissions = Craft::$app->userPermissions->getPermissionsByGroupId($group->id);
-
-        foreach ($groupPermissions as $permission) {
-            if (array_key_exists($permission, $this->mappedPermissions)) {
-                $permission = $this->mappedPermissions[$permission];
-                $permissionDefinitions[] = $this->getSource(false, $permission, 'id', 'handle');
-            }
-        }
-        sort($permissionDefinitions);
-
-        return $permissionDefinitions;
+        return Craft::$app->userGroups->deleteGroup($record);
     }
 
     /**
@@ -84,6 +82,8 @@ class UserGroups extends Base
     }
 
     /**
+     * Recursive function to get mapped permissions.
+     *
      * @param array $permissions
      *
      * @return array
@@ -93,28 +93,11 @@ class UserGroups extends Base
         $mappedPermissions = [];
         foreach ($permissions as $permission => $options) {
             $mappedPermissions[strtolower($permission)] = $permission;
-            if (array_key_exists('nested', $options)) {
+            if (is_array($options) && array_key_exists('nested', $options)) {
                 $mappedPermissions = array_merge($mappedPermissions, $this->getMappedPermissions($options['nested']));
             }
         }
 
         return $mappedPermissions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function saveRecord(Model $record, array $definition)
-    {
-        Schematic::warning('Importing usergroup permissions is not yet implemented');
-        return Craft::$app->userGroups->saveGroup($record);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function deleteRecord(Model $record)
-    {
-        return Craft::$app->userGroups->deleteGroup($record);
     }
 }

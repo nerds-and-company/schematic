@@ -17,6 +17,13 @@ use Craft;
  */
 class Schematic
 {
+    /**
+     * The available datatypes.
+     *
+     * @TODO: Make data types and processor components configurable.
+     *
+     * @var array
+     */
     const DATA_TYPES = [
         'sites' => Services\ModelProcessor::class,
         'volumes' => Services\ModelProcessor::class,

@@ -81,6 +81,7 @@ class SourcesBehavior extends Behavior
                 $method = 'getSectionBy';
                 break;
             case 'group':
+            case 'editCategories':
                 $service = $fieldType == 'Users' ? Craft::$app->userGroups : Craft::$app->categories;
                 $method = 'getGroupBy';
                 break;
@@ -117,7 +118,8 @@ class SourcesBehavior extends Behavior
             return $sourceType.':'.$sourceObject->$indexTo;
         }
 
-        Schematic::warning('No mapping found for source'.$source);
+        Schematic::warning('No mapping found for source '.$source);
+
         return $source;
     }
 }
