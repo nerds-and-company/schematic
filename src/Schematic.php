@@ -44,6 +44,7 @@ class Schematic
      * Get records for datatype.
      *
      * @TODO: Make this more dynamic
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
      * @param string $datatype
      *
