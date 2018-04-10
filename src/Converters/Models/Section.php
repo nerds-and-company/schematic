@@ -8,7 +8,7 @@ use craft\models\Section as SectionModel;
 use craft\models\Section_SiteSettings;
 
 /**
- * Schematic Sections.
+ * Schematic Sections Converter.
  *
  * Sync Craft Setups.
  *

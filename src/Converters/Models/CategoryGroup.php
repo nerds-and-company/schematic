@@ -7,7 +7,7 @@ use craft\base\Model;
 use craft\models\CategoryGroup_SiteSettings;
 
 /**
- * Schematic Category Groups Service.
+ * Schematic Category Groups Converter.
  *
  * Sync Craft Setups.
  *

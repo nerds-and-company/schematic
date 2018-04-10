@@ -1,14 +1,14 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Converters\Base;
 
 use Craft;
-use craft\base\Field;
 use craft\base\Model;
 use craft\models\FieldGroup;
+use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
- * Schematic Fields Service.
+ * Schematic Fields Converter.
  *
  * Sync Craft Setups.
  *
@@ -18,7 +18,7 @@ use craft\models\FieldGroup;
  *
  * @see      http://www.nerds.company
  */
-class Fields extends Base
+class Field extends Base
 {
     /**
      * @var number[]
@@ -26,37 +26,16 @@ class Fields extends Base
     private $groups;
 
     /**
-     * Get all field groups.
-     *
-     * @return FieldGroup[]
-     */
-    protected function getRecords()
-    {
-        return Craft::$app->fields->getAllFields();
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function import(array $definitions, array $records = [], array $defaultAttributes = [])
-    {
-        parent::import($definitions, $records, $defaultAttributes);
-        // Update field version so that contentbehavior is regenerated
-        Craft::$app->fields->updateFieldVersion();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record)
     {
         $definition = parent::getRecordDefinition($record);
-        if ($record instanceof Field) {
-            $definition['group'] = $record->group->name;
-            unset($definition['attributes']['groupId']);
-            unset($definition['attributes']['layoutId']);
-            unset($definition['attributes']['tabId']);
-        }
+
+        $definition['group'] = $record->group->name;
+        unset($definition['attributes']['groupId']);
+        unset($definition['attributes']['layoutId']);
+        unset($definition['attributes']['tabId']);
 
         return $definition;
     }
@@ -64,7 +43,7 @@ class Fields extends Base
     /**
      * {@inheritdoc}
      */
-    protected function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition)
     {
         $record->groupId = $this->getGroupIdByName($definition['group']);
 
@@ -74,7 +53,7 @@ class Fields extends Base
     /**
      * {@inheritdoc}
      */
-    protected function deleteRecord(Model $record)
+    public function deleteRecord(Model $record)
     {
         return Craft::$app->fields->deleteField($record);
     }

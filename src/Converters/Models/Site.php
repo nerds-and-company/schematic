@@ -7,7 +7,7 @@ use craft\models\SiteGroup;
 use craft\base\Model;
 
 /**
- * Schematic Globals Service.
+ * Schematic Sites Converter.
  *
  * Sync Craft Setups.
  *

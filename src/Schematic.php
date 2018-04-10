@@ -21,7 +21,7 @@ class Schematic
         'sites' => Services\ModelProcessor::class,
         'volumes' => Services\ModelProcessor::class,
         'assetTransforms' => Services\ModelProcessor::class,
-        'fields' => Services\Fields::class,
+        'fields' => Services\ModelProcessor::class,
         'plugins' => Services\Plugins::class,
         'sections' => Services\ModelProcessor::class,
         'globalSets' => Services\ModelProcessor::class,
@@ -50,6 +50,9 @@ class Schematic
                 break;
             case 'categoryGroups':
                 $records = Craft::$app->categories->getAllGroups();
+                break;
+            case 'fields':
+                $records = Craft::$app->fields->getAllFields();
                 break;
             case 'globalSets':
                 $records = Craft::$app->globals->getAllSets();

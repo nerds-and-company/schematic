@@ -83,6 +83,9 @@ class ImportCommand extends Base
                 if (is_array($dataModel->$dataType)) {
                     $records = Schematic::getRecords($dataType);
                     Craft::$app->$component->import($dataModel->$dataType, $records);
+                    if ($dataType == 'fields') {
+                        Craft::$app->fields->updateFieldVersion();
+                    }
                 }
             } else {
                 Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');

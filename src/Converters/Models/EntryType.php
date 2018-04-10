@@ -6,7 +6,7 @@ use Craft;
 use craft\base\Model;
 
 /**
- * Schematic Sections.
+ * Schematic Entry Types Converter.
  *
  * Sync Craft Setups.
  *

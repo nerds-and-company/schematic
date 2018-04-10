@@ -8,7 +8,7 @@ use craft\base\Model;
 use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
- * Schematic Globals Service.
+ * Schematic Globals Converter.
  *
  * Sync Craft Setups.
  *

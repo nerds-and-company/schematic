@@ -6,7 +6,7 @@ use Craft;
 use craft\base\Model;
 
 /**
- * Schematic Asset Transforms converter.
+ * Schematic Asset Transforms Converter.
  *
  * Sync Craft Setups.
  *

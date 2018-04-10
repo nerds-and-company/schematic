@@ -7,7 +7,7 @@ use craft\base\Model;
 use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
- * Schematic Asset Sources Service.
+ * Schematic Volume Converter.
  *
  * Sync Craft Setups.
  *

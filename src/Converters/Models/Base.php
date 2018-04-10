@@ -10,7 +10,7 @@ use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
 use NerdsAndCompany\Schematic\Schematic;
 
 /**
- * Schematic Base Service.
+ * Schematic Base Converter.
  *
  * Sync Craft Setups.
  *
