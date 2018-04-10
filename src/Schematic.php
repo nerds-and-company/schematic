@@ -23,7 +23,7 @@ class Schematic
         'assetTransforms' => Services\ModelProcessor::class,
         'fields' => Services\Fields::class,
         'plugins' => Services\Plugins::class,
-        'sections' => Services\Sections::class,
+        'sections' => Services\ModelProcessor::class,
         'globalSets' => Services\ModelProcessor::class,
         'userGroups' => Services\UserGroups::class,
         'users' => Services\Users::class,
@@ -53,6 +53,9 @@ class Schematic
                 break;
             case 'globalSets':
                 $records = Craft::$app->globals->getAllSets();
+                break;
+            case 'sections':
+                $records = Craft::$app->sections->getAllSections();
                 break;
             case 'sites':
                 $records = Craft::$app->sites->getAllSites();

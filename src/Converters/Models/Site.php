@@ -58,11 +58,7 @@ class Site extends Base
     }
 
     /**
-     * Get group id by name.
-     *
-     * @param string $name
-     *
-     * @return
+     * {@inheritdoc}
      */
     public function getGroupIdByName($name)
     {
