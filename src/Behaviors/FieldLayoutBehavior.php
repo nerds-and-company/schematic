@@ -1,4 +1,5 @@
 <?php
+
 namespace NerdsAndCompany\Schematic\Behaviors;
 
 use Craft;

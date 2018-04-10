@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
+use craft\models\MatrixBlockType;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
@@ -83,7 +84,9 @@ abstract class Base extends BaseComponent
 
         // Define field layout
         if (isset($definition['attributes']['fieldLayoutId'])) {
-            $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
+            if (!$record instanceof MatrixBlockType) {
+                $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
+            }
             unset($definition['attributes']['fieldLayoutId']);
         }
 
@@ -107,7 +110,7 @@ abstract class Base extends BaseComponent
     public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
     {
         $attributes = array_merge($definition['attributes'], $defaultAttributes);
-        $record->setAttributes($attributes);
+        $record->setAttributes($attributes, false);
 
         // Set field layout
         if (array_key_exists('fieldLayout', $definition)) {

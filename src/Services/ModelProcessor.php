@@ -51,8 +51,9 @@ class ModelProcessor extends BaseComponent implements MappingInterface
      * @param Model $records           The existing records
      * @param array $defaultAttributes Default attributes to use for each record
      */
-    public function import(array $definitions, array $records = [], array $defaultAttributes = [])
+    public function import(array $definitions, array $records = [], array $defaultAttributes = [], $persist = true)
     {
+        $imported = [];
         $recordsByHandle = ArrayHelper::index($records, 'handle');
         foreach ($definitions as $handle => $definition) {
             $modelClass = $definition['class'];
@@ -81,13 +82,15 @@ class ModelProcessor extends BaseComponent implements MappingInterface
 
             Schematic::info('- Saving '.get_class($record).' '.$handle);
             $converter->setRecordAttributes($record, $definition, $defaultAttributes);
-            if (!$converter->saveRecord($record, $definition)) {
+            if (!$persist || $converter->saveRecord($record, $definition)) {
+                $imported[] = $record;
+            } else {
                 $this->importError($record, $handle);
             }
             unset($recordsByHandle[$handle]);
         }
 
-        if (Schematic::$force) {
+        if (Schematic::$force && $persist) {
             // Delete records not in definitions
             foreach ($recordsByHandle as $handle => $record) {
                 $modelClass = get_class($record);
@@ -96,6 +99,8 @@ class ModelProcessor extends BaseComponent implements MappingInterface
                 $converter->deleteRecord($record);
             }
         }
+
+        return $imported;
     }
 
     /**
@@ -108,7 +113,7 @@ class ModelProcessor extends BaseComponent implements MappingInterface
     protected function getConverter(string $modelClass)
     {
         if ($modelClass) {
-            $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(ltrim($modelClass, 'craft\\'));
+            $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
             if (class_exists($converterClass)) {
                 return new $converterClass();
             }

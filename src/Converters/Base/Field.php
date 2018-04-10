@@ -32,7 +32,12 @@ class Field extends Base
     {
         $definition = parent::getRecordDefinition($record);
 
-        $definition['group'] = $record->group->name;
+        if ($record->groupId) {
+            $definition['group'] = $record->group->name;
+        }
+
+        $definition['attributes']['required'] = $definition['attributes']['required'] == true;
+        unset($definition['attributes']['context']);
         unset($definition['attributes']['groupId']);
         unset($definition['attributes']['layoutId']);
         unset($definition['attributes']['tabId']);
@@ -45,7 +50,9 @@ class Field extends Base
      */
     public function saveRecord(Model $record, array $definition)
     {
-        $record->groupId = $this->getGroupIdByName($definition['group']);
+        if (array_key_exists('group', $definition)) {
+            $record->groupId = $this->getGroupIdByName($definition['group']);
+        }
 
         return Craft::$app->fields->saveField($record);
     }
