@@ -68,6 +68,10 @@ class EntryTypeTest extends Unit
         $newEntryType->expects($this->exactly(1))
                      ->method('setFieldLayout');
 
+        Craft::$app->fields->expects($this->any())
+                           ->method('getFieldByHandle')
+                           ->willReturn($this->getMockField($entryType->id));
+
         $this->converter->setRecordAttributes($newEntryType, $definition, $defaultAttributes);
 
         $this->assertSame($defaultAttributes['sectionId'], $newEntryType->sectionId);
@@ -181,19 +185,16 @@ class EntryTypeTest extends Unit
     private function getMockEntryType(int $entryTypeId)
     {
         $mockEntryType = $this->getMockBuilder(EntryTypeModel::class)
-                           ->setMethods(['getFieldLayout'])
-                           ->disableOriginalConstructor()
-                           ->getMock();
+                              ->setMethods(['getFieldLayout'])
+                              ->disableOriginalConstructor()
+                              ->getMock();
 
         $mockEntryType->id = $entryTypeId;
         $mockEntryType->fieldLayoutId = $entryTypeId;
         $mockEntryType->handle = 'entryTypeHandle'.$entryTypeId;
         $mockEntryType->name = 'entryTypeName'.$entryTypeId;
 
-        $mockField = $this->getMockbuilder(FieldModel::class)->getMock();
-        $mockField->id = $entryTypeId;
-        $mockField->handle = 'field'.$entryTypeId;
-        $mockField->required = true;
+        $mockField = $this->getMockField($entryTypeId);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
         $mockFieldLayoutTab = $this->getMockBuilder(FieldLayoutTab::class)->getMock();
@@ -212,5 +213,25 @@ class EntryTypeTest extends Unit
                    ->willReturn($mockFieldLayout);
 
         return $mockEntryType;
+    }
+
+    /**
+     * Get a mock field.
+     *
+     * @param int $fieldId
+     *
+     * @return Mock|FieldModel
+     */
+    private function getMockField(int $fieldId)
+    {
+        $mockField = $this->getMockbuilder(FieldModel::class)
+                         ->setMethods([])
+                         ->getMock();
+
+        $mockField->id = $fieldId;
+        $mockField->handle = 'field'.$fieldId;
+        $mockField->required = true;
+
+        return $mockField;
     }
 }
