@@ -14,6 +14,7 @@ use craft\services\Matrix;
 use craft\services\Path;
 use craft\services\Sections;
 use craft\services\Sites;
+use craft\services\Tags;
 use craft\services\Volumes;
 use Codeception\Module;
 use Codeception\TestCase;
@@ -48,7 +49,8 @@ class Unit extends Module
         $mockPath = $this->getMock($test, Path::class);
         $mockSections = $this->getMock($test, Sections::class);
         $mockSites = $this->getMock($test, Sites::class);
-        $mockvolumes = $this->getMock($test, Volumes::class);
+        $mockTags = $this->getMock($test, Tags::class);
+        $mockVolumes = $this->getMock($test, Volumes::class);
 
         $mockApp->expects($test->any())
             ->method('__get')
@@ -63,7 +65,8 @@ class Unit extends Module
                 ['schematic_sections', $mockModelProcessor],
                 ['sections', $mockSections],
                 ['sites', $mockSites],
-                ['volumes', $mockvolumes],
+                ['tags', $mockTags],
+                ['volumes', $mockVolumes],
             ]);
 
         $mockApp->expects($test->any())

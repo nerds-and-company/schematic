@@ -119,7 +119,7 @@ class AssetTransformTest extends Unit
     }
 
     /**
-     * @param int $assetTransformId
+     * @param AssetTransformModel $assetTransform
      *
      * @return array
      */
