@@ -6,9 +6,10 @@ use Craft;
 use craft\base\Model;
 use craft\models\MatrixBlockType;
 use yii\base\Component as BaseComponent;
+use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
-use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
 
 /**
  * Schematic Base Converter.
@@ -21,7 +22,7 @@ use NerdsAndCompany\Schematic\Schematic;
  *
  * @see      http://www.nerds.company
  */
-abstract class Base extends BaseComponent
+abstract class Base extends BaseComponent implements ConverterInterface
 {
     /**
      * Load fieldlayout and sources behaviors.
@@ -37,32 +38,19 @@ abstract class Base extends BaseComponent
     }
 
     /**
-     * Save a record.
-     *
-     * @param Model $record
-     * @param array $definition
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    abstract public function saveRecord(Model $record, array $definition);
+    abstract public function saveRecord(Model $record, array $definition): bool;
 
     /**
-     * Delete a record.
-     *
-     * @param Model $record
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    abstract public function deleteRecord(Model $record);
+    abstract public function deleteRecord(Model $record): bool;
 
     /**
-     * Get single record definition.
-     *
-     * @param Model $record
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = [
           'class' => get_class($record),
@@ -102,12 +90,9 @@ abstract class Base extends BaseComponent
     }
 
     /**
-     * Set record attributes from definition.
-     *
-     * @param Model $record
-     * @param array $definition
+     * {@inheritdoc}
      */
-    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
+    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes): void
     {
         $attributes = array_merge($definition['attributes'], $defaultAttributes);
         $record->setAttributes($attributes, false);

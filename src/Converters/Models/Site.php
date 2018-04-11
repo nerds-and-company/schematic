@@ -28,7 +28,7 @@ class Site extends Base
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
 
@@ -41,7 +41,7 @@ class Site extends Base
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         if ($definition['group']) {
             $record->groupId = $this->getGroupIdByName($definition['group']);
@@ -53,7 +53,7 @@ class Site extends Base
     /**
      * {@inheritdoc}
      */
-    public function deleteRecord(Model $record)
+    public function deleteRecord(Model $record): bool
     {
         return Craft::$app->sites->deleteSiteById($record->id);
     }

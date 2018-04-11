@@ -21,7 +21,7 @@ class UserGroup extends Base
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $attributes = parent::getRecordDefinition($record);
         $mappedPermissions = $this->getAllMappedPermissions();
@@ -46,7 +46,7 @@ class UserGroup extends Base
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         if (Craft::$app->userGroups->saveGroup($record)) {
             $permissions = $this->getSources(false, $definition['permissions'], 'handle', 'id');
@@ -60,7 +60,7 @@ class UserGroup extends Base
     /**
      * {@inheritdoc}
      */
-    public function deleteRecord(Model $record)
+    public function deleteRecord(Model $record): bool
     {
         return Craft::$app->userGroups->deleteGroup($record);
     }

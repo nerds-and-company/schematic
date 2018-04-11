@@ -24,7 +24,7 @@ class GlobalSet extends Base
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
 
@@ -51,7 +51,7 @@ class GlobalSet extends Base
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         if (array_key_exists('site', $definition)) {
             $site = Craft::$app->sites->getSiteByHandle($definition['site']);
@@ -70,7 +70,7 @@ class GlobalSet extends Base
     /**
      * {@inheritdoc}
      */
-    public function deleteRecord(Model $record)
+    public function deleteRecord(Model $record): bool
     {
         return Craft::$app->elements->deleteElementById($record->id);
     }

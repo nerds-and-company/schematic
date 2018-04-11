@@ -21,7 +21,7 @@ class AssetTransform extends Base
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
 
@@ -33,7 +33,7 @@ class AssetTransform extends Base
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         return Craft::$app->assetTransforms->saveTransform($record);
     }
@@ -41,7 +41,7 @@ class AssetTransform extends Base
     /**
      * {@inheritdoc}
      */
-    public function deleteRecord(Model $record)
+    public function deleteRecord(Model $record): bool
     {
         return Craft::$app->assetTransforms->deleteTransform($record->id);
     }

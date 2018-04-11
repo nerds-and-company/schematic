@@ -23,7 +23,7 @@ class Section extends Base
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
 
@@ -42,7 +42,7 @@ class Section extends Base
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         if (Craft::$app->sections->saveSection($record)) {
             Craft::$app->schematic_sections->import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
@@ -56,7 +56,7 @@ class Section extends Base
     /**
      * {@inheritdoc}
      */
-    public function deleteRecord(Model $record)
+    public function deleteRecord(Model $record): bool
     {
         return Craft::$app->sections->deleteSection($record);
     }

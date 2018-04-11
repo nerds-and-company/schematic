@@ -7,6 +7,7 @@ use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Base as BaseConverter;
+use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use yii\base\Component as BaseComponent;
 
@@ -131,7 +132,10 @@ class ModelProcessor extends BaseComponent implements MappingInterface
         if ($modelClass) {
             $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
             if (class_exists($converterClass)) {
-                return new $converterClass();
+                $converter = new $converterClass();
+                if ($converter instanceof ConverterInterface) {
+                    return $converter;
+                }
             }
 
             return $this->getConverter(get_parent_class($modelClass));

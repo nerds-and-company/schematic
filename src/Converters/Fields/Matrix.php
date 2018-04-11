@@ -22,7 +22,7 @@ class Matrix extends Field
     /**
      * {@inheritdoc}
      */
-    public function getRecordDefinition(Model $record)
+    public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
         $definition['blockTypes'] = Craft::$app->schematic_fields->export($record->getBlockTypes());
@@ -33,7 +33,7 @@ class Matrix extends Field
     /**
      * {@inheritdoc}
      */
-    public function saveRecord(Model $record, array $definition)
+    public function saveRecord(Model $record, array $definition): bool
     {
         if (parent::saveRecord($record, $definition)) {
             if (array_key_exists('blockTypes', $definition)) {
