@@ -3,7 +3,7 @@
 namespace NerdsAndCompany\Schematic\Converters\Base;
 
 use Craft;
-use craft\base\Field;
+use craft\base\Field as FieldModel;
 use craft\base\Volume as VolumeModel;
 use craft\models\FieldLayout;
 use craft\volumes\Local;
@@ -110,7 +110,7 @@ class VolumeTest extends Unit
     /**
      * @param int $volumeId
      *
-     * @return Local
+     * @return Mock|VolumeModel
      */
     private function getMockVolume(int $volumeId)
     {
@@ -124,7 +124,7 @@ class VolumeTest extends Unit
         $mockVolume->handle = 'volumeHandle'.$volumeId;
         $mockVolume->name = 'volumeName'.$volumeId;
 
-        $mockField = $this->getMockbuilder(Field::class)->getMock();
+        $mockField = $this->getMockbuilder(FieldModel::class)->getMock();
         $mockField->id = $volumeId;
         $mockField->handle = 'field'.$volumeId;
         $mockField->required = true;

@@ -163,7 +163,7 @@ class SiteTest extends Unit
                                     ->getMock();
 
         $mockSite->id = $siteId;
-        $mockSite->groupId = 1;
+        $mockSite->groupId = $groupId;
         $mockSite->handle = 'siteHandle'.$siteId;
         $mockSite->language = 'nl';
         $mockSite->primary = true;

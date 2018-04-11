@@ -62,7 +62,7 @@ class Plugins extends BaseComponent implements MappingInterface
     {
         foreach ($pluginDefinitions as $handle => $definition) {
             if (!array_key_exists($handle, $plugins)) {
-                Schematic::error('Plugin info not found for '.$handle.', make sure it is installed with composer');
+                Schematic::error(' - Plugin info not found for '.$handle.', make sure it is installed with composer');
                 continue;
             }
             if (!$definition['isInstalled']) {

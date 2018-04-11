@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Converters\Base;
 use Craft;
 use craft\base\Model;
 use craft\models\FieldGroup;
+use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Models\Base;
 
 /**
