@@ -68,6 +68,7 @@ class ImportController extends Base
      */
     private function importFromYaml($dataTypes)
     {
+        $this->disableLogging();
         $yaml = file_get_contents($this->file);
         $yamlOverride = null;
         if (file_exists($this->overrideFile)) {

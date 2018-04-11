@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic;
 use Craft;
 use craft\base\Model;
 use yii\base\Module;
+use yii\helpers\Console;
 use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
 use NerdsAndCompany\Schematic\Mappers\ModelMapper;
 use NerdsAndCompany\Schematic\Mappers\PluginMapper;
@@ -167,7 +168,7 @@ class Schematic extends Module
      */
     public static function error($message)
     {
-        Craft::error($message, 'schematic');
+        Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_RED);
     }
 
     /**
@@ -178,7 +179,7 @@ class Schematic extends Module
      */
     public static function warning($message)
     {
-        Craft::warning($message, 'schematic');
+        Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_YELLOW);
     }
 
     /**
@@ -189,7 +190,7 @@ class Schematic extends Module
      */
     public static function info($message)
     {
-        Craft::info($message, 'schematic');
+        Craft::$app->controller->stdout($message.PHP_EOL);
     }
 
     /**

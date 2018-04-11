@@ -50,6 +50,7 @@ class ExportController extends Base
      */
     public function exportToYaml($file, $dataTypes)
     {
+        $this->disableLogging();
         $result = [];
         foreach ($dataTypes as $dataType) {
             $component = Schematic::DATA_TYPES[$dataType]['mapper'];

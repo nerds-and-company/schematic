@@ -104,4 +104,16 @@ class Base extends Controller
         // Remove any explicitly excluded data types from the list of data types to export.
         return array_diff($dataTypes, $exclusions);
     }
+
+    /**
+     * Disable normal logging (to stdout) while running console commands.
+     *
+     * @TODO: Find a less hacky way to solve this
+     */
+    protected function disableLogging()
+    {
+        if (Craft::$app->log) {
+            Craft::$app->log->targets = [];
+        }
+    }
 }
