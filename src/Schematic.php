@@ -66,6 +66,9 @@ class Schematic
             case 'globalSets':
                 $records = Craft::$app->globals->getAllSets();
                 break;
+            case 'plugins':
+                $records = Craft::$app->plugins->getAllPluginInfo();
+                break;
             case 'sections':
                 $records = Craft::$app->sections->getAllSections();
                 break;

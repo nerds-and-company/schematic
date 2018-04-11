@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\Services;
 
 use Craft;
-use craft\base\Plugin;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
 use yii\base\Component as BaseComponent;
@@ -24,14 +23,11 @@ class Plugins extends BaseComponent implements MappingInterface
     /**
      * {@inheritdoc}
      */
-    public function export(array $plugins = null): array
+    public function export(array $plugins): array
     {
-        $plugins = Craft::$app->plugins->getAllPlugins();
         $pluginDefinitions = [];
-
-        foreach ($plugins as $plugin) {
-            $handle = preg_replace('/^Craft\\\\(.*?)Plugin$/', '$1', get_class($plugin));
-            $pluginDefinitions[$handle] = $this->getPluginDefinition($plugin);
+        foreach ($plugins as $handle => $pluginInfo) {
+            $pluginDefinitions[$handle] = $this->getPluginDefinition($handle, $pluginInfo);
         }
         ksort($pluginDefinitions);
 
@@ -39,15 +35,23 @@ class Plugins extends BaseComponent implements MappingInterface
     }
 
     /**
-     * @param Plugin $plugin
+     * @param string $handle
+     * @param array  $pluginInfo
      *
      * @return array
      */
-    private function getPluginDefinition(Plugin $plugin)
+    private function getPluginDefinition(string $handle, array $pluginInfo)
     {
+        $settings = null;
+        $plugin = Craft::$app->plugins->getPlugin($handle);
+        if ($plugin) {
+            $settings = $plugin->getSettings();
+        }
+
         return [
-            'isInstalled' => $plugin->isInstalled,
-            'settings' => $plugin->getSettings()->attributes,
+          'isEnabled' => $pluginInfo['isEnabled'],
+          'isInstalled' => $pluginInfo['isInstalled'],
+          'settings' => $settings ? $settings->attributes : [],
         ];
     }
 
@@ -56,8 +60,52 @@ class Plugins extends BaseComponent implements MappingInterface
      */
     public function import(array $pluginDefinitions, array $plugins): array
     {
-        Schematic::warning('Import of plugins is not yet implemented');
-        //TODO rebuild plugins import
+        foreach ($pluginDefinitions as $handle => $definition) {
+            if (!array_key_exists($handle, $plugins)) {
+                Schematic::error('Plugin info not found for '.$handle.', make sure it is installed with composer');
+                continue;
+            }
+            if (!$definition['isInstalled']) {
+                continue;
+            }
+            Schematic::info('- Installing plugin '.$handle);
+            $pluginInfo = $plugins[$handle];
+            $this->savePlugin($handle, $definition, $pluginInfo);
+            unset($plugins[$handle]);
+        }
+
+        if (Schematic::$force) {
+            foreach (array_keys($plugins) as $handle) {
+                if ($plugins[$handle]['isInstalled']) {
+                    Schematic::info('- Uninstalling plugin '.$handle);
+                    Craft::$app->plugins->uninstallPlugin($handle);
+                }
+            }
+        }
+
         return $plugins;
+    }
+
+    /**
+     * Install, enable, disable and/or update plugin.
+     *
+     * @param string $handle
+     * @param array  $definition
+     * @param array  $pluginInfo
+     */
+    private function savePlugin(string $handle, array $definition, array $pluginInfo)
+    {
+        if (!$pluginInfo['isInstalled']) {
+            Craft::$app->plugins->installPlugin($handle);
+        }
+        if ($definition['isEnabled']) {
+            Craft::$app->plugins->enablePlugin($handle);
+        } else {
+            Craft::$app->plugins->disablePlugin($handle);
+        }
+        $plugin = Craft::$app->plugins->getPlugin($handle);
+        if ($plugin && $plugin->getSettings()) {
+            Craft::$app->plugins->savePluginSettings($plugin, $definition['settings']);
+        }
     }
 }

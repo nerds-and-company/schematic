@@ -2,6 +2,7 @@
 <?php
 use craft\migrations\Install;
 use pahanini\log\ConsoleTarget;
+use yii\log\Dispatcher;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\ConsoleCommands\ImportCommand;
 use NerdsAndCompany\Schematic\ConsoleCommands\ExportCommand;
@@ -20,7 +21,15 @@ $app = require_once CRAFT_VENDOR_PATH.'/craftcms/cms/bootstrap/console.php';
 // Set console logger
 $consoleTarget = new ConsoleTarget();
 $consoleTarget->categories = ['schematic'];
-Craft::getLogger()->dispatcher->targets = [$consoleTarget];
+
+if (Craft::getLogger()->dispatcher) {
+    Craft::getLogger()->dispatcher->targets = [$consoleTarget];
+} else {
+    Craft::getLogger()->dispatcher = Craft::createObject([
+        'class' => Dispatcher::class,
+        'targets' => [$consoleTarget],
+    ]);
+}
 
 // Add schematic controllers
 $app->controllerMap = [
