@@ -48,7 +48,7 @@ class UserGroup extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
-        if (Craft::$app->userGroups->saveGroup($record)) {
+        if (Craft::$app->userGroups->saveGroup($record) && array_key_exists('permissions', $definition)) {
             $permissions = $this->getSources(false, $definition['permissions'], 'handle', 'id');
 
             return Craft::$app->userPermissions->saveGroupPermissions($record->id, $permissions);
@@ -62,7 +62,7 @@ class UserGroup extends Base
      */
     public function deleteRecord(Model $record): bool
     {
-        return Craft::$app->userGroups->deleteGroup($record);
+        return Craft::$app->userGroups->deleteGroupById($record->id);
     }
 
     /**

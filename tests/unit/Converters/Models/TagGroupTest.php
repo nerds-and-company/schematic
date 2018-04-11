@@ -93,7 +93,7 @@ class TagGroupTest extends Unit
         $mockTagGroup = $this->getMockTagGroup(1);
 
         return [
-            'valid group existing group' => [
+            'valid tag group' => [
                 'group' => $mockTagGroup,
                 'definition' => $this->getMockTagGroupDefinition($mockTagGroup),
             ],

@@ -15,6 +15,8 @@ use craft\services\Path;
 use craft\services\Sections;
 use craft\services\Sites;
 use craft\services\Tags;
+use craft\services\UserGroups;
+use craft\services\UserPermissions;
 use craft\services\Volumes;
 use Codeception\Module;
 use Codeception\TestCase;
@@ -50,6 +52,8 @@ class Unit extends Module
         $mockSections = $this->getMock($test, Sections::class);
         $mockSites = $this->getMock($test, Sites::class);
         $mockTags = $this->getMock($test, Tags::class);
+        $mockUserGroups = $this->getMock($test, UserGroups::class);
+        $mockUserPermissions = $this->getMock($test, UserPermissions::class);
         $mockVolumes = $this->getMock($test, Volumes::class);
 
         $mockApp->expects($test->any())
@@ -66,6 +70,8 @@ class Unit extends Module
                 ['sections', $mockSections],
                 ['sites', $mockSites],
                 ['tags', $mockTags],
+                ['userGroups', $mockUserGroups],
+                ['userPermissions', $mockUserPermissions],
                 ['volumes', $mockVolumes],
             ]);
 
