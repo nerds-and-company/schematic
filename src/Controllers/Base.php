@@ -1,5 +1,6 @@
 <?php
-namespace NerdsAndCompany\Schematic\ConsoleCommands;
+
+namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
 use yii\base\Behavior;
@@ -35,7 +36,7 @@ class Base extends Controller
     }
 
     /**
-     * Get the datatypes to import and/or export
+     * Get the datatypes to import and/or export.
      *
      * @return array
      */
@@ -44,21 +45,23 @@ class Base extends Controller
         $dataTypes = array_keys(Schematic::DATA_TYPES);
 
         // If include is specified.
-        if ($this->include !== null) {
+        if (null !== $this->include) {
             $dataTypes = $this->applyIncludes($dataTypes);
         }
 
         // If there are exclusions.
-        if ($this->exclude !== null) {
+        if (null !== $this->exclude) {
             $dataTypes = $this->applyExcludes($dataTypes);
         }
+
         return $dataTypes;
     }
 
     /**
-     * Apply given includes
+     * Apply given includes.
      *
-     * @param  array $dataTypes
+     * @param array $dataTypes
+     *
      * @return array
      */
     protected function applyIncludes($dataTypes)
@@ -79,9 +82,10 @@ class Base extends Controller
     }
 
     /**
-     * Apply given excludes
+     * Apply given excludes.
      *
-     * @param  array $dataTypes
+     * @param array $dataTypes
+     *
      * @return array
      */
     protected function applyExcludes(array $dataTypes)

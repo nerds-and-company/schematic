@@ -24,7 +24,6 @@
   "require-dev": {
     "codeception/codeception": "^2.4"
   },
-  "bin": ["bin/schematic"],
   "autoload": {
     "psr-4": {
       "NerdsAndCompany\\Schematic\\": "src/"

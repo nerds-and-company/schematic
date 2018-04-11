@@ -28,7 +28,7 @@ class Section extends Base
         $definition = parent::getRecordDefinition($record);
 
         if ($record instanceof SectionModel) {
-            $definition['entryTypes'] = Craft::$app->schematic_sections->export($record->getEntryTypes());
+            $definition['entryTypes'] = Craft::$app->controller->module->modelMapper->export($record->getEntryTypes());
         }
 
         if ($record instanceof Section_SiteSettings) {
@@ -45,7 +45,7 @@ class Section extends Base
     public function saveRecord(Model $record, array $definition): bool
     {
         if (Craft::$app->sections->saveSection($record)) {
-            Craft::$app->schematic_sections->import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
+            Craft::$app->controller->module->modelMapper->import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
 
             return true;
         }

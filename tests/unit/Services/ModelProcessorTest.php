@@ -1,6 +1,6 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use craft\models\CategoryGroup;
@@ -12,7 +12,7 @@ use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
 
 /**
- * Class ModelProcessorTest.
+ * Class ModelMapperTest.
  *
  * @TODO: Isolate from category groups
  *
@@ -22,7 +22,7 @@ use NerdsAndCompany\Schematic\Schematic;
  *
  * @see      http://www.nerds.company
  */
-class ModelProcessorTest extends Unit
+class ModelMapperTest extends Unit
 {
     /**
      * @var CategoryGroups
@@ -40,7 +40,7 @@ class ModelProcessorTest extends Unit
                   ->method('getSiteByHandle')
                   ->willReturn($this->getMockSite());
 
-        $this->service = new ModelProcessor();
+        $this->service = new ModelMapper();
     }
 
     //==============================================================================================================

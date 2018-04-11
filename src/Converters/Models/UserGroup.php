@@ -36,6 +36,7 @@ class UserGroup extends Base
         }
 
         $permissionDefinitions = $this->getSources(false, $groupPermissions, 'id', 'handle');
+        sort($permissionDefinitions);
 
         $definition['permissions'] = $permissionDefinitions;
 

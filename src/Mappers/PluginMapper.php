@@ -1,10 +1,10 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
@@ -18,7 +18,7 @@ use yii\base\Component as BaseComponent;
  *
  * @see      http://www.nerds.company
  */
-class Plugins extends BaseComponent implements MappingInterface
+class PluginMapper extends BaseComponent implements MapperInterface
 {
     /**
      * {@inheritdoc}

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="PHP_CodeSniffer">
- <description>Coding standard for Roessingh</description>
+ <description>Coding standard for schematic</description>
 
  <file>modules/</file>
 

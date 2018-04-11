@@ -1,9 +1,9 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\ConsoleCommands;
+namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -18,7 +18,7 @@ use NerdsAndCompany\Schematic\Schematic;
  *
  * @see      http://www.nerds.company
  */
-class ImportCommand extends Base
+class ImportController extends Base
 {
     public $force = false;
 
@@ -76,19 +76,19 @@ class ImportCommand extends Base
         $dataModel = Data::fromYaml($yaml, $yamlOverride);
 
         foreach ($dataTypes as $dataType) {
-            $component = 'schematic_'.$dataType;
-            if (Craft::$app->$component instanceof MappingInterface) {
+            $component = Schematic::DATA_TYPES[$dataType]['mapper'];
+            if (Craft::$app->controller->module->$component instanceof MapperInterface) {
                 Schematic::info('Importing '.$dataType);
                 Schematic::$force = $this->force;
                 if (is_array($dataModel->$dataType)) {
                     $records = Schematic::getRecords($dataType);
-                    Craft::$app->$component->import($dataModel->$dataType, $records);
-                    if ($dataType == 'fields') {
+                    Craft::$app->controller->module->$component->import($dataModel->$dataType, $records);
+                    if ('fields' == $dataType) {
                         Craft::$app->fields->updateFieldVersion();
                     }
                 }
             } else {
-                Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
+                Schematic::error(get_class(Craft::$app->controller->module->$component).' does not implement MapperInterface');
             }
         }
 

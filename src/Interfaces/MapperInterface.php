@@ -13,7 +13,7 @@ namespace NerdsAndCompany\Schematic\Interfaces;
  *
  * @see      http://www.nerds.company
  */
-interface MappingInterface
+interface MapperInterface
 {
     /**
      * Export given records.

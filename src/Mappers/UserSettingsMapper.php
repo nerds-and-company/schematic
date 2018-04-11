@@ -1,12 +1,12 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use craft\elements\User;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
@@ -20,7 +20,7 @@ use yii\base\Component as BaseComponent;
  *
  * @see      http://www.nerds.company
  */
-class Users extends BaseComponent implements MappingInterface
+class UserSettingsMapper extends BaseComponent implements MapperInterface
 {
     /**
      * Load fieldlayout behavior.
@@ -59,7 +59,7 @@ class Users extends BaseComponent implements MappingInterface
     public function import(array $userSettings, array $settings = []): array
     {
         $photoVolumeId = null;
-        if (array_key_exists('photoVolume', $userSettings) && $userSettings['photoVolume'] != null) {
+        if (array_key_exists('photoVolume', $userSettings) && null != $userSettings['photoVolume']) {
             $volume = Craft::$app->volumes->getVolumeByHandle($userSettings['photoVolume']);
             $photoVolumeId = $volume ? $volume->id : null;
         }

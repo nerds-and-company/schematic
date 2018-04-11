@@ -4,6 +4,11 @@ namespace NerdsAndCompany\Schematic;
 
 use Craft;
 use craft\base\Model;
+use yii\base\Module;
+use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
+use NerdsAndCompany\Schematic\Mappers\ModelMapper;
+use NerdsAndCompany\Schematic\Mappers\PluginMapper;
+use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
 
 /**
  * Schematic.
@@ -16,28 +21,86 @@ use craft\base\Model;
  *
  * @see      http://www.nerds.company
  */
-class Schematic
+class Schematic extends Module
 {
+    /**
+     * @var string
+     */
+    public $controllerNamespace = 'NerdsAndCompany\Schematic\Controllers';
+
+    /**
+     * Initialize the module.
+     */
+    public function init()
+    {
+        Craft::setAlias('@NerdsAndCompany/Schematic', __DIR__);
+
+        $config = [
+            'components' => [
+                'elementIndexMapper' => [
+                    'class' => ElementIndexMapper::class,
+                ],
+                'modelMapper' => [
+                    'class' => ModelMapper::class,
+                ],
+                'pluginMapper' => [
+                    'class' => PluginMapper::class,
+                ],
+                'userSettingsMapper' => [
+                    'class' => UserSettingsMapper::class,
+                ],
+            ],
+        ];
+
+        Craft::configure($this, $config);
+
+        parent::init();
+    }
+
     /**
      * The available datatypes.
      *
-     * @TODO: Make data types and processor components configurable.
+     * @TODO: Make data types and Mapper components configurable.
      *
      * @var array
      */
     const DATA_TYPES = [
-        'sites' => Services\ModelProcessor::class,
-        'volumes' => Services\ModelProcessor::class,
-        'assetTransforms' => Services\ModelProcessor::class,
-        'fields' => Services\ModelProcessor::class,
-        'plugins' => Services\Plugins::class,
-        'sections' => Services\ModelProcessor::class,
-        'globalSets' => Services\ModelProcessor::class,
-        'userGroups' => Services\ModelProcessor::class,
-        'users' => Services\Users::class,
-        'categoryGroups' => Services\ModelProcessor::class,
-        'tagGroups' => Services\ModelProcessor::class,
-        'elementIndexSettings' => Services\ElementIndexSettings::class,
+        'sites' => [
+            'mapper' => 'modelMapper',
+        ],
+        'volumes' => [
+            'mapper' => 'modelMapper',
+        ],
+        'assetTransforms' => [
+            'mapper' => 'modelMapper',
+        ],
+        'fields' => [
+            'mapper' => 'modelMapper',
+        ],
+        'plugins' => [
+            'mapper' => 'pluginMapper',
+        ],
+        'sections' => [
+            'mapper' => 'modelMapper',
+        ],
+        'globalSets' => [
+            'mapper' => 'modelMapper',
+        ],
+        'userGroups' => [
+            'mapper' => 'modelMapper',
+        ],
+        'users' => [
+            'mapper' => 'userSettingsMapper',
+        ],
+        'categoryGroups' => [
+            'mapper' => 'modelMapper',
+        ],
+        'tagGroups' => [
+            'mapper' => 'modelMapper',
+        ],
+        'elementIndexSettings' => [
+            'mapper' => 'elementIndexMapper',
+        ],
     ];
 
     /**

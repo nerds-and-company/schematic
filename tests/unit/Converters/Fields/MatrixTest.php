@@ -44,10 +44,10 @@ class MatrixTest extends Unit
      */
     public function testGetRecordDefinition(MatrixModel $matrix, array $definition)
     {
-        Craft::$app->schematic_fields->expects($this->exactly(1))
-                           ->method('export')
-                           ->with($matrix->getBlockTypes())
-                           ->willReturn($definition['blockTypes']);
+        Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
+                                ->method('export')
+                                ->with($matrix->getBlockTypes())
+                                ->willReturn($definition['blockTypes']);
 
         $result = $this->converter->getRecordDefinition($matrix);
 
@@ -68,7 +68,7 @@ class MatrixTest extends Unit
                            ->with($matrix)
                            ->willReturn($valid);
 
-        Craft::$app->schematic_fields->expects($this->exactly($valid ? 1 : 0))
+        Craft::$app->controller->module->modelMapper->expects($this->exactly($valid ? 1 : 0))
                                      ->method('import')
                                      ->with($definition['blockTypes'], $matrix->getBlockTypes(), ['fieldId' => $matrix->id])
                                      ->willReturn($matrix->getBlockTypes());

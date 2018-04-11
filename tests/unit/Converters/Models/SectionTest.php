@@ -46,7 +46,7 @@ class SectionTest extends Unit
      */
     public function testGetRecordDefinition(SectionModel $section, array $definition)
     {
-        Craft::$app->schematic_fields->expects($this->exactly(1))
+        Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
                            ->method('export')
                            ->with($section->getEntryTypes())
                            ->willReturn($definition['entryTypes']);
@@ -70,7 +70,7 @@ class SectionTest extends Unit
                              ->with($section)
                              ->willReturn($valid);
 
-        Craft::$app->schematic_fields->expects($this->exactly($valid ? 1 : 0))
+        Craft::$app->controller->module->modelMapper->expects($this->exactly($valid ? 1 : 0))
                                      ->method('import')
                                      ->with($definition['entryTypes'], $section->getEntryTypes(), ['sectionId' => $section->id])
                                      ->willReturn($section->getEntryTypes());

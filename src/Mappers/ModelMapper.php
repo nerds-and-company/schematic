@@ -1,6 +1,6 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use craft\base\Model;
@@ -8,7 +8,7 @@ use craft\helpers\ArrayHelper;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Base as BaseConverter;
 use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
@@ -22,7 +22,7 @@ use yii\base\Component as BaseComponent;
  *
  * @see      http://www.nerds.company
  */
-class ModelProcessor extends BaseComponent implements MappingInterface
+class ModelMapper extends BaseComponent implements MapperInterface
 {
     /**
      * Get all record definitions.

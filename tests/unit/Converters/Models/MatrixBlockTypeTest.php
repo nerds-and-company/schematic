@@ -46,7 +46,7 @@ class MatrixBlockTypeTest extends Unit
      */
     public function testGetRecordDefinition(MatrixBlockTypeModel $blockType, array $definition)
     {
-        Craft::$app->schematic_fields->expects($this->exactly(1))
+        Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
                                      ->method('export')
                                      ->with($blockType->getFieldLayout()->getFields())
                                      ->willReturn($definition['fields']);
@@ -100,7 +100,7 @@ class MatrixBlockTypeTest extends Unit
                            ->with($context)
                            ->willReturn($existingFields);
 
-        Craft::$app->schematic_fields->expects($this->exactly(1))
+        Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
                                      ->method('import')
                                      ->with($definition['fields'], $existingFields, ['context' => $context], false)
                                      ->willReturn($existingFields);

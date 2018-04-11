@@ -1,16 +1,16 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\ConsoleCommands;
+namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
 use craft\helpers\FileHelper;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Schematic Export Command.
+ * Schematic Export Controller.
  *
  * Sync Craft Setups.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @see      http://www.nerds.company
  */
-class ExportCommand extends Base
+class ExportController extends Base
 {
     /**
      * Exports the Craft datamodel.
@@ -52,13 +52,13 @@ class ExportCommand extends Base
     {
         $result = [];
         foreach ($dataTypes as $dataType) {
-            $component = 'schematic_'.$dataType;
-            if (Craft::$app->$component instanceof MappingInterface) {
+            $component = Schematic::DATA_TYPES[$dataType]['mapper'];
+            if (Craft::$app->controller->module->$component instanceof MapperInterface) {
                 Schematic::info('Exporting '.$dataType);
                 $records = Schematic::getRecords($dataType);
-                $result[$dataType] = Craft::$app->$component->export($records);
+                $result[$dataType] = Craft::$app->controller->module->$component->export($records);
             } else {
-                Schematic::error(get_class(Craft::$app->$component).' does not implement MappingInterface');
+                Schematic::error(get_class(Craft::$app->controller->module->$component).' does not implement MapperInterface');
             }
         }
 

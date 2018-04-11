@@ -59,12 +59,12 @@ class FieldTest extends Unit
     public function testSaveRecord(FieldModel $field, array $definition, string $groupStatus)
     {
         Craft::$app->fields->expects($this->exactly(1))
-                          ->method('getAllGroups')
-                          ->willReturn([$this->getMockFieldGroup(1)]);
+                            ->method('getAllGroups')
+                            ->willReturn([$this->getMockFieldGroup(1)]);
 
-        Craft::$app->fields->expects($this->exactly($groupStatus == 'existing' ? 0 : 1))
+        Craft::$app->fields->expects($this->exactly('existing' == $groupStatus ? 0 : 1))
                           ->method('saveGroup')
-                          ->willReturn($groupStatus !== 'invalid');
+                          ->willReturn('invalid' !== $groupStatus);
 
         Craft::$app->fields->expects($this->exactly(1))
                           ->method('saveField')

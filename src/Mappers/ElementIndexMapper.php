@@ -1,11 +1,11 @@
 <?php
 
-namespace NerdsAndCompany\Schematic\Services;
+namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use NerdsAndCompany\Schematic\Behaviors\SourcesBehavior;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\MappingInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
@@ -19,7 +19,7 @@ use yii\base\Component as BaseComponent;
  *
  * @see      http://www.nerds.company
  */
-class ElementIndexSettings extends BaseComponent implements MappingInterface
+class ElementIndexMapper extends BaseComponent implements MapperInterface
 {
     /**
      * Load sources behaviors.
@@ -83,7 +83,7 @@ class ElementIndexSettings extends BaseComponent implements MappingInterface
 
         if (isset($settings['sourceOrder'])) {
             foreach ($settings['sourceOrder'] as $row) {
-                if ($row[0] == 'key') {
+                if ('key' == $row[0]) {
                     $row[1] = $this->getSource(false, $row[1], $fromIndex, $toIndex);
                 }
                 $mappedSettings['sourceOrder'][] = $row;

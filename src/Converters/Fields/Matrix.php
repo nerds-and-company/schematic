@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Converters\Fields;
 
 use Craft;
 use craft\base\Model;
+use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Base\Field;
 
 /**
@@ -25,7 +26,7 @@ class Matrix extends Field
     public function getRecordDefinition(Model $record): array
     {
         $definition = parent::getRecordDefinition($record);
-        $definition['blockTypes'] = Craft::$app->schematic_fields->export($record->getBlockTypes());
+        $definition['blockTypes'] = Craft::$app->controller->module->modelMapper->export($record->getBlockTypes());
 
         return $definition;
     }
@@ -37,7 +38,7 @@ class Matrix extends Field
     {
         if (parent::saveRecord($record, $definition)) {
             if (array_key_exists('blockTypes', $definition)) {
-                Craft::$app->schematic_fields->import($definition['blockTypes'], $record->getBlockTypes(), ['fieldId' => $record->id]);
+                Craft::$app->controller->module->modelMapper->import($definition['blockTypes'], $record->getBlockTypes(), ['fieldId' => $record->id]);
             }
 
             return true;

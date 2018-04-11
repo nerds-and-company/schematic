@@ -169,11 +169,11 @@ This tool has three hooks that extending code can plug in to. An example of a pr
 #### registerMigrationService
 
 <table>
-<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Services\Schematic::importFromYaml()</code>,  <code>NerdsAndCompany\Schematic\Services\Schematic::exportToYaml()</code></td></tr>
+<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Mappers\Schematic::importFromYaml()</code>,  <code>NerdsAndCompany\Schematic\Mappers\Schematic::exportToYaml()</code></td></tr>
 <tr><td>Return</td><td>An array where the keys are a name and the values are a Migration Service.</td></tr>
 </table>
 
-Gives plugins a chance to register their own Migration Services to Schematic in order to import or exports their own data.
+Gives plugins a chance to register their own Migration Mappers to Schematic in order to import or exports their own data.
 
 ```php
 public function registerMigrationService()
@@ -187,11 +187,11 @@ public function registerMigrationService()
 #### registerSchematicSources
 
 <table>
-<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Services\Sources::getSource()</code></td></tr>
+<tr><td>Called by</td><td><code>NerdsAndCompany\Schematic\Mappers\Sources::getSource()</code></td></tr>
 <tr><td>Return</td><td>An array where the keys are mapped to a value depending on the indexFrom param of the source, id or handle.</td></tr>
 </table>
 
-Gives plugins a chance to register their own Migration Services to Schematic in order to import or exports their own data.
+Gives plugins a chance to register their own Migration Mappers to Schematic in order to import or exports their own data.
 
 ```php
 public function registerSchematicSource($indexFrom)
