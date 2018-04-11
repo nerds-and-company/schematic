@@ -6,7 +6,7 @@ use Craft;
 use craft\base\Field as FieldModel;
 use craft\models\EntryType as EntryTypeModel;
 use craft\models\FieldLayout;
-use craft\entryTypes\Local;
+use craft\models\FieldLayoutTab;
 use Codeception\Test\Unit;
 
 /**
@@ -57,6 +57,29 @@ class EntryTypeTest extends Unit
      *
      * @param EntryTypeModel $entryType
      * @param array          $definition
+     * @param array          #defaultAttributes
+     */
+    public function testSetRecordAttributes(EntryTypeModel $entryType, array $definition, array $defaultAttributes)
+    {
+        $newEntryType = $this->getMockBuilder(EntryTypeModel::class)
+                             ->setMethods(['setFieldLayout'])
+                             ->getMock();
+
+        $newEntryType->expects($this->exactly(1))
+                     ->method('setFieldLayout');
+
+        $this->converter->setRecordAttributes($newEntryType, $definition, $defaultAttributes);
+
+        $this->assertSame($defaultAttributes['sectionId'], $newEntryType->sectionId);
+        $this->assertSame($entryType->name, $newEntryType->name);
+        $this->assertSame($entryType->handle, $newEntryType->handle);
+    }
+
+    /**
+     * @dataProvider provideEntryTypes
+     *
+     * @param EntryTypeModel $entryType
+     * @param array          $definition
      */
     public function testSaveRecord(EntryTypeModel $entryType, array $definition)
     {
@@ -96,9 +119,10 @@ class EntryTypeTest extends Unit
         $mockEntryType = $this->getMockEntryType(1);
 
         return [
-            'local entryType' => [
+            'valid entryType' => [
                 'entryType' => $mockEntryType,
                 'definition' => $this->getMockEntryTypeDefinition($mockEntryType),
+                'defaultAttributes' => ['sectionId' => 1],
             ],
         ];
     }
@@ -114,11 +138,6 @@ class EntryTypeTest extends Unit
      */
     private function getMockEntryTypeDefinition(EntryTypeModel $mockEntryType)
     {
-        $fieldDefs = [];
-        foreach ($mockEntryType->getFieldLayout()->getFields() as $field) {
-            $fieldDefs[$field->handle] = $field->required;
-        }
-
         return [
             'class' => get_class($mockEntryType),
             'attributes' => [
@@ -128,9 +147,29 @@ class EntryTypeTest extends Unit
                 'titleLabel' => 'Title',
                 'titleFormat' => null,
             ],
-            'fieldLayout' => [
-                'fields' => $fieldDefs,
-            ],
+            'fieldLayout' => $this->getMockFieldLayoutDefinition($mockEntryType->getFieldLayout()),
+        ];
+    }
+
+    /**
+     * Get mock field layout definition.
+     *
+     * @param FieldLayout $fieldLayout
+     *
+     * @return array
+     */
+    private function getMockFieldLayoutDefinition(FieldLayout $fieldLayout)
+    {
+        $tabsDef = [];
+        foreach ($fieldLayout->getTabs() as $tab) {
+            $tabsDef[$tab->name] = [];
+            foreach ($tab->getFields() as $field) {
+                $tabsDef[$tab->name][$field->handle] = $field->required;
+            }
+        }
+
+        return [
+            'tabs' => $tabsDef,
         ];
     }
 
@@ -157,10 +196,16 @@ class EntryTypeTest extends Unit
         $mockField->required = true;
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayoutTab = $this->getMockBuilder(FieldLayoutTab::class)->getMock();
+        $mockFieldLayoutTab->name = 'Content';
 
         $mockFieldLayout->expects($this->any())
-                        ->method('getFields')
-                        ->willReturn([$mockField]);
+                        ->method('getTabs')
+                        ->willReturn([$mockFieldLayoutTab]);
+
+        $mockFieldLayoutTab->expects($this->any())
+                           ->method('getFields')
+                           ->willReturn([$mockField]);
 
         $mockEntryType->expects($this->any())
                    ->method('getFieldLayout')
