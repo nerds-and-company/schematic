@@ -107,13 +107,13 @@ class SectionTest extends Unit
         $mockSection2 = $this->getMockSection(2);
 
         return [
-            'valid matrix' => [
-                'matrix' => $mockSection1,
+            'valid section' => [
+                'section' => $mockSection1,
                 'definition' => $this->getMockSectionDefinition($mockSection1),
                 'validSave' => true,
             ],
-            'invalid matrix' => [
-                'matrix' => $mockSection2,
+            'invalid section' => [
+                'section' => $mockSection2,
                 'definition' => $this->getMockSectionDefinition($mockSection2),
                 'validSave' => false,
             ],
@@ -147,8 +147,8 @@ class SectionTest extends Unit
         return [
             'class' => get_class($mockSection),
             'attributes' => [
-                'name' => 'matrixName'.$mockSection->id,
-                'handle' => 'matrixHandle'.$mockSection->id,
+                'name' => 'sectionName'.$mockSection->id,
+                'handle' => 'sectionHandle'.$mockSection->id,
                 'type' => null,
                 'maxLevels' => null,
                 'enableVersioning' => true,
@@ -175,8 +175,8 @@ class SectionTest extends Unit
                            ->getMock();
 
         $mockSection->id = $sectionId;
-        $mockSection->handle = 'matrixHandle'.$sectionId;
-        $mockSection->name = 'matrixName'.$sectionId;
+        $mockSection->handle = 'sectionHandle'.$sectionId;
+        $mockSection->name = 'sectionName'.$sectionId;
 
         $mockSection->expects($this->any())
                    ->method('getEntryTypes')

@@ -23,7 +23,7 @@ class UserGroup extends Base
      */
     public function getRecordDefinition(Model $record): array
     {
-        $attributes = parent::getRecordDefinition($record);
+        $definition = parent::getRecordDefinition($record);
         $mappedPermissions = $this->getAllMappedPermissions();
 
         $groupPermissions = [];
@@ -36,11 +36,10 @@ class UserGroup extends Base
         }
 
         $permissionDefinitions = $this->getSources(false, $groupPermissions, 'id', 'handle');
-        sort($permissionDefinitions);
 
-        $attributes['permissions'] = $permissionDefinitions;
+        $definition['permissions'] = $permissionDefinitions;
 
-        return $attributes;
+        return $definition;
     }
 
     /**
