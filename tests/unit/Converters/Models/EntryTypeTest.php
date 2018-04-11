@@ -57,7 +57,7 @@ class EntryTypeTest extends Unit
      *
      * @param EntryTypeModel $entryType
      * @param array          $definition
-     * @param array          #defaultAttributes
+     * @param array          $defaultAttributes
      */
     public function testSetRecordAttributes(EntryTypeModel $entryType, array $definition, array $defaultAttributes)
     {

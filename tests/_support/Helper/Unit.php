@@ -58,6 +58,7 @@ class Unit extends Module
                 ['elements', $mockElements],
                 ['fields', $mockFields],
                 ['globals', $mockGlobals],
+                ['matrix', $mockMatrix],
                 ['schematic_fields', $mockModelProcessor],
                 ['schematic_sections', $mockModelProcessor],
                 ['sections', $mockSections],
