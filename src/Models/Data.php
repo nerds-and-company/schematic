@@ -2,7 +2,6 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
-use Craft;
 use craft\base\Model;
 use Symfony\Component\Yaml\Yaml;
 
@@ -58,12 +57,12 @@ class Data extends Model
         if (!empty($overrideYaml)) {
             $overrideYaml = static::replaceEnvVariables($overrideYaml);
             $overrideData = Yaml::parse($overrideYaml);
-            if ($overrideData != null) {
+            if (null != $overrideData) {
                 $data = array_replace_recursive($data, $overrideData);
             }
         }
 
-        return $data === null ? null : new static($data);
+        return null === $data ? null : new static($data);
     }
 
     /**
@@ -107,8 +106,8 @@ class Data extends Model
      */
     public static function toYaml(array $data)
     {
-        $data = $data === null ? null : new static($data);
+        $data = null === $data ? null : new static($data);
 
-        return Yaml::dump($data->attributes, 12, 2);
+        return Yaml::dump(array_filter($data->attributes), 12, 2);
     }
 }
