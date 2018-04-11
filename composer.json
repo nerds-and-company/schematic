@@ -1,32 +1,31 @@
 {
-  "name": "nerds-and-company/schematic",
-  "description": "Craft setup and sync tool",
-  "authors": [{
-      "name": "Bart van Gennep",
-      "email": "b.vangennep@nerds.company",
-      "homepage": "http://www.nerds.company",
-      "role": "Developer"
+    "name": "nerds-and-company/schematic",
+    "description": "Craft setup and sync tool",
+    "authors": [{
+            "name": "Bart van Gennep",
+            "email": "b.vangennep@nerds.company",
+            "homepage": "http://www.nerds.company",
+            "role": "Developer"
+        },
+        {
+            "name": "Bob Olde Hampsink",
+            "email": "b.oldehampsink@nerds.company",
+            "homepage": "http://www.nerds.company",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.1",
+        "symfony/yaml": "^4.0",
+        "craftcms/cms": "^3.0.0-RC1"
     },
-    {
-      "name": "Bob Olde Hampsink",
-      "email": "b.oldehampsink@nerds.company",
-      "homepage": "http://www.nerds.company",
-      "role": "Developer"
+    "require-dev": {
+        "codeception/codeception": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "NerdsAndCompany\\Schematic\\": "src/"
+        }
     }
-  ],
-  "license": "MIT",
-  "require": {
-    "php": "^7.1",
-    "symfony/yaml": "^4.0",
-    "pahanini/yii2-consolelog": "^3.0",
-    "craftcms/cms": "^3.0.0-RC1"
-  },
-  "require-dev": {
-    "codeception/codeception": "^2.4"
-  },
-  "autoload": {
-    "psr-4": {
-      "NerdsAndCompany\\Schematic\\": "src/"
-    }
-  }
 }
