@@ -12,6 +12,7 @@ use craft\services\Fields;
 use craft\services\Globals;
 use craft\services\Matrix;
 use craft\services\Path;
+use craft\services\Sections;
 use craft\services\Sites;
 use craft\services\Volumes;
 use Codeception\Module;
@@ -45,6 +46,7 @@ class Unit extends Module
         $mockMatrix = $this->getMock($test, Matrix::class);
         $mockModelProcessor = $this->getMock($test, ModelProcessor::class);
         $mockPath = $this->getMock($test, Path::class);
+        $mockSections = $this->getMock($test, Sections::class);
         $mockSites = $this->getMock($test, Sites::class);
         $mockvolumes = $this->getMock($test, Volumes::class);
 
@@ -57,6 +59,7 @@ class Unit extends Module
                 ['fields', $mockFields],
                 ['globals', $mockGlobals],
                 ['schematic_fields', $mockModelProcessor],
+                ['sections', $mockSections],
                 ['sites', $mockSites],
                 ['volumes', $mockvolumes],
             ]);
