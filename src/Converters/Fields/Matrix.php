@@ -36,7 +36,9 @@ class Matrix extends Field
     public function saveRecord(Model $record, array $definition)
     {
         if (parent::saveRecord($record, $definition)) {
-            Craft::$app->schematic_fields->import($definition['blockTypes'], $record->getBlockTypes(), ['fieldId' => $record->id]);
+            if (array_key_exists('blockTypes', $definition)) {
+                Craft::$app->schematic_fields->import($definition['blockTypes'], $record->getBlockTypes(), ['fieldId' => $record->id]);
+            }
 
             return true;
         }

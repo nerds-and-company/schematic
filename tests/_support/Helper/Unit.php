@@ -10,12 +10,14 @@ use craft\services\Categories;
 use craft\services\Elements;
 use craft\services\Fields;
 use craft\services\Globals;
+use craft\services\Matrix;
 use craft\services\Path;
 use craft\services\Sites;
 use craft\services\Volumes;
 use Codeception\Module;
 use Codeception\TestCase;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Services\ModelProcessor;
 
 /**
  * UnitTest helper.
@@ -34,26 +36,29 @@ class Unit extends Module
     public function _before(TestCase $test)
     {
         $mockApp = $this->getMock($test, Application::class);
-        $mockPath = $this->getMock($test, Path::class);
         $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
-        $mockvolumes = $this->getMock($test, Volumes::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
         $mockElements = $this->getMock($test, Elements::class);
         $mockFields = $this->getMock($test, Fields::class);
         $mockGlobals = $this->getMock($test, Globals::class);
-        $mockSites = $this->getMock($test, Sites::class);
         $mockI18n = $this->getMock($test, I18n::class);
+        $mockMatrix = $this->getMock($test, Matrix::class);
+        $mockModelProcessor = $this->getMock($test, ModelProcessor::class);
+        $mockPath = $this->getMock($test, Path::class);
+        $mockSites = $this->getMock($test, Sites::class);
+        $mockvolumes = $this->getMock($test, Volumes::class);
 
         $mockApp->expects($test->any())
             ->method('__get')
             ->willReturnMap([
                 ['assetTransforms', $mockAssetTransforms],
-                ['volumes', $mockvolumes],
                 ['categories', $mockCategoryGroups],
                 ['elements', $mockElements],
-                ['globals', $mockGlobals],
                 ['fields', $mockFields],
+                ['globals', $mockGlobals],
+                ['schematic_fields', $mockModelProcessor],
                 ['sites', $mockSites],
+                ['volumes', $mockvolumes],
             ]);
 
         $mockApp->expects($test->any())
@@ -63,6 +68,10 @@ class Unit extends Module
         $mockApp->expects($test->any())
             ->method('getI18n')
             ->willReturn($mockI18n);
+
+        $mockApp->expects($test->any())
+            ->method('getMatrix')
+            ->willreturn($mockMatrix);
 
         Craft::$app = $mockApp;
         Schematic::$force = false;
