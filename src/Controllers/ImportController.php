@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
+use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
@@ -74,22 +75,30 @@ class ImportController extends Base
         if (file_exists($this->overrideFile)) {
             $yamlOverride = file_get_contents($this->overrideFile);
         }
-        $dataModel = Data::fromYaml($yaml, $yamlOverride);
+        $definitions = Data::fromYaml($yaml, $yamlOverride);
 
-        foreach ($dataTypes as $dataType) {
-            $component = Schematic::DATA_TYPES[$dataType]['mapper'];
-            if (Craft::$app->controller->module->$component instanceof MapperInterface) {
-                Schematic::info('Importing '.$dataType);
-                Schematic::$force = $this->force;
-                if (is_array($dataModel->$dataType)) {
-                    $records = Schematic::getRecords($dataType);
-                    Craft::$app->controller->module->$component->import($dataModel->$dataType, $records);
-                    if ('fields' == $dataType) {
-                        Craft::$app->fields->updateFieldVersion();
-                    }
+        foreach ($dataTypes as $dataTypeHandle) {
+            $dataTypeClass = Schematic::DATA_TYPES[$dataTypeHandle];
+            $dataType = new $dataTypeClass();
+            if (!$dataType instanceof DataTypeInterface) {
+                Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
+                continue;
+            }
+
+            $mapper = $dataType->getMapperHandle();
+            if (!Craft::$app->controller->module->$mapper instanceof MapperInterface) {
+                Schematic::error(get_class(Craft::$app->controller->module->$mapper).' does not implement MapperInterface');
+                continue;
+            }
+
+            Schematic::info('Importing '.$dataTypeHandle);
+            Schematic::$force = $this->force;
+            if (array_key_exists($dataTypeHandle, $definitions) && is_array($definitions[$dataTypeHandle])) {
+                $records = $dataType->getRecords();
+                Craft::$app->controller->module->$mapper->import($definitions[$dataTypeHandle], $records);
+                if ('fields' == $dataType) {
+                    Craft::$app->fields->updateFieldVersion();
                 }
-            } else {
-                Schematic::error(get_class(Craft::$app->controller->module->$component).' does not implement MapperInterface');
             }
         }
 

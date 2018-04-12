@@ -6,6 +6,18 @@ use Craft;
 use craft\base\Model;
 use yii\base\Module;
 use yii\helpers\Console;
+use NerdsAndCompany\Schematic\DataTypes\AssetTransformDataType;
+use NerdsAndCompany\Schematic\DataTypes\CategoryGroupDataType;
+use NerdsAndCompany\Schematic\DataTypes\ElementIndexDataType;
+use NerdsAndCompany\Schematic\DataTypes\FieldDataType;
+use NerdsAndCompany\Schematic\DataTypes\GlobalSetDataType;
+use NerdsAndCompany\Schematic\DataTypes\PluginDataType;
+use NerdsAndCompany\Schematic\DataTypes\SectionDataType;
+use NerdsAndCompany\Schematic\DataTypes\SiteDataType;
+use NerdsAndCompany\Schematic\DataTypes\TagGroupDataType;
+use NerdsAndCompany\Schematic\DataTypes\UserGroupDataType;
+use NerdsAndCompany\Schematic\DataTypes\UserSettingsDataType;
+use NerdsAndCompany\Schematic\DataTypes\VolumeDataType;
 use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
 use NerdsAndCompany\Schematic\Mappers\ModelMapper;
 use NerdsAndCompany\Schematic\Mappers\PluginMapper;
@@ -66,92 +78,19 @@ class Schematic extends Module
      * @var array
      */
     const DATA_TYPES = [
-        'sites' => [
-            'mapper' => 'modelMapper',
-        ],
-        'volumes' => [
-            'mapper' => 'modelMapper',
-        ],
-        'assetTransforms' => [
-            'mapper' => 'modelMapper',
-        ],
-        'fields' => [
-            'mapper' => 'modelMapper',
-        ],
-        'plugins' => [
-            'mapper' => 'pluginMapper',
-        ],
-        'sections' => [
-            'mapper' => 'modelMapper',
-        ],
-        'globalSets' => [
-            'mapper' => 'modelMapper',
-        ],
-        'userGroups' => [
-            'mapper' => 'modelMapper',
-        ],
-        'users' => [
-            'mapper' => 'userSettingsMapper',
-        ],
-        'categoryGroups' => [
-            'mapper' => 'modelMapper',
-        ],
-        'tagGroups' => [
-            'mapper' => 'modelMapper',
-        ],
-        'elementIndexSettings' => [
-            'mapper' => 'elementIndexMapper',
-        ],
+        'plugins' => PluginDataType::class,
+        'sites' => SiteDataType::class,
+        'volumes' => VolumeDataType::class,
+        'assetTransforms' => AssetTransformDataType::class,
+        'fields' => FieldDataType::class,
+        'sections' => SectionDataType::class,
+        'globalSets' => GlobalSetDataType::class,
+        'categoryGroups' => CategoryGroupDataType::class,
+        'tagGroups' => TagGroupDataType::class,
+        'userGroups' => UserGroupDataType::class,
+        'userSettings' => UserSettingsDataType::class,
+        'elementIndexSettings' => ElementIndexDataType::class,
     ];
-
-    /**
-     * Get records for datatype.
-     *
-     * @TODO: Make this more dynamic
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
-     * @param string $datatype
-     *
-     * @return Model[]
-     */
-    public static function getRecords(string $datatype)
-    {
-        $records = [];
-        switch ($datatype) {
-            case 'assetTransforms':
-                $records = Craft::$app->assetTransforms->getAllTransforms();
-                break;
-            case 'categoryGroups':
-                $records = Craft::$app->categories->getAllGroups();
-                break;
-            case 'fields':
-                $records = Craft::$app->fields->getAllFields();
-                break;
-            case 'globalSets':
-                $records = Craft::$app->globals->getAllSets();
-                break;
-            case 'plugins':
-                $records = Craft::$app->plugins->getAllPluginInfo();
-                break;
-            case 'sections':
-                $records = Craft::$app->sections->getAllSections();
-                break;
-            case 'sites':
-                $records = Craft::$app->sites->getAllSites();
-                break;
-            case 'userGroups':
-                $records = Craft::$app->userGroups->getAllGroups();
-                break;
-            case 'volumes':
-                $records = Craft::$app->volumes->getAllVolumes();
-                break;
-            case 'tagGroups':
-                $records = Craft::$app->tags->getAllTagGroups();
-                break;
-        }
-
-        return $records;
-    }
 
     /**
      * Is force enabled?

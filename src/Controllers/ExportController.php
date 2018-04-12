@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
 use craft\helpers\FileHelper;
+use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
@@ -52,15 +53,23 @@ class ExportController extends Base
     {
         $this->disableLogging();
         $result = [];
-        foreach ($dataTypes as $dataType) {
-            $component = Schematic::DATA_TYPES[$dataType]['mapper'];
-            if (Craft::$app->controller->module->$component instanceof MapperInterface) {
-                Schematic::info('Exporting '.$dataType);
-                $records = Schematic::getRecords($dataType);
-                $result[$dataType] = Craft::$app->controller->module->$component->export($records);
-            } else {
-                Schematic::error(get_class(Craft::$app->controller->module->$component).' does not implement MapperInterface');
+        foreach ($dataTypes as $dataTypeHandle) {
+            $dataTypeClass = Schematic::DATA_TYPES[$dataTypeHandle];
+            $dataType = new $dataTypeClass();
+            if (!$dataType instanceof DataTypeInterface) {
+                Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
+                continue;
             }
+
+            $mapper = $dataType->getMapperHandle();
+            if (!Craft::$app->controller->module->$mapper instanceof MapperInterface) {
+                Schematic::error(get_class(Craft::$app->controller->module->$mapper).' does not implement MapperInterface');
+                continue;
+            }
+
+            Schematic::info('Exporting '.$dataTypeHandle);
+            $records = $dataType->getRecords();
+            $result[$dataTypeHandle] = Craft::$app->controller->module->$mapper->export($records);
         }
 
         FileHelper::writeToFile($file, Data::toYaml($result));

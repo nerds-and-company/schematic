@@ -12,7 +12,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
- * Schematic Base Service.
+ * Schematic Model Mapper.
  *
  * Sync Craft Setups.
  *
@@ -35,7 +35,7 @@ class ModelMapper extends BaseComponent implements MapperInterface
         foreach ($records as $record) {
             $modelClass = get_class($record);
             $converter = $this->getConverter($modelClass);
-            if ($converter == false) {
+            if (false == $converter) {
                 Schematic::error('No converter found for '.$modelClass);
                 continue;
             }
@@ -60,7 +60,7 @@ class ModelMapper extends BaseComponent implements MapperInterface
         foreach ($definitions as $handle => $definition) {
             $modelClass = $definition['class'];
             $converter = $this->getConverter($modelClass);
-            if ($converter == false) {
+            if (false == $converter) {
                 Schematic::error('No converter found for '.$modelClass);
                 continue;
             }

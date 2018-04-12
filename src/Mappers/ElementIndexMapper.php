@@ -9,7 +9,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
- * Schematic Element Index Settings Service.
+ * Schematic Element Index Mapper.
  *
  * Sync Craft Setups.
  *
@@ -36,10 +36,9 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     /**
      * @return array
      */
-    public function export(array $elementTypes = []): array
+    public function export(array $elementTypes): array
     {
         $settingDefinitions = [];
-        $elementTypes = Craft::$app->elements->getAllElementTypes();
         foreach ($elementTypes as $elementType) {
             $settings = Craft::$app->elementIndexes->getSettings($elementType);
             if (is_array($settings)) {
@@ -56,7 +55,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
      *
      * @return Result
      */
-    public function import(array $settingDefinitions, array $elementTypes = []): array
+    public function import(array $settingDefinitions, array $elementTypes): array
     {
         Schematic::warning('Element index import is not yet implemented');
 

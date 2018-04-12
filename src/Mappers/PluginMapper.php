@@ -8,7 +8,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
- * Schematic Plugins Service.
+ * Schematic Plugin Mapper.
  *
  * Sync Craft Setups.
  *
