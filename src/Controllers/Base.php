@@ -42,7 +42,7 @@ class Base extends Controller
      */
     protected function getDataTypes()
     {
-        $dataTypes = array_keys(Schematic::DATA_TYPES);
+        $dataTypes = array_keys($this->module->dataTypes);
 
         // If include is specified.
         if (null !== $this->include) {

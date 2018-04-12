@@ -54,7 +54,7 @@ class ExportController extends Base
         $this->disableLogging();
         $result = [];
         foreach ($dataTypes as $dataTypeHandle) {
-            $dataTypeClass = Schematic::DATA_TYPES[$dataTypeHandle];
+            $dataTypeClass = $this->module->dataTypes[$dataTypeHandle];
             $dataType = new $dataTypeClass();
             if (!$dataType instanceof DataTypeInterface) {
                 Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
@@ -62,14 +62,14 @@ class ExportController extends Base
             }
 
             $mapper = $dataType->getMapperHandle();
-            if (!Craft::$app->controller->module->$mapper instanceof MapperInterface) {
-                Schematic::error(get_class(Craft::$app->controller->module->$mapper).' does not implement MapperInterface');
+            if (!$this->module->$mapper instanceof MapperInterface) {
+                Schematic::error(get_class($this->module->$mapper).' does not implement MapperInterface');
                 continue;
             }
 
             Schematic::info('Exporting '.$dataTypeHandle);
             $records = $dataType->getRecords();
-            $result[$dataTypeHandle] = Craft::$app->controller->module->$mapper->export($records);
+            $result[$dataTypeHandle] = $this->module->$mapper->export($records);
         }
 
         FileHelper::writeToFile($file, Data::toYaml($result));

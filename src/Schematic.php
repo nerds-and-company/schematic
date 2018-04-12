@@ -42,6 +42,11 @@ class Schematic extends Module
     public $controllerNamespace = 'NerdsAndCompany\Schematic\Controllers';
 
     /**
+     * @var array
+     */
+    public $dataTypes = [];
+
+    /**
      * Initialize the module.
      */
     public function init()
@@ -63,34 +68,26 @@ class Schematic extends Module
                     'class' => UserSettingsMapper::class,
                 ],
             ],
+            'dataTypes' => [
+                'plugins' => PluginDataType::class,
+                'sites' => SiteDataType::class,
+                'volumes' => VolumeDataType::class,
+                'assetTransforms' => AssetTransformDataType::class,
+                'fields' => FieldDataType::class,
+                'sections' => SectionDataType::class,
+                'globalSets' => GlobalSetDataType::class,
+                'categoryGroups' => CategoryGroupDataType::class,
+                'tagGroups' => TagGroupDataType::class,
+                'userGroups' => UserGroupDataType::class,
+                'userSettings' => UserSettingsDataType::class,
+                'elementIndexSettings' => ElementIndexDataType::class,
+            ],
         ];
 
         Craft::configure($this, $config);
 
         parent::init();
     }
-
-    /**
-     * The available datatypes.
-     *
-     * @TODO: Make data types and Mapper components configurable.
-     *
-     * @var array
-     */
-    const DATA_TYPES = [
-        'plugins' => PluginDataType::class,
-        'sites' => SiteDataType::class,
-        'volumes' => VolumeDataType::class,
-        'assetTransforms' => AssetTransformDataType::class,
-        'fields' => FieldDataType::class,
-        'sections' => SectionDataType::class,
-        'globalSets' => GlobalSetDataType::class,
-        'categoryGroups' => CategoryGroupDataType::class,
-        'tagGroups' => TagGroupDataType::class,
-        'userGroups' => UserGroupDataType::class,
-        'userSettings' => UserSettingsDataType::class,
-        'elementIndexSettings' => ElementIndexDataType::class,
-    ];
 
     /**
      * Is force enabled?
