@@ -60,6 +60,7 @@ class PluginMapper extends BaseComponent implements MapperInterface
      */
     public function import(array $pluginDefinitions, array $plugins): array
     {
+        $imported = [];
         foreach ($pluginDefinitions as $handle => $definition) {
             if (!array_key_exists($handle, $plugins)) {
                 Schematic::error(' - Plugin info not found for '.$handle.', make sure it is installed with composer');
@@ -70,7 +71,9 @@ class PluginMapper extends BaseComponent implements MapperInterface
             }
             Schematic::info('- Installing plugin '.$handle);
             $pluginInfo = $plugins[$handle];
-            $this->savePlugin($handle, $definition, $pluginInfo);
+            if ($this->savePlugin($handle, $definition, $pluginInfo)) {
+                $imported[] = Craft::$app->plugins->getPlugin($handle);
+            }
             unset($plugins[$handle]);
         }
 
@@ -83,7 +86,7 @@ class PluginMapper extends BaseComponent implements MapperInterface
             }
         }
 
-        return $plugins;
+        return $imported;
     }
 
     /**
@@ -92,8 +95,10 @@ class PluginMapper extends BaseComponent implements MapperInterface
      * @param string $handle
      * @param array  $definition
      * @param array  $pluginInfo
+     *
+     * @return bool
      */
-    private function savePlugin(string $handle, array $definition, array $pluginInfo)
+    private function savePlugin(string $handle, array $definition, array $pluginInfo): bool
     {
         if (!$pluginInfo['isInstalled']) {
             Craft::$app->plugins->installPlugin($handle);
@@ -104,8 +109,11 @@ class PluginMapper extends BaseComponent implements MapperInterface
             Craft::$app->plugins->disablePlugin($handle);
         }
         $plugin = Craft::$app->plugins->getPlugin($handle);
+
         if ($plugin && $plugin->getSettings()) {
-            Craft::$app->plugins->savePluginSettings($plugin, $definition['settings']);
+            return Craft::$app->plugins->savePluginSettings($plugin, $definition['settings']);
         }
+
+        return false;
     }
 }
