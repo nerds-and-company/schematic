@@ -27,6 +27,8 @@ class Assets extends Field
     {
         $definition = parent::getRecordDefinition($record);
 
+        unset($definition['attributes']['targetSiteId']);
+
         if (isset($definition['attributes']['defaultUploadLocationSource'])) {
             $definition['attributes']['defaultUploadLocationSource'] = $this->getSource(
                 $definition['class'],

@@ -3,7 +3,7 @@
 namespace NerdsAndCompany\Schematic\Converters\Fields;
 
 use Craft;
-use craft\fields\Matrix as MatrixModel;
+use craft\fields\Matrix as MatrixField;
 use Codeception\Test\Unit;
 
 /**
@@ -18,7 +18,7 @@ use Codeception\Test\Unit;
 class MatrixTest extends Unit
 {
     /**
-     * @var Matrixs
+     * @var Matrix
      */
     private $converter;
 
@@ -39,10 +39,10 @@ class MatrixTest extends Unit
     /**
      * @dataProvider provideMatrices
      *
-     * @param MatrixModel $matrix
+     * @param MatrixField $matrix
      * @param array       $definition
      */
-    public function testGetRecordDefinition(MatrixModel $matrix, array $definition)
+    public function testGetRecordDefinition(MatrixField $matrix, array $definition)
     {
         Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
                                 ->method('export')
@@ -57,11 +57,11 @@ class MatrixTest extends Unit
     /**
      * @dataProvider provideMatrices
      *
-     * @param MatrixModel $matrix
+     * @param MatrixField $matrix
      * @param array       $definition
      * @param bool        $valid
      */
-    public function testSaveRecord(MatrixModel $matrix, array $definition, bool $valid)
+    public function testSaveRecord(MatrixField $matrix, array $definition, bool $valid)
     {
         Craft::$app->fields->expects($this->exactly(1))
                            ->method('saveField')
@@ -81,9 +81,9 @@ class MatrixTest extends Unit
     /**
      * @dataProvider provideMatrices
      *
-     * @param MatrixModel $matrix
+     * @param MatrixField $matrix
      */
-    public function testDeleteRecord(MatrixModel $matrix)
+    public function testDeleteRecord(MatrixField $matrix)
     {
         Craft::$app->fields->expects($this->exactly(1))
                            ->method('deleteField')
@@ -123,11 +123,11 @@ class MatrixTest extends Unit
     //==============================================================================================================
 
     /**
-     * @param MatrixModel $mockMatrix
+     * @param MatrixField $mockMatrix
      *
      * @return array
      */
-    private function getMockMatrixDefinition(MatrixModel $mockMatrix)
+    private function getMockMatrixDefinition(MatrixField $mockMatrix)
     {
         return [
             'class' => get_class($mockMatrix),
@@ -157,11 +157,11 @@ class MatrixTest extends Unit
      * @param int $matrixId
      * @param int $groupId
      *
-     * @return Mock|MatrixModel
+     * @return Mock|MatrixField
      */
     private function getMockMatrix(int $matrixId, int $groupId)
     {
-        $mockMatrix = $this->getMockBuilder(MatrixModel::class)
+        $mockMatrix = $this->getMockBuilder(MatrixField::class)
                            ->setMethods(['getGroup', 'getBlockTypes'])
                            ->disableOriginalConstructor()
                            ->getMock();
@@ -186,7 +186,7 @@ class MatrixTest extends Unit
     }
 
     /**
-     * Get a mock matrix group.
+     * Get a mock field group.
      *
      * @param int $groupId
      *
