@@ -3,11 +3,6 @@
 namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
-use craft\models\CategoryGroup;
-use craft\models\CategoryGroup_SiteSettings;
-use craft\models\FieldLayout;
-use craft\models\Site;
-use craft\mappers\Fields;
 use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -159,99 +154,6 @@ class ModelMapperTest extends Unit
     //==============================================================================================================
     //================================================  HELPERS  ===================================================
     //==============================================================================================================
-
-    /**
-     * @param CategoryGroup $mockCategoryGroup
-     *
-     * @return array
-     */
-    private function getMockCategoryGroupDefinition(CategoryGroup $mockCategoryGroup)
-    {
-        return [
-            'class' => get_class($mockCategoryGroup),
-            'attributes' => [
-                'name' => $mockCategoryGroup->name,
-                'handle' => $mockCategoryGroup->handle,
-                'maxLevels' => 3,
-            ],
-            'fieldLayout' => [
-                'fields' => [],
-            ],
-            'siteSettings' => [
-                '' => [
-                    'class' => get_class($mockCategoryGroup->getSiteSettings()[0]),
-                    'attributes' => [
-                        'hasUrls' => null,
-                        'uriFormat' => null,
-                        'template' => null,
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @param int $groupId
-     *
-     * @return Mock|CategoryGroup
-     */
-    private function getMockCategoryGroup(int $groupId)
-    {
-        $mockGroup = $this->getMockBuilder(CategoryGroup::class)
-                                    ->setMethods(['getFieldLayout', 'getSiteSettings'])
-                                    ->getMock();
-        $mockGroup->setAttributes([
-            'id' => $groupId,
-            'fieldLayoutId' => $groupId,
-            'handle' => 'groupHandle'.$groupId,
-            'name' => 'groupName'.$groupId,
-            'maxLevels' => 3,
-        ]);
-
-        $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
-
-        $mockGroup->expects($this->any())
-                  ->method('getFieldLayout')
-                  ->willReturn($mockFieldLayout);
-
-        $mockSiteSettings = $this->getMockSiteSettings();
-
-        $mockGroup->expects($this->any())
-                  ->method('getSiteSettings')
-                  ->willReturn([$mockSiteSettings]);
-
-        return $mockGroup;
-    }
-
-    /**
-     * Get mock siteSettings.
-     *
-     * @param string $class
-     *
-     * @return Mock|CategoryGroup_SiteSettings
-     */
-    private function getMockSiteSettings()
-    {
-        $mockSiteSettings = $this->getMockBuilder(CategoryGroup_SiteSettings::class)
-                                 ->setMethods(['getSite'])
-                                 ->getMock();
-
-        $mockSiteSettings->expects($this->any())
-          ->method('getSite')
-          ->willReturn($this->getMockSite());
-
-        return $mockSiteSettings;
-    }
-
-    /**
-     * Get a mock site.
-     *
-     * @return Mock|Site
-     */
-    private function getMockSite()
-    {
-        return $this->getMockBuilder(Site::class)->getMock();
-    }
 
     /**
      * Expect a number of group saves.
