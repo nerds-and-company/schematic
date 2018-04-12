@@ -33,6 +33,8 @@ use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
  * @license   MIT
  *
  * @see      http://www.nerds.company
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Schematic extends Module
 {

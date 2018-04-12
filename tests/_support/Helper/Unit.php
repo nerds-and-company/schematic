@@ -13,6 +13,7 @@ use craft\services\Fields;
 use craft\services\Globals;
 use craft\services\Matrix;
 use craft\services\Path;
+use craft\services\Plugins;
 use craft\services\Sections;
 use craft\services\Sites;
 use craft\services\Tags;
@@ -86,6 +87,7 @@ class Unit extends Module
         $mockI18n = $this->getMock($test, I18n::class);
         $mockMatrix = $this->getMock($test, Matrix::class);
         $mockPath = $this->getMock($test, Path::class);
+        $mockPlugins = $this->getMock($test, Plugins::class);
         $mockSections = $this->getMock($test, Sections::class);
         $mockSites = $this->getMock($test, Sites::class);
         $mockTags = $this->getMock($test, Tags::class);
@@ -102,6 +104,7 @@ class Unit extends Module
                 ['fields', $mockFields],
                 ['globals', $mockGlobals],
                 ['matrix', $mockMatrix],
+                ['plugins', $mockPlugins],
                 ['sections', $mockSections],
                 ['sites', $mockSites],
                 ['tags', $mockTags],

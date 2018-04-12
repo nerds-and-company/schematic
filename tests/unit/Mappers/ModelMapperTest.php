@@ -7,7 +7,7 @@ use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
 use craft\models\FieldLayout;
 use craft\models\Site;
-use craft\services\Fields;
+use craft\mappers\Fields;
 use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -27,10 +27,10 @@ class ModelMapperTest extends Unit
     /**
      * @var CategoryGroups
      */
-    private $service;
+    private $mapper;
 
     /**
-     * Set the service.
+     * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
@@ -40,7 +40,7 @@ class ModelMapperTest extends Unit
                   ->method('getSiteByHandle')
                   ->willReturn($this->getMockSite());
 
-        $this->service = new ModelMapper();
+        $this->mapper = new ModelMapper();
     }
 
     //==============================================================================================================
@@ -55,7 +55,7 @@ class ModelMapperTest extends Unit
      */
     public function testSuccessfulExport(array $groups, array $expectedResult = [])
     {
-        $actualResult = $this->service->export($groups);
+        $actualResult = $this->mapper->export($groups);
 
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -70,7 +70,7 @@ class ModelMapperTest extends Unit
         $this->expectSaves($saveCount);
         $this->expectDeletes(0);
 
-        $this->service->import($groupDefinitions, $existingGroups);
+        $this->mapper->import($groupDefinitions, $existingGroups);
     }
 
     /**
@@ -84,7 +84,7 @@ class ModelMapperTest extends Unit
         $this->expectSaves($saveCount);
         $this->expectDeletes($deleteCount);
 
-        $this->service->import($groupDefinitions, $existingGroups);
+        $this->mapper->import($groupDefinitions, $existingGroups);
     }
 
     //==============================================================================================================
