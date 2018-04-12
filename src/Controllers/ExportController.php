@@ -4,8 +4,6 @@ namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
 use craft\helpers\FileHelper;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
-use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
 use Symfony\Component\Yaml\Yaml;
@@ -31,7 +29,7 @@ class ExportController extends Base
      *
      * @return int
      */
-    public function actionIndex()
+    public function actionIndex(): int
     {
         $dataTypes = $this->getDataTypes();
 
@@ -46,24 +44,19 @@ class ExportController extends Base
      *
      * @param string $file
      * @param bool   $autoCreate
-     *
-     * @return int
      */
-    public function exportToYaml($file, $dataTypes)
+    public function exportToYaml($file, $dataTypes): void
     {
         $this->disableLogging();
         $result = [];
         foreach ($dataTypes as $dataTypeHandle) {
-            $dataTypeClass = $this->module->dataTypes[$dataTypeHandle];
-            $dataType = new $dataTypeClass();
-            if (!$dataType instanceof DataTypeInterface) {
-                Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
+            $dataType = $this->module->getDataType($dataTypeHandle);
+            if (null == $dataType) {
                 continue;
             }
 
             $mapper = $dataType->getMapperHandle();
-            if (!$this->module->$mapper instanceof MapperInterface) {
-                Schematic::error(get_class($this->module->$mapper).' does not implement MapperInterface');
+            if (!$this->module->checkMapper($mapper)) {
                 continue;
             }
 
@@ -73,7 +66,5 @@ class ExportController extends Base
         }
 
         FileHelper::writeToFile($file, Data::toYaml($result));
-
-        return 0;
     }
 }

@@ -30,7 +30,7 @@ class Base extends Controller
      *
      * @return array
      */
-    public function options($actionID)
+    public function options($actionID): array
     {
         return ['file', 'override_file', 'include', 'exclude'];
     }
@@ -40,7 +40,7 @@ class Base extends Controller
      *
      * @return array
      */
-    protected function getDataTypes()
+    protected function getDataTypes(): array
     {
         $dataTypes = array_keys($this->module->dataTypes);
 
@@ -64,7 +64,7 @@ class Base extends Controller
      *
      * @return array
      */
-    protected function applyIncludes($dataTypes)
+    protected function applyIncludes($dataTypes): array
     {
         $inclusions = explode(',', $this->include);
         // Find any invalid data to include.
@@ -88,7 +88,7 @@ class Base extends Controller
      *
      * @return array
      */
-    protected function applyExcludes(array $dataTypes)
+    protected function applyExcludes(array $dataTypes): array
     {
         $exclusions = explode(',', $this->exclude);
         // Find any invalid data to exclude.
@@ -110,7 +110,7 @@ class Base extends Controller
      *
      * @TODO: Find a less hacky way to solve this
      */
-    protected function disableLogging()
+    protected function disableLogging(): void
     {
         if (Craft::$app->log) {
             Craft::$app->log->targets = [];

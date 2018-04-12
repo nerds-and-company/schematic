@@ -6,8 +6,6 @@ use Craft;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Converters\Base as BaseConverter;
-use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
@@ -34,12 +32,10 @@ class ModelMapper extends BaseComponent implements MapperInterface
         $result = [];
         foreach ($records as $record) {
             $modelClass = get_class($record);
-            $converter = $this->getConverter($modelClass);
-            if (false == $converter) {
-                Schematic::error('No converter found for '.$modelClass);
-                continue;
+            $converter = Craft::$app->controller->module->getConverter($modelClass);
+            if ($converter) {
+                $result[$record->handle] = $converter->getRecordDefinition($record);
             }
-            $result[$record->handle] = $converter->getRecordDefinition($record);
         }
 
         return $result;
@@ -59,26 +55,25 @@ class ModelMapper extends BaseComponent implements MapperInterface
         $recordsByHandle = ArrayHelper::index($records, 'handle');
         foreach ($definitions as $handle => $definition) {
             $modelClass = $definition['class'];
-            $converter = $this->getConverter($modelClass);
-            if (false == $converter) {
-                Schematic::error('No converter found for '.$modelClass);
-                continue;
-            }
-            $record = $this->findOrNewRecord($recordsByHandle, $definition, $handle);
+            $converter = Craft::$app->controller->module->getConverter($modelClass);
+            if ($converter) {
+                $record = $this->findOrNewRecord($recordsByHandle, $definition, $handle);
 
-            if ($converter->getRecordDefinition($record) === $definition) {
-                Schematic::info('- Skipping '.get_class($record).' '.$handle);
-            } else {
-                $converter->setRecordAttributes($record, $definition, $defaultAttributes);
-                if ($persist) {
-                    Schematic::info('- Saving '.get_class($record).' '.$handle);
-                    if ($converter->saveRecord($record, $definition)) {
-                    } else {
-                        Schematic::importError($record, $handle);
+                if ($converter->getRecordDefinition($record) === $definition) {
+                    Schematic::info('- Skipping '.get_class($record).' '.$handle);
+                } else {
+                    $converter->setRecordAttributes($record, $definition, $defaultAttributes);
+                    if ($persist) {
+                        Schematic::info('- Saving '.get_class($record).' '.$handle);
+                        if ($converter->saveRecord($record, $definition)) {
+                        } else {
+                            Schematic::importError($record, $handle);
+                        }
                     }
                 }
+
+                $imported[] = $record;
             }
-            $imported[] = $record;
             unset($recordsByHandle[$handle]);
         }
 
@@ -118,29 +113,5 @@ class ModelMapper extends BaseComponent implements MapperInterface
         }
 
         return $record;
-    }
-
-    /**
-     * Find converter class for model.
-     *
-     * @param string $modelClass
-     *
-     * @return BaseConverter
-     */
-    protected function getConverter(string $modelClass)
-    {
-        if ($modelClass) {
-            $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
-            if (class_exists($converterClass)) {
-                $converter = new $converterClass();
-                if ($converter instanceof ConverterInterface) {
-                    return $converter;
-                }
-            }
-
-            return $this->getConverter(get_parent_class($modelClass));
-        }
-
-        return false;
     }
 }

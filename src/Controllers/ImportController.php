@@ -3,8 +3,6 @@
 namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
-use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -28,7 +26,7 @@ class ImportController extends Base
      *
      * @return array
      */
-    public function options($actionID)
+    public function options($actionID): array
     {
         return array_merge(parent::options($actionID), ['force']);
     }
@@ -38,7 +36,7 @@ class ImportController extends Base
      *
      * @return int
      */
-    public function actionIndex()
+    public function actionIndex(): int
     {
         if (!file_exists($this->file)) {
             Schematic::error('File not found: '.$this->file);
@@ -47,15 +45,10 @@ class ImportController extends Base
         }
 
         $dataTypes = $this->getDataTypes();
-        if ($this->importFromYaml($dataTypes)) {
-            Schematic::info('Loaded schema from '.$this->file);
+        $this->importFromYaml($dataTypes);
+        Schematic::info('Loaded schema from '.$this->file);
 
-            return 0;
-        }
-
-        Schematic::info('There was an error loading schema from '.$this->file);
-
-        return 1;
+        return 0;
     }
 
     /**
@@ -63,11 +56,9 @@ class ImportController extends Base
      *
      * @param string $dataTypes The data types to import
      *
-     * @return bool
-     *
      * @throws Exception
      */
-    private function importFromYaml($dataTypes)
+    private function importFromYaml($dataTypes): void
     {
         $this->disableLogging();
         $yaml = file_get_contents($this->file);
@@ -78,16 +69,13 @@ class ImportController extends Base
         $definitions = Data::fromYaml($yaml, $yamlOverride);
 
         foreach ($dataTypes as $dataTypeHandle) {
-            $dataTypeClass = $this->module->dataTypes[$dataTypeHandle];
-            $dataType = new $dataTypeClass();
-            if (!$dataType instanceof DataTypeInterface) {
-                Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
+            $dataType = $this->module->getDataType($dataTypeHandle);
+            if (null == $dataType) {
                 continue;
             }
 
             $mapper = $dataType->getMapperHandle();
-            if (!$this->module->$mapper instanceof MapperInterface) {
-                Schematic::error(get_class($this->module->$mapper).' does not implement MapperInterface');
+            if (!$this->module->checkMapper($mapper)) {
                 continue;
             }
 
@@ -103,7 +91,5 @@ class ImportController extends Base
                 }
             }
         }
-
-        return true;
     }
 }

@@ -22,6 +22,9 @@ use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
 use NerdsAndCompany\Schematic\Mappers\ModelMapper;
 use NerdsAndCompany\Schematic\Mappers\PluginMapper;
 use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
+use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
+use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
+use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 
 /**
  * Schematic.
@@ -89,6 +92,85 @@ class Schematic extends Module
         Craft::configure($this, $config);
 
         parent::init();
+    }
+
+    /**
+     * Get datatype by handle.
+     *
+     * @param string $dataTypeHandle
+     *
+     * @return DateTypeInterface
+     */
+    public function getDataType(string $dataTypeHandle): DataTypeInterface
+    {
+        $dataTypeClass = $this->dataTypes[$dataTypeHandle];
+        if (!class_exists($dataTypeClass)) {
+            Schematic::error('Class '.$dataTypeClass.' does not exist');
+
+            return null;
+        }
+        $dataType = new $dataTypeClass();
+        if (!$dataType instanceof DataTypeInterface) {
+            Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
+
+            return null;
+        }
+
+        return $dataType;
+    }
+
+    /**
+     * Check mapper handle is valid.
+     *
+     * @param string $mapper
+     *
+     * @return bool
+     */
+    public function checkMapper(string $mapper): bool
+    {
+        if (!isset($this->$mapper)) {
+            Schematic::error('Mapper '.$mapper.' not found');
+
+            return false;
+        }
+        if (!$this->$mapper instanceof MapperInterface) {
+            Schematic::error(get_class($this->$mapper).' does not implement MapperInterface');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Find converter for model class.
+     *
+     * @param string $modelClass
+     *
+     * @return BaseConverter
+     */
+    public function getConverter(string $modelClass, string $originalClass = ''): ConverterInterface
+    {
+        if ('' === $originalClass) {
+            $originalClass = $modelClass;
+        }
+
+        $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
+        if (class_exists($converterClass)) {
+            $converter = new $converterClass();
+            if ($converter instanceof ConverterInterface) {
+                return $converter;
+            }
+        }
+
+        $parentClass = get_parent_class($modelClass);
+        if (!$parentClass) {
+            Schematic::error('No converter found for '.$originalClass);
+
+            return null;
+        }
+
+        return $this->getConverter($parentClass, $originalClass);
     }
 
     /**
