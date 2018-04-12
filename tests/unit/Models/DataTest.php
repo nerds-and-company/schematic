@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Models;
 
 use Symfony\Component\Yaml\Yaml;
+use Codeception\Test\Unit;
 
 /**
  * Class DataTest.
@@ -13,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @see      http://www.nerds.company
  */
-class DataTest extends \Codeception\Test\Unit
+class DataTest extends Unit
 {
     /**
      * @return string

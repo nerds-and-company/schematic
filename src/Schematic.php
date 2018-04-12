@@ -99,16 +99,23 @@ class Schematic extends Module
      *
      * @param string $dataTypeHandle
      *
-     * @return DateTypeInterface
+     * @return DateTypeInterface|null
      */
-    public function getDataType(string $dataTypeHandle): DataTypeInterface
+    public function getDataType(string $dataTypeHandle)
     {
+        if (!isset($this->dataTypes[$dataTypeHandle])) {
+            Schematic::error('DataType '.$dataTypeHandle.' is not registered');
+
+            return null;
+        }
+
         $dataTypeClass = $this->dataTypes[$dataTypeHandle];
         if (!class_exists($dataTypeClass)) {
             Schematic::error('Class '.$dataTypeClass.' does not exist');
 
             return null;
         }
+
         $dataType = new $dataTypeClass();
         if (!$dataType instanceof DataTypeInterface) {
             Schematic::error($dataTypeClass.' does not implement DataTypeInterface');
@@ -147,9 +154,9 @@ class Schematic extends Module
      *
      * @param string $modelClass
      *
-     * @return BaseConverter
+     * @return ConverterInterface|null
      */
-    public function getConverter(string $modelClass, string $originalClass = ''): ConverterInterface
+    public function getConverter(string $modelClass, string $originalClass = '')
     {
         if ('' === $originalClass) {
             $originalClass = $modelClass;
