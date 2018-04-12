@@ -5,9 +5,9 @@ namespace NerdsAndCompany\Schematic\Mappers;
 use Craft;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
+use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
-use yii\base\Component as BaseComponent;
 
 /**
  * Schematic Model Mapper.
@@ -48,6 +48,8 @@ class ModelMapper extends BaseComponent implements MapperInterface
      * @param Model $records           The existing records
      * @param array $defaultAttributes Default attributes to use for each record
      * @param bool  $persist           Whether to persist the parsed records
+     *
+     * @return array
      */
     public function import(array $definitions, array $records, array $defaultAttributes = [], $persist = true): array
     {
@@ -82,7 +84,7 @@ class ModelMapper extends BaseComponent implements MapperInterface
             foreach ($recordsByHandle as $handle => $record) {
                 $modelClass = get_class($record);
                 Schematic::info('- Deleting '.get_class($record).' '.$handle);
-                $converter = $this->getConverter($modelClass);
+                $converter = Craft::$app->controller->module->getConverter($modelClass);
                 $converter->deleteRecord($record);
             }
         }
@@ -101,7 +103,7 @@ class ModelMapper extends BaseComponent implements MapperInterface
      */
     private function findOrNewRecord(array $recordsByHandle, array $definition, string $handle): Model
     {
-        $record = new  $definition['class']();
+        $record = new $definition['class']();
         if (array_key_exists($handle, $recordsByHandle)) {
             $existing = $recordsByHandle[$handle];
             if (get_class($record) == get_class($existing)) {

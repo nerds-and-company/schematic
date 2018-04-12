@@ -3,13 +3,13 @@
 namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
+use craft\base\Model;
 use Codeception\Test\Unit;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Converters\Models\Base as Converter;
 
 /**
  * Class ModelMapperTest.
- *
- * @TODO: Isolate from category groups
  *
  * @author    Nerds & Company
  * @copyright Copyright (c) 2015-2017, Nerds & Company
@@ -20,7 +20,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class ModelMapperTest extends Unit
 {
     /**
-     * @var CategoryGroups
+     * @var ModelMapper
      */
     private $mapper;
 
@@ -31,10 +31,6 @@ class ModelMapperTest extends Unit
      */
     protected function _before()
     {
-        Craft::$app->sites->expects($this->any())
-                  ->method('getSiteByHandle')
-                  ->willReturn($this->getMockSite());
-
         $this->mapper = new ModelMapper();
     }
 
@@ -43,43 +39,91 @@ class ModelMapperTest extends Unit
     //==============================================================================================================
 
     /**
-     * @dataProvider provideValidCategoryGroups
+     * @dataProvider provideExportModels
      *
-     * @param CategoryGroupModel[] $groups
-     * @param array                $expectedResult
+     * @param Model[] $models
+     * @param array   $expectedResult
      */
-    public function testSuccessfulExport(array $groups, array $expectedResult = [])
+    public function testSuccessfulExport(array $models, array $expectedResult = [])
     {
-        $actualResult = $this->mapper->export($groups);
+        $converter = $this->getMockConverter();
+        $this->expectConverter($converter, count($models));
+
+        $actualResult = $this->mapper->export($models);
 
         $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * @dataProvider provideValidCategoryGroupDefinitions
+     * @dataProvider provideImportModels
      *
-     * @param array $groupDefinitions
+     * @param Model[] $existingGroups
+     * @param array   $modelDefinitions
+     * @param int     $saveCount
      */
-    public function testSuccessfulImport(array $groupDefinitions, array $existingGroups, int $saveCount)
+    public function testUnSuccessfulImport(array $existingGroups, array $modelDefinitions, int $saveCount)
     {
-        $this->expectSaves($saveCount);
-        $this->expectDeletes(0);
+        $converter = $this->getMockConverter();
+        $this->expectConverter($converter, count($modelDefinitions));
+        $this->expectSaves($converter, $saveCount, false);
+        $this->expectDeletes($converter, 0);
 
-        $this->mapper->import($groupDefinitions, $existingGroups);
+        $this->mapper->import($modelDefinitions, $existingGroups);
     }
 
     /**
-     * @dataProvider provideValidCategoryGroupDefinitions
+     * @dataProvider provideImportModels
      *
-     * @param array $groupDefinitions
+     * @param Model[] $existingGroups
+     * @param array   $modelDefinitions
+     * @param int     $saveCount
      */
-    public function testImportWithForceOption(array $groupDefinitions, array $existingGroups, int $saveCount, int $deleteCount)
+    public function testSuccessfulImport(array $existingGroups, array $modelDefinitions, int $saveCount)
+    {
+        $converter = $this->getMockConverter();
+        $this->expectConverter($converter, count($modelDefinitions));
+        $this->expectSaves($converter, $saveCount);
+        $this->expectDeletes($converter, 0);
+
+        $this->mapper->import($modelDefinitions, $existingGroups);
+    }
+
+    /**
+     * @dataProvider provideImportModels
+     *
+     * @param Model[] $existingGroups
+     * @param array   $modelDefinitions
+     * @param int     $saveCount
+     * @param int     $deleteCount
+     */
+    public function testSuccessfulImportWithForceOption(array $existingGroups, array $modelDefinitions, int $saveCount, int $deleteCount)
     {
         Schematic::$force = true;
-        $this->expectSaves($saveCount);
-        $this->expectDeletes($deleteCount);
+        $converter = $this->getMockConverter();
+        $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);
+        $this->expectSaves($converter, $saveCount);
+        $this->expectDeletes($converter, $deleteCount);
 
-        $this->mapper->import($groupDefinitions, $existingGroups);
+        $this->mapper->import($modelDefinitions, $existingGroups);
+    }
+
+    /**
+     * @dataProvider provideImportModels
+     *
+     * @param Model[] $existingGroups
+     * @param array   $modelDefinitions
+     * @param int     $saveCount
+     * @param int     $deleteCount
+     */
+    public function testUnsuccessfulImportWithForceOption(array $existingGroups, array $modelDefinitions, int $saveCount, int $deleteCount)
+    {
+        Schematic::$force = true;
+        $converter = $this->getMockConverter();
+        $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);
+        $this->expectSaves($converter, $saveCount, false);
+        $this->expectDeletes($converter, $deleteCount);
+
+        $this->mapper->import($modelDefinitions, $existingGroups);
     }
 
     //==============================================================================================================
@@ -89,32 +133,32 @@ class ModelMapperTest extends Unit
     /**
      * @return array
      */
-    public function provideValidCategoryGroups()
+    public function provideExportModels()
     {
-        $mockCategoryGroup1 = $this->getMockCategoryGroup(1);
-        $mockCategoryGroup2 = $this->getMockCategoryGroup(2);
+        $mockModel1 = $this->getMockModel(1);
+        $mockModel2 = $this->getMockModel(2);
 
         return [
-            'emptyArray' => [
-                'categoryGroups' => [],
-                'expectedResult' => [],
+            'empty array' => [
+                'models' => [],
+                'modelDefinitions' => [],
             ],
-            'single group' => [
-                'categoryGroups' => [
-                    'group1' => $mockCategoryGroup1,
+            'single model' => [
+                'models' => [
+                    $mockModel1,
                 ],
-                'expectedResult' => [
-                    'groupHandle1' => $this->getMockCategoryGroupDefinition($mockCategoryGroup1),
+                'modelDefinitions' => [
+                    'modelHandle1' => $this->getMockModelDefinition($mockModel1),
                 ],
             ],
-            'multiple groups' => [
-                'categoryGroups' => [
-                    'group1' => $mockCategoryGroup1,
-                    'group2' => $mockCategoryGroup2,
+            'multiple models' => [
+                'models' => [
+                    $mockModel1,
+                    $mockModel2,
                 ],
-                'expectedResult' => [
-                    'groupHandle1' => $this->getMockCategoryGroupDefinition($mockCategoryGroup1),
-                    'groupHandle2' => $this->getMockCategoryGroupDefinition($mockCategoryGroup2),
+                'modelDefinitions' => [
+                    'modelHandle1' => $this->getMockModelDefinition($mockModel1),
+                    'modelHandle2' => $this->getMockModelDefinition($mockModel2),
                 ],
             ],
         ];
@@ -123,28 +167,35 @@ class ModelMapperTest extends Unit
     /**
      * @return array
      */
-    public function provideValidCategoryGroupDefinitions()
+    public function provideImportModels()
     {
-        $mockCategoryGroup1 = $this->getMockCategoryGroup(1);
-        $mockCategoryGroup2 = $this->getMockCategoryGroup(2);
+        $mockModel1 = $this->getMockModel(1);
+        $mockModel2 = $this->getMockModel(2);
 
         return [
-            'emptyArray' => [
-                'groupDefinitions' => [],
-                'existingGroups' => [
-                    $mockCategoryGroup1,
+            'empty array' => [
+                'models' => [],
+                'modelDefinitions' => [],
+                'saveCount' => 0,
+                'deleteCount' => 0,
+            ],
+            'single old model' => [
+                'models' => [
+                    $mockModel1,
                 ],
+                'modelDefinitions' => [],
                 'saveCount' => 0,
                 'deleteCount' => 1,
             ],
-            'single new group' => [
-                'groupDefinitions' => [
-                    'groupHandle1' => $this->getMockCategoryGroupDefinition($mockCategoryGroup1),
-                    'groupHandle2' => $this->getMockCategoryGroupDefinition($mockCategoryGroup2),
+            'single new model' => [
+                'models' => [
+                    $mockModel1,
                 ],
-                'existingGroups' => [
-                    $mockCategoryGroup1,
+                'modelDefinitions' => [
+                    'modelHandle1' => $this->getMockModelDefinition($mockModel1),
+                    'modelHandle2' => $this->getMockModelDefinition($mockModel2),
                 ],
+
                 'saveCount' => 1,
                 'deleteCount' => 0,
             ],
@@ -156,27 +207,99 @@ class ModelMapperTest extends Unit
     //==============================================================================================================
 
     /**
-     * Expect a number of group saves.
+     * Get model definition for mock model.
      *
-     * @param int $saveCount
+     * @param Model $mockModel
+     *
+     * @return array
      */
-    private function expectSaves(int $saveCount)
+    private function getMockModelDefinition(Model $mockModel): array
     {
-        Craft::$app->categories
-                   ->expects($this->exactly($saveCount))
-                   ->method('saveGroup')
-                   ->willReturn(true);
+        return [
+            'class' => get_class($mockModel),
+            'attributes' => [
+                'name' => $mockModel->name,
+                'handle' => $mockModel->handle,
+                'max' => 100,
+                'other' => 'stuff',
+            ],
+        ];
     }
 
     /**
-     * Expect a number of group deletes.
+     * Get a mock model.
      *
-     * @param int $deleteCount
+     * @param int $modelId
+     *
+     * @return Mock|Model
      */
-    private function expectDeletes(int $deleteCount)
+    private function getMockModel(int $modelId): Model
     {
-        Craft::$app->categories
-                    ->expects($this->exactly($deleteCount))
-                    ->method('deleteGroupById');
+        $mockModel = $this->getMockBuilder(Model::class)->getMock();
+        $mockModel->expects($this->any())
+                  ->method('__get')
+                  ->willReturnMap([
+                        ['id', $modelId],
+                        ['handle', 'modelHandle'.$modelId],
+                        ['name', 'modelName'.$modelId],
+                  ]);
+
+        return $mockModel;
+    }
+
+    /**
+     * Get a mock converter.
+     *
+     * @return Converter
+     */
+    private function getMockConverter(): Converter
+    {
+        $mockConverter = $this->getMockBuilder(Converter::class)->getMock();
+
+        $mockConverter->expects($this->any())
+                      ->method('getRecordDefinition')
+                      ->willReturnCallback(function ($model) {
+                          return $this->getMockModelDefinition($model);
+                      });
+
+        return $mockConverter;
+    }
+
+    /**
+     * Mock a converter.
+     *
+     * @param Mock|Converter|null $converter
+     */
+    private function expectConverter($converter, int $count)
+    {
+        Craft::$app->controller->module->expects($this->exactly($count))
+                                       ->method('getConverter')
+                                       ->willReturn($converter);
+    }
+
+    /**
+     * Expect a number of model saves.
+     *
+     * @param Converter $converter
+     * @param int       $saveCount
+     * @param bool      $return
+     */
+    private function expectSaves(Converter $converter, int $saveCount, bool $return = true)
+    {
+        $converter->expects($this->exactly($saveCount))
+                  ->method('saveRecord')
+                  ->willReturn($return);
+    }
+
+    /**
+     * Expect a number of model deletes.
+     *
+     * @param Converter $converter
+     * @param int       $deleteCount
+     */
+    private function expectDeletes(Converter $converter, int $deleteCount)
+    {
+        $converter->expects($this->exactly($deleteCount))
+                  ->method('deleteRecord');
     }
 }

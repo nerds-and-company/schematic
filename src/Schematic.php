@@ -186,7 +186,7 @@ class Schematic extends Module
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function error($message)
+    public static function error($message): void
     {
         Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_RED);
     }
@@ -197,7 +197,7 @@ class Schematic extends Module
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function warning($message)
+    public static function warning($message): void
     {
         Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_YELLOW);
     }
@@ -208,7 +208,7 @@ class Schematic extends Module
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function info($message)
+    public static function info($message): void
     {
         Craft::$app->controller->stdout($message.PHP_EOL);
     }
@@ -219,9 +219,14 @@ class Schematic extends Module
      * @param Model  $record
      * @param string $handle
      */
-    public static function importError(Model $record, string $handle)
+    public static function importError(Model $record, string $handle): void
     {
         static::warning('- Error importing '.get_class($record).' '.$handle);
+        if (!is_array($record->getErrors())) {
+            static::error('   - An unknown error has occurred');
+
+            return;
+        }
         foreach ($record->getErrors() as $errors) {
             foreach ($errors as $error) {
                 static::error('   - '.$error);
