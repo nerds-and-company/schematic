@@ -16,6 +16,7 @@ use craft\services\Path;
 use craft\services\Plugins;
 use craft\services\Sections;
 use craft\services\Sites;
+use craft\services\SystemSettings;
 use craft\services\Tags;
 use craft\services\UserGroups;
 use craft\services\UserPermissions;
@@ -90,6 +91,7 @@ class Unit extends Module
         $mockPlugins = $this->getMock($test, Plugins::class);
         $mockSections = $this->getMock($test, Sections::class);
         $mockSites = $this->getMock($test, Sites::class);
+        $mockSystemSettings = $this->getMock($test, SystemSettings::class);
         $mockTags = $this->getMock($test, Tags::class);
         $mockUserGroups = $this->getMock($test, UserGroups::class);
         $mockUserPermissions = $this->getMock($test, UserPermissions::class);
@@ -107,6 +109,7 @@ class Unit extends Module
                 ['plugins', $mockPlugins],
                 ['sections', $mockSections],
                 ['sites', $mockSites],
+                ['systemSettings', $mockSystemSettings],
                 ['tags', $mockTags],
                 ['userGroups', $mockUserGroups],
                 ['userPermissions', $mockUserPermissions],

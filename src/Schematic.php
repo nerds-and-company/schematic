@@ -222,13 +222,14 @@ class Schematic extends Module
     public static function importError(Model $record, string $handle): void
     {
         static::warning('- Error importing '.get_class($record).' '.$handle);
-        if (!is_array($record->getErrors())) {
+        $errors = $record->getErrors();
+        if (!is_array($errors)) {
             static::error('   - An unknown error has occurred');
 
             return;
         }
-        foreach ($record->getErrors() as $errors) {
-            foreach ($errors as $error) {
+        foreach ($errors as $subErrors) {
+            foreach ($subErrors as $error) {
                 static::error('   - '.$error);
             }
         }

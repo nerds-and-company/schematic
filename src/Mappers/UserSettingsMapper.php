@@ -43,12 +43,12 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
         $photoVolumeId = (int) $settings['photoVolumeId'];
         $volume = Craft::$app->volumes->getVolumeById($photoVolumeId);
         unset($settings['photoVolumeId']);
+        $settings['photoVolume'] = $volume ? $volume->handle : null;
 
-        $fieldLayout = Craft::$app->getFields()->getLayoutByType(User::class);
+        $fieldLayout = Craft::$app->fields->getLayoutByType(User::class);
 
         return [
             'settings' => $settings,
-            'photoVolume' => $volume ? $volume->handle : null,
             'fieldLayout' => $this->getFieldLayoutDefinition($fieldLayout),
         ];
     }
@@ -59,13 +59,15 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
     public function import(array $userSettings, array $settings = []): array
     {
         $photoVolumeId = null;
-        if (array_key_exists('photoVolume', $userSettings) && null != $userSettings['photoVolume']) {
-            $volume = Craft::$app->volumes->getVolumeByHandle($userSettings['photoVolume']);
+        if (array_key_exists('photoVolume', $userSettings['settings']) && null != $userSettings['settings']['photoVolume']) {
+            $volume = Craft::$app->volumes->getVolumeByHandle($userSettings['settings']['photoVolume']);
             $photoVolumeId = $volume ? $volume->id : null;
         }
+        unset($userSettings['settings']['photoVolume']);
+
         if (array_key_exists('settings', $userSettings)) {
             Schematic::info('- Saving user settings');
-            $userSettings['photoVolumeId'] = $photoVolumeId;
+            $userSettings['settings']['photoVolumeId'] = $photoVolumeId;
             if (!Craft::$app->systemSettings->saveSettings('users', $userSettings['settings'])) {
                 Schematic::warning('- Couldn’t save user settings.');
             }
@@ -79,6 +81,8 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
             Craft::$app->fields->deleteLayoutsByType(User::class);
             if (!Craft::$app->fields->saveLayout($fieldLayout)) {
                 Schematic::warning('- Couldn’t save user field layout.');
+
+                Schematic::importError($fieldLayout, 'users');
             }
         }
 
