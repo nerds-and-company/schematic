@@ -23,9 +23,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 class ModelMapper extends BaseComponent implements MapperInterface
 {
     /**
-     * Get all record definitions.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function export(array $records): array
     {

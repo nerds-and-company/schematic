@@ -9,6 +9,7 @@ use craft\i18n\I18n;
 use craft\services\AssetTransforms;
 use craft\services\Categories;
 use craft\services\Elements;
+use craft\services\ElementIndexes;
 use craft\services\Fields;
 use craft\services\Globals;
 use craft\services\Matrix;
@@ -83,6 +84,7 @@ class Unit extends Module
         $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
         $mockElements = $this->getMock($test, Elements::class);
+        $mockElementIndexes = $this->getMock($test, ElementIndexes::class);
         $mockFields = $this->getMock($test, Fields::class);
         $mockGlobals = $this->getMock($test, Globals::class);
         $mockI18n = $this->getMock($test, I18n::class);
@@ -103,6 +105,7 @@ class Unit extends Module
                 ['assetTransforms', $mockAssetTransforms],
                 ['categories', $mockCategoryGroups],
                 ['elements', $mockElements],
+                ['elementIndexes', $mockElementIndexes],
                 ['fields', $mockFields],
                 ['globals', $mockGlobals],
                 ['matrix', $mockMatrix],

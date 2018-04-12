@@ -34,7 +34,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function export(array $elementTypes): array
     {
@@ -51,20 +51,21 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     }
 
     /**
-     * @param array $settingDefinitions
-     *
-     * @return Result
+     * @TODO: Look into issue with element index settings
+     * {@inheritdoc}
      */
     public function import(array $settingDefinitions, array $elementTypes): array
     {
-        Schematic::warning('Element index import is not yet implemented');
-
-        foreach ($settingDefinitions as $elementType => $settings) {
+        Schematic::warning(' - Element index settings may not be imported properly bevause craft prunes the sources');
+        foreach ($settingDefinitions as $elementTypeName => $settings) {
+            $elementType = 'craft\\elements\\'.$elementTypeName;
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
-            // Import the settings
+            if (!Craft::$app->elementIndexes->saveSettings($elementType, $mappedSettings)) {
+                Schematic::error(' - Settings for '.$elementTypeName.' could not be saved');
+            }
         }
 
-        return $elementTypes;
+        return [];
     }
 
     /**

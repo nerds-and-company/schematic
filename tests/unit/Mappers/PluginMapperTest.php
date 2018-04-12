@@ -21,6 +21,11 @@ use Codeception\Test\Unit;
 class PluginMapperTest extends Unit
 {
     /**
+     * @var PluginMapper
+     */
+    private $mapper;
+
+    /**
      * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
