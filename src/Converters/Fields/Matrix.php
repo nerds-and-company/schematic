@@ -8,7 +8,7 @@ use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Converters\Base\Field;
 
 /**
- * Schematic Globals Converter.
+ * Schematic Matrix Converter.
  *
  * Sync Craft Setups.
  *

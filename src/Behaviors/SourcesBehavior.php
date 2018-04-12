@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Behaviors;
 
 use Craft;
+use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
 use NerdsAndCompany\Schematic\Schematic;
@@ -54,10 +55,13 @@ class SourcesBehavior extends Behavior
      * @param string $indexTo
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getSource($fieldType, $source, $indexFrom, $indexTo)
     {
-        if (strpos($source, ':') === false) {
+        if (false === strpos($source, ':')) {
             return $source;
         }
 
@@ -82,7 +86,7 @@ class SourcesBehavior extends Behavior
                 break;
             case 'group':
             case 'editCategories':
-                $service = $fieldType == 'Users' ? Craft::$app->userGroups : Craft::$app->categories;
+                $service = 'Users' == $fieldType ? Craft::$app->userGroups : Craft::$app->categories;
                 $method = 'getGroupBy';
                 break;
             case 'folder':
@@ -111,7 +115,12 @@ class SourcesBehavior extends Behavior
 
         if (isset($service) && isset($method) && isset($sourceFrom)) {
             $method = $method.ucfirst($indexFrom);
-            $sourceObject = $service->$method($sourceFrom);
+            try {
+                $sourceObject = $service->$method($sourceFrom);
+            } catch (TypeError $e) {
+                Schematic::error('An error occured mapping source '.$source.' from '.$indexFrom.' to '.$indexTo);
+                Schematic::error($e->getMessage());
+            }
         }
 
         if ($sourceObject && isset($sourceType)) {
