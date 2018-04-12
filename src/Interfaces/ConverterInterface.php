@@ -5,7 +5,7 @@ namespace NerdsAndCompany\Schematic\Interfaces;
 use craft\base\Model;
 
 /**
- * Schematic Element Mapping Interface.
+ * Schematic Converter Interface.
  *
  * Sync Craft Setups.
  *

@@ -2,6 +2,7 @@
 
 namespace NerdsAndCompany\Schematic\Models;
 
+use Exception;
 use craft\base\Model;
 use Symfony\Component\Yaml\Yaml;
 
@@ -15,36 +16,11 @@ use Symfony\Component\Yaml\Yaml;
  * @license   MIT
  *
  * @see      http://www.nerds.company
- *
- * @property array $volumes
- * @property array $assetTransforms
- * @property array $fields
- * @property array $globalSets
- * @property array $plugins
- * @property array $sections
- * @property array $userGroups
- * @property array $users
- * @property array $elementIndexSettings
- * @property array $categoryGroups
- * @property array $tagGroups
  */
 class Data extends Model
 {
-    public $sites;
-    public $volumes;
-    public $assetTransforms;
-    public $fields;
-    public $globalSets;
-    public $plugins;
-    public $sections;
-    public $userGroups;
-    public $users;
-    public $elementIndexSettings;
-    public $categoryGroups;
-    public $tagGroups;
-
     /**
-     * Populate data model from yaml.
+     * Parse a yaml file.
      *
      * @param string $yaml
      * @param string $overrideYaml
@@ -62,7 +38,7 @@ class Data extends Model
             }
         }
 
-        return null === $data ? null : new static($data);
+        return $data;
     }
 
     /**
@@ -98,7 +74,7 @@ class Data extends Model
     }
 
     /**
-     * Populate yaml from data model.
+     * Convert array to yaml.
      *
      * @param array $data
      *
@@ -106,8 +82,6 @@ class Data extends Model
      */
     public static function toYaml(array $data)
     {
-        $data = null === $data ? null : new static($data);
-
-        return Yaml::dump(array_filter($data->attributes), 12, 2);
+        return Yaml::dump($data, 12, 2);
     }
 }

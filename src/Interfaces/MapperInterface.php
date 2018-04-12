@@ -3,7 +3,7 @@
 namespace NerdsAndCompany\Schematic\Interfaces;
 
 /**
- * Schematic Element Mapping Interface.
+ * Schematic Mapper Interface.
  *
  * Sync Craft Setups.
  *

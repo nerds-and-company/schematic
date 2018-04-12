@@ -46,20 +46,20 @@ class DataTest extends \Codeception\Test\Unit
     public function testRegularOverride()
     {
         $result = $this->generateDataModel();
-        $this->assertEquals('override_key', $result->volumes['uploads']['attributes']['keyId']);
+        $this->assertEquals('override_key', $result['volumes']['uploads']['attributes']['keyId']);
     }
 
     public function testEnvironmentOverride()
     {
         $result = $this->generateDataModel();
-        $this->assertEquals('override_bucket_name', $result->volumes['uploads']['attributes']['bucket']);
+        $this->assertEquals('override_bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
     }
 
     public function testErrorWhenEnvironmentVariableNotSet()
     {
         // unset environment variable
         putenv('SCHEMATIC_S3_BUCKET');
-        $this->setExpectedException('Error');
+        $this->setExpectedException('Exception');
         $schema = $this->getSchemaTestFile();
         $override = $this->getOverrideTestFile();
         Data::fromYaml($schema, $override);
@@ -68,14 +68,14 @@ class DataTest extends \Codeception\Test\Unit
     public function testToYamlIsValidYaml()
     {
         $dataModel = $this->generateDataModel();
-        $yaml = Data::toYaml($dataModel->attributes);
+        $yaml = Data::toYaml($dataModel);
         $this->assertInternalType('array', Yaml::parse($yaml));
     }
 
     public function testToYamlContainsCorrectText()
     {
         $dataModel = $this->generateDataModel();
-        $yaml = Data::toYaml($dataModel->attributes);
+        $yaml = Data::toYaml($dataModel);
         $this->assertContains('override_bucket_name', $yaml);
     }
 }
