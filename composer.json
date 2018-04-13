@@ -1,6 +1,8 @@
 {
     "name": "nerds-and-company/schematic",
     "description": "Craft setup and sync tool",
+    "type": "craft-plugin",
+    "license": "MIT",
     "authors": [{
             "name": "Bart van Gennep",
             "email": "b.vangennep@nerds.company",
@@ -14,7 +16,13 @@
             "role": "Developer"
         }
     ],
-    "license": "MIT",
+    "extra": {
+        "handle": "schematic",
+        "name": "Schematic",
+        "class": "NerdsAndCompany\\Schematic\\Schematic",
+        "developer": "Nerds & Company",
+        "developerUrl": "http://www.nerds.company"
+    },
     "require": {
         "php": "^7.1",
         "symfony/yaml": "^4.0",
