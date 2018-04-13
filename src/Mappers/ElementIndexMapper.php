@@ -56,7 +56,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
      */
     public function import(array $settingDefinitions, array $elementTypes): array
     {
-        Schematic::warning(' - Element index settings may not be imported properly bevause craft prunes the sources');
+        Schematic::warning(' - Element index settings may not be imported properly because craft prunes the sources');
         foreach ($settingDefinitions as $elementTypeName => $settings) {
             $elementType = 'craft\\elements\\'.$elementTypeName;
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');

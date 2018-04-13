@@ -8,7 +8,7 @@ use yii\console\Controller;
 use NerdsAndCompany\Schematic\Schematic;
 
 /**
- * Schematic FieldLayout Behavior.
+ * Schematic Base Controller.
  *
  * Sync Craft Setups.
  *

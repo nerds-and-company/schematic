@@ -120,10 +120,12 @@ class SourcesBehavior extends Behavior
             } catch (TypeError $e) {
                 Schematic::error('An error occured mapping source '.$source.' from '.$indexFrom.' to '.$indexTo);
                 Schematic::error($e->getMessage());
+
+                return null;
             }
         }
 
-        if ($sourceObject && isset($sourceType)) {
+        if ($sourceObject) {
             return $sourceType.':'.$sourceObject->$indexTo;
         }
 

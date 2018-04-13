@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Controllers;
 use Craft;
 use NerdsAndCompany\Schematic\Models\Data;
 use NerdsAndCompany\Schematic\Schematic;
+use craft\errors\WrongEditionException;
 
 /**
  * Schematic Import Command.
@@ -83,11 +84,15 @@ class ImportController extends Base
             Schematic::$force = $this->force;
             if (array_key_exists($dataTypeHandle, $definitions) && is_array($definitions[$dataTypeHandle])) {
                 $records = $dataType->getRecords();
-                $this->module->$mapper->import($definitions[$dataTypeHandle], $records);
+                try {
+                    $this->module->$mapper->import($definitions[$dataTypeHandle], $records);
 
-                // @TODO: Don't hardcode datatype in controller
-                if ('fields' == $dataType) {
-                    Craft::$app->fields->updateFieldVersion();
+                    // @TODO: Don't hardcode datatype in controller
+                    if ('fields' == $dataTypeHandle) {
+                        Craft::$app->fields->updateFieldVersion();
+                    }
+                } catch (WrongEditionException $e) {
+                    Schematic::error('Craft Pro is required for datatype '.$dataTypeHandle);
                 }
             }
         }

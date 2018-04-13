@@ -27,11 +27,13 @@ class UserGroup extends Base
         $mappedPermissions = $this->getAllMappedPermissions();
 
         $groupPermissions = [];
-        foreach (Craft::$app->userPermissions->getPermissionsByGroupId($record->id) as $permission) {
-            if (array_key_exists($permission, $mappedPermissions)) {
-                $groupPermissions[] = $mappedPermissions[$permission];
-            } else {
-                $groupPermissions[] = $permission;
+        if ($record->id) {
+            foreach (Craft::$app->userPermissions->getPermissionsByGroupId($record->id) as $permission) {
+                if (array_key_exists($permission, $mappedPermissions)) {
+                    $groupPermissions[] = $mappedPermissions[$permission];
+                } else {
+                    $groupPermissions[] = $permission;
+                }
             }
         }
 
