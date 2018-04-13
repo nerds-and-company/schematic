@@ -1,3 +1,6 @@
+### 4.0.0 ###
+- Major refactor for craft3
+
 ### 3.8.8 ###
 - Added ability to exclude datatypes on import (thanks @Zae)
 
