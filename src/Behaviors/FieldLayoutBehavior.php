@@ -28,7 +28,7 @@ class FieldLayoutBehavior extends Behavior
      *
      * @return array
      */
-    public function getFieldLayoutDefinition(FieldLayout $fieldLayout)
+    public function getFieldLayoutDefinition(FieldLayout $fieldLayout): array
     {
         if ($fieldLayout->getTabs()) {
             $tabDefinitions = [];
@@ -50,7 +50,7 @@ class FieldLayoutBehavior extends Behavior
      *
      * @return array
      */
-    private function getFieldLayoutFieldsDefinition(array $fields)
+    private function getFieldLayoutFieldsDefinition(array $fields): array
     {
         $fieldDefinitions = [];
 
@@ -68,7 +68,7 @@ class FieldLayoutBehavior extends Behavior
      *
      * @return FieldLayout
      */
-    public function getFieldLayout(array $fieldLayoutDef)
+    public function getFieldLayout(array $fieldLayoutDef): FieldLayout
     {
         $layoutFields = [];
         $requiredFields = [];
@@ -98,7 +98,7 @@ class FieldLayoutBehavior extends Behavior
      *
      * @return array
      */
-    private function getPrepareFieldLayout(array $fieldLayoutDef)
+    private function getPrepareFieldLayout(array $fieldLayoutDef): array
     {
         $layoutFields = [];
         $requiredFields = [];

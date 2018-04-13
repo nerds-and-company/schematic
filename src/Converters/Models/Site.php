@@ -32,7 +32,9 @@ class Site extends Base
     {
         $definition = parent::getRecordDefinition($record);
 
-        $definition['group'] = $record->group->name;
+        if ($record->groupId) {
+            $definition['group'] = $record->group->name;
+        }
         unset($definition['attributes']['groupId']);
 
         return $definition;
@@ -59,7 +61,11 @@ class Site extends Base
     }
 
     /**
-     * {@inheritdoc}
+     * Get group id by name.
+     *
+     * @param string $name
+     *
+     * @return int|null
      */
     public function getGroupIdByName($name)
     {

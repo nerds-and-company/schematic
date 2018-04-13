@@ -25,9 +25,9 @@ class Data extends Model
      * @param string $yaml
      * @param string $overrideYaml
      *
-     * @return Data
+     * @return array
      */
-    public static function fromYaml($yaml, $overrideYaml)
+    public static function fromYaml($yaml, $overrideYaml): array
     {
         $data = Yaml::parse($yaml);
         if (!empty($overrideYaml)) {
@@ -54,7 +54,7 @@ class Data extends Model
      *
      * @throws Exception
      */
-    public static function replaceEnvVariables($yaml)
+    public static function replaceEnvVariables($yaml): string
     {
         $matches = null;
         preg_match_all('/%\w+%/', $yaml, $matches);
@@ -78,9 +78,9 @@ class Data extends Model
      *
      * @param array $data
      *
-     * @return Data
+     * @return string
      */
-    public static function toYaml(array $data)
+    public static function toYaml(array $data): string
     {
         return Yaml::dump($data, 12, 2);
     }

@@ -71,9 +71,9 @@ class Field extends Base
      *
      * @param string $name
      *
-     * @return
+     * @return int|null
      */
-    private function getGroupIdByName($name)
+    private function getGroupIdByName(string $name)
     {
         if (!isset($this->groups)) {
             $this->groups = [];

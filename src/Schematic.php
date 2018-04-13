@@ -54,7 +54,7 @@ class Schematic extends Module
     /**
      * Initialize the module.
      */
-    public function init()
+    public function init(): void
     {
         Craft::setAlias('@NerdsAndCompany/Schematic', __DIR__);
 

@@ -40,7 +40,7 @@ class PluginMapper extends BaseComponent implements MapperInterface
      *
      * @return array
      */
-    private function getPluginDefinition(string $handle, array $pluginInfo)
+    private function getPluginDefinition(string $handle, array $pluginInfo): array
     {
         $settings = null;
         $plugin = Craft::$app->plugins->getPlugin($handle);

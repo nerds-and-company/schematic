@@ -73,7 +73,7 @@ class UserGroup extends Base
      *
      * @return array
      */
-    private function getAllMappedPermissions()
+    private function getAllMappedPermissions(): array
     {
         $mappedPermissions = [];
         foreach (Craft::$app->userPermissions->getAllPermissions() as $permissions) {
@@ -90,7 +90,7 @@ class UserGroup extends Base
      *
      * @return array
      */
-    private function getMappedPermissions(array $permissions)
+    private function getMappedPermissions(array $permissions): array
     {
         $mappedPermissions = [];
         foreach ($permissions as $permission => $options) {

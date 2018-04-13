@@ -31,7 +31,7 @@ class SourcesBehavior extends Behavior
      *
      * @return array|string
      */
-    public function getSources($fieldType, $sources, $indexFrom, $indexTo)
+    public function getSources(string $fieldType, $sources, string $indexFrom, string $indexTo)
     {
         $mappedSources = $sources;
         if (is_array($sources)) {
@@ -54,12 +54,12 @@ class SourcesBehavior extends Behavior
      * @param string $indexFrom
      * @param string $indexTo
      *
-     * @return string
+     * @return string|null
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getSource($fieldType, $source, $indexFrom, $indexTo)
+    public function getSource(string $fieldType, string $source, string $indexFrom, string $indexTo)
     {
         if (false === strpos($source, ':')) {
             return $source;

@@ -27,7 +27,7 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
      *
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
           FieldLayoutBehavior::className(),
