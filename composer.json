@@ -6,13 +6,13 @@
     "authors": [{
             "name": "Bart van Gennep",
             "email": "b.vangennep@nerds.company",
-            "homepage": "http://www.nerds.company",
+            "homepage": "https://nerds.company",
             "role": "Developer"
         },
         {
             "name": "Bob Olde Hampsink",
             "email": "b.oldehampsink@nerds.company",
-            "homepage": "http://www.nerds.company",
+            "homepage": "https://nerds.company",
             "role": "Developer"
         }
     ],
@@ -21,7 +21,7 @@
         "name": "Schematic",
         "class": "NerdsAndCompany\\Schematic\\Schematic",
         "developer": "Nerds & Company",
-        "developerUrl": "http://www.nerds.company"
+        "developerUrl": "https://nerds.company"
     },
     "require": {
         "php": "^7.1",
