@@ -9,9 +9,7 @@
   <description>PHPMD Ruleset</description>
 
   <rule ref="rulesets/codesize.xml"/>
-  <rule ref="rulesets/controversial.xml">
-    <exclude name="CamelCaseClassName"/>
-  </rule>
+  <rule ref="rulesets/controversial.xml"/>
   <rule ref="rulesets/design.xml"/>
   <rule ref="rulesets/naming.xml">
     <exclude name="LongVariable"/>

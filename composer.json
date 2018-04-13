@@ -18,7 +18,7 @@
     "require": {
         "php": "^7.1",
         "symfony/yaml": "^4.0",
-        "craftcms/cms": "^3.0.0-RC1"
+        "craftcms/cms": "^3.0"
     },
     "require-dev": {
         "codeception/codeception": "^2.4"

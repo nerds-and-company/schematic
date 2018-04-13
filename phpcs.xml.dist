@@ -2,14 +2,11 @@
 <ruleset name="PHP_CodeSniffer">
  <description>Coding standard for schematic</description>
 
- <file>modules/</file>
+ <file>src/</file>
 
  <arg name="colors"/>
  <arg name="extensions" value="php"/>
  <arg value="n"/>
 
- <rule ref="PSR2">
-  <exclude name="Squiz.Classes.ValidClassName"/>
-  <exclude name="Squiz.WhiteSpace.ControlStructureSpacing"/>
- </rule>
+ <rule ref="PSR2"></rule>
 </ruleset>

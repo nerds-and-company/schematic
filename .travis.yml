@@ -5,6 +5,7 @@ language: php
 php:
   # aliased to a recent 7.x version
   - 7.1
+  - 7.2
   # aliased to a recent hhvm version
   - hhvm
 
