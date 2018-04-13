@@ -3,7 +3,6 @@
 namespace NerdsAndCompany\Schematic\Controllers;
 
 use Craft;
-use yii\base\Behavior;
 use yii\console\Controller;
 use NerdsAndCompany\Schematic\Schematic;
 
@@ -21,7 +20,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class Base extends Controller
 {
     public $file = 'config/schema.yml';
-    public $overrideFile = 'craft/config/override.yml';
+    public $overrideFile = 'config/override.yml';
     public $exclude;
     public $include;
 
