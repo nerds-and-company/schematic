@@ -4,7 +4,7 @@ namespace NerdsAndCompany\Schematic;
 
 use Craft;
 use craft\base\Model;
-use yii\base\Module;
+use craft\base\Plugin;
 use yii\helpers\Console;
 use NerdsAndCompany\Schematic\DataTypes\AssetTransformDataType;
 use NerdsAndCompany\Schematic\DataTypes\CategoryGroupDataType;
@@ -39,7 +39,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Schematic extends Module
+class Schematic extends Plugin
 {
     /**
      * @var string

@@ -10,20 +10,9 @@ This tool can be installed [using Composer](https://getcomposer.org/doc/00-intro
 composer require nerds-and-company/schematic
 ```
 
-This will add `nerds-and-company/schematic` as a requirement to your  project's `composer.json` file and install the source-code into the `vendor/nerds-and-company/schematic` directory. Composer will also create the executable `vendor/bin/schematic`.
+This will add `nerds-and-company/schematic` as a requirement to your  project's `composer.json` file and install the source-code into the `vendor/nerds-and-company/schematic` directory.
 
-You will also need to include the module in `app.console.php` in your config directory.
-if the file does not exist yet, create it.
-
-```
-return [
-    'modules' => [
-        'schematic' => [
-            'class' => NerdsAndCompany\Schematic\Schematic::class,
-        ],
-    ],
-];
-```
+Schematic is now available as an installable plugin in Craft. You can install it in the cp or use `./craft install/plugin schematic`
 
 ## Usage
 
