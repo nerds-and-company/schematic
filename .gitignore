@@ -1,5 +1,4 @@
 build/
 composer.lock
-phpunit.xml
 tests/data/test_schema_export.yml
 vendor/

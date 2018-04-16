@@ -1,0 +1,11 @@
+volumes:
+  uploads:
+    attributes:
+      keyId: original_key_id
+      bucket: original_bucket_name
+users:
+  settings:
+    requireEmailVerification: true
+    allowPublicRegistration: false
+    defaultGroup: null
+    photoSubpath: profile

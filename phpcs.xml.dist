@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="PHP_CodeSniffer">
+ <description>Coding standard for schematic</description>
+
+ <file>src/</file>
+
+ <arg name="colors"/>
+ <arg name="extensions" value="php"/>
+ <arg value="n"/>
+
+ <rule ref="PSR2"></rule>
+</ruleset>
