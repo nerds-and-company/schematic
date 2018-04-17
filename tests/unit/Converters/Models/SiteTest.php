@@ -19,7 +19,7 @@ use Codeception\Test\Unit;
 class SiteTest extends Unit
 {
     /**
-     * @var Sites
+     * @var Site
      */
     private $converter;
 
@@ -63,9 +63,9 @@ class SiteTest extends Unit
                           ->method('getAllGroups')
                           ->willReturn([$this->getMockSiteGroup(1)]);
 
-        Craft::$app->sites->expects($this->exactly($groupStatus == 'existing' ? 0 : 1))
+        Craft::$app->sites->expects($this->exactly('existing' == $groupStatus ? 0 : 1))
                           ->method('saveGroup')
-                          ->willReturn($groupStatus !== 'invalid');
+                          ->willReturn('invalid' !== $groupStatus);
 
         Craft::$app->sites->expects($this->exactly(1))
                           ->method('saveSite')

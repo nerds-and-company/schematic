@@ -20,7 +20,7 @@ use Codeception\Test\Unit;
 class MatrixBlockTypeTest extends Unit
 {
     /**
-     * @var MatrixBlockTypes
+     * @var MatrixBlockType
      */
     private $converter;
 

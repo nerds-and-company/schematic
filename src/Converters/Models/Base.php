@@ -4,7 +4,7 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\MatrixBlockType;
+use craft\models\MatrixBlockType as MatrixBlockTypeModel;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Behaviors\FieldLayoutBehavior;
@@ -21,6 +21,11 @@ use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
  * @license   MIT
  *
  * @see      http://www.nerds.company
+ *
+ * @method getSources(string $fieldType, $sources, string $indexFrom, string $indexTo)
+ * @method getSource(string $fieldType, string $source, string $indexFrom, string $indexTo)
+ * @method getFieldLayoutDefinition(FieldLayout $fieldLayout): array
+ * @method getFieldLayout(array $fieldLayoutDef): FieldLayout
  */
 abstract class Base extends BaseComponent implements ConverterInterface
 {
@@ -63,16 +68,18 @@ abstract class Base extends BaseComponent implements ConverterInterface
 
         // Define sources
         if (isset($definition['attributes']['sources'])) {
-            $definition['attributes']['sources'] = $this->getSources($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
+            $sources = $this->getSources($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
+            $definition['attributes']['sources'] = $sources;
         }
 
         if (isset($definition['attributes']['source'])) {
-            $definition['attributes']['source'] = $this->getSource($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
+            $source = $this->getSource($definition['class'], $definition['attributes']['source'], 'id', 'handle');
+            $definition['attributes']['source'] = $source;
         }
 
         // Define field layout
         if (isset($definition['attributes']['fieldLayoutId'])) {
-            if (!$record instanceof MatrixBlockType) {
+            if (!$record instanceof MatrixBlockTypeModel) {
                 $definition['fieldLayout'] = $this->getFieldLayoutDefinition($record->getFieldLayout());
             }
         }
@@ -96,11 +103,13 @@ abstract class Base extends BaseComponent implements ConverterInterface
     {
         // Set sources
         if (isset($definition['attributes']['sources'])) {
-            $definition['attributes']['sources'] = $this->getSources($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
+            $sources = $this->getSources($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
+            $definition['attributes']['sources'] = $sources;
         }
 
         if (isset($definition['attributes']['source'])) {
-            $definition['attributes']['source'] = $this->getSource($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
+            $source = $this->getSource($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
+            $definition['attributes']['source'] = $source;
         }
 
         $attributes = array_merge($definition['attributes'], $defaultAttributes);

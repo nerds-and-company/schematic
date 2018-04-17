@@ -21,7 +21,7 @@ use Codeception\Test\Unit;
 class CategoryGroupTest extends Unit
 {
     /**
-     * @var CategoryGroups
+     * @var CategoryGroup
      */
     private $converter;
 

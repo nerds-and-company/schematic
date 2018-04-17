@@ -23,9 +23,6 @@ class ExportController extends Base
     /**
      * Exports the Craft datamodel.
      *
-     * @param string $file    file to write the schema to
-     * @param array  $exclude Data to not export
-     *
      * @return int
      */
     public function actionIndex(): int

@@ -21,7 +21,7 @@ use Codeception\Test\Unit;
 class EntryTypeTest extends Unit
 {
     /**
-     * @var EntryTypes
+     * @var EntryType
      */
     private $converter;
 

@@ -22,7 +22,7 @@ use Codeception\Test\Unit;
 class UserGroupTest extends Unit
 {
     /**
-     * @var UserGroups
+     * @var UserGroup
      */
     private $converter;
 
