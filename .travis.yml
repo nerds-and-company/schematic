@@ -19,7 +19,10 @@ install:
   - composer install
 
 # execute tests
-script: php vendor/bin/codecept run --coverage --coverage-xml
+script:
+  - ./vendor/bin/phpcs
+  - ./vendor/bin/phpmd src text phpmd.xml --suffixes php
+  - php vendor/bin/codecept run --coverage --coverage-xml
 
 # upload coverage to scrutinizer
 after_script:
