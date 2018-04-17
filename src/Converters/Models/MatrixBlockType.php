@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\models\MatrixBlockType as MatrixBlockTypeModel;
 
 /**
  * Schematic Matrix Block Types Converter.
@@ -39,13 +38,11 @@ class MatrixBlockType extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
-        if ($record instanceof MatrixBlockTypeModel && array_key_exists('fields', $definition)) {
-            $context = 'matrixBlockType:'.$record->id;
-            $existingFields = Craft::$app->fields->getAllFields($context);
-            $modelMapper = Craft::$app->controller->module->modelMapper;
-            $fields = $modelMapper->import($definition['fields'], $existingFields, ['context' => $context], false);
-            $record->setFields($fields);
-        }
+        $context = 'matrixBlockType:'.$record->id;
+        $existingFields = Craft::$app->fields->getAllFields($context);
+        $modelMapper = Craft::$app->controller->module->modelMapper;
+        $fields = $modelMapper->import($definition['fields'], $existingFields, ['context' => $context], false);
+        $record->setFields($fields);
 
         return Craft::$app->matrix->saveBlockType($record, false);
     }
