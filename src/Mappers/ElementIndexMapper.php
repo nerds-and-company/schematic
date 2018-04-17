@@ -32,7 +32,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     public function behaviors(): array
     {
         return [
-          SourcesBehavior::className(),
+          SourcesBehavior::class,
         ];
     }
 

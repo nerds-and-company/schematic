@@ -37,8 +37,8 @@ abstract class Base extends BaseComponent implements ConverterInterface
     public function behaviors()
     {
         return [
-          FieldLayoutBehavior::className(),
-          SourcesBehavior::className(),
+          FieldLayoutBehavior::class,
+          SourcesBehavior::class,
         ];
     }
 

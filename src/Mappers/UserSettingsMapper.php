@@ -33,7 +33,7 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
     public function behaviors(): array
     {
         return [
-          FieldLayoutBehavior::className(),
+          FieldLayoutBehavior::class,
         ];
     }
 
