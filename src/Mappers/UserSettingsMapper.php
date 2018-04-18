@@ -19,6 +19,9 @@ use yii\base\Component as BaseComponent;
  * @license   MIT
  *
  * @see      http://www.nerds.company
+ *
+ * @method getFieldLayoutDefinition(FieldLayout $fieldLayout): array
+ * @method getFieldLayout(array $fieldLayoutDef): FieldLayout
  */
 class UserSettingsMapper extends BaseComponent implements MapperInterface
 {
@@ -30,7 +33,7 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
     public function behaviors(): array
     {
         return [
-          FieldLayoutBehavior::className(),
+          FieldLayoutBehavior::class,
         ];
     }
 
@@ -59,7 +62,7 @@ class UserSettingsMapper extends BaseComponent implements MapperInterface
     public function import(array $userSettings, array $settings = []): array
     {
         $photoVolumeId = null;
-        if (array_key_exists('photoVolume', $userSettings['settings']) && null != $userSettings['settings']['photoVolume']) {
+        if (isset($userSettings['settings']['photoVolume'])) {
             $volume = Craft::$app->volumes->getVolumeByHandle($userSettings['settings']['photoVolume']);
             $photoVolumeId = $volume ? $volume->id : null;
         }

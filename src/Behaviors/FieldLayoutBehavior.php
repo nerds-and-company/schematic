@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Behaviors;
 use Craft;
 use yii\base\Behavior;
 use craft\base\Field;
+use craft\base\FieldInterface;
 use craft\models\FieldLayout;
 use craft\elements\Entry;
 
@@ -46,7 +47,7 @@ class FieldLayoutBehavior extends Behavior
     /**
      * Get field layout fields definition.
      *
-     * @param Field[] $fields
+     * @param FieldInterface[] $fields
      *
      * @return array
      */

@@ -65,8 +65,7 @@ class ModelMapper extends BaseComponent implements MapperInterface
                     $converter->setRecordAttributes($record, $definition, $defaultAttributes);
                     if ($persist) {
                         Schematic::info('- Saving '.get_class($record).' '.$handle);
-                        if ($converter->saveRecord($record, $definition)) {
-                        } else {
+                        if (!$converter->saveRecord($record, $definition)) {
                             Schematic::importError($record, $handle);
                         }
                     }

@@ -18,7 +18,7 @@ use Codeception\Test\Unit;
 class TagGroupTest extends Unit
 {
     /**
-     * @var TagGroups
+     * @var TagGroup
      */
     private $converter;
 

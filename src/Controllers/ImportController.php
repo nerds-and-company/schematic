@@ -55,11 +55,11 @@ class ImportController extends Base
     /**
      * Import from Yaml file.
      *
-     * @param string $dataTypes The data types to import
+     * @param array $dataTypes The data types to import
      *
      * @throws Exception
      */
-    private function importFromYaml($dataTypes)
+    private function importFromYaml(array $dataTypes)
     {
         $this->disableLogging();
         $yaml = file_get_contents($this->file);

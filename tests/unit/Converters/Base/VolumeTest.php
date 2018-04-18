@@ -21,7 +21,7 @@ use Codeception\Test\Unit;
 class VolumeTest extends Unit
 {
     /**
-     * @var Volumes
+     * @var Volume
      */
     private $converter;
 

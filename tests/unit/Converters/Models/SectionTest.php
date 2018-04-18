@@ -20,7 +20,7 @@ use Codeception\Test\Unit;
 class SectionTest extends Unit
 {
     /**
-     * @var Sections
+     * @var Section
      */
     private $converter;
 
