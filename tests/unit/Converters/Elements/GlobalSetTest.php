@@ -23,7 +23,7 @@ use Codeception\Test\Unit;
 class GlobalSetsTest extends Unit
 {
     /**
-     * @var GlobalSets
+     * @var GlobalSet
      */
     private $converter;
 

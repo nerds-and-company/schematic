@@ -18,7 +18,7 @@ use Codeception\Test\Unit;
 class FieldTest extends Unit
 {
     /**
-     * @var Fields
+     * @var Field
      */
     private $converter;
 

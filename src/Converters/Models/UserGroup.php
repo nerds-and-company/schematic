@@ -37,7 +37,7 @@ class UserGroup extends Base
             }
         }
 
-        $permissionDefinitions = $this->getSources(false, $groupPermissions, 'id', 'handle');
+        $permissionDefinitions = $this->getSources('', $groupPermissions, 'id', 'handle');
         sort($permissionDefinitions);
 
         $definition['permissions'] = $permissionDefinitions;
@@ -51,7 +51,7 @@ class UserGroup extends Base
     public function saveRecord(Model $record, array $definition): bool
     {
         if (Craft::$app->userGroups->saveGroup($record) && array_key_exists('permissions', $definition)) {
-            $permissions = $this->getSources(false, $definition['permissions'], 'handle', 'id');
+            $permissions = $this->getSources('', $definition['permissions'], 'handle', 'id');
 
             return Craft::$app->userPermissions->saveGroupPermissions($record->id, $permissions);
         }

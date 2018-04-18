@@ -38,12 +38,11 @@ class MatrixBlockType extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
-        if (array_key_exists('fields', $definition)) {
-            $context = 'matrixBlockType:'.$record->id;
-            $existingFields = Craft::$app->fields->getAllFields($context);
-            $fields = Craft::$app->controller->module->modelMapper->import($definition['fields'], $existingFields, ['context' => $context], false);
-            $record->setFields($fields);
-        }
+        $context = 'matrixBlockType:'.$record->id;
+        $existingFields = Craft::$app->fields->getAllFields($context);
+        $modelMapper = Craft::$app->controller->module->modelMapper;
+        $fields = $modelMapper->import($definition['fields'], $existingFields, ['context' => $context], false);
+        $record->setFields($fields);
 
         return Craft::$app->matrix->saveBlockType($record, false);
     }

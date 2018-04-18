@@ -18,7 +18,7 @@ use Codeception\Test\Unit;
 class AssetTransformTest extends Unit
 {
     /**
-     * @var AssetTransforms
+     * @var AssetTransform
      */
     private $converter;
 

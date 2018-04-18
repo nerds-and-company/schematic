@@ -18,6 +18,9 @@ use yii\base\Component as BaseComponent;
  * @license   MIT
  *
  * @see      http://www.nerds.company
+ *
+ * @method getSources(string $fieldType, $sources, string $indexFrom, string $indexTo)
+ * @method getSource(string $fieldType, string $source, string $indexFrom, string $indexTo)
  */
 class ElementIndexMapper extends BaseComponent implements MapperInterface
 {
@@ -29,7 +32,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     public function behaviors(): array
     {
         return [
-          SourcesBehavior::className(),
+          SourcesBehavior::class,
         ];
     }
 
@@ -84,7 +87,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
         if (isset($settings['sourceOrder'])) {
             foreach ($settings['sourceOrder'] as $row) {
                 if ('key' == $row[0]) {
-                    $row[1] = $this->getSource(false, $row[1], $fromIndex, $toIndex);
+                    $row[1] = $this->getSource('', $row[1], $fromIndex, $toIndex);
                 }
                 $mappedSettings['sourceOrder'][] = $row;
             }
@@ -92,7 +95,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
 
         if (isset($settings['sources'])) {
             foreach ($settings['sources'] as $source => $sourceSettings) {
-                $mappedSource = $this->getSource(false, $source, $fromIndex, $toIndex);
+                $mappedSource = $this->getSource('', $source, $fromIndex, $toIndex);
                 $mappedSettings['sources'][$mappedSource] = [
                   'tableAttributes' => $this->getSources('', $sourceSettings['tableAttributes'], $fromIndex, $toIndex),
                 ];
