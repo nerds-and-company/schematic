@@ -54,7 +54,7 @@ class Schematic extends Plugin
     /**
      * Initialize the module.
      */
-    public function init(): void
+    public function init()
     {
         Craft::setAlias('@NerdsAndCompany/Schematic', __DIR__);
 
@@ -193,7 +193,7 @@ class Schematic extends Plugin
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function error($message): void
+    public static function error($message)
     {
         Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_RED);
     }
@@ -204,7 +204,7 @@ class Schematic extends Plugin
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function warning($message): void
+    public static function warning($message)
     {
         Craft::$app->controller->stdout($message.PHP_EOL, Console::FG_YELLOW);
     }
@@ -215,7 +215,7 @@ class Schematic extends Plugin
      * @param string|array $message the message to be logged. This can be a simple string or a more
      *                              complex data structure, such as array.
      */
-    public static function info($message): void
+    public static function info($message)
     {
         Craft::$app->controller->stdout($message.PHP_EOL);
     }
@@ -226,7 +226,7 @@ class Schematic extends Plugin
      * @param Model  $record
      * @param string $handle
      */
-    public static function importError(Model $record, string $handle): void
+    public static function importError(Model $record, string $handle)
     {
         static::warning('- Error importing '.get_class($record).' '.$handle);
         $errors = $record->getErrors();

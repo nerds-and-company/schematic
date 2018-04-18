@@ -59,7 +59,7 @@ class ImportController extends Base
      *
      * @throws Exception
      */
-    private function importFromYaml($dataTypes): void
+    private function importFromYaml($dataTypes)
     {
         $this->disableLogging();
         $yaml = file_get_contents($this->file);
