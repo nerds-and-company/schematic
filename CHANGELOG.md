@@ -1,5 +1,6 @@
 ### 4.0.1 ###
 - Added PHP 7.0 compatibility
+- Added new plugin icon
 
 ### 4.0.0 ###
 - Major refactor for Craft 3
