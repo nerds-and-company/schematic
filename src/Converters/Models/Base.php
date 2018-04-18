@@ -99,7 +99,7 @@ abstract class Base extends BaseComponent implements ConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes): void
+    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
     {
         // Set sources
         if (isset($definition['attributes']['sources'])) {

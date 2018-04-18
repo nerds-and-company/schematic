@@ -52,5 +52,5 @@ interface ConverterInterface
      * @param array $definition
      * @param array $defaultAttributes to also use
      */
-    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes): void;
+    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes);
 }

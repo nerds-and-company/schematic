@@ -114,7 +114,7 @@ class Base extends Controller
      *
      * @TODO: Find a less hacky way to solve this
      */
-    protected function disableLogging(): void
+    protected function disableLogging()
     {
         if (Craft::$app->log) {
             Craft::$app->log->targets = [];

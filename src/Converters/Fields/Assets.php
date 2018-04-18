@@ -53,7 +53,7 @@ class Assets extends Field
     /**
      * {@inheritdoc}
      */
-    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes): void
+    public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
     {
         if (isset($definition['attributes']['defaultUploadLocationSource'])) {
             $definition['attributes']['defaultUploadLocationSource'] = $this->getSource(

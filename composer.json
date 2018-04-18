@@ -1,4 +1,5 @@
 {
+    "version": "4.0.1",
     "name": "nerds-and-company/schematic",
     "description": "Craft setup and sync tool",
     "type": "craft-plugin",
@@ -21,12 +22,15 @@
         "name": "Schematic",
         "class": "NerdsAndCompany\\Schematic\\Schematic",
         "developer": "Nerds & Company",
-        "developerUrl": "https://nerds.company"
+        "developerUrl": "https://nerds.company",
+        "documentationUrl": "https://github.com/nerds-and-company/schematic/blob/master/README.md",
+        "changelogUrl": "https://github.com/nerds-and-company/schematic/blob/master/CHANGELOG.md",
+        "downloadUrl": "https://github.com/nerds-and-company/schematic/releases/latest"
     },
     "require": {
-        "php": "^7.1",
-        "symfony/yaml": "^4.0",
-        "craftcms/cms": "^3.0"
+        "php": "^7.0",
+        "craftcms/cms": "^3.0",
+        "symfony/yaml": "^3.0 || ^4.0"
     },
     "require-dev": {
         "codeception/codeception": "^2.4",

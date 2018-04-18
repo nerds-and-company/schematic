@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="1.11022302e-14%" y1="100%" x2="100%" y2="3.74939946e-31%" id="linearGradient-1">
+            <stop stop-color="#9A8E79" offset="0%"></stop>
+            <stop stop-color="#F8EDD9" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="200" height="200" rx="50"></rect>
+        <filter x="-3.8%" y="-3.8%" width="107.5%" height="107.5%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="-15" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <path d="M29.170505,21.2140909 C19.392555,28.0504545 13.645905,39.2004545 13.650455,51.0004545 L0.000453034218,51.0004545 C-0.004095,34.7777273 7.890155,19.4459091 21.335405,10.0413636 C35.986405,-0.204090909 54.991755,-1.86772727 71.198855,5.68227273 C75.571405,7.72318182 79.516255,10.3959091 83.042505,13.4913636 L91.000455,5.54590909 L91.000455,32.8186364 L63.700455,32.8186364 L73.378305,23.1504545 C70.975905,21.1413636 68.336905,19.4004545 65.434005,18.0459091 C53.644955,12.5504545 39.822055,13.7595455 29.170505,21.2140909 Z M86.35,50.9990909 L100,50.9990909 C100,67.2172727 92.10575,82.5490909 78.65595,91.9581818 C64.0095,102.203636 44.9996,103.867273 28.79705,96.3127273 C24.41995,94.2763636 20.47965,91.6036364 16.9534,88.5081818 L9,96.4536364 L9,69.1809091 L36.3,69.1809091 L26.62215,78.8490909 C29.01545,80.8536364 31.65445,82.5990909 34.56645,83.9536364 C46.35095,89.4490909 60.17385,88.2354545 70.8254,80.7854545 C80.6079,73.9490909 86.35,62.7990909 86.35,50.9990909 Z" id="path-4"></path>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="62.4340264%" id="radialGradient-6">
+            <stop stop-color="#FFFFFF" stop-opacity="0.549592391" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.5" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-7" x="0" y="1" width="100" height="100"></rect>
+    </defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rectangle">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+            <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+            <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+        </g>
+        <g id="Rectangle-2" transform="translate(50.000000, 45.000000)">
+            <mask id="mask-5" fill="white">
+                <use xlink:href="#path-4"></use>
+            </mask>
+            <use id="Mask" fill="#1F2B31" xlink:href="#path-4"></use>
+            <g mask="url(#mask-5)">
+                <use fill="#1F2B31" xlink:href="#path-7"></use>
+                <use fill-opacity="0.300000012" fill="url(#radialGradient-6)" xlink:href="#path-7"></use>
+            </g>
+        </g>
+    </g>
+</svg>
