@@ -1,5 +1,8 @@
+### 4.0.1 ###
+- Added PHP 7.0 compatibility
+
 ### 4.0.0 ###
-- Major refactor for craft3
+- Major refactor for Craft 3
 
 ### 3.8.8 ###
 - Added ability to exclude datatypes on import (thanks @Zae)

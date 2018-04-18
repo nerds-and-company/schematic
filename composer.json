@@ -24,9 +24,9 @@
         "developerUrl": "https://nerds.company"
     },
     "require": {
-        "php": "^7.1",
-        "symfony/yaml": "^4.0",
-        "craftcms/cms": "^3.0"
+        "php": "^7.0",
+        "craftcms/cms": "^3.0",
+        "symfony/yaml": "^3.0 || ^4.0"
     },
     "require-dev": {
         "codeception/codeception": "^2.4"
