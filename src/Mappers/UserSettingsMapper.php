@@ -10,7 +10,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
- * Schematic User Mapper.
+ * Schematic User Settings Mapper.
  *
  * Sync Craft Setups.
  *

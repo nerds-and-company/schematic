@@ -54,7 +54,7 @@ class UserSettingsMapperTest extends Unit
     }
 
     /**
-     * Test UserSettings service import.
+     * Test UserSettings service import without fieldlayout.
      */
     public function testUserSettingsServiceImportWithoutFieldLayout()
     {
@@ -68,7 +68,7 @@ class UserSettingsMapperTest extends Unit
     }
 
     /**
-     * Test UserSettings service import.
+     * Test UserSettings service import with import error.
      */
     public function testUserSettingsServiceImportWithImportError()
     {
@@ -85,9 +85,9 @@ class UserSettingsMapperTest extends Unit
     //==============================================================================================================
 
     /**
-     * [getUserSettingsDefinition description].
+     * Get user settings definition.
      *
-     * @return [type] [description]
+     * @return array
      */
     private function getUserSettingsDefinition()
     {

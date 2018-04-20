@@ -9,6 +9,7 @@ use yii\helpers\Console;
 use NerdsAndCompany\Schematic\DataTypes\AssetTransformDataType;
 use NerdsAndCompany\Schematic\DataTypes\CategoryGroupDataType;
 use NerdsAndCompany\Schematic\DataTypes\ElementIndexDataType;
+use NerdsAndCompany\Schematic\DataTypes\EmailSettingsDataType;
 use NerdsAndCompany\Schematic\DataTypes\FieldDataType;
 use NerdsAndCompany\Schematic\DataTypes\GlobalSetDataType;
 use NerdsAndCompany\Schematic\DataTypes\PluginDataType;
@@ -19,6 +20,7 @@ use NerdsAndCompany\Schematic\DataTypes\UserGroupDataType;
 use NerdsAndCompany\Schematic\DataTypes\UserSettingsDataType;
 use NerdsAndCompany\Schematic\DataTypes\VolumeDataType;
 use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
+use NerdsAndCompany\Schematic\Mappers\EmailSettingsMapper;
 use NerdsAndCompany\Schematic\Mappers\ModelMapper;
 use NerdsAndCompany\Schematic\Mappers\PluginMapper;
 use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
@@ -63,6 +65,9 @@ class Schematic extends Plugin
                 'elementIndexMapper' => [
                     'class' => ElementIndexMapper::class,
                 ],
+                'emailSettingsMapper' => [
+                    'class' => EmailSettingsMapper::class,
+                ],
                 'modelMapper' => [
                     'class' => ModelMapper::class,
                 ],
@@ -78,6 +83,7 @@ class Schematic extends Plugin
                 'sites' => SiteDataType::class,
                 'volumes' => VolumeDataType::class,
                 'assetTransforms' => AssetTransformDataType::class,
+                'emailSettings' => EmailSettingsDataType::class,
                 'fields' => FieldDataType::class,
                 'sections' => SectionDataType::class,
                 'globalSets' => GlobalSetDataType::class,

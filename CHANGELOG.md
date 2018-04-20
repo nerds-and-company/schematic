@@ -1,3 +1,7 @@
+## 4.0.2 - 2018-04-20
+### Added
+- Added Email Settings support
+
 ## 4.0.1 - 2018-04-18
 ### Added
 - Added PHP 7.0 compatibility
