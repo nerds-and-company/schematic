@@ -7,7 +7,7 @@ use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
- * Schematic UserSettings DataType.
+ * Schematic EmailSettings DataType.
  *
  * Sync Craft Setups.
  *
@@ -17,7 +17,7 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class UserSettingsDataType implements DataTypeInterface
+class EmailSettingsDataType implements DataTypeInterface
 {
     /**
      * Get mapper component handle.
@@ -26,7 +26,7 @@ class UserSettingsDataType implements DataTypeInterface
      */
     public function getMapperHandle(): string
     {
-        return 'userSettingsMapper';
+        return 'emailSettingsMapper';
     }
 
     /**
