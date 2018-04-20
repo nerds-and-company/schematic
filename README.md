@@ -105,12 +105,13 @@ Here is a list of all of the data types and their corresponding exclude paramete
 | Asset Transforms | assetTransforms |
 | Category Groups | categoryGroups |
 | Element Indexes | elementIndexSettings |
+| Email Settings | emailSettings |
 | Fields | fields |
 | Global Sets | globalSets |
 | Plugins | plugins |
 | Sections | sections |
 | Tag Groups | tagGroups |
-| UserSettings | userSettings |
+| User Settings | userSettings |
 | User Groups | userGroups |
 | Volumes | volumes |
 
