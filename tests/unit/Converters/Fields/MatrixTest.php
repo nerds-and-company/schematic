@@ -26,6 +26,7 @@ class MatrixTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -70,7 +71,9 @@ class MatrixTest extends Unit
 
         Craft::$app->controller->module->modelMapper->expects($this->exactly($valid ? 1 : 0))
                                      ->method('import')
-                                     ->with($definition['blockTypes'], $matrix->getBlockTypes(), ['fieldId' => $matrix->id])
+                                     ->with($definition['blockTypes'], $matrix->getBlockTypes(), [
+                                         'fieldId' => $matrix->id,
+                                     ])
                                      ->willReturn($matrix->getBlockTypes());
 
         $result = $this->converter->saveRecord($matrix, $definition);

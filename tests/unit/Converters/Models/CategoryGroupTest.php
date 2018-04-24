@@ -29,6 +29,7 @@ class CategoryGroupTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {

@@ -16,6 +16,7 @@
  * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
+ * phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  */
 class UnitTester extends \Codeception\Actor
 {

@@ -28,6 +28,7 @@ class MatrixBlockTypeTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -63,8 +64,11 @@ class MatrixBlockTypeTest extends Unit
      * @param array                $definition
      * @param array                $defaultAttributes
      */
-    public function testSetRecordAttributes(MatrixBlockTypeModel $blockType, array $definition, array $defaultAttributes)
-    {
+    public function testSetRecordAttributes(
+        MatrixBlockTypeModel $blockType,
+        array $definition,
+        array $defaultAttributes
+    ) {
         $newMatrixBlockType = $this->getMockBuilder(MatrixBlockTypeModel::class)
                                    ->setMethods(['setFieldLayout'])
                                    ->getMock();

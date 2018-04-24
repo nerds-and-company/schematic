@@ -30,6 +30,7 @@ class UserGroupTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -48,8 +49,12 @@ class UserGroupTest extends Unit
      * @param array          $groupPermissions
      * @param array          $allPermissions
      */
-    public function testGetRecordDefinition(UserGroupModel $group, array $definition, array $groupPermissions, array $allPermissions)
-    {
+    public function testGetRecordDefinition(
+        UserGroupModel $group,
+        array $definition,
+        array $groupPermissions,
+        array $allPermissions
+    ) {
         Craft::$app->userPermissions->expects($this->exactly(1))
                                     ->method('getPermissionsByGroupId')
                                     ->with($group->id)
@@ -90,8 +95,13 @@ class UserGroupTest extends Unit
      * @param array          $allPermissions
      * @param bool           $valid
      */
-    public function testSaveRecord(UserGroupModel $group, array $definition, array $groupPermissions, array $allPermissions, bool $valid)
-    {
+    public function testSaveRecord(
+        UserGroupModel $group,
+        array $definition,
+        array $groupPermissions,
+        array $allPermissions,
+        bool $valid
+    ) {
         Craft::$app->userGroups->expects($this->exactly(1))
                                ->method('saveGroup')
                                ->with($group)

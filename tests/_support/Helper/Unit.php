@@ -38,6 +38,7 @@ class Unit extends Module
      * Mock craft Mappers.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      *
      * @param TestCase $test
      */

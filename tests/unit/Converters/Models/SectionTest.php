@@ -28,6 +28,7 @@ class SectionTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -72,7 +73,9 @@ class SectionTest extends Unit
 
         Craft::$app->controller->module->modelMapper->expects($this->exactly($valid ? 1 : 0))
                                      ->method('import')
-                                     ->with($definition['entryTypes'], $section->getEntryTypes(), ['sectionId' => $section->id])
+                                     ->with($definition['entryTypes'], $section->getEntryTypes(), [
+                                         'sectionId' => $section->id,
+                                     ])
                                      ->willReturn($section->getEntryTypes());
 
         $result = $this->converter->saveRecord($section, $definition);
