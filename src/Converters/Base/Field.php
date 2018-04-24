@@ -102,8 +102,10 @@ class Field extends Base
     {
         $obj = Craft::$app->fields;
         $refObject = new \ReflectionObject($obj);
-        $refProperty = $refObject->getProperty('_fetchedAllGroups');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($obj, false);
+        if ($refObject->hasProperty('_fetchedAllGroups')) {
+            $refProperty = $refObject->getProperty('_fetchedAllGroups');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
+        }
     }
 }

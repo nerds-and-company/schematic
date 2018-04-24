@@ -56,8 +56,10 @@ class Matrix extends Field
     {
         $obj = Craft::$app->matrix;
         $refObject = new \ReflectionObject($obj);
-        $refProperty1 = $refObject->getProperty('_fetchedAllBlockTypesForFieldId');
-        $refProperty1->setAccessible(true);
-        $refProperty1->setValue($obj, false);
+        if ($refObject->hasProperty('_fetchedAllBlockTypesForFieldId')) {
+            $refProperty1 = $refObject->getProperty('_fetchedAllBlockTypesForFieldId');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, false);
+        }
     }
 }
