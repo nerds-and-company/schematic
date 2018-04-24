@@ -1,3 +1,7 @@
+## 4.0.3 - 2018-04-24
+### Fixed
+- Fixed a bug where fields weren't properly skipped when importing a second time
+
 ## 4.0.2 - 2018-04-20
 ### Added
 - Added Email Settings support
