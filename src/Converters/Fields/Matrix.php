@@ -38,7 +38,11 @@ class Matrix extends Field
     {
         if (parent::saveRecord($record, $definition)) {
             if (array_key_exists('blockTypes', $definition)) {
-                Craft::$app->controller->module->modelMapper->import($definition['blockTypes'], $record->getBlockTypes(), ['fieldId' => $record->id]);
+                Craft::$app->controller->module->modelMapper->import(
+                    $definition['blockTypes'],
+                    $record->getBlockTypes(),
+                    ['fieldId' => $record->id]
+                );
             }
 
             return true;
