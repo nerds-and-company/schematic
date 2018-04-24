@@ -76,6 +76,8 @@ class Field extends Base
     private function getGroupIdByName(string $name)
     {
         if (!isset($this->groups)) {
+            $this->resetCraftFieldsServiceGroupsCache();
+
             $this->groups = [];
             foreach (Craft::$app->fields->getAllGroups() as $group) {
                 $this->groups[$group->name] = $group->id;
@@ -91,5 +93,19 @@ class Field extends Base
         }
 
         return $this->groups[$name];
+    }
+
+    /**
+     * Reset craft fields service groups cache using reflection.
+     */
+    private function resetCraftFieldsServiceGroupsCache()
+    {
+        $obj = Craft::$app->fields;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_fetchedAllGroups')) {
+            $refProperty = $refObject->getProperty('_fetchedAllGroups');
+            $refProperty->setAccessible(true);
+            $refProperty->setValue($obj, false);
+        }
     }
 }
