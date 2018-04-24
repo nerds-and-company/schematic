@@ -3,6 +3,7 @@
  <description>Coding standard for schematic</description>
 
  <file>src/</file>
+ <file>tests/</file>
 
  <arg name="colors"/>
  <arg name="extensions" value="php"/>
