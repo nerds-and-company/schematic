@@ -45,7 +45,11 @@ class Section extends Base
     public function saveRecord(Model $record, array $definition): bool
     {
         if (Craft::$app->sections->saveSection($record)) {
-            Craft::$app->controller->module->modelMapper->import($definition['entryTypes'], $record->getEntryTypes(), ['sectionId' => $record->id]);
+            Craft::$app->controller->module->modelMapper->import(
+                $definition['entryTypes'],
+                $record->getEntryTypes(),
+                ['sectionId' => $record->id]
+            );
 
             return true;
         }

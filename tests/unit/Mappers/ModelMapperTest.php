@@ -28,6 +28,7 @@ class ModelMapperTest extends Unit
      * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -96,8 +97,12 @@ class ModelMapperTest extends Unit
      * @param int     $saveCount
      * @param int     $deleteCount
      */
-    public function testSuccessfulImportWithForceOption(array $existingGroups, array $modelDefinitions, int $saveCount, int $deleteCount)
-    {
+    public function testSuccessfulImportWithForceOption(
+        array $existingGroups,
+        array $modelDefinitions,
+        int $saveCount,
+        int $deleteCount
+    ) {
         Schematic::$force = true;
         $converter = $this->getMockConverter();
         $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);
@@ -115,8 +120,12 @@ class ModelMapperTest extends Unit
      * @param int     $saveCount
      * @param int     $deleteCount
      */
-    public function testUnsuccessfulImportWithForceOption(array $existingGroups, array $modelDefinitions, int $saveCount, int $deleteCount)
-    {
+    public function testUnsuccessfulImportWithForceOption(
+        array $existingGroups,
+        array $modelDefinitions,
+        int $saveCount,
+        int $deleteCount
+    ) {
         Schematic::$force = true;
         $converter = $this->getMockConverter();
         $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);

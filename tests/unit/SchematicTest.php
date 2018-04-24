@@ -30,6 +30,7 @@ class SchematicTest extends Unit
      * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {

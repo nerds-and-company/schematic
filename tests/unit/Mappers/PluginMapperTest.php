@@ -29,6 +29,7 @@ class PluginMapperTest extends Unit
      * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -174,7 +175,9 @@ class PluginMapperTest extends Unit
         $disablePluginResponse = true,
         $saveSettingsResponse = true
     ) {
-        Craft::$app->plugins->expects($this->any())->method('getPlugin')->willReturn(($returnPlugin) ? $this->getMockplugin() : null);
+        Craft::$app->plugins->expects($this->any())
+                            ->method('getPlugin')
+                            ->willReturn(($returnPlugin) ? $this->getMockplugin() : null);
 
         if ($installPluginResponse) {
             Craft::$app->plugins->expects($this->any())->method('installPlugin')->willReturn($installPluginResponse);

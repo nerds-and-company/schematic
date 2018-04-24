@@ -30,6 +30,7 @@ class UserSettingsMapperTest extends Unit
      * Set the mapper.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -147,7 +148,9 @@ class UserSettingsMapperTest extends Unit
     private function setMockServicesForImport($saveLayout = true, $deleteLayoutsByType = true, $errors = false)
     {
         Craft::$app->fields->expects($this->exactly($saveLayout ? 1 : 0))->method('saveLayout')->willReturn(!$errors);
-        Craft::$app->fields->expects($this->exactly($deleteLayoutsByType ? 1 : 0))->method('deleteLayoutsByType')->willReturn(true);
+        Craft::$app->fields->expects($this->exactly($deleteLayoutsByType ? 1 : 0))
+                           ->method('deleteLayoutsByType')
+                           ->willReturn(true);
         $mockFieldLayout = $this->getMockFieldLayout();
         if ($errors) {
             $mockFieldLayout->expects($this->exactly(1))->method('getErrors')->willReturn([
@@ -155,7 +158,9 @@ class UserSettingsMapperTest extends Unit
             ]);
         }
 
-        Craft::$app->fields->expects($this->exactly($saveLayout ? 1 : 0))->method('assembleLayout')->willReturn($mockFieldLayout);
+        Craft::$app->fields->expects($this->exactly($saveLayout ? 1 : 0))
+                           ->method('assembleLayout')
+                           ->willReturn($mockFieldLayout);
     }
 
     /**

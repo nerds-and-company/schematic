@@ -31,6 +31,7 @@ class GlobalSetsTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -164,7 +165,14 @@ class GlobalSetsTest extends Unit
     private function getMockGlobalSet(int $setId, string $siteHandle = 'default')
     {
         $mockSet = $this->getMockBuilder(GlobalSetElement::class)
-                                    ->setMethods(['__isset', 'getSite', 'getFieldLayout', 'fieldByHandle', 'getBehavior', 'behaviors'])
+                                    ->setMethods([
+                                        '__isset',
+                                        'getSite',
+                                        'getFieldLayout',
+                                        'fieldByHandle',
+                                        'getBehavior',
+                                        'behaviors',
+                                    ])
                                     ->disableOriginalConstructor()
                                     ->getMock();
 

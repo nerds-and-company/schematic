@@ -26,6 +26,7 @@ class FieldTest extends Unit
      * Set the converter.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
@@ -185,7 +186,7 @@ class FieldTest extends Unit
     {
         $mockGroup = $this->getMockBuilder(FieldGroup::class)
                         ->disableOriginalConstructor()
-                        ->getmock();
+                        ->getMock();
 
         $mockGroup->id = $groupId;
         $mockGroup->name = 'fieldGroup'.$groupId;

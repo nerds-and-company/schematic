@@ -26,6 +26,7 @@ class TagGroupDataTypeTest extends Unit
      * Set the dataType.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
      */
     protected function _before()
     {
