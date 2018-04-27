@@ -108,7 +108,7 @@ abstract class Base extends BaseComponent implements ConverterInterface
         }
 
         if (isset($definition['attributes']['source'])) {
-            $source = $this->getSource($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
+            $source = $this->getSource($definition['class'], $definition['attributes']['source'], 'handle', 'id');
             $definition['attributes']['source'] = $source;
         }
 
