@@ -1,3 +1,7 @@
+## 4.0.4 - 2018-04-28
+### Fixed
+- Fixed a bug where categories field source was not imported
+
 ## 4.0.3 - 2018-04-24
 ### Fixed
 - Fixed a bug where fields weren't properly skipped when importing a second time
