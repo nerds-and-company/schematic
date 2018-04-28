@@ -1,4 +1,4 @@
-## 4.0.4 - 2018-04-27
+## 4.0.4 - 2018-04-28
 ### Fixed
 - Fixed a bug where categories field source was not imported
 
