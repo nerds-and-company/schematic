@@ -1,3 +1,7 @@
+## 4.0.5
+### Added
+- Added ability to inject custom converters
+
 ## 4.0.4 - 2018-04-28
 ### Fixed
 - Fixed a bug where categories field source was not imported
