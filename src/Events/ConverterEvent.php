@@ -14,8 +14,6 @@ use yii\base\Event;
  * @license   MIT
  *
  * @see      http://www.nerds.company
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConverterEvent extends Event
 {
