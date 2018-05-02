@@ -1,3 +1,8 @@
+## 4.0.5 - 2018-05-03
+### Fixed
+- Fixed a bug where matrix fields got imported into the wrong content table
+- Fixed a bug where matrix fields got imported with the wrong field context
+
 ## 4.0.4 - 2018-04-28
 ### Fixed
 - Fixed a bug where categories field source was not imported
