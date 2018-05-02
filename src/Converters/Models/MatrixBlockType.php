@@ -38,12 +38,15 @@ class MatrixBlockType extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
+        $this->resetCraftMatrixServiceBlockTypesCache();
+
         // Get existing fields by block type handle
         $existingFields = [];
         $existingBlockTypes = Craft::$app->matrix->getBlockTypesByFieldId($record->fieldId);
         foreach ($existingBlockTypes as $existingBlockType) {
             if ($existingBlockType->handle == $definition['attributes']['handle']) {
                 $existingFields = $existingBlockType->getFields();
+                break;
             }
         }
 
@@ -73,5 +76,19 @@ class MatrixBlockType extends Base
     public function deleteRecord(Model $record): bool
     {
         return Craft::$app->matrix->deleteBlockType($record);
+    }
+
+    /**
+     * Reset craft matrix service block types cache using reflection.
+     */
+    private function resetCraftMatrixServiceBlockTypesCache()
+    {
+        $obj = Craft::$app->matrix;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_fetchedAllBlockTypesForFieldId')) {
+            $refProperty1 = $refObject->getProperty('_fetchedAllBlockTypesForFieldId');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, false);
+        }
     }
 }
