@@ -4,8 +4,6 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Model;
-use craft\db\Query;
-use craft\models\MatrixBlockType as MatrixBlockTypeModel;
 
 /**
  * Schematic Matrix Block Types Converter.
@@ -41,8 +39,13 @@ class MatrixBlockType extends Base
     public function saveRecord(Model $record, array $definition): bool
     {
         // Get existing fields by block type handle
-        $existingBlockType = $this->getBlockTypeByHandle($definition['attributes']['handle']);
-        $existingFields = $existingBlockType ? $existingBlockType->getFields() : [];
+        $existingFields = [];
+        $existingBlockTypes = Craft::$app->matrix->getBlockTypesByFieldId($record->fieldId);
+        foreach ($existingBlockTypes as $existingBlockType) {
+            if ($existingBlockType->handle == $definition['attributes']['handle']) {
+                $existingFields = $existingBlockType->getFields();
+            }
+        }
 
         // Set the content table for this matrix block
         $originalContentTable = Craft::$app->content->contentTable;
@@ -70,30 +73,5 @@ class MatrixBlockType extends Base
     public function deleteRecord(Model $record): bool
     {
         return Craft::$app->matrix->deleteBlockType($record);
-    }
-
-    /**
-     * Get a Matrix Block Type Model by its handle.
-     *
-     * @param string $handle
-     *
-     * @return MatrixBlockTypeModel
-     */
-    private function getBlockTypeByHandle(string $handle): MatrixBlockTypeModel
-    {
-        $result = (new Query())
-            ->select([
-                'id',
-                'fieldId',
-                'fieldLayoutId',
-                'name',
-                'handle',
-                'sortOrder',
-            ])
-            ->from(['{{%matrixblocktypes}}'])
-            ->where(['handle' => $handle])
-            ->one();
-
-        return new MatrixBlockTypeModel($result);
     }
 }
