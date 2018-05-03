@@ -38,18 +38,6 @@ class MatrixBlockType extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
-        $this->resetCraftMatrixServiceBlockTypesCache();
-
-        // Get existing fields by block type handle
-        $existingFields = [];
-        $existingBlockTypes = Craft::$app->matrix->getBlockTypesByFieldId($record->fieldId);
-        foreach ($existingBlockTypes as $existingBlockType) {
-            if ($existingBlockType->handle == $definition['attributes']['handle']) {
-                $existingFields = $existingBlockType->getFields();
-                break;
-            }
-        }
-
         // Set the content table for this matrix block
         $originalContentTable = Craft::$app->content->contentTable;
         $matrixField = Craft::$app->fields->getFieldById($record->fieldId);
@@ -58,7 +46,7 @@ class MatrixBlockType extends Base
 
         // Get the matrix block fields from the definition
         $modelMapper = Craft::$app->controller->module->modelMapper;
-        $fields = $modelMapper->import($definition['fields'], $existingFields, [], false);
+        $fields = $modelMapper->import($definition['fields'], $record->getFields(), [], false);
         $record->setFields($fields);
 
         // Save the matrix block
@@ -76,19 +64,5 @@ class MatrixBlockType extends Base
     public function deleteRecord(Model $record): bool
     {
         return Craft::$app->matrix->deleteBlockType($record);
-    }
-
-    /**
-     * Reset craft matrix service block types cache using reflection.
-     */
-    private function resetCraftMatrixServiceBlockTypesCache()
-    {
-        $obj = Craft::$app->matrix;
-        $refObject = new \ReflectionObject($obj);
-        if ($refObject->hasProperty('_fetchedAllBlockTypesForFieldId')) {
-            $refProperty1 = $refObject->getProperty('_fetchedAllBlockTypesForFieldId');
-            $refProperty1->setAccessible(true);
-            $refProperty1->setValue($obj, false);
-        }
     }
 }
