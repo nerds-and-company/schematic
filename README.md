@@ -132,7 +132,17 @@ Then the environment variable `SCHEMATIC_KEY_VALUE` needs to be set. The value o
 
 ### Hooks
 
-There are no hooks available at this time.
+Custom converters can be injected with the `EVENT_RESOLVE_CONVERTER` event.
+This can be especially useful for importing and exporting custom field types.
+The converters need to implement the `NerdsAndCompany\Schematic\Interfaces\ConverterInterface`.
+
+```php
+Event::on(Schematic::class, Schematic::EVENT_RESOLVE_CONVERTER, function (ConverterEvent $event) {
+    if ($event->modelClass = "My\Custom\Field") {
+      $event->converterClass = "My\Custom\FieldConverter";
+    }
+});
+```
 
 ### Caveats
 

@@ -27,6 +27,7 @@ use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
 use NerdsAndCompany\Schematic\Interfaces\ConverterInterface;
 use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
+use NerdsAndCompany\Schematic\Events\ConverterEvent;
 
 /**
  * Schematic.
@@ -43,6 +44,8 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
  */
 class Schematic extends Plugin
 {
+    const EVENT_RESOLVE_CONVERTER = 'resolve_converter';
+
     /**
      * @var string
      */
@@ -169,6 +172,14 @@ class Schematic extends Plugin
         }
 
         $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
+        $event = new ConverterEvent([
+            'modelClass' => $modelClass,
+            'converterClass' => $converterClass,
+        ]);
+
+        $this->trigger(self::EVENT_RESOLVE_CONVERTER, $event);
+        $converterClass = $event->converterClass;
+
         if (class_exists($converterClass)) {
             $converter = new $converterClass();
             if ($converter instanceof ConverterInterface) {
