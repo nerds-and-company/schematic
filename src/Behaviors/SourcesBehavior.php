@@ -36,6 +36,7 @@ class SourcesBehavior extends Behavior
         $mappedSources = $sources;
         if (is_array($sources)) {
             $mappedSources = [];
+            $sources = array_filter($sources);
             foreach ($sources as $source) {
                 $mappedSources[] = $this->getSource($fieldType, $source, $indexFrom, $indexTo);
             }
@@ -131,6 +132,6 @@ class SourcesBehavior extends Behavior
 
         Schematic::warning('No mapping found for source '.$source);
 
-        return $source;
+        return null;
     }
 }

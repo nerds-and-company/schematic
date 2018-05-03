@@ -2,6 +2,7 @@
 ### Fixed
 - Fixed a bug where matrix fields got imported into the wrong content table
 - Fixed a bug where matrix fields got imported with the wrong field context
+- Fixed a bug where matrix fields got skipped when the definition was changed
 
 ## 4.0.4 - 2018-04-28
 ### Fixed
