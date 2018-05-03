@@ -97,6 +97,10 @@ class MatrixBlockTypeTest extends Unit
                            ->with(1)
                            ->willReturn($this->getMockbuilder(MatrixField::class)->getMock());
 
+        Craft::$app->getFields()->expects($this->exactly(1))
+                                ->method('getFieldsByLayoutId')
+                                ->willReturn([$this->getMockField(1)]);
+
         Craft::$app->matrix->expects($this->exactly(1))
                            ->method('getContentTableName')
                            ->willReturn('matrix_content');
