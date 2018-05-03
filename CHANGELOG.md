@@ -1,6 +1,11 @@
-## 4.0.5
+## 4.0.5 - 2018-05-03
 ### Added
 - Added ability to inject custom converters
+
+### Fixed
+- Fixed a bug where matrix fields got imported into the wrong content table
+- Fixed a bug where matrix fields got imported with the wrong field context
+- Fixed a bug where sources didn't get mapped correctly in some cases
 
 ## 4.0.4 - 2018-04-28
 ### Fixed
