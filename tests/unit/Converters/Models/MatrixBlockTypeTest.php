@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Field as FieldModel;
+use craft\fields\Matrix as MatrixField;
 use craft\models\MatrixBlockType as MatrixBlockTypeModel;
 use craft\models\FieldLayout;
 use Codeception\Test\Unit;
@@ -91,22 +92,29 @@ class MatrixBlockTypeTest extends Unit
      */
     public function testSaveRecord(MatrixBlockTypeModel $blockType, array $definition)
     {
+        Craft::$app->fields->expects($this->exactly(1))
+                           ->method('getFieldById')
+                           ->with(1)
+                           ->willReturn($this->getMockbuilder(MatrixField::class)->getMock());
+
+        Craft::$app->getFields()->expects($this->exactly(1))
+                                ->method('getFieldsByLayoutId')
+                                ->willReturn([$this->getMockField(1)]);
+
+        Craft::$app->matrix->expects($this->exactly(1))
+                           ->method('getContentTableName')
+                           ->willReturn('matrix_content');
+
         Craft::$app->matrix->expects($this->exactly(1))
                            ->method('saveBlockType')
                            ->with($blockType, false)
                            ->willReturn(true);
 
-        $context = 'matrixBlockType:'.$blockType->id;
         $existingFields = $blockType->getFieldLayout()->getFields();
-
-        Craft::$app->fields->expects($this->exactly(1))
-                           ->method('getAllFields')
-                           ->with($context)
-                           ->willReturn($existingFields);
 
         Craft::$app->controller->module->modelMapper->expects($this->exactly(1))
                                      ->method('import')
-                                     ->with($definition['fields'], $existingFields, ['context' => $context], false)
+                                     ->with($definition['fields'], $existingFields, [], false)
                                      ->willReturn($existingFields);
 
         $result = $this->converter->saveRecord($blockType, $definition);
@@ -185,6 +193,7 @@ class MatrixBlockTypeTest extends Unit
                               ->getMock();
 
         $mockMatrixBlockType->id = $blockTypeId;
+        $mockMatrixBlockType->fieldId = 1;
         $mockMatrixBlockType->fieldLayoutId = $blockTypeId;
         $mockMatrixBlockType->handle = 'blockTypeHandle'.$blockTypeId;
         $mockMatrixBlockType->name = 'blockTypeName'.$blockTypeId;

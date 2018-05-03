@@ -8,6 +8,7 @@ use yii\console\Controller;
 use craft\i18n\I18n;
 use craft\services\AssetTransforms;
 use craft\services\Categories;
+use craft\services\Content;
 use craft\services\Elements;
 use craft\services\ElementIndexes;
 use craft\services\Fields;
@@ -84,6 +85,7 @@ class Unit extends Module
         $mockApp = $this->getMock($test, Application::class);
         $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
+        $mockContent = $this->getMock($test, Content::class);
         $mockElements = $this->getMock($test, Elements::class);
         $mockElementIndexes = $this->getMock($test, ElementIndexes::class);
         $mockFields = $this->getMock($test, Fields::class);
@@ -105,6 +107,7 @@ class Unit extends Module
             ->willReturnMap([
                 ['assetTransforms', $mockAssetTransforms],
                 ['categories', $mockCategoryGroups],
+                ['content', $mockContent],
                 ['elements', $mockElements],
                 ['elementIndexes', $mockElementIndexes],
                 ['fields', $mockFields],
@@ -122,7 +125,7 @@ class Unit extends Module
 
         $mockApp->expects($test->any())
                 ->method('getPath')
-                ->willreturn($mockPath);
+                ->willReturn($mockPath);
 
         $mockApp->expects($test->any())
                 ->method('getI18n')
@@ -130,7 +133,11 @@ class Unit extends Module
 
         $mockApp->expects($test->any())
                 ->method('getMatrix')
-                ->willreturn($mockMatrix);
+                ->willReturn($mockMatrix);
+
+        $mockApp->expects($test->any())
+                ->method('getFields')
+                ->willReturn($mockFields);
 
         return $mockApp;
     }

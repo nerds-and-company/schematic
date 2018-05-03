@@ -36,10 +36,11 @@ class Matrix extends Field
      */
     public function saveRecord(Model $record, array $definition): bool
     {
-        $this->resetCraftMatrixServiceBlockTypesCache();
-
         if (parent::saveRecord($record, $definition)) {
             if (array_key_exists('blockTypes', $definition)) {
+                $this->resetCraftMatrixServiceBlockTypesCache();
+                $this->resetCraftMatrixFieldBlockTypesCache($record);
+
                 Craft::$app->controller->module->modelMapper->import(
                     $definition['blockTypes'],
                     $record->getBlockTypes(),
@@ -64,6 +65,22 @@ class Matrix extends Field
             $refProperty1 = $refObject->getProperty('_fetchedAllBlockTypesForFieldId');
             $refProperty1->setAccessible(true);
             $refProperty1->setValue($obj, false);
+        }
+    }
+
+    /**
+     * Reset craft matrix field block types cache using reflection.
+     *
+     * @param Model $record
+     */
+    private function resetCraftMatrixFieldBlockTypesCache(Model $record)
+    {
+        $obj = $record;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_blockTypes')) {
+            $refProperty1 = $refObject->getProperty('_blockTypes');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, null);
         }
     }
 }
