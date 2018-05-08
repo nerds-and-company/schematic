@@ -31,7 +31,7 @@ class Base extends Controller
      */
     public function options($actionID): array
     {
-        return ['file', 'override_file', 'include', 'exclude'];
+        return ['file', 'overrideFile', 'include', 'exclude'];
     }
 
     /**

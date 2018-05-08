@@ -90,7 +90,7 @@ Multiple exclusions can also be specified:
 ./craft schematic/import --exclude=volumes,categoryGroups
 ```
 
-Keys in the schema file can be overridden by passing an override file to schematic using the `--override_file` flag, for instance: `vendor/bin/schematic import --override_file=craft/config/override.yml`.
+Keys in the schema file can be overridden by passing an override file to schematic using the `--override-file` flag, for instance: `./craft schematic/import --override-file=craft/config/override.yml`.
 
 See [Supported DataTypes](#Supported DataTypes)
 
