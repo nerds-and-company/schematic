@@ -1,3 +1,7 @@
+## 4.0.6 - 2018-05-13
+### Fixed
+- Fixed override file command option to be in kebab case
+
 ## 4.0.5 - 2018-05-03
 ### Added
 - Added ability to inject custom converters
