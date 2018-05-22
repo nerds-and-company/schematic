@@ -1,3 +1,7 @@
+## 4.0.7 - 2018-05-22
+### Fixed
+- Fixed issues with importing element index settings
+
 ## 4.0.6 - 2018-05-13
 ### Fixed
 - Fixed override file command option to be in kebab case

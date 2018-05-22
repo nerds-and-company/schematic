@@ -54,12 +54,12 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     }
 
     /**
-     * @TODO: Look into issue with element index settings
      * {@inheritdoc}
      */
     public function import(array $settingDefinitions, array $elementTypes): array
     {
-        Schematic::warning(' - Element index settings may not be imported properly because craft prunes the sources');
+        $this->resetCraftEditableSectionsCache();
+
         foreach ($settingDefinitions as $elementTypeName => $settings) {
             $elementType = 'craft\\elements\\'.$elementTypeName;
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
@@ -103,5 +103,19 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
         }
 
         return $mappedSettings;
+    }
+
+    /**
+     * Reset craft editable sections cache using reflection.
+     */
+    private function resetCraftEditableSectionsCache()
+    {
+        $obj = Craft::$app->sections;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_editableSectionIds')) {
+            $refProperty1 = $refObject->getProperty('_editableSectionIds');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, $obj->getAllSectionIds());
+        }
     }
 }

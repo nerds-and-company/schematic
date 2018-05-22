@@ -1,5 +1,5 @@
 {
-    "version": "4.0.6",
+    "version": "4.0.7",
     "name": "nerds-and-company/schematic",
     "description": "Craft setup and sync tool",
     "type": "craft-plugin",

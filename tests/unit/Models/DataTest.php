@@ -60,7 +60,7 @@ class DataTest extends Unit
     {
         // unset environment variable
         putenv('SCHEMATIC_S3_BUCKET');
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $schema = $this->getSchemaTestFile();
         $override = $this->getOverrideTestFile();
         Data::fromYaml($schema, $override);
