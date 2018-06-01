@@ -79,4 +79,12 @@ class DataTest extends Unit
         $yaml = Data::toYaml($dataModel);
         $this->assertContains('override_bucket_name', $yaml);
     }
+
+    public function testToYamlOverride()
+    {
+        $dataModel = $this->generateDataModel();
+        $override = $this->getOverrideTestFile();
+        $yaml = Data::toYaml($dataModel, $override);
+        $this->assertContains("'%s3_bucket%'", $yaml);
+    }
 }

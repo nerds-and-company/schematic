@@ -45,7 +45,12 @@ class ExportController extends Base
             $result[$dataTypeHandle] = $this->module->$mapper->export($records);
         }
 
-        FileHelper::writeToFile($this->file, Data::toYaml($result));
+        $yamlOverride = null;
+        if (file_exists($this->overrideFile)) {
+            $yamlOverride = file_get_contents($this->overrideFile);
+        }
+
+        FileHelper::writeToFile($this->file, Data::toYaml($result, $yamlOverride));
         Schematic::info('Exported schema to '.$this->file);
 
         return 0;
