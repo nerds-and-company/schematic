@@ -1,4 +1,7 @@
 ## 4.0.8 - 2018-06-01
+### Added
+- Added support for "singles" sources, fixing #139
+
 ### Fixed
 - Fixed issue where category site settings weren't properly imported in some cases
 

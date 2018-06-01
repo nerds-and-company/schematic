@@ -71,6 +71,7 @@ class SourcesBehavior extends Behavior
 
         list($sourceType, $sourceFrom) = explode(':', $source);
         switch ($sourceType) {
+            case 'single':
             case 'section':
             case 'createEntries':
             case 'editPeerEntries':
