@@ -76,12 +76,20 @@ class Data extends Model
     /**
      * Convert array to yaml.
      *
-     * @param array $data
+     * @param array  $data
+     * @param string $overrideYaml
      *
      * @return string
      */
-    public static function toYaml(array $data): string
+    public static function toYaml(array $data, $overrideYaml = ''): string
     {
+        if (!empty($overrideYaml)) {
+            $overrideData = Yaml::parse($overrideYaml);
+            if (null != $overrideData) {
+                $data = array_replace_recursive($data, $overrideData);
+            }
+        }
+
         return Yaml::dump($data, 12, 2);
     }
 }

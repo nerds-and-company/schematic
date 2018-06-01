@@ -1,3 +1,7 @@
+## 4.0.8
+### Added
+- Schematic now also uses the override file when exporting
+
 ## 4.0.7 - 2018-05-22
 ### Fixed
 - Fixed issues with importing element index settings
