@@ -1,3 +1,7 @@
+## 4.0.8 - 2018-06-01
+### Added
+- Added support for "singles" sources, fixing #139
+
 ## 4.0.7 - 2018-05-22
 ### Fixed
 - Fixed issues with importing element index settings
