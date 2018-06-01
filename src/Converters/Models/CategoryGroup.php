@@ -39,6 +39,8 @@ class CategoryGroup extends Base
      */
     public function saveRecord(Model $record, array $definition): bool
     {
+        $this->resetCraftSiteServiceSiteIdsCache();
+
         return Craft::$app->categories->saveGroup($record);
     }
 
@@ -48,5 +50,20 @@ class CategoryGroup extends Base
     public function deleteRecord(Model $record): bool
     {
         return Craft::$app->categories->deleteGroupById($record->id);
+    }
+
+    /**
+     * Reset craft site service site ids cache using reflection.
+     */
+    private function resetCraftSiteServiceSiteIdsCache()
+    {
+        $obj = Craft::$app->sites;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_sitesById')) {
+            $refProperty1 = $refObject->getProperty('_sitesById');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, null);
+            $obj->init(); // reload sites
+        }
     }
 }

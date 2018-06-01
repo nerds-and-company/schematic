@@ -2,6 +2,9 @@
 ### Added
 - Added support for "singles" sources, fixing #139
 
+### Fixed
+- Fixed issue where category site settings weren't properly imported in some cases
+
 ## 4.0.7 - 2018-05-22
 ### Fixed
 - Fixed issues with importing element index settings
