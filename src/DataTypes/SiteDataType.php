@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\DataTypes;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
  * Schematic Sites DataType.
@@ -17,12 +16,10 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class SiteDataType implements DataTypeInterface
+class SiteDataType extends Base
 {
     /**
-     * Get mapper component handle.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMapperHandle(): string
     {
@@ -30,12 +27,33 @@ class SiteDataType implements DataTypeInterface
     }
 
     /**
-     * Get data of this type.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRecords(): array
     {
         return Craft::$app->sites->getAllSites();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterImport()
+    {
+        $this->resetCraftSiteServiceSiteIdsCache();
+    }
+
+    /**
+     * Reset craft site service site ids cache using reflection.
+     */
+    private function resetCraftSiteServiceSiteIdsCache()
+    {
+        $obj = Craft::$app->sites;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_sitesById')) {
+            $refProperty1 = $refObject->getProperty('_sitesById');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, null);
+            $obj->init(); // reload sites
+        }
     }
 }

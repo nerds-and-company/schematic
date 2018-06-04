@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\DataTypes;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
  * Schematic Fields DataType.
@@ -17,12 +16,10 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class FieldDataType implements DataTypeInterface
+class FieldDataType extends Base
 {
     /**
-     * Get mapper component handle.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMapperHandle(): string
     {
@@ -30,12 +27,18 @@ class FieldDataType implements DataTypeInterface
     }
 
     /**
-     * Get data of this type.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRecords(): array
     {
         return Craft::$app->fields->getAllFields();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterImport()
+    {
+        Craft::$app->fields->updateFieldVersion();
     }
 }

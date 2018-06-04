@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\DataTypes;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
  * Schematic UserGroups DataType.
@@ -17,12 +16,10 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class UserGroupDataType implements DataTypeInterface
+class UserGroupDataType extends Base
 {
     /**
-     * Get mapper component handle.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMapperHandle(): string
     {
@@ -30,9 +27,7 @@ class UserGroupDataType implements DataTypeInterface
     }
 
     /**
-     * Get data of this type.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRecords(): array
     {
