@@ -34,9 +34,10 @@ class SourcesBehavior extends Behavior
     public function findSources(string $fieldType, array $attributes, string $indexFrom, string $indexTo): array
     {
         foreach ($attributes as $key => $attribute) {
-            if ($key === 'source' || $key === 'sources') {
-                $method = 'get'.ucfirst($key);
-                $attributes[$key] = $this->$method($fieldType, $attribute, $indexFrom, $indexTo);
+            if ($key === 'source') {
+                $attributes[$key] = $this->getSource($fieldType, $attribute, $indexFrom, $indexTo);
+            } elseif ($key === 'sources') {
+                $attributes[$key] = $this->getSources($fieldType, $attribute, $indexFrom, $indexTo);
             } elseif (is_array($attribute)) {
                 $attributes[$key] = $this->findSources($fieldType, $attribute, $indexFrom, $indexTo);
             }
@@ -84,7 +85,7 @@ class SourcesBehavior extends Behavior
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getSource(string $fieldType, $source, string $indexFrom, string $indexTo)
+    public function getSource(string $fieldType, string $source = null, string $indexFrom, string $indexTo)
     {
         if (false === strpos($source, ':')) {
             return $source;
