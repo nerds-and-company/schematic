@@ -22,6 +22,30 @@ use NerdsAndCompany\Schematic\Schematic;
 class SourcesBehavior extends Behavior
 {
     /**
+     * Recursively find sources in definition attributes.
+     *
+     * @param string $fieldType
+     * @param array  $attributes
+     * @param string $indexFrom
+     * @param string $indexTo
+     *
+     * @return array
+     */
+    public function findSources(string $fieldType, array $attributes, string $indexFrom, string $indexTo): array
+    {
+        foreach ($attributes as $key => $attribute) {
+            if ($key === 'source' || $key === 'sources') {
+                $method = 'get'.ucfirst($key);
+                $attributes[$key] = $this->$method($fieldType, $attribute, $indexFrom, $indexTo);
+            } elseif (is_array($attribute)) {
+                $attributes[$key] = $this->findSources($fieldType, $attribute, $indexFrom, $indexTo);
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Get sources based on the indexFrom attribute and return them with the indexTo attribute.
      *
      * @param string       $fieldType
@@ -60,7 +84,7 @@ class SourcesBehavior extends Behavior
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getSource(string $fieldType, string $source, string $indexFrom, string $indexTo)
+    public function getSource(string $fieldType, $source, string $indexFrom, string $indexTo)
     {
         if (false === strpos($source, ':')) {
             return $source;
