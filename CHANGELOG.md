@@ -1,4 +1,4 @@
-### 4.0.9
+## 4.0.9 - 2018-06-06
 ### Added
 - Schematic now recursively parses source id's to handles and vice versa
 
