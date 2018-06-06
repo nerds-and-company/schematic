@@ -1,3 +1,7 @@
+### 4.0.9
+### Added
+- Schematic now recursively parses source id's to handles and vice versa
+
 ## 4.0.8 - 2018-06-01
 ### Added
 - Schematic now also uses the override file when exporting

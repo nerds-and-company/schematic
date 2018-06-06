@@ -67,15 +67,7 @@ abstract class Base extends BaseComponent implements ConverterInterface
         unset($definition['attributes']['dateUpdated']);
 
         // Define sources
-        if (isset($definition['attributes']['sources'])) {
-            $sources = $this->getSources($definition['class'], $definition['attributes']['sources'], 'id', 'handle');
-            $definition['attributes']['sources'] = $sources;
-        }
-
-        if (isset($definition['attributes']['source'])) {
-            $source = $this->getSource($definition['class'], $definition['attributes']['source'], 'id', 'handle');
-            $definition['attributes']['source'] = $source;
-        }
+        $definition['attributes'] = $this->findSources($definition['class'], $definition['attributes'], 'id', 'handle');
 
         // Define field layout
         if (isset($definition['attributes']['fieldLayoutId'])) {
@@ -102,15 +94,7 @@ abstract class Base extends BaseComponent implements ConverterInterface
     public function setRecordAttributes(Model &$record, array $definition, array $defaultAttributes)
     {
         // Set sources
-        if (isset($definition['attributes']['sources'])) {
-            $sources = $this->getSources($definition['class'], $definition['attributes']['sources'], 'handle', 'id');
-            $definition['attributes']['sources'] = $sources;
-        }
-
-        if (isset($definition['attributes']['source'])) {
-            $source = $this->getSource($definition['class'], $definition['attributes']['source'], 'handle', 'id');
-            $definition['attributes']['source'] = $source;
-        }
+        $definition['attributes'] = $this->findSources($definition['class'], $definition['attributes'], 'handle', 'id');
 
         $attributes = array_merge($definition['attributes'], $defaultAttributes);
         $record->setAttributes($attributes, false);
