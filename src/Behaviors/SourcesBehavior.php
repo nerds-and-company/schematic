@@ -96,6 +96,10 @@ class SourcesBehavior extends Behavior
 
         list($sourceType, $sourceFrom) = explode(':', $source);
         switch ($sourceType) {
+            case 'editSite':
+                $service = Craft::$app->sites;
+                $method = 'getSiteBy';
+                break;
             case 'single':
             case 'section':
             case 'createEntries':
