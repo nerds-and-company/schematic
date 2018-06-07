@@ -1,3 +1,7 @@
+## 4.0.10 - 2018-06-07
+### Fixed
+- Fixed issue handling "edit site" permissions
+
 ## 4.0.9 - 2018-06-06
 ### Added
 - Schematic now recursively parses source id's to handles and vice versa
