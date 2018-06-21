@@ -11,6 +11,7 @@ use NerdsAndCompany\Schematic\DataTypes\CategoryGroupDataType;
 use NerdsAndCompany\Schematic\DataTypes\ElementIndexDataType;
 use NerdsAndCompany\Schematic\DataTypes\EmailSettingsDataType;
 use NerdsAndCompany\Schematic\DataTypes\FieldDataType;
+use NerdsAndCompany\Schematic\DataTypes\GeneralSettingsDataType;
 use NerdsAndCompany\Schematic\DataTypes\GlobalSetDataType;
 use NerdsAndCompany\Schematic\DataTypes\PluginDataType;
 use NerdsAndCompany\Schematic\DataTypes\SectionDataType;
@@ -21,6 +22,7 @@ use NerdsAndCompany\Schematic\DataTypes\UserSettingsDataType;
 use NerdsAndCompany\Schematic\DataTypes\VolumeDataType;
 use NerdsAndCompany\Schematic\Mappers\ElementIndexMapper;
 use NerdsAndCompany\Schematic\Mappers\EmailSettingsMapper;
+use NerdsAndCompany\Schematic\Mappers\GeneralSettingsMapper;
 use NerdsAndCompany\Schematic\Mappers\ModelMapper;
 use NerdsAndCompany\Schematic\Mappers\PluginMapper;
 use NerdsAndCompany\Schematic\Mappers\UserSettingsMapper;
@@ -71,6 +73,9 @@ class Schematic extends Plugin
                 'emailSettingsMapper' => [
                     'class' => EmailSettingsMapper::class,
                 ],
+                'generalSettingsMapper' => [
+                    'class' => GeneralSettingsMapper::class,
+                ],
                 'modelMapper' => [
                     'class' => ModelMapper::class,
                 ],
@@ -88,6 +93,7 @@ class Schematic extends Plugin
                 'assetTransforms' => AssetTransformDataType::class,
                 'emailSettings' => EmailSettingsDataType::class,
                 'fields' => FieldDataType::class,
+                'generalSettings' => GeneralSettingsDataType::class,
                 'sections' => SectionDataType::class,
                 'globalSets' => GlobalSetDataType::class,
                 'categoryGroups' => CategoryGroupDataType::class,

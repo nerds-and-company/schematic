@@ -107,6 +107,7 @@ Here is a list of all of the data types and their corresponding exclude paramete
 | Element Indexes | elementIndexSettings |
 | Email Settings | emailSettings |
 | Fields | fields |
+| General Settings | generalSettings |
 | Global Sets | globalSets |
 | Plugins | plugins |
 | Sections | sections |

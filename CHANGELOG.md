@@ -1,3 +1,7 @@
+## 4.0.11 - 2018-06-21
+### Added
+- Added General Settings support
+
 ## 4.0.10 - 2018-06-07
 ### Fixed
 - Fixed issue handling "edit site" permissions
