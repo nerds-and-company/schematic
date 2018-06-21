@@ -8,7 +8,7 @@ use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
 use yii\base\Component as BaseComponent;
 
 /**
- * Schematic System Settings Mapper.
+ * Schematic Email Settings Mapper.
  *
  * Sync Craft Setups.
  *
