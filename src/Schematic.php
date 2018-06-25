@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use yii\di\ServiceLocator;
 use yii\helpers\Console;
 use NerdsAndCompany\Schematic\DataTypes\AssetTransformDataType;
 use NerdsAndCompany\Schematic\DataTypes\CategoryGroupDataType;
@@ -59,11 +60,24 @@ class Schematic extends Plugin
     public $dataTypes = [];
 
     /**
+     * @var ServiceLocator
+     */
+    private $converterLocator;
+
+    /**
+     * @var ServiceLocator
+     */
+    private $datatypeLocator;
+
+    /**
      * Initialize the module.
      */
     public function init()
     {
         Craft::setAlias('@NerdsAndCompany/Schematic', __DIR__);
+
+        $this->converterLocator = new ServiceLocator();
+        $this->datatypeLocator = new ServiceLocator();
 
         $config = [
             'components' => [
@@ -118,6 +132,10 @@ class Schematic extends Plugin
      */
     public function getDataType(string $dataTypeHandle)
     {
+        if ($this->datatypeLocator->has($dataTypeHandle)) {
+            return $this->datatypeLocator->get($dataTypeHandle);
+        }
+
         if (!isset($this->dataTypes[$dataTypeHandle])) {
             Schematic::error('DataType '.$dataTypeHandle.' is not registered');
 
@@ -137,6 +155,8 @@ class Schematic extends Plugin
 
             return null;
         }
+
+        $this->datatypeLocator->set($dataTypeHandle, $dataType);
 
         return $dataType;
     }
@@ -177,6 +197,10 @@ class Schematic extends Plugin
             $originalClass = $modelClass;
         }
 
+        if ($this->converterLocator->has($originalClass)) {
+            return $this->converterLocator->get($originalClass);
+        }
+
         $converterClass = 'NerdsAndCompany\\Schematic\\Converters\\'.ucfirst(str_replace('craft\\', '', $modelClass));
         $event = new ConverterEvent([
             'modelClass' => $modelClass,
@@ -189,6 +213,8 @@ class Schematic extends Plugin
         if (class_exists($converterClass)) {
             $converter = new $converterClass();
             if ($converter instanceof ConverterInterface) {
+                $this->converterLocator->set($originalClass, $converter);
+
                 return $converter;
             }
         }
