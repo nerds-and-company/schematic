@@ -1,6 +1,18 @@
-## 4.0.9 -
+## 4.0.12 -
 ### Added
 - Added afterImport callback for datatypes
+
+## 4.0.11 - 2018-06-21
+### Added
+- Added General Settings support
+
+## 4.0.10 - 2018-06-07
+### Fixed
+- Fixed issue handling "edit site" permissions
+
+## 4.0.9 - 2018-06-06
+### Added
+- Schematic now recursively parses source id's to handles and vice versa
 
 ## 4.0.8 - 2018-06-01
 ### Added
