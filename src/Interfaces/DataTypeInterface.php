@@ -28,4 +28,10 @@ interface DataTypeInterface
      * @return array
      */
     public function getRecords(): array;
+
+    /**
+     * Callback for actions after import.
+     * For example to clear caches.
+     */
+    public function afterImport();
 }

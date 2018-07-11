@@ -86,11 +86,7 @@ class ImportController extends Base
                 $records = $dataType->getRecords();
                 try {
                     $this->module->$mapper->import($definitions[$dataTypeHandle], $records);
-
-                    // @TODO: Don't hardcode datatype in controller
-                    if ('fields' == $dataTypeHandle) {
-                        Craft::$app->fields->updateFieldVersion();
-                    }
+                    $dataType->afterImport();
                 } catch (WrongEditionException $e) {
                     Schematic::error('Craft Pro is required for datatype '.$dataTypeHandle);
                 }

@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\DataTypes;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
  * Schematic UserSettings DataType.
@@ -17,12 +16,10 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class UserSettingsDataType implements DataTypeInterface
+class UserSettingsDataType extends Base
 {
     /**
-     * Get mapper component handle.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMapperHandle(): string
     {
@@ -30,9 +27,7 @@ class UserSettingsDataType implements DataTypeInterface
     }
 
     /**
-     * Get data of this type.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRecords(): array
     {

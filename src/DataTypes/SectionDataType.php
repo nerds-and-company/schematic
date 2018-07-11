@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\DataTypes;
 
 use Craft;
 use NerdsAndCompany\Schematic\Schematic;
-use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
 
 /**
  * Schematic Sections DataType.
@@ -17,12 +16,10 @@ use NerdsAndCompany\Schematic\Interfaces\DataTypeInterface;
  *
  * @see      http://www.nerds.company
  */
-class SectionDataType implements DataTypeInterface
+class SectionDataType extends Base
 {
     /**
-     * Get mapper component handle.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMapperHandle(): string
     {
@@ -30,12 +27,24 @@ class SectionDataType implements DataTypeInterface
     }
 
     /**
-     * Get data of this type.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRecords(): array
     {
         return Craft::$app->sections->getAllSections();
+    }
+
+    /**
+     * Reset craft editable sections cache using reflection.
+     */
+    public function afterImport()
+    {
+        $obj = Craft::$app->sections;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_editableSectionIds')) {
+            $refProperty1 = $refObject->getProperty('_editableSectionIds');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, $obj->getAllSectionIds());
+        }
     }
 }

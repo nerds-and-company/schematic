@@ -1,3 +1,10 @@
+## 4.0.12 - 2018-07-11
+### Added
+- Added afterImport callback for datatypes
+
+### Fixed
+- Fixed issue where global sets weren't properly imported in some cases
+
 ## 4.0.11 - 2018-06-21
 ### Added
 - Added General Settings support
