@@ -1,3 +1,6 @@
+### 3.8.9 ###
+- Fixed assignUserGroup permission serialization bug
+
 ### 3.8.8 ###
 - Added ability to exclude datatypes on import (thanks @Zae)
 
