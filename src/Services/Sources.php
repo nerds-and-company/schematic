@@ -110,6 +110,10 @@ class Sources extends BaseApplication
               break;
           case 'editLocale':
               return $source;
+          case 'assignUserGroup':
+              $service = Craft::app()->userGroups;
+              $method = 'getGroupBy';
+              break;
        }
 
        if (isset($service) && isset($method) && isset($sourceFrom)) {
