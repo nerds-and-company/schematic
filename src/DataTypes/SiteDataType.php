@@ -35,17 +35,9 @@ class SiteDataType extends Base
     }
 
     /**
-     * {@inheritdoc}
+     * Reset craft site service sites cache using reflection.
      */
     public function afterImport()
-    {
-        $this->resetCraftSiteServiceSiteIdsCache();
-    }
-
-    /**
-     * Reset craft site service site ids cache using reflection.
-     */
-    private function resetCraftSiteServiceSiteIdsCache()
     {
         $obj = Craft::$app->sites;
         $refObject = new \ReflectionObject($obj);
@@ -53,7 +45,12 @@ class SiteDataType extends Base
             $refProperty1 = $refObject->getProperty('_sitesById');
             $refProperty1->setAccessible(true);
             $refProperty1->setValue($obj, null);
-            $obj->init(); // reload sites
         }
+        if ($refObject->hasProperty('_sitesByHandle')) {
+            $refProperty2 = $refObject->getProperty('_sitesByHandle');
+            $refProperty2->setAccessible(true);
+            $refProperty2->setValue($obj, null);
+        }
+        $obj->init(); // reload sites
     }
 }

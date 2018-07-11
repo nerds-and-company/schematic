@@ -34,15 +34,10 @@ class SectionDataType extends Base
         return Craft::$app->sections->getAllSections();
     }
 
-    public function afterImport()
-    {
-        $this->resetCraftEditableSectionsCache();
-    }
-
     /**
      * Reset craft editable sections cache using reflection.
      */
-    private function resetCraftEditableSectionsCache()
+    public function afterImport()
     {
         $obj = Craft::$app->sections;
         $refObject = new \ReflectionObject($obj);
