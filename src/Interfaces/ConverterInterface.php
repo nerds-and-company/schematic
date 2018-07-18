@@ -37,6 +37,13 @@ interface ConverterInterface
     public function deleteRecord(Model $record): bool;
 
     /**
+     * Gets the record's key to index by.
+     *
+     * @return string
+     */
+    public function getRecordIndex(): string;
+
+    /**
      * Get single record definition.
      *
      * @param Model $record

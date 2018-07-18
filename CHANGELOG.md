@@ -1,3 +1,7 @@
+## 4.0.13 - 2018-07-18
+### Added
+- Added ability to use a custom key to index by for model converters
+
 ## 4.0.12 - 2018-07-11
 ### Added
 - Added afterImport callback for datatypes

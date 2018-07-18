@@ -4,7 +4,6 @@ namespace NerdsAndCompany\Schematic\Mappers;
 
 use Craft;
 use craft\base\Model;
-use craft\helpers\ArrayHelper;
 use yii\base\Component as BaseComponent;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Interfaces\MapperInterface;
@@ -32,7 +31,8 @@ class ModelMapper extends BaseComponent implements MapperInterface
             $modelClass = get_class($record);
             $converter = Craft::$app->controller->module->getConverter($modelClass);
             if ($converter) {
-                $result[$record->handle] = $converter->getRecordDefinition($record);
+                $index = $converter->getRecordIndex();
+                $result[$record->$index] = $converter->getRecordDefinition($record);
             }
         }
 
@@ -48,11 +48,13 @@ class ModelMapper extends BaseComponent implements MapperInterface
      * @param bool  $persist           Whether to persist the parsed records
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function import(array $definitions, array $records, array $defaultAttributes = [], $persist = true): array
     {
         $imported = [];
-        $recordsByHandle = ArrayHelper::index($records, 'handle');
+        $recordsByHandle = $this->getRecordsByHandle($records);
         foreach ($definitions as $handle => $definition) {
             $modelClass = $definition['class'];
             $converter = Craft::$app->controller->module->getConverter($modelClass);
@@ -87,6 +89,26 @@ class ModelMapper extends BaseComponent implements MapperInterface
         }
 
         return $imported;
+    }
+
+    /**
+     * Get records by handle.
+     *
+     * @param array $records
+     *
+     * @return array
+     */
+    private function getRecordsByHandle(array $records): array
+    {
+        $recordsByHandle = [];
+        foreach ($records as $record) {
+            $modelClass = get_class($record);
+            $converter = Craft::$app->controller->module->getConverter($modelClass);
+            $index = $converter->getRecordIndex();
+            $recordsByHandle[$record->$index] = $record;
+        }
+
+        return $recordsByHandle;
     }
 
     /**
