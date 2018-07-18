@@ -55,6 +55,14 @@ abstract class Base extends BaseComponent implements ConverterInterface
     /**
      * {@inheritdoc}
      */
+    public function getRecordIndex(): string
+    {
+        return 'handle';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRecordDefinition(Model $record): array
     {
         $definition = [

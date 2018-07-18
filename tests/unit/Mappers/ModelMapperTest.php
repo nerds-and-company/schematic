@@ -65,7 +65,7 @@ class ModelMapperTest extends Unit
     public function testUnSuccessfulImport(array $existingGroups, array $modelDefinitions, int $saveCount)
     {
         $converter = $this->getMockConverter();
-        $this->expectConverter($converter, count($modelDefinitions));
+        $this->expectConverter($converter, count($existingGroups) + count($modelDefinitions));
         $this->expectSaves($converter, $saveCount, false);
         $this->expectDeletes($converter, 0);
 
@@ -82,7 +82,7 @@ class ModelMapperTest extends Unit
     public function testSuccessfulImport(array $existingGroups, array $modelDefinitions, int $saveCount)
     {
         $converter = $this->getMockConverter();
-        $this->expectConverter($converter, count($modelDefinitions));
+        $this->expectConverter($converter, count($existingGroups) + count($modelDefinitions));
         $this->expectSaves($converter, $saveCount);
         $this->expectDeletes($converter, 0);
 
@@ -105,7 +105,7 @@ class ModelMapperTest extends Unit
     ) {
         Schematic::$force = true;
         $converter = $this->getMockConverter();
-        $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);
+        $this->expectConverter($converter, count($existingGroups) + count($modelDefinitions) + $deleteCount);
         $this->expectSaves($converter, $saveCount);
         $this->expectDeletes($converter, $deleteCount);
 
@@ -128,7 +128,7 @@ class ModelMapperTest extends Unit
     ) {
         Schematic::$force = true;
         $converter = $this->getMockConverter();
-        $this->expectConverter($converter, count($modelDefinitions) + $deleteCount);
+        $this->expectConverter($converter, count($existingGroups) + count($modelDefinitions) + $deleteCount);
         $this->expectSaves($converter, $saveCount, false);
         $this->expectDeletes($converter, $deleteCount);
 
@@ -264,6 +264,10 @@ class ModelMapperTest extends Unit
     private function getMockConverter(): Converter
     {
         $mockConverter = $this->getMockBuilder(Converter::class)->getMock();
+
+        $mockConverter->expects($this->any())
+                      ->method('getRecordIndex')
+                      ->willReturn('handle');
 
         $mockConverter->expects($this->any())
                       ->method('getRecordDefinition')
