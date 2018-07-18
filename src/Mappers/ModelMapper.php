@@ -48,8 +48,6 @@ class ModelMapper extends BaseComponent implements MapperInterface
      * @param bool  $persist           Whether to persist the parsed records
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function import(array $definitions, array $records, array $defaultAttributes = [], $persist = true): array
     {
