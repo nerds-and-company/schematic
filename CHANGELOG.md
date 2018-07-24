@@ -1,3 +1,7 @@
+## 4.0.14 - 2018-07-24
+### Fixed
+- Fixed a bug where element indexes with custom elements failed to import
+
 ## 4.0.13 - 2018-07-18
 ### Added
 - Added ability to use a custom key to index by for model converters

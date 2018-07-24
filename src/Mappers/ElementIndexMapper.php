@@ -45,8 +45,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
         foreach ($elementTypes as $elementType) {
             $settings = Craft::$app->elementIndexes->getSettings($elementType);
             if (is_array($settings)) {
-                $elementTypeName = str_replace('craft\\elements\\', '', $elementType);
-                $settingDefinitions[$elementTypeName] = $this->getMappedSettings($settings, 'id', 'handle');
+                $settingDefinitions[$elementType] = $this->getMappedSettings($settings, 'id', 'handle');
             }
         }
 
@@ -58,11 +57,10 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
      */
     public function import(array $settingDefinitions, array $elementTypes): array
     {
-        foreach ($settingDefinitions as $elementTypeName => $settings) {
-            $elementType = 'craft\\elements\\'.$elementTypeName;
+        foreach ($settingDefinitions as $elementType => $settings) {
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
             if (!Craft::$app->elementIndexes->saveSettings($elementType, $mappedSettings)) {
-                Schematic::error(' - Settings for '.$elementTypeName.' could not be saved');
+                Schematic::error(' - Settings for '.$elementType.' could not be saved');
             }
         }
 
