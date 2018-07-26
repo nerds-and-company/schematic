@@ -1,4 +1,4 @@
-## 4.0.14 - 2018-07-24
+## 4.0.14 - 2018-07-26
 ### Fixed
 - Fixed a bug where element indexes with custom elements failed to import
 
