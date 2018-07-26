@@ -91,8 +91,8 @@ class ElementIndexMapperTest extends Unit
                    ->expects($this->any())
                    ->method('getSettings')
                    ->willReturnMap([
-                      [Entry::class, $getSettingsResponse['Entry']],
-                      [Category::class, $getSettingsResponse['Category']],
+                      [Entry::class, $getSettingsResponse[Entry::class]],
+                      [Category::class, $getSettingsResponse[Category::class]],
                    ]);
 
         Craft::$app->elementIndexes->expects($this->any())
@@ -121,7 +121,7 @@ class ElementIndexMapperTest extends Unit
     private function getElementIndexSettingsSavedData()
     {
         return [
-            'Category' => [
+            Category::class => [
                 'sourceOrder' => [
                     ['heading', 'Channels'],
                     ['key', 'section:1'],
@@ -139,7 +139,7 @@ class ElementIndexMapperTest extends Unit
                     ],
                 ],
             ],
-            'Entry' => [
+            Entry::class => [
                 'sourceOrder' => [
                     ['heading', 'Channels'],
                     ['key', 'section:1'],
@@ -167,7 +167,7 @@ class ElementIndexMapperTest extends Unit
     private function getElementIndexSettingsExportedData()
     {
         return [
-            'Category' => [
+            Category::class => [
                 'sourceOrder' => [
                     ['heading', 'Channels'],
                     ['key', 'section:handle'],
@@ -185,7 +185,7 @@ class ElementIndexMapperTest extends Unit
                     ],
                 ],
             ],
-            'Entry' => [
+            Entry::class => [
                 'sourceOrder' => [
                     ['heading', 'Channels'],
                     ['key', 'section:handle'],
