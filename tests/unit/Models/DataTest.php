@@ -34,31 +34,58 @@ class DataTest extends Unit
 
     /**
      * @return Data
+     *
+     * @param bool $useOverride Whether to use the override file or not
      */
-    private function generateDataModel()
+    private function generateDataModel($useOverride = false)
     {
-        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
         $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
+        $override = $useOverride ? $this->getOverrideTestFile() : [];
 
         return Data::fromYaml($schema, $override);
     }
 
+    public function testEnvironment()
+    {
+        putenv('S3_BUCKET=bucket_name');
+        $result = $this->generateDataModel();
+        $this->assertEquals('bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
+    }
+
+    public function testEnvironmentFallback()
+    {
+        putenv('S3_BUCKET'); // unset
+        putenv('SCHEMATIC_S3_BUCKET=bucket_name');
+        $result = $this->generateDataModel();
+        $this->assertEquals('bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
+    }
+
     public function testRegularOverride()
     {
-        $result = $this->generateDataModel();
+        putenv('S3_BUCKET=bucket_name');
+        $result = $this->generateDataModel(true);
         $this->assertEquals('override_key', $result['volumes']['uploads']['attributes']['keyId']);
     }
 
     public function testEnvironmentOverride()
     {
-        $result = $this->generateDataModel();
+        putenv('S3_BUCKET=override_bucket_name');
+        $result = $this->generateDataModel(true);
+        $this->assertEquals('override_bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
+    }
+
+    public function testEnvironmentOverrideFallback()
+    {
+        putenv('S3_BUCKET'); // unset
+        putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
+        $result = $this->generateDataModel(true);
         $this->assertEquals('override_bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
     }
 
     public function testErrorWhenEnvironmentVariableNotSet()
     {
-        // unset environment variable
+        // unset environment variables
+        putenv('S3_BUCKET');
         putenv('SCHEMATIC_S3_BUCKET');
         $this->expectException('Exception');
         $schema = $this->getSchemaTestFile();
@@ -68,6 +95,7 @@ class DataTest extends Unit
 
     public function testToYamlIsValidYaml()
     {
+        putenv('S3_BUCKET=bucket_name');
         $dataModel = $this->generateDataModel();
         $yaml = Data::toYaml($dataModel);
         $this->assertInternalType('array', Yaml::parse($yaml));
@@ -75,16 +103,18 @@ class DataTest extends Unit
 
     public function testToYamlContainsCorrectText()
     {
+        putenv('S3_BUCKET=bucket_name');
         $dataModel = $this->generateDataModel();
         $yaml = Data::toYaml($dataModel);
-        $this->assertContains('override_bucket_name', $yaml);
+        $this->assertContains('bucket_name', $yaml);
     }
 
     public function testToYamlOverride()
     {
+        putenv('S3_BUCKET=bucket_name');
         $dataModel = $this->generateDataModel();
         $override = $this->getOverrideTestFile();
         $yaml = Data::toYaml($dataModel, $override);
-        $this->assertContains("'%s3_bucket%'", $yaml);
+        $this->assertContains("'%S3_BUCKET%'", $yaml);
     }
 }

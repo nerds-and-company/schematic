@@ -47,7 +47,7 @@ class Unit extends Module
     {
         $mockApp = $this->getMockApp($test);
         $mockApp->controller = $this->getMock($test, Controller::class);
-        $mockApp->controller->module = $this->getmockModule($test);
+        $mockApp->controller->module = $this->getMockModule($test);
 
         Craft::$app = $mockApp;
         Schematic::$force = false;
