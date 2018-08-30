@@ -39,6 +39,8 @@ class DataTest extends Unit
      */
     private function generateDataModel($useOverride = false)
     {
+        putenv('SCHEMATIC_S3_SECRET_ACCESS_KEY=secret');
+
         $schema = $this->getSchemaTestFile();
         $override = $useOverride ? $this->getOverrideTestFile() : [];
 
@@ -58,6 +60,7 @@ class DataTest extends Unit
         putenv('SCHEMATIC_S3_BUCKET=bucket_name');
         $result = $this->generateDataModel();
         $this->assertEquals('bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
+        $this->assertEquals('secret', $result['volumes']['uploads']['attributes']['secret']);
     }
 
     public function testRegularOverride()
@@ -80,6 +83,7 @@ class DataTest extends Unit
         putenv('SCHEMATIC_S3_BUCKET=override_bucket_name');
         $result = $this->generateDataModel(true);
         $this->assertEquals('override_bucket_name', $result['volumes']['uploads']['attributes']['bucket']);
+        $this->assertEquals('secret', $result['volumes']['uploads']['attributes']['secret']);
     }
 
     public function testErrorWhenEnvironmentVariableNotSet()
