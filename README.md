@@ -90,8 +90,6 @@ Multiple exclusions can also be specified:
 ./craft schematic/import --exclude=volumes,categoryGroups
 ```
 
-Keys in the schema file can be overridden by passing an override file to schematic using the `--override-file` flag, for instance: `./craft schematic/import --override-file=craft/config/override.yml`.
-
 See [Supported DataTypes](#Supported DataTypes)
 
 ### Supported DataTypes
@@ -116,9 +114,11 @@ Here is a list of all of the data types and their corresponding exclude paramete
 | User Groups | userGroups |
 | Volumes | volumes |
 
-### Overrides
+### Overrides and environment variables
 
-Specific keys can be overriden by adding a key in `craft/config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names. The value has to start and end with a `%` (percentage sign). The correspending environment value will be `SCHEMATIC_{value_without_percentage_signs}`.
+Specific keys can be overriden by adding a key in `config/override.yml` and setting the corresponding environment variable. The key name in the `override.yml` needs to be the same as the key you want to override from `schema.yml`, including any parent key names.
+
+The override file is also applied back when exporting, so your variables are not overriden by actual values. Schematic also supports passing an override file using the `--override-file` flag, for instance: `./craft schematic/import --override-file=path/to/your/config/override.yml`.
 
 #### Example
 
@@ -126,10 +126,12 @@ If the following `override.yml` is defined:
 
 ```yml
 parent:
-    key_name: %key_value%
+    key_name: %KEY_VALUE%
 ```
 
-Then the environment variable `SCHEMATIC_KEY_VALUE` needs to be set. The value of this environment variable will override the key `key_name`. If the environment variable is not set Schematic will throw an error.
+Then the environment variable `KEY_VALUE` needs to be set. The value of this environment variable will override the key `key_name`. If the environment variable is not set Schematic will throw an error.
+
+Environment variables can also directly be used in the `schema.yml` file. Beware that if you do that, they will be overriden on export by their environment variable's values.
 
 ### Hooks
 
