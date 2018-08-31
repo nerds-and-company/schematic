@@ -1,4 +1,4 @@
-## 4.0.15 - 2018-08-21
+## 4.0.15 - 2018-08-31
 ### Added
 - Schematic can now parse environment variables in the schema file directly, without need for an override file
 - Used environment variables don't have to be prefixed with SCHEMATIC_ anymore
