@@ -1,3 +1,9 @@
+## 4.0.15 - 2018-08-21
+### Added
+- Schematic can now parse environment variables in the schema file directly, without need for an override file
+- Used environment variables don't have to be prefixed with SCHEMATIC_ anymore
+- Environment variables without SCHEMATIC_ prefix are now case-sensitive
+
 ## 4.0.14 - 2018-07-26
 ### Fixed
 - Fixed a bug where element indexes with custom elements failed to import

@@ -29,11 +29,14 @@ class Data extends Model
      */
     public static function fromYaml($yaml, $overrideYaml): array
     {
+        $yaml = static::replaceEnvVariables($yaml);
         $data = Yaml::parse($yaml);
+
         if (!empty($overrideYaml)) {
             $overrideYaml = static::replaceEnvVariables($overrideYaml);
             $overrideData = Yaml::parse($overrideYaml);
-            if (null != $overrideData) {
+
+            if ($overrideData != null) {
                 $data = array_replace_recursive($data, $overrideData);
             }
         }
@@ -61,11 +64,15 @@ class Data extends Model
         $originalValues = $matches[0];
         $replaceValues = [];
         foreach ($originalValues as $match) {
-            $envVariable = strtoupper(substr($match, 1, -1));
-            $envVariable = 'SCHEMATIC_'.$envVariable;
+            $envVariable = substr($match, 1, -1);
             $envValue = getenv($envVariable);
             if (!$envValue) {
-                throw new Exception("Schematic environment variable not set: {$envVariable}");
+                $envVariable = strtoupper($envVariable);
+                $envVariable = 'SCHEMATIC_'.$envVariable;
+                $envValue = getenv($envVariable);
+                if (!$envValue) {
+                    throw new Exception("Schematic environment variable not set: {$envVariable}");
+                }
             }
             $replaceValues[] = $envValue;
         }
@@ -85,7 +92,8 @@ class Data extends Model
     {
         if (!empty($overrideYaml)) {
             $overrideData = Yaml::parse($overrideYaml);
-            if (null != $overrideData) {
+
+            if ($overrideData != null) {
                 $data = array_replace_recursive($data, $overrideData);
             }
         }

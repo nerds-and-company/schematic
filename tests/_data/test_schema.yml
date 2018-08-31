@@ -2,7 +2,8 @@ volumes:
   uploads:
     attributes:
       keyId: original_key_id
-      bucket: original_bucket_name
+      bucket: '%S3_BUCKET%'
+      secret: '%s3_secret_access_key%'
 users:
   settings:
     requireEmailVerification: true

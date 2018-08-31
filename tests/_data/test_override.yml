@@ -2,4 +2,5 @@ volumes:
   uploads:
     attributes:
       keyId: override_key
-      bucket: '%s3_bucket%'
+      bucket: '%S3_BUCKET%'
+      secret: '%s3_secret_access_key%'
