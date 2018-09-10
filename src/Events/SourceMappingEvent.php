@@ -20,6 +20,11 @@ class SourceMappingEvent extends Event
     /**
      * @var string
      */
+    public $source;
+
+    /**
+     * @var string
+     */
     public $service;
 
     /**
