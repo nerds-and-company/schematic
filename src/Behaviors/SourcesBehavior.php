@@ -7,6 +7,7 @@ use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
 
 /**
  * Schematic Sources Behavior.
@@ -21,6 +22,8 @@ use NerdsAndCompany\Schematic\Schematic;
  */
 class SourcesBehavior extends Behavior
 {
+    const EVENT_MAP_SOURCE = 'map_source';
+
     /**
      * Recursively find sources in definition attributes.
      *
@@ -142,6 +145,17 @@ class SourcesBehavior extends Behavior
                 break;
             case 'utility':
                 return $source;
+        }
+
+        // Send event
+        $event = new SourceMappingEvent([
+            'service' => $service ?? null,
+            'method' => $method ?? null,
+        ]);
+        $this->trigger(self::EVENT_MAP_SOURCE, $event);
+        if ($event->service && $event->method) {
+            $service = $event->service;
+            $method = $event->method;
         }
 
         if (isset($service) && isset($method) && isset($sourceFrom)) {
