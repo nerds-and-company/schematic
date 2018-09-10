@@ -47,6 +47,7 @@ use NerdsAndCompany\Schematic\Events\ConverterEvent;
 class Schematic extends Plugin
 {
     const EVENT_RESOLVE_CONVERTER = 'resolve_converter';
+    const EVENT_MAP_SOURCE = 'map_source';
 
     /**
      * @var string

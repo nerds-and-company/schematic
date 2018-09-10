@@ -22,8 +22,6 @@ use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
  */
 class SourcesBehavior extends Behavior
 {
-    const EVENT_MAP_SOURCE = 'map_source';
-
     /**
      * Recursively find sources in definition attributes.
      *
@@ -97,6 +95,7 @@ class SourcesBehavior extends Behavior
         /** @var Model $sourceObject */
         $sourceObject = null;
 
+        // Get service and method by source
         list($sourceType, $sourceFrom) = explode(':', $source);
         switch ($sourceType) {
             case 'editSite':
@@ -148,16 +147,16 @@ class SourcesBehavior extends Behavior
         }
 
         // Send event
+        $plugin = Craft::$app->getPlugins()->getPlugin('schematic');
         $event = new SourceMappingEvent([
             'service' => $service ?? null,
             'method' => $method ?? null,
         ]);
-        $this->trigger(self::EVENT_MAP_SOURCE, $event);
-        if ($event->service && $event->method) {
-            $service = $event->service;
-            $method = $event->method;
-        }
+        $plugin->trigger($plugin::EVENT_MAP_SOURCE, $event);
+        $service = $event->service;
+        $method = $event->method;
 
+        // Try service and method
         if (isset($service) && isset($method) && isset($sourceFrom)) {
             $method = $method.ucfirst($indexFrom);
             try {
