@@ -1,3 +1,7 @@
+### 4.0.16 - 2018-09-10
+### Added
+- Added map_source event for mapping custom sources. See the Events section in the README for more.
+
 ## 4.0.15 - 2018-08-31
 ### Added
 - Schematic can now parse environment variables in the schema file directly, without need for an override file
