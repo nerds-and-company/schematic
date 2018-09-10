@@ -53,9 +53,10 @@ class Base extends Controller
             $dataTypes = $this->applyExcludes($dataTypes);
         }
 
-        //Import fields again after all sources have been imported
+        //Import fields and usergroups again after all sources have been imported
         if (array_search('fields', $dataTypes) && count($dataTypes) > 1) {
             $dataTypes[] = 'fields';
+            $dataTypes[] = 'userGroups';
         }
 
         return $dataTypes;
