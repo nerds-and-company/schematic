@@ -149,6 +149,7 @@ class SourcesBehavior extends Behavior
         // Send event
         $plugin = Craft::$app->getPlugins()->getPlugin('schematic');
         $event = new SourceMappingEvent([
+            'source' => $source,
             'service' => $service ?? null,
             'method' => $method ?? null,
         ]);
