@@ -133,7 +133,7 @@ Then the environment variable `KEY_VALUE` needs to be set. The value of this env
 
 Environment variables can also directly be used in the `schema.yml` file. Beware that if you do that, they will be overriden on export by their environment variable's values.
 
-### Hooks
+### Events
 
 Custom converters can be injected with the `EVENT_RESOLVE_CONVERTER` event.
 This can be especially useful for importing and exporting custom field types.
@@ -143,6 +143,22 @@ The converters need to implement the `NerdsAndCompany\Schematic\Interfaces\Conve
 Event::on(Schematic::class, Schematic::EVENT_RESOLVE_CONVERTER, function (ConverterEvent $event) {
     if ($event->modelClass = "My\Custom\Field") {
       $event->converterClass = "My\Custom\FieldConverter";
+    }
+});
+```
+
+Custom source mappings can be injected with the `EVENT_MAP_SOURCE` event.
+This can be especially useful for importing and exporting custom sources.
+
+```php
+Event::on(Schematic::class, Schematic::EVENT_MAP_SOURCE, function (SourceMappingEvent $event) {
+    list($sourceType, $sourceFrom) = explode(':', $event->source);
+
+    switch ($sourceType) {
+        case 'plugin-source':
+            $event->service = Craft::$app->customService;
+            $event->method = 'getCustomModelBy';
+            break;
     }
 });
 ```

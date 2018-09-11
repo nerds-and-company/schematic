@@ -7,6 +7,7 @@ use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
 use NerdsAndCompany\Schematic\Schematic;
+use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
 
 /**
  * Schematic Sources Behavior.
@@ -94,6 +95,7 @@ class SourcesBehavior extends Behavior
         /** @var Model $sourceObject */
         $sourceObject = null;
 
+        // Get service and method by source
         list($sourceType, $sourceFrom) = explode(':', $source);
         switch ($sourceType) {
             case 'editSite':
@@ -144,6 +146,18 @@ class SourcesBehavior extends Behavior
                 return $source;
         }
 
+        // Send event
+        $plugin = Craft::$app->controller->module;
+        $event = new SourceMappingEvent([
+            'source' => $source,
+            'service' => $service ?? null,
+            'method' => $method ?? null,
+        ]);
+        $plugin->trigger($plugin::EVENT_MAP_SOURCE, $event);
+        $service = $event->service;
+        $method = $event->method;
+
+        // Try service and method
         if (isset($service) && isset($method) && isset($sourceFrom)) {
             $method = $method.ucfirst($indexFrom);
             try {
