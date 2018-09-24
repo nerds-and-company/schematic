@@ -216,7 +216,12 @@ class SourcesBehavior extends Behavior
         return $this->mockFolder ? $this->mockFolder : VolumeFolder::findOne(['volumeId' => $volumeId]);
     }
 
-    public function setMockFolder(VolumeFolder $mockFolder): void
+    /**
+     * Set a mock folder for the tests
+     *
+     * @param VolumeFolder $mockFolder
+     */
+    public function setMockFolder(VolumeFolder $mockFolder)
     {
         $this->mockFolder = $mockFolder;
     }
