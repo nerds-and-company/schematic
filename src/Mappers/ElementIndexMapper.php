@@ -59,7 +59,7 @@ class ElementIndexMapper extends BaseComponent implements MapperInterface
     {
         foreach ($settingDefinitions as $elementType => $settings) {
             // Backwards compatibility
-            if (class_exists('craft\\elements\\'.$elementType, false)) {
+            if (class_exists('craft\\elements\\'.$elementType)) {
                 $elementType = 'craft\\elements\\'.$elementType;
             }
             $mappedSettings = $this->getMappedSettings($settings, 'handle', 'id');
