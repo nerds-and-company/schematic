@@ -6,6 +6,7 @@ use Craft;
 use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
+use craft\records\VolumeFolder;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
 
@@ -22,6 +23,9 @@ use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
  */
 class SourcesBehavior extends Behavior
 {
+    /** Hack to be able to avoid the active record call in VolumeFolder::findOne() */
+    public $mockFolder = null;
+
     /**
      * Recursively find sources in definition attributes.
      *
@@ -123,6 +127,9 @@ class SourcesBehavior extends Behavior
                 $method = 'getGroupBy';
                 break;
             case 'folder':
+                $service = $this;
+                $method = 'getFolderBy';
+                break;
             case 'createFoldersInVolume':
             case 'deleteFilesAndFoldersInVolume':
             case 'saveAssetInVolume':
@@ -176,6 +183,69 @@ class SourcesBehavior extends Behavior
 
         Schematic::warning('No mapping found for source '.$source);
 
+        return null;
+    }
+
+    /**
+     * Get a folder by id
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     *
+     * @param int $folderId
+     * @return object
+     */
+    private function getFolderById(int $folderId): \stdClass
+    {
+        $folder = Craft::$app->assets->getFolderById($folderId);
+        if ($folder) {
+            $volume = $folder->getVolume();
+            return  (object) [
+                'id' => $folderId,
+                'handle' => $volume->handle
+            ];
+        }
+        return null;
+    }
+
+    /**
+     * Get folder by volume id
+     *
+     * @param int $volumeId
+     * @return VolumeFolder
+     */
+    private function getFolderByVolumeId(int $volumeId): VolumeFolder
+    {
+        return $this->mockFolder ? $this->mockFolder : VolumeFolder::findOne(['volumeId' => $volumeId]);
+    }
+
+    /**
+     * Set a mock folder for the tests
+     *
+     * @param VolumeFolder $mockFolder
+     */
+    public function setMockFolder(VolumeFolder $mockFolder)
+    {
+        $this->mockFolder = $mockFolder;
+    }
+
+    /**
+     * Get a folder by volume handle
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     *
+     * @param string $folderHandle
+     * @return object
+     */
+    private function getFolderByHandle(string $folderHandle): \stdClass
+    {
+        $volume = Craft::$app->volumes->getVolumeByHandle($folderHandle);
+        if ($volume) {
+            $folder = $this->getFolderByVolumeId($volume->id);
+            if ($folder) {
+                return  (object) [
+                    'id' => $folder->id,
+                    'handle' => $folderHandle
+                ];
+            }
+        }
         return null;
     }
 }

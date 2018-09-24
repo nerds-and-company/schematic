@@ -3,9 +3,11 @@
 namespace Helper;
 
 use Craft;
+use Yii;
 use craft\console\Application;
 use yii\console\Controller;
 use craft\i18n\I18n;
+use craft\services\Assets;
 use craft\services\AssetTransforms;
 use craft\services\Categories;
 use craft\services\Content;
@@ -50,6 +52,7 @@ class Unit extends Module
         $mockApp->controller->module = $this->getMockModule($test);
 
         Craft::$app = $mockApp;
+        Yii::$app = $mockApp;
         Schematic::$force = false;
     }
 
@@ -83,6 +86,7 @@ class Unit extends Module
     private function getMockApp(TestCase $test)
     {
         $mockApp = $this->getMock($test, Application::class);
+        $mockAssets = $this->getMock($test, Assets::class);
         $mockAssetTransforms = $this->getMock($test, AssetTransforms::class);
         $mockCategoryGroups = $this->getMock($test, Categories::class);
         $mockContent = $this->getMock($test, Content::class);
@@ -105,6 +109,7 @@ class Unit extends Module
         $mockApp->expects($test->any())
             ->method('__get')
             ->willReturnMap([
+                ['assets', $mockAssets],
                 ['assetTransforms', $mockAssetTransforms],
                 ['categories', $mockCategoryGroups],
                 ['content', $mockContent],

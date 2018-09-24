@@ -5,6 +5,8 @@ namespace NerdsAndCompany\Schematic\Converters\Fields;
 use Craft;
 use craft\fields\Assets as AssetsField;
 use craft\base\Volume;
+use craft\models\VolumeFolder;
+use craft\records\VolumeFolder as VolumeFolderRecord;
 use Codeception\Test\Unit;
 
 /**
@@ -43,14 +45,14 @@ class AssetsTest extends Unit
      *
      * @param AssetsField      $assets
      * @param array            $definition
-     * @param Mock|Volume|null $mockVolume
+     * @param Mock|Volume|null $mockFolder
      */
-    public function testGetRecordDefinition(AssetsField $assets, array $definition, $mockVolume)
+    public function testGetRecordDefinition(AssetsField $assets, array $definition, $mockFolder)
     {
-        Craft::$app->volumes->expects($this->any())
-                            ->method('getVolumeById')
-                            ->with($mockVolume->id)
-                            ->willReturn($mockVolume);
+        Craft::$app->assets->expects($this->any())
+                           ->method('getFolderById')
+                           ->with($mockFolder->id)
+                           ->willReturn($mockFolder);
 
         $result = $this->converter->getRecordDefinition($assets);
 
@@ -62,18 +64,20 @@ class AssetsTest extends Unit
      *
      * @param AssetsField      $assets
      * @param array            $definition
-     * @param Mock|Volume|null $mockVolume
+     * @param Mock|Volume|null $mockFolder
      */
-    public function testSetRecordAttributes(AssetsField $assets, array $definition, $mockVolume)
+    public function testSetRecordAttributes(AssetsField $assets, array $definition, $mockFolder)
     {
+        $this->setMockFolderRecord($mockFolder);
+        $mockVolume = $mockFolder->getVolume();
         Craft::$app->volumes->expects($this->any())
                             ->method('getVolumeByHandle')
+                            ->with($mockVolume->handle)
                             ->willReturn($mockVolume);
 
         $newAssets = new AssetsField();
 
         $this->converter->setRecordAttributes($newAssets, $definition, []);
-
         $this->assertSame($assets->name, $newAssets->name);
         $this->assertSame($assets->handle, $newAssets->handle);
         $this->assertSame($assets->defaultUploadLocationSource, $newAssets->defaultUploadLocationSource);
@@ -91,13 +95,13 @@ class AssetsTest extends Unit
     public function provideAssets()
     {
         $mockAssets1 = $this->getMockAssets(1, 1);
-        $mockVolume1 = $this->getMockVolume(1);
+        $mockFolder1 = $this->getMockFolder(1);
 
         return [
             'assets' => [
                 'Assets' => $mockAssets1,
                 'definition' => $this->getMockAssetsDefinition($mockAssets1),
-                'volume' => $mockVolume1,
+                'volume' => $mockFolder1,
             ],
         ];
     }
@@ -195,6 +199,30 @@ class AssetsTest extends Unit
     }
 
     /**
+     * Get a mock folder.
+     *
+     * @param int $folderId
+     *
+     * @return Mock|VolumeFolder
+     */
+    private function getMockFolder(int $folderId)
+    {
+        $mockVolume = $this->getMockVolume($folderId);
+        $mockFolder = $this->getMockBuilder(VolumeFolder::class)
+                           ->disableOriginalConstructor()
+                           ->getmock();
+
+        $mockFolder->id = $folderId;
+        $mockFolder->handle = 'folderHandle'.$folderId;
+
+        $mockFolder->expects($this->any())
+                   ->method('getVolume')
+                   ->willReturn($mockVolume);
+
+        return $mockFolder;
+    }
+
+    /**
      * Get a mock volume.
      *
      * @param int $volumeId
@@ -211,5 +239,19 @@ class AssetsTest extends Unit
         $mockVolume->handle = 'volumeHandle'.$volumeId;
 
         return $mockVolume;
+    }
+
+    /**
+     * Set a mock folder record on converter based on mock folder
+     *
+     * @param VolumeFolder $mockFolder
+     */
+    private function setMockFolderRecord(VolumeFolder $mockFolder)
+    {
+        $mockFolderRecord = $this->getMockBuilder(VolumeFolderRecord::class)->getMock();
+        $mockFolderRecord->expects($this->any())
+                         ->method('__get')
+                         ->willReturnMap([['id', $mockFolder->id]]);
+        $this->converter->setMockFolder($mockFolderRecord);
     }
 }
