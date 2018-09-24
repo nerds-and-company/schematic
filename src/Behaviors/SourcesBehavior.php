@@ -6,6 +6,7 @@ use Craft;
 use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
+use craft\records\VolumeFolder;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
 
@@ -123,6 +124,9 @@ class SourcesBehavior extends Behavior
                 $method = 'getGroupBy';
                 break;
             case 'folder':
+                $service = $this;
+                $method = 'getFolderBy';
+                break;
             case 'createFoldersInVolume':
             case 'deleteFilesAndFoldersInVolume':
             case 'saveAssetInVolume':
@@ -177,5 +181,37 @@ class SourcesBehavior extends Behavior
         Schematic::warning('No mapping found for source '.$source);
 
         return null;
+    }
+
+    /**
+     * Get a folder by id
+     *
+     * @param int $folderId
+     * @return object
+     */
+    private function getFolderById(int $folderId): object
+    {
+        $folder = Craft::$app->assets->getFolderById($folderId);
+        $volume = $folder->getVolume();
+        return  (object) [
+            'id' => $folderId,
+            'handle' => $volume->handle
+        ];
+    }
+
+    /**
+     * Get a folder by handle
+     *
+     * @param string $folderHandle
+     * @return object
+     */
+    private function getFolderByHandle(string $folderHandle): object
+    {
+        $volume = Craft::$app->volumes->getVolumeByHandle($folderHandle);
+        $folder = VolumeFolder::findOne(['volumeId' => $volume->id]);
+        return  (object) [
+            'id' => $folder->id,
+            'handle' => $folderHandle
+        ];
     }
 }
