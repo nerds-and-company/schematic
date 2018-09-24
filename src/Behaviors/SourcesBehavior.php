@@ -188,6 +188,7 @@ class SourcesBehavior extends Behavior
 
     /**
      * Get a folder by id
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      *
      * @param int $folderId
      * @return object
@@ -228,6 +229,7 @@ class SourcesBehavior extends Behavior
 
     /**
      * Get a folder by volume handle
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      *
      * @param string $folderHandle
      * @return object
