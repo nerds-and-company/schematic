@@ -193,7 +193,7 @@ class SourcesBehavior extends Behavior
      * @param int $folderId
      * @return object
      */
-    private function getFolderById(int $folderId): object
+    private function getFolderById(int $folderId): \stdClass
     {
         $folder = Craft::$app->assets->getFolderById($folderId);
         if ($folder) {
@@ -234,7 +234,7 @@ class SourcesBehavior extends Behavior
      * @param string $folderHandle
      * @return object
      */
-    private function getFolderByHandle(string $folderHandle): object
+    private function getFolderByHandle(string $folderHandle): \stdClass
     {
         $volume = Craft::$app->volumes->getVolumeByHandle($folderHandle);
         if ($volume) {
