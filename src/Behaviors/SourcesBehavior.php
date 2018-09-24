@@ -23,6 +23,9 @@ use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
  */
 class SourcesBehavior extends Behavior
 {
+    /** Hack to be able to avoid the active record call in VolumeFolder::findOne() */
+    public $mockFolder = null;
+
     /**
      * Recursively find sources in definition attributes.
      *
@@ -192,15 +195,34 @@ class SourcesBehavior extends Behavior
     private function getFolderById(int $folderId): object
     {
         $folder = Craft::$app->assets->getFolderById($folderId);
-        $volume = $folder->getVolume();
-        return  (object) [
-            'id' => $folderId,
-            'handle' => $volume->handle
-        ];
+        if ($folder) {
+            $volume = $folder->getVolume();
+            return  (object) [
+                'id' => $folderId,
+                'handle' => $volume->handle
+            ];
+        }
+        return null;
     }
 
     /**
-     * Get a folder by handle
+     * Get folder by volume id
+     *
+     * @param int $volumeId
+     * @return VolumeFolder
+     */
+    private function getFolderByVolumeId(int $volumeId): VolumeFolder
+    {
+        return $this->mockFolder ? $this->mockFolder : VolumeFolder::findOne(['volumeId' => $volumeId]);
+    }
+
+    public function setMockFolder(VolumeFolder $mockFolder): void
+    {
+        $this->mockFolder = $mockFolder;
+    }
+
+    /**
+     * Get a folder by volume handle
      *
      * @param string $folderHandle
      * @return object
@@ -208,10 +230,15 @@ class SourcesBehavior extends Behavior
     private function getFolderByHandle(string $folderHandle): object
     {
         $volume = Craft::$app->volumes->getVolumeByHandle($folderHandle);
-        $folder = VolumeFolder::findOne(['volumeId' => $volume->id]);
-        return  (object) [
-            'id' => $folder->id,
-            'handle' => $folderHandle
-        ];
+        if ($volume) {
+            $folder = $this->getFolderByVolumeId($volume->id);
+            if ($folder) {
+                return  (object) [
+                    'id' => $folder->id,
+                    'handle' => $folderHandle
+                ];
+            }
+        }
+        return null;
     }
 }

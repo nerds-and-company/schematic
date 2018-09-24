@@ -1,7 +1,7 @@
 ### 4.0.17 - 2018-09-24
 ### Fixed
 - Fixed backwards compatibility of element index mapper
-- Fixed issue with volume and volume folder ids going out of sink
+- Fixed issue with volume and volume folder ids going out of sync
 
 ### 4.0.16 - 2018-09-11
 ### Added
