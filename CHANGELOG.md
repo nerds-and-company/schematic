@@ -1,3 +1,6 @@
+### 3.8.10 ###
+- Added dummy getTheme method to schematic application
+
 ### 3.8.9 ###
 - Fixed assignUserGroup permission serialization bug
 

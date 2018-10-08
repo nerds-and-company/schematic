@@ -185,6 +185,17 @@ class App extends Base
     }
 
     /**
+     * Returns the target application theme.
+     *
+     * @return string
+     */
+    public function getTheme()
+    {
+        return null;
+    }
+
+
+    /**
      * Override getComponent() so we can attach any pending events if the component is getting initialized as well as
      * do some special logic around creating the `Craft::app()->db` application component.
      *
