@@ -39,9 +39,11 @@ interface ConverterInterface
     /**
      * Gets the record's key to index by.
      *
+     * @param Model $record
+     *
      * @return string
      */
-    public function getRecordIndex(): string;
+    public function getRecordIndex(Model $record): string;
 
     /**
      * Get single record definition.

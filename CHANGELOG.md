@@ -1,3 +1,7 @@
+### 4.1.0 - 2018-11-06
+### Added
+- Added more flexibility for getting a record's index
+
 ### 4.0.17 - 2018-09-24
 ### Fixed
 - Fixed backwards compatibility of element index mapper
