@@ -20,6 +20,7 @@ use NerdsAndCompany\Schematic\Schematic;
 class Base extends Controller
 {
     public $file = 'config/schema.yml';
+    public $path = 'config/schema/';
     public $overrideFile = 'config/override.yml';
     public $exclude;
     public $include;
@@ -120,5 +121,33 @@ class Base extends Controller
         if (Craft::$app->log) {
             Craft::$app->log->targets = [];
         }
+    }
+
+    /**
+     * Convert a filename to one safe to use.
+     *
+     * @param $fileName
+     * @return mixed
+     */
+    protected function toSafeFileName($fileName) {
+        // Remove all slashes and backslashes in the recordName to avoid file sturcture problems.
+        $fileName = str_replace('\\', ':', $fileName);
+        $fileName = str_replace('/', '::', $fileName);
+
+        return $fileName;
+    }
+
+    /**
+     * Convert a safe filename back to it's original form.
+     *
+     * @param $fileName
+     * @return mixed
+     */
+    protected function fromSafeFileName($fileName) {
+        // Replace the placeholders back to slashes and backslashes.
+        $fileName = str_replace(':', '\\', $fileName);
+        $fileName = str_replace('::', '/', $fileName);
+
+        return $fileName;
     }
 }

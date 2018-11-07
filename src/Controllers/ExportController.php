@@ -40,9 +40,8 @@ class ExportController extends Base
                 continue;
             }
 
-            Schematic::info('Exporting '.$dataTypeHandle);
             $records = $dataType->getRecords();
-            $result[$dataTypeHandle] = $this->module->$mapper->export($records);
+            $configurations[$dataTypeHandle] = $this->module->$mapper->export($records);
         }
 
         $yamlOverride = null;
@@ -50,8 +49,20 @@ class ExportController extends Base
             $yamlOverride = file_get_contents($this->overrideFile);
         }
 
-        FileHelper::writeToFile($this->file, Data::toYaml($result, $yamlOverride));
-        Schematic::info('Exported schema to '.$this->file);
+        // Create export directory if it doesn't exist.
+        if (!file_exists($this->path)) {
+            mkdir($this->path, 2775, true);
+        }
+
+        // Export the configuration to multiple yaml files.
+        foreach ($configurations as $dataTypeHandle => $configuration) {
+            Schematic::info('Exporting '.$dataTypeHandle);
+            foreach ($configuration as $recordName => $records) {
+                $fileName = $this->toSafeFileName($dataTypeHandle . '.' . $recordName . '.yml');
+                FileHelper::writeToFile($this->path . $fileName, Data::toYaml($records));
+                Schematic::info('Exported ' . $recordName . ' to ' . $fileName);
+            }
+        }
 
         return 0;
     }
