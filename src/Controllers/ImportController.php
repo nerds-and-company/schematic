@@ -56,17 +56,14 @@ class ImportController extends Base
      * Import from Yaml file.
      *
      * @param array $dataTypes The data types to import
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     private function importFromYaml(array $dataTypes)
     {
         $this->disableLogging();
 
-        $yamlOverride = null;
-        if (file_exists($this->overrideFile)) {
-            $yamlOverride = file_get_contents($this->overrideFile);
-        }
+        // Parse data in the overrideFile if available.
+        $overrideData = Data::parseYamlFile($this->overrideFile);
 
         // Grab all yaml files in the schema directory.
         $schemaFiles = preg_grep('~\.(yml)$~', scandir($this->path));
@@ -77,9 +74,17 @@ class ImportController extends Base
             $dataTypeHandle = $schemaStructure[0];
             $recordName = $schemaStructure[1];
 
-            $contents = file_get_contents($this->path . $fileName);
+            $definition = Data::fromYaml(file_get_contents($this->path . $fileName));
 
-            $definitions[$dataTypeHandle][$recordName] = Data::fromYaml($contents, $yamlOverride);
+            // Check if there is data in the override file for the current record.
+            if (isset($overrideData[$dataTypeHandle][$recordName])) {
+                $definition = array_replace_recursive(
+                    $definition,
+                    $overrideData[$dataTypeHandle][$recordName]
+                );
+            }
+
+            $definitions[$dataTypeHandle][$recordName] = $definition;
         }
 
         foreach ($dataTypes as $dataTypeHandle) {

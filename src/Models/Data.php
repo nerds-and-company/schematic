@@ -27,21 +27,9 @@ class Data extends Model
      *
      * @return array
      */
-    public static function fromYaml($yaml, $overrideYaml): array
+    public static function fromYaml($yaml): array
     {
-        $yaml = static::replaceEnvVariables($yaml);
-        $data = Yaml::parse($yaml);
-
-        if (!empty($overrideYaml)) {
-            $overrideYaml = static::replaceEnvVariables($overrideYaml);
-            $overrideData = Yaml::parse($overrideYaml);
-
-            if ($overrideData != null) {
-                $data = array_replace_recursive($data, $overrideData);
-            }
-        }
-
-        return $data;
+        return Yaml::parse($yaml);
     }
 
     /**
@@ -84,20 +72,31 @@ class Data extends Model
      * Convert array to yaml.
      *
      * @param array  $data
-     * @param string $overrideYaml
      *
      * @return string
      */
-    public static function toYaml(array $data, $overrideYaml = ''): string
+    public static function toYaml(array $data): string
     {
-        if (!empty($overrideYaml)) {
-            $overrideData = Yaml::parse($overrideYaml);
+        return Yaml::dump($data, 12, 2);
+    }
 
-            if ($overrideData != null) {
-                $data = array_replace_recursive($data, $overrideData);
+    /**
+     * Read yaml file and parse content.
+     *
+     * @param $file
+     * @return array
+     * @throws Exception
+     */
+    public static function parseYamlFile($file): array
+    {
+        if (file_exists($file)) {
+            $data = file_get_contents($file);
+            if (!empty($data)) {
+                $data = static::replaceEnvVariables($data);
+                return Yaml::parse($data);
             }
         }
 
-        return Yaml::dump($data, 12, 2);
+        return [];
     }
 }
