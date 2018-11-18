@@ -109,7 +109,9 @@ abstract class Base extends BaseComponent implements ConverterInterface
 
         // Set field layout
         if (array_key_exists('fieldLayout', $definition)) {
-            $record->setFieldLayout($this->getFieldLayout($definition['fieldLayout']));
+            $fieldLayout = $this->getFieldLayout($definition['fieldLayout']);
+            $fieldLayout->id = $record->fieldLayoutId;
+            $record->setFieldLayout($fieldLayout);
         }
 
         // Set site settings

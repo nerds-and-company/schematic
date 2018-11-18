@@ -1,6 +1,7 @@
 ### 4.0.18
 ### Fixed
 - Fixed user field sources not being exported
+- Fixed category field layout not properly importing for existing categories
 
 ### 4.0.17 - 2018-09-24
 ### Fixed
