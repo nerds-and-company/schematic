@@ -1,3 +1,7 @@
+### 4.0.18
+### Fixed
+- Fixed user field sources not being exported
+
 ### 4.0.17 - 2018-09-24
 ### Fixed
 - Fixed backwards compatibility of element index mapper

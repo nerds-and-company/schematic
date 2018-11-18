@@ -7,6 +7,7 @@ use TypeError;
 use yii\base\Behavior;
 use craft\base\Model;
 use craft\records\VolumeFolder;
+use craft\fields\Users;
 use NerdsAndCompany\Schematic\Schematic;
 use NerdsAndCompany\Schematic\Events\SourceMappingEvent;
 
@@ -123,7 +124,7 @@ class SourcesBehavior extends Behavior
                 break;
             case 'group':
             case 'editCategories':
-                $service = 'Users' == $fieldType ? Craft::$app->userGroups : Craft::$app->categories;
+                $service = Users::class == $fieldType ? Craft::$app->userGroups : Craft::$app->categories;
                 $method = 'getGroupBy';
                 break;
             case 'folder':
