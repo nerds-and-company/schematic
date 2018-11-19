@@ -2,7 +2,7 @@
 ### Added
 - Added more flexibility for getting a record's index
 
-### 4.0.18 - 2018-11-19
+## 4.0.18 - 2018-11-19
 ### Added
 - Delete empty field and site groups on import with force
 ### Fixed
