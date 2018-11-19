@@ -35,9 +35,20 @@ class SiteDataType extends Base
     }
 
     /**
-     * Reset craft site service sites cache using reflection.
+     * {@inheritdoc}
      */
     public function afterImport()
+    {
+        $this->clearSiteCaches();
+        if (Schematic::$force) {
+            $this->clearEmptyGroups();
+        }
+    }
+
+    /**
+     * Reset craft site service sites cache using reflection.
+     */
+    private function clearSiteCaches()
     {
         $obj = Craft::$app->sites;
         $refObject = new \ReflectionObject($obj);
@@ -52,5 +63,17 @@ class SiteDataType extends Base
             $refProperty2->setValue($obj, null);
         }
         $obj->init(); // reload sites
+    }
+
+    /**
+     * Clear empty sute groups
+     */
+    private function clearEmptyGroups()
+    {
+        foreach (Craft::$app->sites->getAllGroups() as $group) {
+            if (count($group->getSites()) == 0) {
+                Craft::$app->sites->deleteGroup($group);
+            }
+        }
     }
 }

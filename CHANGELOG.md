@@ -1,6 +1,9 @@
 ### 4.0.18
+### Added
+- Delete empty field and site groups on import with force
 ### Fixed
 - Fixed user field sources not being exported
+- Fixed import of multiple sites in same sitegroup
 
 ### 4.0.17 - 2018-09-24
 ### Fixed

@@ -40,5 +40,20 @@ class FieldDataType extends Base
     public function afterImport()
     {
         Craft::$app->fields->updateFieldVersion();
+        if (Schematic::$force) {
+            $this->clearEmptyGroups();
+        }
+    }
+
+    /**
+     * Clear empty field groups
+     */
+    private function clearEmptyGroups()
+    {
+        foreach (Craft::$app->fields->getAllGroups() as $group) {
+            if (count($group->getFields()) == 0) {
+                Craft::$app->fields->deleteGroup($group);
+            }
+        }
     }
 }
