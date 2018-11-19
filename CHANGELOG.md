@@ -1,6 +1,14 @@
-### 4.1.0 - 2018-11-06
+### 4.1.0 - 2018-11-19
 ### Added
 - Added more flexibility for getting a record's index
+
+### 4.0.18 - 2018-11-19
+### Added
+- Delete empty field and site groups on import with force
+### Fixed
+- Fixed user field sources not being exported
+- Fixed category field layout not properly importing for existing categories
+- Fixed import of multiple sites in same sitegroup
 
 ### 4.0.17 - 2018-09-24
 ### Fixed

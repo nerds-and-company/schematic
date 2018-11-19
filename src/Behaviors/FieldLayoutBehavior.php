@@ -38,10 +38,16 @@ class FieldLayoutBehavior extends Behavior
                 $tabDefinitions[$tab->name] = $this->getFieldLayoutFieldsDefinition($tab->getFields());
             }
 
-            return ['tabs' => $tabDefinitions];
+            return [
+                'type' => $fieldLayout->type,
+                'tabs' => $tabDefinitions
+            ];
         }
 
-        return ['fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields())];
+        return [
+            'type' => $fieldLayout->type,
+            'fields' => $this->getFieldLayoutFieldsDefinition($fieldLayout->getFields()),
+        ];
     }
 
     /**
@@ -87,7 +93,12 @@ class FieldLayoutBehavior extends Behavior
         }
 
         $fieldLayout = Craft::$app->fields->assembleLayout($layoutFields, $requiredFields);
-        $fieldLayout->type = Entry::class;
+
+        if (array_key_exists('type', $fieldLayoutDef)) {
+            $fieldLayout->type = $fieldLayoutDef['type'];
+        } else {
+            $fieldLayout->type = Entry::class;
+        }
 
         return $fieldLayout;
     }

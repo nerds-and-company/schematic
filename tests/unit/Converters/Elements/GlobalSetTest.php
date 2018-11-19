@@ -150,6 +150,7 @@ class GlobalSetsTest extends Unit
                 'uri' => null,
             ],
             'fieldLayout' => [
+                'type' => GlobalSetElement::class,
                 'fields' => $fieldDefs,
             ],
             'site' => $mockGlobalSet->getSite()->handle,
@@ -209,6 +210,7 @@ class GlobalSetsTest extends Unit
                 ->willReturn($mockField);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayout->type = GlobalSetElement::class;
 
         $mockFieldLayout->expects($this->any())
                         ->method('getFields')

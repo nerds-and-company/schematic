@@ -3,6 +3,7 @@
 namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
+use craft\elements\Category;
 use craft\models\CategoryGroup as CategoryGroupModel;
 use craft\models\CategoryGroup_SiteSettings;
 use craft\models\FieldLayout;
@@ -155,6 +156,7 @@ class CategoryGroupTest extends Unit
                 'maxLevels' => 3,
             ],
             'fieldLayout' => [
+                'type' => Category::class,
                 'fields' => [],
             ],
             'siteSettings' => [
@@ -189,6 +191,7 @@ class CategoryGroupTest extends Unit
         ]);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayout->type = Category::class;
 
         $mockGroup->expects($this->any())
                   ->method('getFieldLayout')

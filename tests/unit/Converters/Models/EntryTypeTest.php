@@ -4,6 +4,7 @@ namespace NerdsAndCompany\Schematic\Converters\Models;
 
 use Craft;
 use craft\base\Field as FieldModel;
+use craft\elements\Entry;
 use craft\models\EntryType as EntryTypeModel;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
@@ -174,6 +175,7 @@ class EntryTypeTest extends Unit
         }
 
         return [
+            'type' => Entry::class,
             'tabs' => $tabsDef,
         ];
     }
@@ -198,6 +200,8 @@ class EntryTypeTest extends Unit
         $mockField = $this->getMockField($entryTypeId);
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayout->type = Entry::class;
+
         $mockFieldLayoutTab = $this->getMockBuilder(FieldLayoutTab::class)->getMock();
         $mockFieldLayoutTab->name = 'Content';
 
