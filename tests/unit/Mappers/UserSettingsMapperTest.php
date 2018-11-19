@@ -101,6 +101,7 @@ class UserSettingsMapperTest extends Unit
                 'photoVolume' => 'volumeHandle',
             ],
             'fieldLayout' => [
+                'type' => User::class,
                 'tabs' => [
                     'Content' => [
                         'fieldHandle1' => true,
@@ -169,6 +170,7 @@ class UserSettingsMapperTest extends Unit
     private function getMockFieldLayout()
     {
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayout->type = User::class;
         $mockFieldLayoutTab = $this->getMockBuilder(FieldLayoutTab::class)->getMock();
         $mockFieldLayoutTab->name = 'Content';
 

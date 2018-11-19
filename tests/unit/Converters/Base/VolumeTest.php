@@ -5,6 +5,7 @@ namespace NerdsAndCompany\Schematic\Converters\Base;
 use Craft;
 use craft\base\Field as FieldModel;
 use craft\base\Volume as VolumeModel;
+use craft\elements\Asset;
 use craft\models\FieldLayout;
 use craft\volumes\Local;
 use Codeception\Test\Unit;
@@ -131,6 +132,7 @@ class VolumeTest extends Unit
         $mockField->required = true;
 
         $mockFieldLayout = $this->getMockBuilder(FieldLayout::class)->getMock();
+        $mockFieldLayout->type = Asset::class;
 
         $mockFieldLayout->expects($this->any())
                         ->method('getFields')
@@ -166,6 +168,7 @@ class VolumeTest extends Unit
                 'sortOrder' => null,
             ],
             'fieldLayout' => [
+                'type' => Asset::class,
                 'fields' => $fieldDefs,
             ],
         ];
