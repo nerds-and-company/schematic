@@ -267,7 +267,9 @@ class ModelMapperTest extends Unit
 
         $mockConverter->expects($this->any())
                       ->method('getRecordIndex')
-                      ->willReturn('handle');
+                      ->willReturnCallback(function ($model) {
+                        return $model->handle;
+                      });
 
         $mockConverter->expects($this->any())
                       ->method('getRecordDefinition')

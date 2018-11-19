@@ -31,8 +31,8 @@ class ModelMapper extends BaseComponent implements MapperInterface
             $modelClass = get_class($record);
             $converter = Craft::$app->controller->module->getConverter($modelClass);
             if ($converter) {
-                $index = $converter->getRecordIndex();
-                $result[$record->$index] = $converter->getRecordDefinition($record);
+                $index = $converter->getRecordIndex($record);
+                $result[$index] = $converter->getRecordDefinition($record);
             }
         }
 
@@ -102,8 +102,8 @@ class ModelMapper extends BaseComponent implements MapperInterface
         foreach ($records as $record) {
             $modelClass = get_class($record);
             $converter = Craft::$app->controller->module->getConverter($modelClass);
-            $index = $converter->getRecordIndex();
-            $recordsByHandle[$record->$index] = $record;
+            $index = $converter->getRecordIndex($record);
+            $recordsByHandle[$index] = $record;
         }
 
         return $recordsByHandle;
