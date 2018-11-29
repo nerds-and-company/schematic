@@ -2,6 +2,11 @@
 
 Schematic allows you to synchronize your Craft setup over multiple environments. It does this by exporting information about assets,  database (fields, sections, users), locales and plugins to a YAML file that can be imported in other environments.
 
+## :exclamation: Craft 3.1 notice
+
+Craft 3.1 brings [project config](https://github.com/craftcms/cms/blob/3.1/docs/project-config.md) that will deliver most if not all schematic functionality natively.
+We will continue to support schematic going forward, but it seems likely to become obsolete.
+
 ## Installation
 
 This tool can be installed [using Composer](https://getcomposer.org/doc/00-intro.md). Run the following command from the root of your project:
