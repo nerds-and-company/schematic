@@ -154,7 +154,7 @@ class Sources extends BaseApplication
    private function loadHookedSources($indexFrom)
    {
        if (!isset($this->hookedSources[$indexFrom])) {
-           $this->hookedSources[$indexFrom] = Craft::app()->plugins->call('registerSchematicSources');
+           $this->hookedSources[$indexFrom] = Craft::app()->plugins->call('registerSchematicSources', [$indexFrom]);
        }
    }
 }

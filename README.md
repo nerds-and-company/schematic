@@ -194,7 +194,7 @@ public function registerMigrationService()
 Gives plugins a chance to register their own Migration Services to Schematic in order to import or exports their own data.
 
 ```php
-public function registerSchematicSource($indexFrom)
+public function registerSchematicSources($indexFrom)
 {
     $mapping = [
         'createSomething:handle1' => 'createSomething:1'

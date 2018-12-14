@@ -1,3 +1,6 @@
+### 3.8.11 ###
+- Fixed registerSchematicSources hook
+
 ### 3.8.10 ###
 - Added dummy getTheme method to schematic application
 
