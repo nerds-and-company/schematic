@@ -189,11 +189,6 @@ class Schematic extends BaseApplication
             $userImportResult = Craft::app()->schematic_users->import($users, true);
         }
 
-        if (in_array('fields', $dataTypes)) {
-            $fields = $model->getAttribute('fields');
-            $fieldImportResultFinal = Craft::app()->schematic_fields->import($fields, $force);
-        }
-
         if (in_array('elementIndexSettings', $dataTypes)) {
             // Element index settings are supported from Craft 2.5
             if (version_compare(CRAFT_VERSION, '2.5', '>=')) {
@@ -226,6 +221,11 @@ class Schematic extends BaseApplication
 
         $services = Craft::app()->plugins->call('registerMigrationService');
         $this->doImport($result, $model->pluginData, $services, $force);
+
+        if (in_array('fields', $dataTypes)) {
+            $fields = $model->getAttribute('fields');
+            $fieldImportResultFinal = Craft::app()->schematic_fields->import($fields, $force);
+        }
 
         return $result;
     }

@@ -1,3 +1,6 @@
+### 3.8.12 ###
+- Do last fields import after hook imports
+
 ### 3.8.11 ###
 - Fixed registerSchematicSources hook
 
