@@ -1,3 +1,7 @@
+## 4.1.1 - 2019-01-08
+### Fixed
+- Fixed "assign user group" permissions not being exported
+
 ## 4.1.0 - 2018-11-19
 ### Added
 - Added more flexibility for getting a record's index
