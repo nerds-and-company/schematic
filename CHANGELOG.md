@@ -1,6 +1,7 @@
 ## 4.1.1 - 2019-01-08
 ### Fixed
 - Fixed "assign user group" permissions not being exported
+- Fixed issue where global set sources weren't linked because they were cached
 
 ## 4.1.0 - 2018-11-19
 ### Added

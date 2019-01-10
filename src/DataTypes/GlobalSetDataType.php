@@ -35,4 +35,18 @@ class GlobalSetDataType extends Base
     {
         return Craft::$app->globals->getAllSets();
     }
+
+    /**
+     * Reset craft global sets cache using reflection.
+     */
+    public function afterImport()
+    {
+        $obj = Craft::$app->globals;
+        $refObject = new \ReflectionObject($obj);
+        if ($refObject->hasProperty('_allGlobalSets')) {
+            $refProperty1 = $refObject->getProperty('_allGlobalSets');
+            $refProperty1->setAccessible(true);
+            $refProperty1->setValue($obj, null);
+        }
+    }
 }
