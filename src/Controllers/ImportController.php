@@ -36,6 +36,7 @@ class ImportController extends Base
      * Imports the Craft datamodel.
      *
      * @return int
+     * @throws \Exception
      */
     public function actionIndex(): int
     {
@@ -65,26 +66,39 @@ class ImportController extends Base
         // Parse data in the overrideFile if available.
         $overrideData = Data::parseYamlFile($this->overrideFile);
 
-        // Grab all yaml files in the schema directory.
-        $schemaFiles = preg_grep('~\.(yml)$~', scandir($this->path));
-
-        // Read contents of each file and add it to the definitions.
-        foreach ($schemaFiles as $fileName) {
-            $schemaStructure = explode('.', $this->fromSafeFileName($fileName));
-            $dataTypeHandle = $schemaStructure[0];
-            $recordName = $schemaStructure[1];
-
-            $definition = Data::fromYaml(file_get_contents($this->path . $fileName));
-
-            // Check if there is data in the override file for the current record.
-            if (isset($overrideData[$dataTypeHandle][$recordName])) {
-                $definition = array_replace_recursive(
-                    $definition,
-                    $overrideData[$dataTypeHandle][$recordName]
-                );
+        // Import from single file.
+        if ($this->getStorageType() === self::SINGLE_FILE) {
+            $yaml = file_get_contents($this->file);
+            $yamlOverride = null;
+            if (file_exists($this->overrideFile)) {
+                $yamlOverride = file_get_contents($this->overrideFile);
             }
+            $definitions = Data::fromYaml($yaml, $yamlOverride);
+        }
 
-            $definitions[$dataTypeHandle][$recordName] = $definition;
+        // Import from multiple files.
+        if ($this->getStorageType() === self::MULTIPLE_FILES) {
+            // Grab all yaml files in the schema directory.
+            $schemaFiles = preg_grep('~\.(yml)$~', scandir($this->path));
+
+            // Read contents of each file and add it to the definitions.
+            foreach ($schemaFiles as $fileName) {
+                $schemaStructure = explode('.', $this->fromSafeFileName($fileName));
+                $dataTypeHandle = $schemaStructure[0];
+                $recordName = $schemaStructure[1];
+
+                $definition = Data::fromYaml(file_get_contents($this->path . $fileName));
+
+                // Check if there is data in the override file for the current record.
+                if (isset($overrideData[$dataTypeHandle][$recordName])) {
+                    $definition = array_replace_recursive(
+                        $definition,
+                        $overrideData[$dataTypeHandle][$recordName]
+                    );
+                }
+
+                $definitions[$dataTypeHandle][$recordName] = $definition;
+            }
         }
 
         foreach ($dataTypes as $dataTypeHandle) {
