@@ -1,3 +1,7 @@
+## 4.1.1 - 2019-01-22
+### Changed
+- Lock Schematic for use with Craft 3.0.x - it doesn't work with Craft 3.1.x
+
 ## 4.1.0 - 2018-11-19
 ### Added
 - Added more flexibility for getting a record's index

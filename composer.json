@@ -1,5 +1,5 @@
 {
-    "version": "4.1.0",
+    "version": "4.1.1",
     "name": "nerds-and-company/schematic",
     "description": "Craft setup and sync tool",
     "type": "craft-plugin",
@@ -30,7 +30,7 @@
     },
     "require": {
         "php": "^7.0",
-        "craftcms/cms": "^3.0",
+        "craftcms/cms": "~3.0.0",
         "symfony/yaml": "^3.0 || ^4.0"
     },
     "require-dev": {
