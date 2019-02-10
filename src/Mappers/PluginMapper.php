@@ -51,7 +51,7 @@ class PluginMapper extends BaseComponent implements MapperInterface
         return [
           'isEnabled' => $pluginInfo['isEnabled'],
           'isInstalled' => $pluginInfo['isInstalled'],
-          'settings' => $settings ? $settings->attributes : [],
+          'settings' => $settings->attributes ?? [],
         ];
     }
 
