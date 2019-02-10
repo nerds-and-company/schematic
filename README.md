@@ -7,6 +7,8 @@ Schematic allows you to synchronize your Craft setup over multiple environments.
 Craft 3.1 brings [project config](https://github.com/craftcms/cms/blob/3.1/docs/project-config.md) that will deliver most if not all schematic functionality natively.
 We will continue to support schematic going forward, but it seems likely to become obsolete.
 
+Currently Schematic will not run on Craft 3.1 or higher!
+
 ## Installation
 
 This tool can be installed [using Composer](https://getcomposer.org/doc/00-intro.md). Run the following command from the root of your project:
