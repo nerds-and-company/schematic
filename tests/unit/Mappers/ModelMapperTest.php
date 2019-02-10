@@ -12,7 +12,7 @@ use NerdsAndCompany\Schematic\Converters\Models\Base as Converter;
  * Class ModelMapperTest.
  *
  * @author    Nerds & Company
- * @copyright Copyright (c) 2015-2017, Nerds & Company
+ * @copyright Copyright (c) 2015-2019, Nerds & Company
  * @license   MIT
  *
  * @see      http://www.nerds.company
