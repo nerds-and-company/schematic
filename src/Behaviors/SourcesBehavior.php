@@ -122,6 +122,10 @@ class SourcesBehavior extends Behavior
                 $service = Craft::$app->sections;
                 $method = 'getSectionBy';
                 break;
+            case 'assignUserGroup':
+                $service = Craft::$app->userGroups;
+                $method = 'getGroupBy';
+                break;
             case 'group':
             case 'editCategories':
                 $service = Users::class == $fieldType ? Craft::$app->userGroups : Craft::$app->categories;

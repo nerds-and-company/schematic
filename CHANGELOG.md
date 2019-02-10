@@ -1,6 +1,11 @@
-## 4.1.1 - 2019-01-22
+## 4.1.2 - 2019-02-10
 ### Changed
 - Lock Schematic for use with Craft 3.0.x - it doesn't work with Craft 3.1.x
+
+## 4.1.1 - 2019-01-08
+### Fixed
+- Fixed "assign user group" permissions not being exported
+- Fixed issue where global set sources weren't linked because they were cached
 
 ## 4.1.0 - 2018-11-19
 ### Added
