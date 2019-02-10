@@ -92,7 +92,7 @@ class DataTest extends Unit
         putenv('S3_BUCKET');
         putenv('SCHEMATIC_S3_BUCKET');
         $this->expectException('Exception');
-        $result = $this->generateDataModel(true);
+        $this->generateDataModel(true);
     }
 
     public function testToYamlIsValidYaml()
