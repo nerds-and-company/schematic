@@ -23,7 +23,6 @@ class Data extends Model
      * Parse a yaml file.
      *
      * @param string $yaml
-     * @param string $overrideYaml
      *
      * @return array
      */

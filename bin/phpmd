@@ -1,0 +1,2 @@
+#!/bin/bash
+vendor/bin/phpmd src,tests text phpmd.xml --suffixes php

@@ -29,8 +29,6 @@ class Base extends Controller
     public $configFile = 'config/schematic.yml';
     public $exclude;
     public $include;
-    /** @var string */
-    private $storageType;
     /** @var array */
     private $config;
 
@@ -138,7 +136,8 @@ class Base extends Controller
      * @param $fileName
      * @return mixed
      */
-    protected function toSafeFileName($fileName) {
+    protected function toSafeFileName($fileName)
+    {
         // Remove all slashes and backslashes in the recordName to avoid file sturcture problems.
         $fileName = str_replace('\\', ':', $fileName);
         $fileName = str_replace('/', '::', $fileName);
@@ -152,7 +151,8 @@ class Base extends Controller
      * @param $fileName
      * @return mixed
      */
-    protected function fromSafeFileName($fileName) {
+    protected function fromSafeFileName($fileName)
+    {
         // Replace the placeholders back to slashes and backslashes.
         $fileName = str_replace(':', '\\', $fileName);
         $fileName = str_replace('::', '/', $fileName);

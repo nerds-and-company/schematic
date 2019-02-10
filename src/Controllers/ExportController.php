@@ -55,34 +55,56 @@ class ExportController extends Base
 
         // Export the configuration to a single file.
         if ($this->getStorageType() === self::SINGLE_FILE) {
-            $configurations = array_replace_recursive($configurations, $overrideData);
-            FileHelper::writeToFile($this->file, Data::toYaml($configurations));
-            Schematic::info('Exported schema to '.$this->file);
+            $this->exportToSingle($configurations, $overrideData);
         }
 
         // Export the configuration to multiple yaml files.
         if ($this->getStorageType() === self::MULTIPLE_FILES) {
-            // Create export directory if it doesn't exist.
-            if (!file_exists($this->path)) {
-                mkdir($this->path, 2775, true);
-            }
-
-            foreach ($configurations as $dataTypeHandle => $configuration) {
-                Schematic::info('Exporting '.$dataTypeHandle);
-                foreach ($configuration as $recordName => $records) {
-                    // Check if there is data in the override file for the current record.
-                    if (isset($overrideData[$dataTypeHandle][$recordName])) {
-                        $records = array_replace_recursive($records, $overrideData[$dataTypeHandle][$recordName]);
-                    }
-
-                    // Export records to file.
-                    $fileName = $this->toSafeFileName($dataTypeHandle.'.'.$recordName.'.yml');
-                    FileHelper::writeToFile($this->path.$fileName, Data::toYaml($records));
-                    Schematic::info('Exported '.$recordName.' to '.$fileName);
-                }
-            }
+            $this->exportToMultiple($configurations, $overrideData);
         }
 
         return 0;
+    }
+
+    /**
+     * Export schema to single file
+     *
+     * @param array $configurations configurations to export
+     * @param array $overrideData   overridden configurations
+     */
+    private function exportToSingle(array $configurations, array $overrideData)
+    {
+        $configurations = array_replace_recursive($configurations, $overrideData);
+        FileHelper::writeToFile($this->file, Data::toYaml($configurations));
+        Schematic::info('Exported schema to '.$this->file);
+    }
+
+    /**
+     * Export schema to multiple files
+     *
+     * @param array $configurations configurations to export
+     * @param array $overrideData   overridden configurations
+     */
+    private function exportToMultiple(array $configurations, array $overrideData)
+    {
+        // Create export directory if it doesn't exist.
+        if (!file_exists($this->path)) {
+            mkdir($this->path, 2775, true);
+        }
+
+        foreach ($configurations as $dataTypeHandle => $configuration) {
+            Schematic::info('Exporting '.$dataTypeHandle);
+            foreach ($configuration as $recordName => $records) {
+                // Check if there is data in the override file for the current record.
+                if (isset($overrideData[$dataTypeHandle][$recordName])) {
+                    $records = array_replace_recursive($records, $overrideData[$dataTypeHandle][$recordName]);
+                }
+
+                // Export records to file.
+                $fileName = $this->toSafeFileName($dataTypeHandle.'.'.$recordName.'.yml');
+                FileHelper::writeToFile($this->path.$fileName, Data::toYaml($records));
+                Schematic::info('Exported '.$recordName.' to '.$fileName);
+            }
+        }
     }
 }

@@ -22,9 +22,9 @@ install:
 
 # execute tests
 script:
-  - ./vendor/bin/phpcs
-  - ./vendor/bin/phpmd src,tests text phpmd.xml --suffixes php
-  - php vendor/bin/codecept run --coverage --coverage-xml
+  - ./bin/phpcs
+  - ./bin/phpmd
+  - ./bin/test
 
 # upload coverage to scrutinizer
 after_script:
