@@ -21,7 +21,7 @@ class DataTest extends Unit
      */
     private function getSchemaTestFile()
     {
-        return file_get_contents(__DIR__.'/../../_data/test_schema.yml');
+        return __DIR__.'/../../_data/test_schema.yml';
     }
 
     /**
@@ -29,7 +29,7 @@ class DataTest extends Unit
      */
     private function getOverrideTestFile()
     {
-        return file_get_contents(__DIR__.'/../../_data/test_override.yml');
+        return __DIR__.'/../../_data/test_override.yml';
     }
 
     /**
@@ -41,10 +41,10 @@ class DataTest extends Unit
     {
         putenv('SCHEMATIC_S3_SECRET_ACCESS_KEY=secret');
 
-        $schema = $this->getSchemaTestFile();
-        $override = $useOverride ? $this->getOverrideTestFile() : [];
+        $schema = Data::parseYamlFile($this->getSchemaTestFile());
+        $override = $useOverride ? Data::parseYamlFile($this->getOverrideTestFile()) : [];
 
-        return Data::fromYaml($schema, $override);
+        return array_replace_recursive($schema, $override);
     }
 
     public function testEnvironment()
@@ -92,9 +92,7 @@ class DataTest extends Unit
         putenv('S3_BUCKET');
         putenv('SCHEMATIC_S3_BUCKET');
         $this->expectException('Exception');
-        $schema = $this->getSchemaTestFile();
-        $override = $this->getOverrideTestFile();
-        Data::fromYaml($schema, $override);
+        $result = $this->generateDataModel(true);
     }
 
     public function testToYamlIsValidYaml()
@@ -115,7 +113,7 @@ class DataTest extends Unit
 
     public function testToYamlOverride()
     {
-        putenv('S3_BUCKET=bucket_name');
+        putenv('S3_BUCKET=%S3_BUCKET%');
         $dataModel = $this->generateDataModel();
         $override = $this->getOverrideTestFile();
         $yaml = Data::toYaml($dataModel, $override);

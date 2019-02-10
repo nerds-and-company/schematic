@@ -20,18 +20,6 @@ use Symfony\Component\Yaml\Yaml;
 class Data extends Model
 {
     /**
-     * Parse a yaml file.
-     *
-     * @param string $yaml
-     *
-     * @return array
-     */
-    public static function fromYaml($yaml): array
-    {
-        return Yaml::parse($yaml);
-    }
-
-    /**
      * Replace placeholders with enviroment variables.
      *
      * Placeholders start with % and end with %. This will be replaced by the
